@@ -37,6 +37,12 @@ A Learner works in one language throughout — interface, questions, answers, an
 
 Authoring rule: **every pre-reading question and Gate Quiz item must be answerable from the article's text alone.** Nothing may depend on an embedded video.
 
+> **Amended 2026-07-21.** A second authoring rule applies to Stage 1 only: **every Stage 1 item must be judgeable from a static screenshot** — no hover, no click, no waiting. [ADR-0001](0001-curriculum-organised-by-defect-type.md) defines Stage 1 as what is "auditable from a screenshot", but until now nothing stopped an item being written against material its source article covers and a screenshot cannot show.
+>
+> The rule is needed across Stage 1, not in one place. Competency 4's article spends much of its length on hover, focus, pressed and loading states and states its concrete guidelines as response times in milliseconds; Competency 2's article states its findings as research statistics — share of words read, recall rates — rather than as something a page can be seen to violate. Both are correctly chosen articles that contain material Stage 1 cannot assess, and that is normal: a Learner may read more than they are tested on. What is not acceptable is an item that asks about it.
+>
+> **Replacing Competency 4's article with `/articles/clickable-elements/` was considered and rejected.** Everything it prescribes is screenshot-judgeable, which is what made it tempting. But it dates from March 2015 and its argument is carried almost entirely by screenshots of real websites of that year, which look nothing like those sites in 2026. Its subject is what makes its age expensive: material that argues from how real pages looked ages at the speed of web design, whereas Competency 3's article (1994) has not aged at all, because it states principles and shows no screenshots. Competency 4's article is from April 2025 and is the most recent in the curriculum; trading it for one eleven years older, to avoid writing one authoring rule, is the wrong trade. NN/g has published nothing on clickability signifiers since 2020, so no fresher replacement exists.
+
 Explicit non-goal for the MVP, but an anticipated extension: each Competency carries an `explanation` field, empty in the MVP. Adding written explanations later is additive and must not require restructuring Competencies.
 
 ## Rationale
