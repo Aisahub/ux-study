@@ -29,6 +29,12 @@ Explicit non-goals: **no password storage, no registration form, no email verifi
 
 Boundary: this assumes every Indonesia-based Learner has a Google account. If any use a non-Google provider, this ADR must be revisited — a one-time email link would be the fallback, and it reintroduces the email-delivery dependency this decision avoids.
 
+> **Amended 2026-07-21. The assumption is accepted rather than confirmed, and sign-in is built on it.** The Background above already records that Indonesia-based staff use personal accounts "reported as Gmail", so what is being accepted is a report, not a guess; what is being skipped is the per-person check before first enrolment.
+>
+> The trade is deliberate. Holding the largest piece of the MVP until every Learner has been individually confirmed stalls a build on an answer that changes nothing about how the build proceeds, while the recovery if the assumption is wrong for one person is that they create a free Google account — minutes of work, no cost, no code. **A risk whose worst case is a two-minute task is not worth blocking a build on**, and the failure surfaces at that Learner's first sign-in rather than silently.
+>
+> The documented fallback is unchanged and is still not being built. If a Learner cannot or will not hold a Google account, this ADR is revisited and the one-time email link under "Considered alternatives" is the route, along with the email-delivery dependency it brings back.
+
 ## Rationale
 
 - The need is *admitting known people*, and authentication mechanism is orthogonal to it. Reaching for passwords conflates the two: a password proves identity, it does not decide who is allowed. The allowlist is the part that actually does the work, and it is required under any mechanism because personal email addresses cannot be pattern-matched.
@@ -54,7 +60,7 @@ Boundary: this assumes every Indonesia-based Learner has a Google account. If an
 
 ## Follow-up work
 
-- Confirm every Indonesia-based Learner has a Google account before the first enrolment; if any do not, revisit this ADR before building sign-in.
+- ~~Confirm every Indonesia-based Learner has a Google account before the first enrolment; if any do not, revisit this ADR before building sign-in.~~ **Closed 2026-07-21 by the amendment above** — accepted rather than confirmed, so sign-in is no longer blocked on it. A Learner without a Google account now surfaces at their own first sign-in, and the response is the amendment's, not this check's.
 - Verify that an address absent from the allowlist is rejected after a successful Google authentication, and that the Learner sees why rather than a blank error.
 - Verify that the `@aisahub.com` wildcard entry admits a Workspace account not listed individually.
 - Define who owns allowlist maintenance and where removal happens in the offboarding process.
