@@ -63,4 +63,4 @@ Boundary: this assumes every Indonesia-based Learner has a Google account. If an
 - ~~Confirm every Indonesia-based Learner has a Google account before the first enrolment; if any do not, revisit this ADR before building sign-in.~~ **Closed 2026-07-21 by the amendment above** — accepted rather than confirmed, so sign-in is no longer blocked on it. A Learner without a Google account now surfaces at their own first sign-in, and the response is the amendment's, not this check's.
 - Verify that an address absent from the allowlist is rejected after a successful Google authentication, and that the Learner sees why rather than a blank error.
 - Verify that the `@aisahub.com` wildcard entry admits a Workspace account not listed individually.
-- Define who owns allowlist maintenance and where removal happens in the offboarding process.
+- ~~Define who owns allowlist maintenance and where removal happens in the offboarding process.~~ **Closed 2026-07-22 by decision in issue #7** — Chloe owns the allowlist and removes entries by hand as people leave, personal-account entries included; removal is not tied to a step in a formal offboarding process.
