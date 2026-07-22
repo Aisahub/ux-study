@@ -1,0 +1,60 @@
+---
+sourceSection: 'Disabled State'
+principles:
+  - disabled-state
+  - contrast
+artefact:
+  en: >-
+    An account-creation form in an internal admin tool, five fields long. Two
+    of them — "Team" and "Role" — are still empty, each with a small red
+    "Required" note beside it. At the bottom, "Create account" is a solid blue
+    rounded rectangle with a bold white label, pixel-identical to every
+    working primary button in the tool. The team has decided the button stays
+    inert until the two fields are filled, and nothing about its look changes
+    while it is.
+  ko: >-
+    사내 관리 도구의 계정 생성 폼으로, 입력란이 다섯 개입니다. 그중 "소속
+    팀"과 "직무" 두 칸이 아직 비어 있고, 각각 옆에 빨간 "필수" 표시가 작게
+    붙어 있습니다. 맨 아래 "계정 만들기"는 파랑으로 꽉 채운 둥근 사각형에
+    굵은 흰 글자로, 이 도구에서 실제로 동작하는 주요 버튼들과 픽셀 하나까지
+    똑같습니다. 두 칸이 채워질 때까지 버튼이 눌리지 않게 두기로 팀이 정했는데,
+    그동안에도 버튼의 겉모습은 아무것도 달라지지 않습니다.
+prompt:
+  en: >-
+    The button stays inert until Team and Role are filled — that decision is
+    made. What should its look do in the meantime?
+  ko: >-
+    소속 팀과 직무가 채워질 때까지 버튼은 눌리지 않습니다 — 그 결정은 이미
+    내려졌습니다. 그동안 버튼의 겉모습은 어때야 할까요?
+options:
+  en:
+    - text: >-
+        Dim it — desaturate the blue and lower its contrast so it reads as
+        unavailable, keep the label legible, and say beside it what enables it:
+        "Fill in Team and Role".
+      correct: true
+    - text: >-
+        Leave the look as it is — unavailability is communicated through the
+        button's states, so it is enough that a press produces no response.
+    - text: >-
+        Hide the button entirely until both fields are filled, so nothing
+        unusable is ever shown.
+    - text: >-
+        Fade the whole button, label included, to the faintest grey the
+        background allows, so that nobody is tempted to try it.
+  ko:
+    - text: >-
+        흐리게 합니다 — 파랑의 채도와 대비를 낮춰 지금은 쓸 수 없다는 것이
+        보이게 하되 글자는 읽히게 남기고, 옆에 "소속 팀과 직무를 입력하세요"
+        라고 무엇이 버튼을 살리는지 적어 둡니다.
+      correct: true
+    - text: >-
+        겉모습은 그대로 둡니다 — 쓸 수 없다는 것은 버튼의 상태로 전달되는
+        것이므로, 눌러도 반응이 없으면 그것으로 충분합니다.
+    - text: >-
+        두 칸이 채워질 때까지 버튼을 아예 숨겨서, 쓸 수 없는 것은 화면에
+        보이지 않게 합니다.
+    - text: >-
+        글자까지 포함해 버튼 전체를 배경에 묻힐 만큼 옅은 회색으로 빼서,
+        아무도 눌러 볼 마음이 들지 않게 합니다.
+---
