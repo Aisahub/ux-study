@@ -33,6 +33,14 @@ For the MVP, the platform **does not explain the material**. It scaffolds around
 
 Learners read the source articles in English. Indonesia-based Learners read them directly. Korea-based Learners use their browser's built-in page translation. We do not host, generate, or distribute any translation of NN/g prose.
 
+> **Amended 2026-07-21. Korea-based Learners read English well enough to use the source articles directly.** Browser page translation stays available and is still offered, but it is **an aid rather than a dependency**. The unmeasured-translation-quality risk this ADR recorded is closed rather than mitigated, and the spike that was to measure it is unnecessary.
+>
+> **This does not reduce the bilingual authoring load, and the inference that it should is the one to resist.** The Korean content was never there so that Learners could understand the material. It is there so that a defect named in Seoul and the same defect named in Jakarta carry the same name — which is this ADR's central purpose, and it is untouched. If anything the Principle Glossary matters *more* now: a Learner reading the article in English meets every concept in English only, so the Korean canonical name has nowhere to come from except us.
+>
+> Two consequences recorded below are withdrawn. The Korea cohort no longer depends on a browser feature this project does not control. And the specific hazard found while authoring the Glossary — machine translation rendering "contrast in value and saturation" with `value` as a numeric quantity, which destroys the article's central claim — cannot arise for a reader of the original.
+>
+> The residual risk is narrow and self-announcing: reading a second language costs time even when comprehension is fine, so the Korea cohort's reading load is higher than the Indonesia cohort's. Nothing is built for this; it surfaces as slower progress on the Maintainer dashboard if it matters at all.
+
 A Learner works in one language throughout — interface, questions, answers, and report. Language is a display preference, not a separate track: both languages present the same Competencies, the same questions, and the same bar.
 
 Authoring rule: **every pre-reading question and Gate Quiz item must be answerable from the article's text alone.** Nothing may depend on an embedded video.
@@ -74,7 +82,7 @@ Explicit non-goal for the MVP, but an anticipated extension: each Competency car
 
 ## Follow-up work
 
-- Have one **Korea-based** Learner read one translated article end to end and report whether the Korean output is comprehensible; record the result and revisit this ADR if it is not. The Indonesia cohort does not need this check.
-- Confirm the browsers actually in use by the Korea cohort offer built-in page translation, and document the requirement for those Learners.
+- ~~Have one **Korea-based** Learner read one translated article end to end and report whether the Korean output is comprehensible; record the result and revisit this ADR if it is not.~~ **Closed 2026-07-21 by the amendment above** — the Korea cohort reads the original, so the quality of a translation they do not depend on no longer gates anything.
+- ~~Confirm the browsers actually in use by the Korea cohort offer built-in page translation, and document the requirement for those Learners.~~ **Closed 2026-07-21 by the amendment above** — translation is an aid, not a requirement, so there is no requirement to document.
 - When drafting each Gate Quiz, verify every item is answerable from article text alone by checking it against the article with videos disregarded — in both languages.
 - Check each Quiz Item's two language variants against each other for equal difficulty before enrolment; a variant that is easier in one language silently lowers the bar for that cohort.
