@@ -1,0 +1,64 @@
+---
+sourceSection: '4: Consistency and Standards'
+principles:
+  - consistency
+artefact:
+  en: >-
+    A profile page. Under the avatar sits a filled blue button, "Upload
+    photo". Further down, inside the "About you" form, the same action —
+    putting a picture on the profile — appears again as a grey text link,
+    "Add image". Every other action on this page is a filled blue button
+    named verb-plus-noun: "Save changes", "Update email", "Verify number".
+    The caption under the avatar reads "Your photo appears next to your
+    comments", and the help text at the bottom says "Photos must be under
+    5 MB".
+  ko: >-
+    프로필 페이지입니다. 아바타 아래에는 파란색으로 채워진 "사진 올리기"
+    버튼이 있습니다. 더 내려가면 "자기 소개" 폼 안에, 프로필에 그림을 넣는
+    같은 동작이 회색 글자 링크 "이미지 추가"로 다시 나타납니다. 이 페이지의
+    다른 동작들은 전부 동사가 붙은 파란 채움 버튼입니다. "변경사항 저장",
+    "이메일 갱신", "번호 인증". 아바타 밑 설명문에는 "사진은 댓글 옆에
+    표시됩니다"라고, 페이지 맨 아래 도움말에는 "사진은 5MB 이하여야
+    합니다"라고 적혀 있습니다.
+prompt:
+  en: >-
+    The same action appears twice, worded and styled differently. Which
+    treatment should both places use?
+  ko: >-
+    같은 동작이 두 번, 서로 다른 이름과 모양으로 나옵니다. 두 곳을 어느
+    쪽으로 맞춰야 할까요?
+options:
+  en:
+    - text: >-
+        "Upload photo" as a filled blue button — the page's other actions all
+        take that form, and the page's own captions and help text already
+        call the thing a photo, never an image.
+      correct: true
+    - text: >-
+        "Add image" — "image" covers illustrations and logos as well as
+        photographs, so it is the more accurate word for what users might
+        upload.
+    - text: >-
+        Keep both as they are — the button serves the avatar and the link
+        serves the form, and two entry points to one action can dress for
+        where they live.
+    - text: >-
+        Remove the form's link entirely and keep only the avatar button, so
+        the question of matching them never arises.
+  ko:
+    - text: >-
+        파란 채움 버튼의 "사진 올리기"로 맞춥니다 — 이 페이지의 다른 동작이
+        모두 그 형태이고, 페이지의 설명문과 도움말도 이미 줄곧 "이미지"가
+        아니라 "사진"이라고 부르고 있습니다.
+      correct: true
+    - text: >-
+        "이미지 추가"로 맞춥니다 — "이미지"는 사진만 아니라 일러스트와
+        로고까지 아우르니, 사용자가 올릴 수 있는 것을 더 정확히 담는
+        말입니다.
+    - text: >-
+        지금 그대로 둡니다 — 버튼은 아바타를, 링크는 폼을 섬기는 것이니, 한
+        동작의 입구가 둘이라면 각자 놓인 자리에 맞게 차려입어도 됩니다.
+    - text: >-
+        폼의 링크를 아예 없애고 아바타 버튼만 남겨서, 둘을 맞추는 문제 자체가
+        생기지 않게 합니다.
+---
