@@ -74,6 +74,14 @@ export interface QuizItem {
   sourceSection: string
   /** UX Principles the item cites, each required to exist in the Glossary. */
   principles: string[]
+  /**
+   * The concrete thing the item asks a judgement about — a described page or a
+   * pair of alternatives. An item with nothing to examine is a definition
+   * question and does not belong in a pool (CONTEXT.md, Quiz Item).
+   */
+  artefact: Bilingual
+  /** The question asked about the artefact. */
+  prompt: Bilingual
   options: { en: QuizItemOption[]; ko: QuizItemOption[] }
   frontmatter: Record<string, unknown>
 }
@@ -299,6 +307,15 @@ function loadItems(
       if (typeof data.sourceSection !== 'string' || data.sourceSection.trim() === '') {
         problems.push(`${rel}: missing sourceSection, the source-article pointer shown on a wrong answer`)
       }
+      // An item is a judgement about something. Without an artefact there is
+      // nothing to judge, and the options can only be answered from memory of
+      // the article — which is the definition question ADR-0006 rules out.
+      if (!isLanguagePair(data.artefact)) {
+        problems.push(`${rel}: missing artefact — an item with nothing to examine is a definition question`)
+      }
+      if (!isLanguagePair(data.prompt)) {
+        problems.push(`${rel}: prompt must carry en and ko variants`)
+      }
 
       const options: QuizItem['options'] = { en: [], ko: [] }
       const rawOptions = isRecord(data.options) ? data.options : {}
@@ -326,6 +343,8 @@ function loadItems(
         competency,
         sourceSection: stringOrEmpty(data.sourceSection),
         principles: citedPrinciples(data.principles, rel, principles, problems),
+        artefact: asBilingual(data.artefact),
+        prompt: asBilingual(data.prompt),
         options,
         frontmatter: data,
       })

@@ -11,7 +11,7 @@ import { defineConfig } from 'vitest/config'
  */
 export default defineConfig({
   test: {
-    include: ['test/content.test.ts', 'test/competencies.test.ts'],
+    include: ['test/content.test.ts', 'test/competencies.test.ts', 'test/items.test.ts'],
     testTimeout: 30_000,
   },
 })

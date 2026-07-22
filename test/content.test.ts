@@ -85,6 +85,9 @@ const ITEM_ONE = `---
 sourceSection: Contrast
 principles:
   - contrast
+artefact:
+  en: An orders page with a pale confirm button and a bright upgrade banner.
+  ko: 확정 버튼은 흐릿하고 업그레이드 배너는 선명한 주문 페이지.
 prompt:
   en: Which element should carry the strongest contrast?
   ko: 어느 요소가 가장 강한 대비를 가져야 하나요?
@@ -102,6 +105,9 @@ options:
 
 const ITEM_TWO = `---
 sourceSection: Size
+artefact:
+  en: A dashboard whose largest text is the data-refresh time.
+  ko: 가장 큰 글자가 데이터 갱신 시각인 대시보드.
 prompt:
   en: Which number deserves the largest type?
   ko: 어느 숫자가 가장 큰 글자 크기를 받아야 하나요?
@@ -283,6 +289,44 @@ test('a quiz item with two keyed correct answers in one language fails the build
     edit(ITEM_ONE, '    - text: 업그레이드 배너', '    - text: 업그레이드 배너\n      correct: true'),
   )
   expectProblem(root, /washed-out-confirm\.md: options\.ko keys 2 correct answers where exactly one is required/)
+})
+
+test('a quiz item with nothing to examine fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'items/visual-hierarchy/washed-out-confirm.md',
+    edit(
+      ITEM_ONE,
+      'artefact:\n  en: An orders page with a pale confirm button and a bright upgrade banner.\n  ko: 확정 버튼은 흐릿하고 업그레이드 배너는 선명한 주문 페이지.\n',
+      '',
+    ),
+  )
+  expectProblem(root, /washed-out-confirm\.md: missing artefact/)
+})
+
+test('an artefact written in one language only fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'items/visual-hierarchy/washed-out-confirm.md',
+    edit(ITEM_ONE, '\n  ko: 확정 버튼은 흐릿하고 업그레이드 배너는 선명한 주문 페이지.', ''),
+  )
+  expectProblem(root, /washed-out-confirm\.md: artefact is missing its ko language variant/)
+})
+
+test('a quiz item that asks nothing fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'items/visual-hierarchy/washed-out-confirm.md',
+    edit(
+      ITEM_ONE,
+      'prompt:\n  en: Which element should carry the strongest contrast?\n  ko: 어느 요소가 가장 강한 대비를 가져야 하나요?\n',
+      '',
+    ),
+  )
+  expectProblem(root, /washed-out-confirm\.md: prompt must carry en and ko variants/)
 })
 
 test('a quiz item with no article-section pointer fails the build', () => {
