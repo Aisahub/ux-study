@@ -14,12 +14,17 @@ const LABEL: Record<Language, string> = { en: 'English', ko: '한국어' }
  * It is a link and not a button because switching is navigation: it can be
  * opened in a new tab, it works before the page has hydrated, and following it
  * is what records the preference (see `middleware.ts`). The counterpart is
- * computed from the current path, so a Learner deep inside a quiz stays where
+ * computed from the current path, so a Learner on a deep page stays where
  * they are instead of being returned to a section root.
  */
 export function LanguageSwitcher({ current }: { current: Language }) {
   const pathname = usePathname()
   const target: Language = current === 'ko' ? 'en' : 'ko'
+
+  // The one place the switcher must not appear: an open quiz attempt. The
+  // switch is forbidden mid-attempt (ADR-0008 amendment, #6) — the recorded
+  // language must describe every item of the attempt, not where it started.
+  if (/^\/(en|ko)\/learn\/[^/]+\/quiz\/\d+/.test(pathname)) return null
 
   return (
     <Link
