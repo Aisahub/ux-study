@@ -24,6 +24,7 @@ const COPY: Record<
     capstoneReady: string
     capstoneSubmitted: string
     complete: string
+    visibility: string
   }
 > = {
   en: {
@@ -42,6 +43,8 @@ const COPY: Record<
     capstoneReady: 'Ready — all four Gate Quizzes passed.',
     capstoneSubmitted: 'Submitted',
     complete: 'Stage 1 complete',
+    visibility:
+      'A programme maintainer can see your progress: your position in Stage 1, how long since your last activity, and how many attempts each quiz took. Nothing ranks you against anyone.',
   },
   ko: {
     heading: '학습',
@@ -58,6 +61,8 @@ const COPY: Record<
     capstoneReady: '준비 완료 — 관문 퀴즈 네 개를 모두 통과했습니다.',
     capstoneSubmitted: '제출 완료',
     complete: '1단계 수료',
+    visibility:
+      '프로그램 관리자는 여러분의 진행 상황을 볼 수 있습니다 — 1단계에서 어디까지 왔는지, 마지막 활동이 얼마나 지났는지, 퀴즈마다 몇 번 시도했는지. 누구와도 순위를 매기지 않습니다.',
   },
 }
 
@@ -88,6 +93,9 @@ export default async function Learn({ params }: { params: Promise<{ lang: string
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
         {copy.remaining(progress.stepsDone, progress.stepsTotal)}
       </p>
+      {/* Visible on the page every Learner lands on, before any first attempt
+          — being watched is stated, not discovered (ADR-0005, #30). */}
+      <p className="text-xs text-zinc-500">{copy.visibility}</p>
 
       <ol className="flex flex-col gap-3">
         {competencies.map((competency) => {

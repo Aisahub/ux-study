@@ -58,5 +58,5 @@ Non-goals: no notification or email of any kind, no Learner-visible view of anot
 ## Follow-up work
 
 - Confirm no Learner-facing surface exposes another Learner's progress, including through the dashboard route or its data layer.
-- Tell Learners that a Reviewer can see their progress and inactivity, rather than leaving them to infer it.
+- ~~Tell Learners that a Reviewer can see their progress and inactivity, rather than leaving them to infer it.~~ Closed by #30: a bilingual notice on the Learn overview — the page every Learner lands on, before any first attempt — states what a Maintainer can see: position, inactivity, and attempt counts.
 - After the first cohort, check whether any Gate Quiz item has a pass rate low enough to indicate a wording defect rather than a knowledge gap, and rewrite it.

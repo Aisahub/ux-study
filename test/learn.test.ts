@@ -50,6 +50,19 @@ test('a fresh Learner sees four Competencies unstarted, and the remaining work w
   expect(text).toContain('Unlocks when all four Gate Quizzes are passed')
 })
 
+test('being watched is stated before any first attempt, in both languages (#30)', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  const en = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
+  const ko = visibleText(await (await fetch(`${BASE_URL}/ko/learn`, { headers: { cookie } })).text())
+
+  // What a Maintainer can see, named: position, inactivity, attempt counts.
+  expect(en).toContain('maintainer can see your progress')
+  expect(en).toContain('how long since your last activity')
+  expect(en).toContain('how many attempts')
+  expect(ko).toContain('관리자는 여러분의 진행 상황을 볼 수 있습니다')
+})
+
 test('both languages present the same Competency set', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 

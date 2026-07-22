@@ -92,6 +92,15 @@ export default async function CompetencyPage({
         </ol>
       </section>
 
+      {/* The written-explanation trial (#29): exactly one Competency carries
+          this; for the other three the field is authored empty and nothing
+          renders. */}
+      {competency.explanation && (
+        <section className="whitespace-pre-line rounded-lg border border-zinc-200 p-4 text-sm leading-relaxed text-zinc-700 dark:border-zinc-800 dark:text-zinc-300">
+          {competency.explanation[lang]}
+        </section>
+      )}
+
       {/* Korean-language Learners read the article in English with browser
           translation as an aid (ADR-0002) — the notice never shows in English. */}
       {lang === 'ko' && competency.koTranslationNotice && (
