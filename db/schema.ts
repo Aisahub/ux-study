@@ -1,4 +1,4 @@
-import { boolean, index, pgTable, serial, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
+import { boolean, index, integer, jsonb, pgTable, serial, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
 
 /**
  * Who is allowed in. A row holds either a full email address or the wildcard
@@ -50,4 +50,89 @@ export const sessions = pgTable(
     expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
   },
   (table) => [index('sessions_email_idx').on(table.email)],
+)
+
+/**
+ * One Gate Quiz attempt (#21). The drawn set is persisted at the start — a
+ * refresh mid-attempt must not redraw — and the selections, score and verdict
+ * arrive together at the single submit. Storing the pairing of item and
+ * selection, not just the score, is what lets a Maintainer tell a defective
+ * item from an unprepared cohort (ADR-0006).
+ */
+export const attempts = pgTable(
+  'attempts',
+  {
+    id: serial('id').primaryKey(),
+    email: text('email').notNull(),
+    competency: text('competency').notNull(),
+    /** The language every item was seen and answered in — the switch is forbidden mid-attempt (ADR-0008, #6). */
+    language: text('language').notNull(),
+    /** The item slugs drawn for this attempt, in presentation order. */
+    drawn: text('drawn').array().notNull(),
+    /**
+     * One entry per drawn item once submitted: the option index chosen and
+     * whether it was the keyed answer at scoring time. Null while open.
+     * Correctness is frozen here so re-scoring a stored attempt yields the
+     * same verdict even after an item is reworded.
+     */
+    selections: jsonb('selections').$type<{ item: string; choice: number; correct: boolean }[]>(),
+    score: integer('score'),
+    passed: boolean('passed'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    submittedAt: timestamp('submitted_at', { withTimezone: true }),
+  },
+  (table) => [index('attempts_email_idx').on(table.email)],
+)
+
+/**
+ * The Self-Audit Report (#24) — at most one per Learner, because submission
+ * is final: once the manifest is revealed, a second attempt measures nothing.
+ * The row exists from the first autosave; submittedAt is what separates a
+ * draft from the submitted report.
+ */
+export const reports = pgTable('reports', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  /** Optional link showing one Finding actually fixed; a screenshot URL is sufficient. Never affects Completion. */
+  issueUrl: text('issue_url'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  submittedAt: timestamp('submitted_at', { withTimezone: true }),
+})
+
+/**
+ * One Finding: two structured fields and two written ones (#24). The element
+ * is an identifier pointed at on the page — which is what makes a Korean
+ * Finding and an English Finding the same record (ADR-0008).
+ */
+export const findings = pgTable(
+  'findings',
+  {
+    id: serial('id').primaryKey(),
+    reportId: integer('report_id')
+      .notNull()
+      .references(() => reports.id, { onDelete: 'cascade' }),
+    element: text('element').notNull(),
+    principle: text('principle').notNull(),
+    description: text('description').notNull(),
+    fix: text('fix').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index('findings_report_idx').on(table.reportId)],
+)
+
+/**
+ * Agreement marks (#25): a Learner endorsing a colleague's Finding. Ranks
+ * Findings, never Learners — nothing anywhere totals these per person.
+ */
+export const agreements = pgTable(
+  'agreements',
+  {
+    id: serial('id').primaryKey(),
+    findingId: integer('finding_id')
+      .notNull()
+      .references(() => findings.id, { onDelete: 'cascade' }),
+    email: text('email').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [uniqueIndex('agreements_once_idx').on(table.findingId, table.email)],
 )

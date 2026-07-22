@@ -61,7 +61,8 @@ export async function GET(request: NextRequest) {
   const preferred: Language = isLanguage(user.language) ? user.language : lang
 
   const { token, expiresAt } = await createSession(email)
-  const response = NextResponse.redirect(new URL(`/${preferred}`, request.url))
+  // Where a Learner lands: the Stage 1 overview (#20).
+  const response = NextResponse.redirect(new URL(`/${preferred}/learn`, request.url))
   response.cookies.set(SESSION_COOKIE, token, {
     path: '/',
     expires: expiresAt,
