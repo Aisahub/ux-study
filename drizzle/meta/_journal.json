@@ -8,6 +8,20 @@
       "when": 1784687024370,
       "tag": "0000_same_hiroim",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784747116449,
+      "tag": "0001_powerful_human_cannonball",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784747126112,
+      "tag": "0002_seed-allowlist",
+      "breakpoints": true
     }
   ]
 }

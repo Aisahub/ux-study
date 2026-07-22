@@ -24,7 +24,15 @@ export default async function setup() {
     throw new Error('DATABASE_URL_TEST points at the branch that serves Learners. Use a test branch.')
   }
 
-  const env = { ...process.env, DATABASE_URL: url }
+  const env = {
+    ...process.env,
+    DATABASE_URL: url,
+    // Dummy OAuth credentials: enough for the sign-in routes to build their
+    // redirects, never presented to Google — the handshake itself is verified
+    // by hand, not by this suite (#11).
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ?? 'test-client-id.apps.googleusercontent.com',
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ?? 'test-client-secret',
+  }
 
   await run('npx', ['drizzle-kit', 'migrate'], env)
 
