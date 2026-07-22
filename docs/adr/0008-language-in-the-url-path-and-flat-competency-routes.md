@@ -47,11 +47,13 @@ The first question was sharpened by [ADR-0007](0007-stage-1-assessed-against-an-
 - **The switcher becomes a real requirement rather than a default.** Mapping a route to its counterpart has to be implemented deliberately; the common failure — redirecting to the section root — loses the reader's place and would be worst on exactly the deep pages that get shared.
 - **The content build gains an element-parity check**, joining the checks that already fail the build on a missing translation, an uncited Principle, or an unmarked answer key.
 - **Attempt records are unaffected.** An attempt already stores the language it was taken in, so nothing about scoring or comparison changes.
+
+> **Amended 2026-07-23 (#6): the switch is forbidden while an attempt is open.** An attempt is a measurement, and its recorded language names the condition it was measured under; permit a mid-attempt switch and that field describes only where the attempt started, which is the quiet lie the follow-up below existed to prevent. Of the two routes, forbidding costs almost nothing — an attempt is five items and minutes long, and the switcher returns the moment it is submitted — while defining a changed-language attempt would complicate every per-item comparison the Maintainer dashboard (ADR-0006) is built on, for the benefit of a switch nobody needs mid-quiz. Concretely: quiz-attempt screens do not render the switcher, and opening an attempt's screens under the other language's path returns the Learner to the attempt's own language — while an attempt is open, the attempt owns the language, not the URL. **The field's meaning is therefore unambiguous in both cases: every item of an attempt was seen, and answered, in the attempt's recorded language.**
 - **A third language would be a path segment and a content pass**, not a structural change. Nothing here assumes two.
 
 ## Follow-up work
 
 - Add the Practice Page element-parity check to the content build.
 - Verify the language switcher lands on the counterpart route for every page type, including a quiz in progress and the Practice Page.
-- **Decide what switching language mid-attempt means.** Item identifiers are shared across languages, so the drawn items have counterparts and the switch is coherent — but the attempt's recorded language then describes only where it started. Either forbid the switch during an attempt or define what the field means. Neither is decided here.
+- ~~**Decide what switching language mid-attempt means.** Item identifiers are shared across languages, so the drawn items have counterparts and the switch is coherent — but the attempt's recorded language then describes only where it started. Either forbid the switch during an attempt or define what the field means. Neither is decided here.~~ Closed by #6: forbidden while an attempt is open — see the amendment under Consequences.
 - Confirm the `/` language guess never overrides a signed-in Learner's saved preference.
