@@ -60,6 +60,22 @@ const COMPETENCY = `---
 name:
   en: Visual hierarchy
   ko: 시각적 위계
+objective:
+  en: Say where a first-time visitor's eye lands first.
+  ko: 처음 방문한 사용자의 시선이 어디에 먼저 닿는지 말할 수 있다.
+roleHint:
+  en: Developers look at the screen they built.
+  ko: 개발자는 직접 만든 화면을 봅니다.
+preReadingQuestions:
+  - en: What pulls the eye first?
+    ko: 무엇이 시선을 먼저 끄는가?
+  - en: What is the squint test for?
+    ko: 실눈 테스트는 무엇을 위한 것인가?
+source:
+  url: https://example.test/article
+  attribution: Example Author, Example Article, Example Publisher
+koTranslationNotice: 원문은 영어입니다. 브라우저 번역은 보조 수단입니다.
+explanation: ''
 ---
 
 Where a first-time visitor's eye lands, and whether that matches importance.
@@ -188,6 +204,59 @@ test('a Competency missing one of its two language variants fails the build', ()
   const root = scaffold()
   write(root, 'competencies/visual-hierarchy.md', edit(COMPETENCY, '\n  ko: 시각적 위계', ''))
   expectProblem(root, /competencies\/visual-hierarchy\.md: name is missing its ko language variant/)
+})
+
+test('a Competency without an objective fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'competencies/visual-hierarchy.md',
+    edit(COMPETENCY, 'objective:\n  en: Say where a first-time visitor\'s eye lands first.\n  ko: 처음 방문한 사용자의 시선이 어디에 먼저 닿는지 말할 수 있다.\n', ''),
+  )
+  expectProblem(root, /competencies\/visual-hierarchy\.md: objective must carry en and ko variants/)
+})
+
+test('a Competency without pre-reading questions fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'competencies/visual-hierarchy.md',
+    edit(COMPETENCY, '  - en: What pulls the eye first?\n    ko: 무엇이 시선을 먼저 끄는가?\n', '').replace(
+      '  - en: What is the squint test for?\n    ko: 실눈 테스트는 무엇을 위한 것인가?\n',
+      '',
+    ),
+  )
+  expectProblem(root, /competencies\/visual-hierarchy\.md: preReadingQuestions must be a list of en\/ko question pairs/)
+})
+
+test('a Competency whose source lacks attribution fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'competencies/visual-hierarchy.md',
+    edit(COMPETENCY, '\n  attribution: Example Author, Example Article, Example Publisher', ''),
+  )
+  expectProblem(root, /competencies\/visual-hierarchy\.md: source must carry the article url and its attribution/)
+})
+
+test('a browser-translation notice written as an en/ko pair fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'competencies/visual-hierarchy.md',
+    edit(
+      COMPETENCY,
+      'koTranslationNotice: 원문은 영어입니다. 브라우저 번역은 보조 수단입니다.',
+      'koTranslationNotice:\n  en: The article is in English.\n  ko: 원문은 영어입니다.',
+    ),
+  )
+  expectProblem(root, /koTranslationNotice is Korean-only by design and must be a plain string/)
+})
+
+test('an explanation that is neither empty nor an en/ko pair fails the build', () => {
+  const root = scaffold()
+  write(root, 'competencies/visual-hierarchy.md', edit(COMPETENCY, "explanation: ''", 'explanation: one language only'))
+  expectProblem(root, /explanation must be empty or an en\/ko pair/)
 })
 
 test('a Glossary entry missing one of its two language variants fails the build', () => {

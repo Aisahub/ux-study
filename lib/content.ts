@@ -41,7 +41,23 @@ export interface GlossaryEntry {
 export interface Competency {
   slug: string
   name: Bilingual
-  /** The full front matter, carrying fields authored later (#14) than this loader. */
+  /** What the Learner can be seen to do afterwards — an observable action, never knowledge held. */
+  objective: Bilingual
+  /** What to audit given the Learner's role: developers the interface they built, PMs the flow they signed off. */
+  roleHint: Bilingual
+  /** Two or three questions to carry into the source article — a hypothesis instead of a skim. */
+  preReadingQuestions: Bilingual[]
+  /** The source article this Competency scaffolds around (ADR-0002). */
+  source: { url: string; attribution: string }
+  /**
+   * Korean-only by design, so a plain string rather than an en/ko pair: the
+   * source articles are English, and browser page translation is offered as
+   * an aid to the Korean cohort alone (ADR-0002, amended).
+   */
+  koTranslationNotice?: string
+  /** Null until the written-explanation trial (#29) fills exactly one. */
+  explanation: Bilingual | null
+  /** The full front matter, carrying fields authored later than this loader. */
   frontmatter: Record<string, unknown>
   body: string
 }
@@ -205,11 +221,51 @@ function loadCompetencies(root: string, config: ContentConfig, problems: string[
     if (!config.stage1Competencies.includes(slug)) {
       problems.push(`${rel}: "${slug}" is not a Competency declared in config.md`)
     }
-    if (!isLanguagePair(data.name)) {
-      problems.push(`${rel}: name must carry en and ko variants`)
+    for (const field of ['name', 'objective', 'roleHint'] as const) {
+      if (!isLanguagePair(data[field])) {
+        problems.push(`${rel}: ${field} must carry en and ko variants`)
+      }
     }
 
-    competencies.push({ slug, name: asBilingual(data.name), frontmatter: data, body })
+    const questions = Array.isArray(data.preReadingQuestions) ? data.preReadingQuestions : null
+    if (!questions || questions.length === 0 || questions.some((question) => !isLanguagePair(question))) {
+      problems.push(`${rel}: preReadingQuestions must be a list of en/ko question pairs`)
+    }
+
+    const source = isRecord(data.source) ? data.source : {}
+    if (
+      typeof source.url !== 'string' ||
+      source.url.trim() === '' ||
+      typeof source.attribution !== 'string' ||
+      source.attribution.trim() === ''
+    ) {
+      problems.push(`${rel}: source must carry the article url and its attribution`)
+    }
+
+    if (data.koTranslationNotice !== undefined && typeof data.koTranslationNotice !== 'string') {
+      problems.push(`${rel}: koTranslationNotice is Korean-only by design and must be a plain string`)
+    }
+
+    // Present-and-empty is the MVP state (ADR-0002); the trial (#29) turns
+    // exactly one into a filled en/ko pair. Anything else is a mistake.
+    let explanation: Bilingual | null = null
+    if (isLanguagePair(data.explanation)) explanation = asBilingual(data.explanation)
+    else if (data.explanation !== undefined && data.explanation !== null && data.explanation !== '') {
+      problems.push(`${rel}: explanation must be empty or an en/ko pair`)
+    }
+
+    competencies.push({
+      slug,
+      name: asBilingual(data.name),
+      objective: asBilingual(data.objective),
+      roleHint: asBilingual(data.roleHint),
+      preReadingQuestions: (questions ?? []).filter(isLanguagePair).map(asBilingual),
+      source: { url: stringOrEmpty(source.url), attribution: stringOrEmpty(source.attribution) },
+      koTranslationNotice: typeof data.koTranslationNotice === 'string' ? data.koTranslationNotice : undefined,
+      explanation,
+      frontmatter: data,
+      body,
+    })
   }
   return competencies
 }
