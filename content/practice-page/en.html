@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mellow Beauty — Orders</title>
+<link rel="stylesheet" href="./practice-page.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="page-head">
+    <h1 data-element="page-title">Orders</h1>
+    <input class="search" type="search" placeholder="Search orders" data-element="order-search">
+    <button class="btn btn-export" data-element="export-orders">Export CSV</button>
+  </header>
+
+  <aside class="banner" data-element="upgrade-banner">
+    <p>Mellow Beauty Pro is live — automated restock alerts, carrier rate compare, priority support!</p>
+    <button class="btn">See plans</button>
+  </aside>
+
+  <section class="stats">
+    <div class="stat" data-element="stat-new-orders">
+      <p class="stat-label">New orders</p>
+      <p class="stat-value">18</p>
+    </div>
+    <div class="stat" data-element="stat-monthly-revenue">
+      <p class="stat-label">Revenue, last 30 days</p>
+      <p class="stat-value">$9,340</p>
+    </div>
+    <div class="stat stat--refreshed" data-element="stat-last-refreshed">
+      <p class="stat-label">Last refreshed</p>
+      <p class="stat-value">09:12</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 data-element="orders-heading">Recent orders</h2>
+    <table data-element="orders-table">
+      <thead>
+        <tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>#2841</td><td>Ayu Lestari</td><td>$64.00</td><td><span class="chip chip--shipped">Shipped</span></td></tr>
+        <tr><td>#2840</td><td>Grace Tan</td><td>$27.50</td><td><span class="chip chip--preparing">Preparing</span></td></tr>
+        <tr><td>#2839</td><td>Putri Andini</td><td>$112.00</td><td><span class="chip chip--delivered">Delivered</span></td></tr>
+        <tr><td>#2838</td><td>Daniel Wong</td><td>$45.90</td><td><span class="chip chip--preparing">Preparing</span></td></tr>
+        <tr><td>#2837</td><td>Sari Dewi</td><td>$88.20</td><td><span class="chip chip--delivered">Delivered</span></td></tr>
+      </tbody>
+    </table>
+    <div class="table-foot">
+      <button class="btn btn-download" data-element="download-orders">Download</button>
+      <button class="btn btn-confirm" data-element="confirm-selected-orders">Confirm selected orders</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 data-element="shipping-heading">Shipping settings</h2>
+    <form data-element="shipping-form">
+      <label class="field-label" for="pickup-contact">Pickup contact</label>
+      <input class="field-input" id="pickup-contact" type="text" value="Rina Wijaya" data-element="pickup-contact-field">
+      <label class="field-label" for="pickup-phone">Phone</label>
+      <input class="field-input" id="pickup-phone" type="tel" value="+62 812-3345-7788" data-element="pickup-phone-field">
+      <label class="field-label" for="warehouse-address">Warehouse address</label>
+      <input class="field-input" id="warehouse-address" type="text" value="Jl. Kemang Raya 18, Jakarta 12730" data-element="warehouse-address-field">
+      <button class="btn btn-save" type="submit" data-element="save-shipping">Save settings</button>
+    </form>
+    <p class="help" data-element="shipping-help-text">Orders confirmed before the 15:00 cutoff are batched into the same-day consignment manifest and handed to the fulfilment partner at the 16:30 collection window, while orders confirmed after the cutoff roll into the next business day's consignment unless expedited handling has been enabled in the carrier profile, in which case the surcharge schedule defined in the carrier profile applies instead of the standard rate card, and note that address changes submitted after consignment lock cannot be applied automatically but require a manual void-and-reissue through the fulfilment partner's support desk, which can take up to two business days to complete depending on the carrier's processing queue.</p>
+    <a class="invoice-link" href="/invoices/latest" data-element="tax-invoice-link">Download monthly tax invoice</a>
+  </section>
+
+</div>
+</body>
+</html>

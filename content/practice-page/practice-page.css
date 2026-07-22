@@ -1,0 +1,230 @@
+/*
+ * Styles for both language variants of the Practice Page. One file, linked by
+ * both, so the variants cannot drift visually. The planted defects live in the
+ * markup and in these rules; nothing here labels them.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f6f7f8;
+  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 20px 48px;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.page-head h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  margin-right: auto;
+}
+
+.search {
+  width: 220px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.btn {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-export {
+  background: #fff;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+}
+
+.banner {
+  background: linear-gradient(100deg, #7c3aed, #db2777 70%, #f59e0b);
+  color: #fff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35);
+}
+
+.banner p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  margin-right: auto;
+}
+
+.banner .btn {
+  background: #fff;
+  color: #7c3aed;
+  white-space: nowrap;
+}
+
+.stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 4px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.stat--refreshed .stat-value {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.card h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th {
+  text-align: left;
+  font-weight: 600;
+  color: #6b7280;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.chip {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.chip--shipped {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.chip--preparing {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.chip--delivered {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.table-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.btn-download {
+  background: #16a34a;
+  color: #fff;
+}
+
+.btn-confirm {
+  background: #e9eaec;
+  color: #9aa0a8;
+}
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 16px;
+}
+
+.field-input {
+  display: block;
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  margin: 0 0 4px;
+}
+
+.btn-save {
+  background: #2563eb;
+  color: #fff;
+  margin-top: 12px;
+}
+
+.help {
+  font-size: 13px;
+  color: #4b5563;
+  margin: 16px 0 0;
+}
+
+.invoice-link {
+  color: inherit;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 14px;
+}

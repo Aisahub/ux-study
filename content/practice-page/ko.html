@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mellow Beauty — 주문 관리</title>
+<link rel="stylesheet" href="./practice-page.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="page-head">
+    <h1 data-element="page-title">주문 관리</h1>
+    <input class="search" type="search" placeholder="주문 검색" data-element="order-search">
+    <button class="btn btn-export" data-element="export-orders">CSV 내보내기</button>
+  </header>
+
+  <aside class="banner" data-element="upgrade-banner">
+    <p>Mellow Beauty Pro 출시 — 자동 재입고 알림, 배송사 요금 비교, 우선 지원까지!</p>
+    <button class="btn">요금제 보기</button>
+  </aside>
+
+  <section class="stats">
+    <div class="stat" data-element="stat-new-orders">
+      <p class="stat-label">신규 주문</p>
+      <p class="stat-value">18</p>
+    </div>
+    <div class="stat" data-element="stat-monthly-revenue">
+      <p class="stat-label">최근 30일 매출</p>
+      <p class="stat-value">₩12,480,000</p>
+    </div>
+    <div class="stat stat--refreshed" data-element="stat-last-refreshed">
+      <p class="stat-label">마지막 갱신</p>
+      <p class="stat-value">09:12</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 data-element="orders-heading">최근 주문</h2>
+    <table data-element="orders-table">
+      <thead>
+        <tr><th>주문번호</th><th>고객</th><th>결제 금액</th><th>상태</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>#2841</td><td>김서연</td><td>₩86,000</td><td><span class="chip chip--shipped">배송 중</span></td></tr>
+        <tr><td>#2840</td><td>이지은</td><td>₩37,000</td><td><span class="chip chip--preparing">준비 중</span></td></tr>
+        <tr><td>#2839</td><td>박민준</td><td>₩150,000</td><td><span class="chip chip--delivered">배송 완료</span></td></tr>
+        <tr><td>#2838</td><td>최수아</td><td>₩61,500</td><td><span class="chip chip--preparing">준비 중</span></td></tr>
+        <tr><td>#2837</td><td>정하늘</td><td>₩118,000</td><td><span class="chip chip--delivered">배송 완료</span></td></tr>
+      </tbody>
+    </table>
+    <div class="table-foot">
+      <button class="btn btn-download" data-element="download-orders">다운로드</button>
+      <button class="btn btn-confirm" data-element="confirm-selected-orders">선택한 주문 확정</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 data-element="shipping-heading">배송 설정</h2>
+    <form data-element="shipping-form">
+      <label class="field-label" for="pickup-contact">수거 담당자</label>
+      <input class="field-input" id="pickup-contact" type="text" value="한지민" data-element="pickup-contact-field">
+      <label class="field-label" for="pickup-phone">연락처</label>
+      <input class="field-input" id="pickup-phone" type="tel" value="010-3345-7788" data-element="pickup-phone-field">
+      <label class="field-label" for="warehouse-address">출고지 주소</label>
+      <input class="field-input" id="warehouse-address" type="text" value="서울 마포구 성지길 25, 2층" data-element="warehouse-address-field">
+      <button class="btn btn-save" type="submit" data-element="save-shipping">설정 저장</button>
+    </form>
+    <p class="help" data-element="shipping-help-text">15:00 마감 이전에 확정된 주문은 당일 위탁 배송 명세에 일괄 편성되어 16:30 수거 시간에 풀필먼트 협력사로 인계되며, 마감 이후에 확정된 주문은 배송사 프로필에서 특급 처리 옵션을 활성화해 둔 경우가 아니라면 다음 영업일 위탁 물량으로 이월되는데, 특급 처리를 활성화한 경우에는 표준 요금표 대신 배송사 프로필에 정의된 할증 요금표가 적용되고, 위탁 확정 이후에 접수된 주소 변경은 자동으로 반영되지 않으므로 풀필먼트 협력사 지원 창구를 통한 수동 취소 후 재발행 절차가 필요하며 이 절차는 배송사 처리 대기열에 따라 완료까지 최대 2영업일이 소요될 수 있습니다.</p>
+    <a class="invoice-link" href="/invoices/latest" data-element="tax-invoice-link">월별 세금계산서 내려받기</a>
+  </section>
+
+</div>
+</body>
+</html>

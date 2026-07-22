@@ -72,8 +72,8 @@ This distinction matters because the deferral is the largest cost of this decisi
 
 ## Follow-up work
 
-- Build the Practice Page, deriving each Planted Defect from a real Aisahub screen rather than inventing it, and keep the manifest in the same commit as the markup.
-- Verify each Planted Defect is findable from a screenshot alone; anything requiring interaction belongs to Stage 2, not Stage 1.
-- Confirm the six planted defects are not evenly one-per-Competency-plus-two, which would let a Learner reason about the distribution instead of looking at the page.
+- ~~Build the Practice Page, deriving each Planted Defect from a real Aisahub screen rather than inventing it, and keep the manifest in the same commit as the markup.~~ **Closed 2026-07-22 by issue #15** — built at `content/practice-page/`, manifest beside the markup in the same commit. The derive-from-a-real-screen mitigation was waived by the decision-maker during review: the defects are authored from the Stage 1 curriculum's recurring archetypes instead, accepting the artificiality consequence above rather than mitigating it.
+- ~~Verify each Planted Defect is findable from a screenshot alone; anything requiring interaction belongs to Stage 2, not Stage 1.~~ **Closed 2026-07-22** — all six are static visual states (contrast, size, spacing, text density, naming, styling); none requires clicking, waiting, or erring.
+- ~~Confirm the six planted defects are not evenly one-per-Competency-plus-two, which would let a Learner reason about the distribution instead of looking at the page.~~ **Closed 2026-07-22** — planted 3-1-1-1 (three on visual-hierarchy), and `test/practice-page.test.ts` fails the suite if the spread ever becomes even.
 - **Decide where own-work auditing happens, as its own decision.** It is currently nowhere. Stage 2 is the proposal; whether the programme should instead reach real product pages earlier, or alongside Stage 1, is untested and unargued. This item stays open until an ADR closes it.
 - After the first cohort, review which Planted Defects were missed most often, and whether the two locations missed the same ones.
