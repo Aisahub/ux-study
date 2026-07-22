@@ -54,6 +54,10 @@ _Avoid_: assignment, homework, project, final exam
 One defect a Learner reports inside a Self-Audit Report. Four parts: the page element (selected), the UX Principle it violates (selected from the Glossary), a description of the defect, and a proposed fix. The two selected parts are what make one Learner's Finding comparable to another's; the two written parts are what make it useful.
 _Avoid_: issue, item, observation, comment
 
+**Brief** (브리프 / 任务说明):
+The instructions a Learner reads before auditing the Practice Page, in both Learner-facing languages, stating what a complete Self-Audit Report requires: the minimum of three Findings and the four parts of a Finding. It never states how many Planted Defects the page contains — the count is withheld until submission so the Learner looks at the page rather than counting toward a number. It also describes the optional fix-and-show step, for which a screenshot is sufficient from a non-developer. Every UX Principle it cites exists in the Principle Glossary in both languages.
+_Avoid_: instructions, prompt, assignment sheet, task description
+
 **Practice Page** (연습 페이지 / 练习页):
 The page Stage 1 Learners audit — authored by this project rather than taken from real work, so that it contains exactly what Stage 1 teaches and so that the correct answer is known rather than inferred. Its source is published; a Learner may fix a defect and show the result. See ADR-0007.
 _Avoid_: sample, demo, test page, sandbox
