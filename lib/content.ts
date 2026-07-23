@@ -80,6 +80,14 @@ export interface QuizItem {
    * question and does not belong in a pool (CONTEXT.md, Quiz Item).
    */
   artefact: Bilingual
+  /**
+   * The artefact drawn rather than described: an HTML fragment styled by
+   * `items/item-screen.css` and rendered isolated from the platform. Optional,
+   * because "a described page" is a format ADR-0006 allows. Where it is
+   * present it becomes what the Learner judges, and `artefact` steps back to
+   * being the equivalent for anyone who cannot see it.
+   */
+  screen?: Bilingual
   /** The question asked about the artefact. */
   prompt: Bilingual
   options: { en: QuizItemOption[]; ko: QuizItemOption[] }
@@ -116,6 +124,8 @@ export interface Content {
   competencies: Competency[]
   /** Item pools keyed by Competency slug. */
   items: Record<string, QuizItem[]>
+  /** The one stylesheet every item screen is drawn with, so pools cannot drift visually. */
+  itemScreenCss: string
   briefs: Brief[]
   practicePage: PracticePage
 }
@@ -138,11 +148,12 @@ export function loadContent(root: string = join(process.cwd(), 'content')): Cont
   const principles = new Set(glossary.map((entry) => entry.slug))
   const competencies = loadCompetencies(root, config, problems)
   const items = loadItems(root, config, principles, problems)
+  const itemScreenCss = loadItemScreenCss(root, items, problems)
   const briefs = loadBriefs(root, principles, problems)
   const practicePage = loadPracticePage(root, config, principles, problems)
 
   if (problems.length > 0) throw new ContentError(problems)
-  return { config, glossary, competencies, items, briefs, practicePage }
+  return { config, glossary, competencies, items, itemScreenCss, briefs, practicePage }
 }
 
 function loadConfig(root: string, problems: string[]): ContentConfig | null {
@@ -338,12 +349,21 @@ function loadItems(
         }
       }
 
+      // A drawn screen is optional, but a half-authored one is a mistake: the
+      // two language variants must exist together or the item renders blank
+      // for one cohort. The pair walker above already caught an empty variant;
+      // this catches a `screen` that is not a language pair at all.
+      if (data.screen !== undefined && !isLanguagePair(data.screen)) {
+        problems.push(`${rel}: screen must carry en and ko variants`)
+      }
+
       pool.push({
         slug: file.replace(/\.md$/, ''),
         competency,
         sourceSection: stringOrEmpty(data.sourceSection),
         principles: citedPrinciples(data.principles, rel, principles, problems),
         artefact: asBilingual(data.artefact),
+        screen: isLanguagePair(data.screen) ? asBilingual(data.screen) : undefined,
         prompt: asBilingual(data.prompt),
         options,
         frontmatter: data,
@@ -360,6 +380,21 @@ function loadItems(
     pools[competency] = pool
   }
   return pools
+}
+
+/**
+ * The stylesheet item screens are drawn with. Required only once something
+ * draws one — until then it would be a file the project asks for and nothing
+ * reads. Missing it while items reference it is worth failing the build over:
+ * the screens would still render, unstyled, and a Learner would be judging a
+ * layout nobody authored.
+ */
+function loadItemScreenCss(root: string, items: Record<string, QuizItem[]>, problems: string[]): string {
+  const drawn = Object.values(items).some((pool) => pool.some((item) => item.screen))
+  const path = join(root, 'items', 'item-screen.css')
+  if (existsSync(path)) return readFileSync(path, 'utf8')
+  if (drawn) problems.push('items/item-screen.css is missing — items draw screens that nothing styles')
+  return ''
 }
 
 function loadBriefs(root: string, principles: Set<string>, problems: string[]): Brief[] {

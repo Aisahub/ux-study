@@ -7,7 +7,7 @@ import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
 import { shuffledOrder } from '@/lib/quiz'
-import { content } from '@/lib/server-content'
+import { content, itemScreenCss } from '@/lib/server-content'
 
 import { QuizWizard } from './wizard'
 
@@ -92,11 +92,13 @@ export default async function AttemptPage({
       <QuizWizard
         lang={attemptLang}
         attemptId={attempt.id}
+        screenCss={itemScreenCss}
         items={items.map((item) => {
           const order = shuffledOrder(`${attempt.id}:${item.slug}`, item.options[attemptLang].length)
           return {
             slug: item.slug,
             artefact: item.artefact[attemptLang],
+            screen: item.screen?.[attemptLang],
             prompt: item.prompt[attemptLang],
             // Original indices survive the shuffle so scoring is order-blind;
             // the keyed flag itself must never travel to the client (#22).

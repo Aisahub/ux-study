@@ -130,6 +130,55 @@ test('an open attempt serves its items with no correct-answer key anywhere in th
   expect(html).not.toMatch(/correct&quot;/)
 })
 
+test('an item that draws its screen shows the screen, and stops printing the words for it', async () => {
+  const drawn = pool.find((item) => item.screen)
+  // A pool with no drawn screens is a state this repository has been in and
+  // may be in again mid-authoring; it is not a failure of the mechanism.
+  if (!drawn) return
+
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  const attempt = await openAttempt(email, [drawn.slug, ...slugs.filter((slug) => slug !== drawn.slug)].slice(0, config.drawSize))
+
+  const html = await (
+    await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz/${attempt.id}`, { headers: { cookie } })
+  ).text()
+
+  // The screen is served, isolated: a frame the platform's own styling cannot
+  // reach into, so what is judged is what the author drew. Read out of the
+  // attribute rather than matched in the page, because the same markup also
+  // travels in the RSC payload — a match there would pass on a page that
+  // rendered no frame at all.
+  // Case-insensitive: React serialises the prop's own spelling, `srcDoc`, and
+  // HTML attribute names do not care.
+  const [, srcdoc = ''] = /srcdoc="([^"]*)"/i.exec(html) ?? []
+  expect(html).toContain('sandbox="allow-scripts"')
+  expect(srcdoc).toContain('btn--ghost')
+  expect(srcdoc).toContain(drawn.screen!.en.slice(0, 20).replace(/[<>"]/g, (c) => `&${{ '<': 'lt', '>': 'gt', '"': 'quot' }[c]};`))
+
+  // And the prose is no longer read out beside it. It survives as the frame's
+  // accessible name for anyone who cannot see the screen — an attribute, so
+  // invisible to this — but a Learner who can see one is not handed a
+  // paragraph that answers the question before they look.
+  expect(visibleText(html)).not.toContain(drawn.artefact.en.slice(0, 40))
+})
+
+test('the item-screen stylesheet reaches a Learner with its authoring notes stripped', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  const attempt = await openAttempt(email, slugs.slice(0, config.drawSize))
+
+  const html = await (
+    await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz/${attempt.id}`, { headers: { cookie } })
+  ).text()
+
+  // The authored file explains which class choices make a screen wrong. That
+  // is documentation for whoever writes the next item and a hint for whoever
+  // is sitting the quiz — the same leak the Practice Page stylesheet had.
+  expect(html).not.toMatch(/creates its defect/i)
+  expect(html).not.toMatch(/Practice Page stylesheet/i)
+})
+
 test('while an attempt is open, the attempt owns the language: the other path returns to it', async () => {
   const email = freshLearner()
   const cookie = await sessionCookieFor(email)

@@ -1,0 +1,116 @@
+/*
+ * Styles for the screens quiz items are judged against.
+ *
+ * Deliberately NOT the Practice Page stylesheet. That one carries the Stage 1
+ * planted defects inside its own class names, so composing an item out of it
+ * would import defects the item did not intend. This kit is neutral: every
+ * class here is a correct, unremarkable piece of an internal tool. An item
+ * creates its defect by choosing badly among these — a primary action wearing
+ * `.btn--ghost`, a body paragraph wearing `.text--wide` — or by an inline
+ * style where no sensible class exists.
+ *
+ * Nothing here names a defect or a principle. A Learner can read this file.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  /* Padding rather than a margin on `.screen`, so the gap belongs to the box
+     the host measures. A child's margin collapses out through `body` and is
+     then not counted in its height, which is how the frame first came out
+     short of its own content. */
+  padding: 12px;
+  background: #f6f7f8;
+  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* The frame every screen sits in, so artefacts share one scale and one
+   margin and differ only where the item means them to. */
+.screen {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.screen h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.screen h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.screen p {
+  margin: 0 0 10px;
+}
+
+.screen p:last-child {
+  margin-bottom: 0;
+}
+
+/* A row of actions, in the order the markup gives them. */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font: inherit;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Filled — the loudest thing a screen can say. */
+.btn--solid {
+  background: #1f2937;
+  border-color: #1f2937;
+  color: #ffffff;
+}
+
+/* Filled in red, for destruction and for alarm. */
+.btn--danger {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+/* Outlined — visible, clearly a control, quieter than filled. */
+.btn--outline {
+  background: #ffffff;
+  border-color: #4b5563;
+  color: #1f2937;
+}
+
+/* Bare text, no border and no fill. */
+.btn--ghost {
+  color: #9ca3af;
+}
+
+/* Text that is present but plays no part in the decision. */
+.muted {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.note {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 14px;
+}

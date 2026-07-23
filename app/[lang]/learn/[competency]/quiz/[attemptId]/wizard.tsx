@@ -5,10 +5,13 @@ import { useState, useTransition } from 'react'
 import type { Language } from '@/lib/language'
 
 import { submitAttempt } from '../actions'
+import { ItemScreen } from './screen'
 
 interface WizardItem {
   slug: string
   artefact: string
+  /** The drawn screen, where the item has one; otherwise the artefact is read. */
+  screen?: string
   prompt: string
   /** Shuffled for display; index is the option's authored position, which is what scoring understands. */
   options: { index: number; text: string }[]
@@ -54,10 +57,12 @@ export function QuizWizard({
   lang,
   attemptId,
   items,
+  screenCss,
 }: {
   lang: Language
   attemptId: number
   items: WizardItem[]
+  screenCss: string
 }) {
   const copy = COPY[lang]
   const [current, setCurrent] = useState(0)
@@ -72,9 +77,20 @@ export function QuizWizard({
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
       <p className="text-sm text-zinc-500">{copy.progress(current + 1, items.length)}</p>
 
-      <div className="whitespace-pre-line rounded-lg border border-zinc-200 p-4 text-sm leading-relaxed dark:border-zinc-800">
-        {item.artefact}
-      </div>
+      {/*
+        One channel, never both. An item with a drawn screen keeps its prose
+        as the frame's accessible name rather than printing it alongside: a
+        paragraph that says a button is light grey on white answers the
+        question before the screen is looked at, and the Learner is back to
+        reading a description of a defect instead of seeing one.
+      */}
+      {item.screen ? (
+        <ItemScreen slug={item.slug} lang={lang} html={item.screen} css={screenCss} description={item.artefact} />
+      ) : (
+        <div className="whitespace-pre-line rounded-lg border border-zinc-200 p-4 text-sm leading-relaxed dark:border-zinc-800">
+          {item.artefact}
+        </div>
+      )}
       <p className="font-medium">{item.prompt}</p>
 
       <fieldset className="flex flex-col gap-2">

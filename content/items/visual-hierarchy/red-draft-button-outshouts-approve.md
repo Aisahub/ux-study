@@ -19,6 +19,27 @@ artefact:
     바탕에 짙은 회색 외곽선입니다. 정작 돈이 나가는 동작이자 이 화면을 여는
     이유인 "결재 승인"은 흰 바탕에 옅은 회색 글자뿐이고 테두리조차 없습니다.
     그 아래에 "대기 중인 청구서 23건"이 흐릿하게 적혀 있습니다.
+screen:
+  en: |-
+    <div class="screen">
+      <h1>Invoice approval</h1>
+      <div class="actions">
+        <button class="btn btn--danger">Save draft</button>
+        <button class="btn btn--outline">Refer to finance</button>
+        <button class="btn btn--ghost">Approve payment</button>
+      </div>
+      <p class="note">23 invoices waiting</p>
+    </div>
+  ko: |-
+    <div class="screen">
+      <h1>청구서 결재</h1>
+      <div class="actions">
+        <button class="btn btn--danger">임시 저장</button>
+        <button class="btn btn--outline">재무팀에 문의</button>
+        <button class="btn btn--ghost">결재 승인</button>
+      </div>
+      <p class="note">대기 중인 청구서 23건</p>
+    </div>
 prompt:
   en: >-
     Which change fixes what this screen's colours are saying?
