@@ -21,6 +21,53 @@ artefact:
     심장의 전기 리듬이 정상보다 오래 걸리는 징후가 있는지 살펴보십시오"가
     됩니다. 시안 B의 문장은 두 배 가까이 길고, 이름이 붙은 측정 지표는
     사라졌습니다.
+screen:
+  en: |-
+    <div class="split">
+      <div>
+        <p class="pane-label">Draft A</p>
+        <div class="screen">
+          <h3>Dosing guidance — for prescribing clinicians</h3>
+          <div class="prose" style="font-size:15px;line-height:1.6">
+            <p>Titrate to 10mg daily.</p>
+            <p>Monitor for QT prolongation during the first week.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">Draft B</p>
+        <div class="screen">
+          <h3>Dosing guidance — for prescribing clinicians</h3>
+          <div class="prose" style="font-size:15px;line-height:1.6">
+            <p>Slowly adjust the amount taken until it reaches 10mg each day.</p>
+            <p>During the first week, watch for signs that the heart's electrical rhythm is taking longer than it should.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  ko: |-
+    <div class="split">
+      <div>
+        <p class="pane-label">시안 A</p>
+        <div class="screen">
+          <h3>복용 지침 — 처방 의사용</h3>
+          <div class="prose" style="font-size:15px;line-height:1.6">
+            <p>하루 10mg까지 적정(titration)하십시오.</p>
+            <p>첫 주에는 QT 연장을 모니터링하십시오.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">시안 B</p>
+        <div class="screen">
+          <h3>복용 지침 — 처방 의사용</h3>
+          <div class="prose" style="font-size:15px;line-height:1.6">
+            <p>복용량을 하루 10mg에 이를 때까지 천천히 조절하십시오.</p>
+            <p>첫 주 동안은 심장의 전기 리듬이 정상보다 오래 걸리는 징후가 있는지 살펴보십시오.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 prompt:
   en: >-
     Which draft should ship for this page?

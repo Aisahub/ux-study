@@ -18,6 +18,63 @@ artefact:
     것은 아무것도 없고 위아래 여백은 16px로, 이 페이지가 다른 곳에서 쓰는
     간격과 똑같습니다. 그 아래에 리포트 표가 있고, 표 밑에 페이지 이동이
     있습니다.
+screen:
+  en: |-
+    <div class="screen stack">
+      <h1>Billing report</h1>
+      <div class="region">
+        <div class="stats stats--three">
+          <div><p class="stat-label">Invoiced</p><p class="stat-value">$48,200</p></div>
+          <div><p class="stat-label">Collected</p><p class="stat-value">$41,150</p></div>
+          <div><p class="stat-label">Outstanding</p><p class="stat-value">$7,050</p></div>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="control">1 Jun – 31 Jul</span>
+        <span class="control">All clients</span>
+        <span class="control">All statuses</span>
+        <span class="control">USD</span>
+        <span class="link">Reset</span>
+      </div>
+      <table class="table">
+        <thead><tr><th>Client</th><th>Invoiced</th><th>Collected</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Northwind</td><td>$12,400</td><td>$12,400</td><td>Paid</td></tr>
+          <tr><td>Lakeside Co</td><td>$9,800</td><td>$4,000</td><td>Part paid</td></tr>
+          <tr><td>Bright Foods</td><td>$7,300</td><td>$7,300</td><td>Paid</td></tr>
+          <tr><td>Harbour Ltd</td><td>$6,150</td><td>$0</td><td>Overdue</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">1–4 of 128 · Previous · Next</p>
+    </div>
+  ko: |-
+    <div class="screen stack">
+      <h1>청구 리포트</h1>
+      <div class="region">
+        <div class="stats stats--three">
+          <div><p class="stat-label">청구액</p><p class="stat-value">4,820만</p></div>
+          <div><p class="stat-label">수금액</p><p class="stat-value">4,115만</p></div>
+          <div><p class="stat-label">미수금</p><p class="stat-value">705만</p></div>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="control">6월 1일 – 7월 31일</span>
+        <span class="control">전체 고객사</span>
+        <span class="control">전체 상태</span>
+        <span class="control">KRW</span>
+        <span class="link">초기화</span>
+      </div>
+      <table class="table">
+        <thead><tr><th>고객사</th><th>청구액</th><th>수금액</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td>노스윈드</td><td>1,240만</td><td>1,240만</td><td>완납</td></tr>
+          <tr><td>레이크사이드</td><td>980만</td><td>400만</td><td>부분 납부</td></tr>
+          <tr><td>브라이트푸드</td><td>730만</td><td>730만</td><td>완납</td></tr>
+          <tr><td>하버</td><td>615만</td><td>0</td><td>연체</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">128건 중 1–4 · 이전 · 다음</p>
+    </div>
 prompt:
   en: >-
     The five controls do not read as one set. What is the smallest change that

@@ -60,9 +60,12 @@ export function ItemScreen({
   description: string
 }) {
   const frame = useRef<HTMLIFrameElement>(null)
-  // Enough to show most screens before the first measurement lands, so the
-  // page does not visibly jump on a fast connection.
-  const [height, setHeight] = useState(240)
+  // Kept per item, not as one number. This component is not remounted when
+  // the Learner moves between items, so a single height would be the previous
+  // screen's until the new one reported — briefly cutting off a screen that
+  // happens to be taller. Remembering them also makes stepping Back instant
+  // and correct rather than re-measured.
+  const [heights, setHeights] = useState<Record<string, number>>({})
 
   useEffect(() => {
     function receive(event: MessageEvent) {
@@ -71,12 +74,17 @@ export function ItemScreen({
       if (event.source !== frame.current?.contentWindow) return
       const data = event.data
       if (data?.type !== HEIGHT_MESSAGE || data.slug !== slug) return
-      if (typeof data.height === 'number' && data.height > 0) setHeight(data.height)
+      if (typeof data.height !== 'number' || data.height <= 0) return
+      setHeights((previous) => (previous[slug] === data.height ? previous : { ...previous, [slug]: data.height }))
     }
 
     window.addEventListener('message', receive)
     return () => window.removeEventListener('message', receive)
   }, [slug])
+
+  // Enough to show most screens before the first measurement lands, so the
+  // page does not visibly jump on a fast connection.
+  const height = heights[slug] ?? 240
 
   const srcDoc = `<!doctype html>
 <html lang="${lang}">

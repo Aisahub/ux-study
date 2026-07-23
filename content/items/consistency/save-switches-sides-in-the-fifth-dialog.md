@@ -17,6 +17,23 @@ artefact:
     디자인한 알림 대화상자 — 만 둘을 뒤집어서, 채워진 "저장"이 왼쪽 아래에,
     "취소"가 오른쪽 아래에 있습니다. 저장 버튼 자체는 크기도 색도 이름도 다른
     넷과 똑같습니다.
+screen:
+  en: |-
+    <div class="split split--six">
+      <div><div class="dialog"><p class="dialog-title">Rename workspace</p><input class="control" value="Aisahub" style="width:100%"><div class="dialog-foot actions--end"><span class="btn btn--ghost">Cancel</span><button class="btn btn--blue">Save</button></div></div></div>
+      <div><div class="dialog"><p class="dialog-title">Time zone</p><input class="control" value="Asia/Seoul" style="width:100%"><div class="dialog-foot actions--end"><span class="btn btn--ghost">Cancel</span><button class="btn btn--blue">Save</button></div></div></div>
+      <div><div class="dialog"><p class="dialog-title">Password</p><input class="control" value="••••••••" style="width:100%"><div class="dialog-foot actions--end"><span class="btn btn--ghost">Cancel</span><button class="btn btn--blue">Save</button></div></div></div>
+      <div><div class="dialog"><p class="dialog-title">Language</p><input class="control" value="English" style="width:100%"><div class="dialog-foot actions--end"><span class="btn btn--ghost">Cancel</span><button class="btn btn--blue">Save</button></div></div></div>
+      <div><div class="dialog"><p class="dialog-title">Notifications</p><input class="control" value="Mentions only" style="width:100%"><div class="dialog-foot"><button class="btn btn--blue">Save</button><span class="btn btn--ghost" style="margin-left:auto">Cancel</span></div></div></div>
+    </div>
+  ko: |-
+    <div class="split split--six">
+      <div><div class="dialog"><p class="dialog-title">워크스페이스 이름</p><input class="control" value="Aisahub" style="width:100%"><div class="dialog-foot actions--end"><span class="btn btn--ghost">취소</span><button class="btn btn--blue">저장</button></div></div></div>
+      <div><div class="dialog"><p class="dialog-title">시간대</p><input class="control" value="Asia/Seoul" style="width:100%"><div class="dialog-foot actions--end"><span class="btn btn--ghost">취소</span><button class="btn btn--blue">저장</button></div></div></div>
+      <div><div class="dialog"><p class="dialog-title">비밀번호</p><input class="control" value="••••••••" style="width:100%"><div class="dialog-foot actions--end"><span class="btn btn--ghost">취소</span><button class="btn btn--blue">저장</button></div></div></div>
+      <div><div class="dialog"><p class="dialog-title">언어</p><input class="control" value="한국어" style="width:100%"><div class="dialog-foot actions--end"><span class="btn btn--ghost">취소</span><button class="btn btn--blue">저장</button></div></div></div>
+      <div><div class="dialog"><p class="dialog-title">알림</p><input class="control" value="멘션만" style="width:100%"><div class="dialog-foot"><button class="btn btn--blue">저장</button><span class="btn btn--ghost" style="margin-left:auto">취소</span></div></div></div>
+    </div>
 prompt:
   en: >-
     Where should "Save" sit in the notifications dialog, and on what grounds?

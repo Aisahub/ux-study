@@ -15,6 +15,27 @@ artefact:
     "요청 제출"은 폼을 결재자에게 보내고, "임시 저장"은 나만 볼 수 있게
     보관합니다. 새로 온 직원들이 쓰다 만 요청서를 실수로 결재자에게 보내는
     일이 계속 생깁니다.
+screen:
+  en: |-
+    <div class="screen">
+      <div class="field" style="margin-bottom:10px"><span class="field-label">Item</span><input class="control" value="Standing desk, oak"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">Quantity</span><input class="control" value="2"></div>
+      <div class="field" style="margin-bottom:16px"><span class="field-label">Approver</span><input class="control" value="Dana Whitfield"></div>
+      <div class="actions" style="border-top:1px solid #eceef1;padding-top:14px">
+        <button class="btn btn--green" style="width:160px;font-size:15px">Submit request</button>
+        <button class="btn btn--green" style="width:160px;font-size:15px">Save draft</button>
+      </div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <div class="field" style="margin-bottom:10px"><span class="field-label">품목</span><input class="control" value="스탠딩 데스크, 오크"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">수량</span><input class="control" value="2"></div>
+      <div class="field" style="margin-bottom:16px"><span class="field-label">결재자</span><input class="control" value="박서연"></div>
+      <div class="actions" style="border-top:1px solid #eceef1;padding-top:14px">
+        <button class="btn btn--green" style="width:160px;font-size:15px">요청 제출</button>
+        <button class="btn btn--green" style="width:160px;font-size:15px">임시 저장</button>
+      </div>
+    </div>
 prompt:
   en: >-
     What should these two buttons look like?

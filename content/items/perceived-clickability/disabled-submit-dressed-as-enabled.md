@@ -19,6 +19,27 @@ artefact:
     굵은 흰 글자로, 이 도구에서 실제로 동작하는 주요 버튼들과 픽셀 하나까지
     똑같습니다. 두 칸이 채워질 때까지 버튼이 눌리지 않게 두기로 팀이 정했는데,
     그동안에도 버튼의 겉모습은 아무것도 달라지지 않습니다.
+screen:
+  en: |-
+    <div class="screen">
+      <h2>Create account</h2>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">Full name</span><input class="control" value="Alex Ferrer"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">Email</span><input class="control" value="alex@aisahub.com"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">Team</span><input class="control control--empty" value="" placeholder="Choose a team"><span class="required">Required</span></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">Role</span><input class="control control--empty" value="" placeholder="Choose a role"><span class="required">Required</span></div>
+      <div class="field" style="margin-bottom:16px"><span class="field-label">Start date</span><input class="control" value="2026-08-01"></div>
+      <button class="btn btn--blue">Create account</button>
+    </div>
+  ko: |-
+    <div class="screen">
+      <h2>계정 만들기</h2>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">이름</span><input class="control" value="김지우"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">이메일</span><input class="control" value="jiwoo@aisahub.com"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">소속 팀</span><input class="control control--empty" value="" placeholder="팀 선택"><span class="required">필수</span></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">직무</span><input class="control control--empty" value="" placeholder="직무 선택"><span class="required">필수</span></div>
+      <div class="field" style="margin-bottom:16px"><span class="field-label">입사일</span><input class="control" value="2026-08-01"></div>
+      <button class="btn btn--blue">계정 만들기</button>
+    </div>
 prompt:
   en: >-
     The button stays inert until Team and Role are filled — that decision is

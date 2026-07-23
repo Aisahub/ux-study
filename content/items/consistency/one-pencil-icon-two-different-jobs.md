@@ -18,6 +18,59 @@ artefact:
     번째 화면에는 문서가 열려 있고, 상단 도구 막대에 같은 연필 아이콘이
     있는데, 거기서는 자유롭게 손으로 그리는 주석 도구로 전환됩니다. 두 연필
     모두 같은 크기의 똑같은 모양이고, 어느 쪽에도 글자 이름은 없습니다.
+screen:
+  en: |-
+    <div class="split">
+      <div>
+        <p class="pane-label">Documents list</p>
+        <div class="screen">
+          <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">Q3 forecast</span><span class="i i-pencil"></span></div></div>
+          <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">Supplier agreement</span><span class="i i-pencil"></span></div></div>
+          <div class="card"><div class="actions"><span style="margin-right:auto">Packaging brief</span><span class="i i-pencil"></span></div></div>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">A document, open</p>
+        <div class="screen">
+          <div class="toolbar" style="margin-bottom:12px">
+            <span class="i i-pencil"></span>
+            <span style="color:#d1d5db">|</span>
+            <span style="font-size:13px">Comment</span>
+            <span style="font-size:13px">Share</span>
+          </div>
+          <div class="prose" style="font-size:13px;line-height:1.5">
+            <p>Q3 forecast</p>
+            <p>Revenue is tracking eight per cent above plan, carried mostly by the two accounts that renewed early.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  ko: |-
+    <div class="split">
+      <div>
+        <p class="pane-label">문서 목록</p>
+        <div class="screen">
+          <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">3분기 전망</span><span class="i i-pencil"></span></div></div>
+          <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">공급 계약서</span><span class="i i-pencil"></span></div></div>
+          <div class="card"><div class="actions"><span style="margin-right:auto">패키지 기획서</span><span class="i i-pencil"></span></div></div>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">문서를 연 화면</p>
+        <div class="screen">
+          <div class="toolbar" style="margin-bottom:12px">
+            <span class="i i-pencil"></span>
+            <span style="color:#d1d5db">|</span>
+            <span style="font-size:13px">댓글</span>
+            <span style="font-size:13px">공유</span>
+          </div>
+          <div class="prose" style="font-size:13px;line-height:1.5">
+            <p>3분기 전망</p>
+            <p>매출은 계획보다 8% 앞서 가고 있으며, 대부분 일찍 갱신한 두 고객사가 끌어올린 결과입니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 prompt:
   en: >-
     One glyph is carrying two meanings. Which meaning should the pencil keep?

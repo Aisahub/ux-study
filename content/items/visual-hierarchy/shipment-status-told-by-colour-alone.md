@@ -27,6 +27,57 @@ artefact:
     배송 중, 빨강은 지연입니다. 남는 자리에는 표에서 쓰는 13픽셀 글자로 세 가지
     상태 중 어느 것도 한 줄에 들어가지 않습니다. 그 행의 다른 어디에도 이
     배송이 무슨 상태인지 적혀 있지 않습니다.
+screen:
+  en: |-
+    <div class="screen">
+      <h2>Shipments</h2>
+      <div class="scroller">
+        <table class="table" style="min-width:720px">
+          <thead>
+            <tr>
+              <th>Order</th><th>Destination</th><th>Carrier</th><th>Weight</th>
+              <th>Booked</th><th>Due</th><th class="col-narrow">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>#2841</td><td>Jakarta</td><td>PosLaju</td><td>2.4 kg</td><td>2026-07-12</td><td>2026-07-16</td><td class="col-narrow"><span class="dot dot--green"></span></td></tr>
+            <tr><td>#2840</td><td>Surabaya</td><td>JNE</td><td>1.1 kg</td><td>2026-07-12</td><td>2026-07-17</td><td class="col-narrow"><span class="dot dot--amber"></span></td></tr>
+            <tr><td>#2839</td><td>Busan</td><td>CJ</td><td>5.8 kg</td><td>2026-07-11</td><td>2026-07-15</td><td class="col-narrow"><span class="dot dot--red"></span></td></tr>
+            <tr><td>#2838</td><td>Bandung</td><td>SiCepat</td><td>0.9 kg</td><td>2026-07-11</td><td>2026-07-16</td><td class="col-narrow"><span class="dot dot--green"></span></td></tr>
+            <tr><td>#2837</td><td>Incheon</td><td>Hanjin</td><td>3.2 kg</td><td>2026-07-10</td><td>2026-07-14</td><td class="col-narrow"><span class="dot dot--amber"></span></td></tr>
+            <tr><td>#2836</td><td>Medan</td><td>JNE</td><td>7.5 kg</td><td>2026-07-10</td><td>2026-07-15</td><td class="col-narrow"><span class="dot dot--red"></span></td></tr>
+            <tr><td>#2835</td><td>Seoul</td><td>CJ</td><td>1.6 kg</td><td>2026-07-09</td><td>2026-07-13</td><td class="col-narrow"><span class="dot dot--green"></span></td></tr>
+            <tr><td>#2834</td><td>Semarang</td><td>SiCepat</td><td>4.0 kg</td><td>2026-07-09</td><td>2026-07-14</td><td class="col-narrow"><span class="dot dot--green"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Showing 40 of 386</p>
+    </div>
+  ko: |-
+    <div class="screen">
+      <h2>배송 목록</h2>
+      <div class="scroller">
+        <table class="table" style="min-width:720px">
+          <thead>
+            <tr>
+              <th>주문번호</th><th>도착지</th><th>배송사</th><th>중량</th>
+              <th>접수일</th><th>마감일</th><th class="col-narrow">상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>#2841</td><td>자카르타</td><td>PosLaju</td><td>2.4 kg</td><td>2026-07-12</td><td>2026-07-16</td><td class="col-narrow"><span class="dot dot--green"></span></td></tr>
+            <tr><td>#2840</td><td>수라바야</td><td>JNE</td><td>1.1 kg</td><td>2026-07-12</td><td>2026-07-17</td><td class="col-narrow"><span class="dot dot--amber"></span></td></tr>
+            <tr><td>#2839</td><td>부산</td><td>CJ</td><td>5.8 kg</td><td>2026-07-11</td><td>2026-07-15</td><td class="col-narrow"><span class="dot dot--red"></span></td></tr>
+            <tr><td>#2838</td><td>반둥</td><td>SiCepat</td><td>0.9 kg</td><td>2026-07-11</td><td>2026-07-16</td><td class="col-narrow"><span class="dot dot--green"></span></td></tr>
+            <tr><td>#2837</td><td>인천</td><td>한진</td><td>3.2 kg</td><td>2026-07-10</td><td>2026-07-14</td><td class="col-narrow"><span class="dot dot--amber"></span></td></tr>
+            <tr><td>#2836</td><td>메단</td><td>JNE</td><td>7.5 kg</td><td>2026-07-10</td><td>2026-07-15</td><td class="col-narrow"><span class="dot dot--red"></span></td></tr>
+            <tr><td>#2835</td><td>서울</td><td>CJ</td><td>1.6 kg</td><td>2026-07-09</td><td>2026-07-13</td><td class="col-narrow"><span class="dot dot--green"></span></td></tr>
+            <tr><td>#2834</td><td>스마랑</td><td>SiCepat</td><td>4.0 kg</td><td>2026-07-09</td><td>2026-07-14</td><td class="col-narrow"><span class="dot dot--green"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">386건 중 40건 표시</p>
+    </div>
 prompt:
   en: >-
     An operator who cannot tell red from green works this table all day. Which

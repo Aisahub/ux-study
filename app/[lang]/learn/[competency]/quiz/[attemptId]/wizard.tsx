@@ -73,9 +73,15 @@ export function QuizWizard({
   const last = current === items.length - 1
   const unanswered = items.filter((candidate) => choices[candidate.slug] === undefined).length
 
+  // Two widths on purpose. The screen is a page being examined and wants the
+  // room a page needs — tables that would otherwise wrap, two versions shown
+  // side by side, lines whose length is the very thing being judged. The words
+  // are read rather than examined, and reading is what a narrow column is for.
+  // One width for both would either cramp the screens or stretch the options
+  // past a comfortable line.
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
-      <p className="text-sm text-zinc-500">{copy.progress(current + 1, items.length)}</p>
+    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 p-8 font-sans">
+      <p className="mx-auto w-full max-w-2xl text-sm text-zinc-500">{copy.progress(current + 1, items.length)}</p>
 
       {/*
         One channel, never both. An item with a drawn screen keeps its prose
@@ -87,13 +93,13 @@ export function QuizWizard({
       {item.screen ? (
         <ItemScreen slug={item.slug} lang={lang} html={item.screen} css={screenCss} description={item.artefact} />
       ) : (
-        <div className="whitespace-pre-line rounded-lg border border-zinc-200 p-4 text-sm leading-relaxed dark:border-zinc-800">
+        <div className="mx-auto w-full max-w-2xl whitespace-pre-line rounded-lg border border-zinc-200 p-4 text-sm leading-relaxed dark:border-zinc-800">
           {item.artefact}
         </div>
       )}
-      <p className="font-medium">{item.prompt}</p>
+      <p className="mx-auto w-full max-w-2xl font-medium">{item.prompt}</p>
 
-      <fieldset className="flex flex-col gap-2">
+      <fieldset className="mx-auto flex w-full max-w-2xl flex-col gap-2">
         {item.options.map((option) => (
           <label
             key={option.index}
@@ -110,7 +116,7 @@ export function QuizWizard({
         ))}
       </fieldset>
 
-      <div className="flex items-center gap-4">
+      <div className="mx-auto flex w-full max-w-2xl items-center gap-4">
         <button
           type="button"
           disabled={current === 0}

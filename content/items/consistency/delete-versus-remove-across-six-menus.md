@@ -17,6 +17,25 @@ artefact:
     추가된 자동화 화면의 여섯 번째 메뉴만 같은 휴지통 아이콘 옆에 "제거"로
     끝납니다. 여섯 동작이 하는 일은 전부 같습니다. 그 행이 모두에게서
     사라집니다.
+screen:
+  en: |-
+    <div class="split split--six">
+      <div><p class="pane-label">Task list</p><div class="menu"><div class="menu-item">Open</div><div class="menu-item">Duplicate</div><div class="menu-item"><span class="i i-trash"></span>Delete</div></div></div>
+      <div><p class="pane-label">File list</p><div class="menu"><div class="menu-item">Download</div><div class="menu-item">Rename</div><div class="menu-item"><span class="i i-trash"></span>Delete</div></div></div>
+      <div><p class="pane-label">Comment thread</p><div class="menu"><div class="menu-item">Reply</div><div class="menu-item">Copy link</div><div class="menu-item"><span class="i i-trash"></span>Delete</div></div></div>
+      <div><p class="pane-label">Tag manager</p><div class="menu"><div class="menu-item">Rename</div><div class="menu-item">Merge</div><div class="menu-item"><span class="i i-trash"></span>Delete</div></div></div>
+      <div><p class="pane-label">Member list</p><div class="menu"><div class="menu-item">View profile</div><div class="menu-item">Change role</div><div class="menu-item"><span class="i i-trash"></span>Delete</div></div></div>
+      <div><p class="pane-label">Automations</p><div class="menu"><div class="menu-item">Run now</div><div class="menu-item">Duplicate</div><div class="menu-item"><span class="i i-trash"></span>Remove</div></div></div>
+    </div>
+  ko: |-
+    <div class="split split--six">
+      <div><p class="pane-label">할 일 목록</p><div class="menu"><div class="menu-item">열기</div><div class="menu-item">복제</div><div class="menu-item"><span class="i i-trash"></span>삭제</div></div></div>
+      <div><p class="pane-label">파일 목록</p><div class="menu"><div class="menu-item">내려받기</div><div class="menu-item">이름 변경</div><div class="menu-item"><span class="i i-trash"></span>삭제</div></div></div>
+      <div><p class="pane-label">댓글 스레드</p><div class="menu"><div class="menu-item">답글</div><div class="menu-item">링크 복사</div><div class="menu-item"><span class="i i-trash"></span>삭제</div></div></div>
+      <div><p class="pane-label">태그 관리</p><div class="menu"><div class="menu-item">이름 변경</div><div class="menu-item">병합</div><div class="menu-item"><span class="i i-trash"></span>삭제</div></div></div>
+      <div><p class="pane-label">멤버 목록</p><div class="menu"><div class="menu-item">프로필 보기</div><div class="menu-item">역할 변경</div><div class="menu-item"><span class="i i-trash"></span>삭제</div></div></div>
+      <div><p class="pane-label">자동화</p><div class="menu"><div class="menu-item">지금 실행</div><div class="menu-item">복제</div><div class="menu-item"><span class="i i-trash"></span>제거</div></div></div>
+    </div>
 prompt:
   en: >-
     The two labels cannot both stay. Which one wins, and why?

@@ -18,6 +18,39 @@ artefact:
     버튼이 바로 그 회색-위-회색 차림을 하고 있습니다. 그 옆의 "장바구니로
     돌아가기"는 흰 바탕에 짙은 테두리와 짙은 글자를 갖춰, 하단에서 가장
     강해 보이는 요소입니다.
+screen:
+  en: |-
+    <div class="screen">
+      <table class="table" style="margin-bottom:16px">
+        <thead><tr><th>Item</th><th>Qty</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td>A4 paper, box</td><td>6</td><td>$54.00</td></tr>
+          <tr><td>Toner, black</td><td>2</td><td>$118.00</td></tr>
+          <tr><td>Desk risers</td><td>3</td><td>$96.00</td></tr>
+        </tbody>
+      </table>
+      <div style="border-top:1px solid #eceef1;padding-top:14px" class="actions">
+        <span style="margin-right:auto;font-weight:600">Total $268.00</span>
+        <button class="btn btn--quiet">Place order</button>
+        <button class="btn btn--outline">Back to cart</button>
+      </div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <table class="table" style="margin-bottom:16px">
+        <thead><tr><th>품목</th><th>수량</th><th>금액</th></tr></thead>
+        <tbody>
+          <tr><td>A4 용지, 박스</td><td>6</td><td>54,000원</td></tr>
+          <tr><td>토너, 검정</td><td>2</td><td>118,000원</td></tr>
+          <tr><td>모니터 받침대</td><td>3</td><td>96,000원</td></tr>
+        </tbody>
+      </table>
+      <div style="border-top:1px solid #eceef1;padding-top:14px" class="actions">
+        <span style="margin-right:auto;font-weight:600">합계 268,000원</span>
+        <button class="btn btn--quiet">주문하기</button>
+        <button class="btn btn--outline">장바구니로 돌아가기</button>
+      </div>
+    </div>
 prompt:
   en: >-
     The orders team reports that people reach this page and stall, unsure how

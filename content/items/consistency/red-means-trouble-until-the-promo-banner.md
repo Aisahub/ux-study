@@ -17,6 +17,53 @@ artefact:
     네 번째는 화면 맨 위를 가로지르는 배너로, "Pro로 업그레이드 — 이번 주
     30% 할인"이 같은 빨강 바탕에 흰 글자로 적혀 있습니다. 이 제안에는
     잘못되거나 급한 것이 전혀 없습니다. 그냥 홍보입니다.
+screen:
+  en: |-
+    <div class="screen">
+      <div class="banner banner--red" style="margin-bottom:14px">Upgrade to Pro — 30% off this week</div>
+      <div class="app">
+        <div class="side">
+          <div class="side-item side-item--on">Invoices</div>
+          <div class="side-item">Customers</div>
+          <div class="side-item">Settings</div>
+          <div style="margin-top:24px"><button class="btn btn--danger" style="width:100%">Delete account</button></div>
+        </div>
+        <div>
+          <p class="toast" style="margin:0 0 12px">Card declined</p>
+          <table class="table">
+            <thead><tr><th>Invoice</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>#2841</td><td>Northwind</td><td>$1,240</td><td>Paid</td></tr>
+              <tr><td>#2840</td><td>Harbour Ltd</td><td>$615</td><td><span class="badge badge--red">Payment failed</span></td></tr>
+              <tr><td>#2839</td><td>Bright Foods</td><td>$730</td><td>Paid</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <div class="banner banner--red" style="margin-bottom:14px">Pro로 업그레이드 — 이번 주 30% 할인</div>
+      <div class="app">
+        <div class="side">
+          <div class="side-item side-item--on">청구서</div>
+          <div class="side-item">고객</div>
+          <div class="side-item">설정</div>
+          <div style="margin-top:24px"><button class="btn btn--danger" style="width:100%">계정 삭제</button></div>
+        </div>
+        <div>
+          <p class="toast" style="margin:0 0 12px">카드가 거절되었습니다</p>
+          <table class="table">
+            <thead><tr><th>청구서</th><th>고객사</th><th>금액</th><th>상태</th></tr></thead>
+            <tbody>
+              <tr><td>#2841</td><td>노스윈드</td><td>124만</td><td>완납</td></tr>
+              <tr><td>#2840</td><td>하버</td><td>61만</td><td><span class="badge badge--red">결제 실패</span></td></tr>
+              <tr><td>#2839</td><td>브라이트푸드</td><td>73만</td><td>완납</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 prompt:
   en: >-
     Red is doing two different jobs on this screen. Which job keeps the

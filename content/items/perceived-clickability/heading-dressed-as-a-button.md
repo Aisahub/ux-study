@@ -15,6 +15,21 @@ artefact:
     있습니다 — 이 포털의 진짜 버튼들이 쓰는 바로 그 모양입니다. 이것은
     제목이라 눌러도 아무 일도 일어나지 않습니다. 그 아래 급여명세서 행마다
     끝에는 같은 알약 모양으로 그려진 진짜 "다운로드" 버튼이 있습니다.
+screen:
+  en: |-
+    <div class="screen">
+      <p style="text-align:center;margin:0 0 16px"><span class="btn btn--pill" style="font-weight:600">Your payslips</span></p>
+      <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">June 2026</span><span class="btn btn--pill">Download</span></div></div>
+      <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">May 2026</span><span class="btn btn--pill">Download</span></div></div>
+      <div class="card"><div class="actions"><span style="margin-right:auto">April 2026</span><span class="btn btn--pill">Download</span></div></div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <p style="text-align:center;margin:0 0 16px"><span class="btn btn--pill" style="font-weight:600">급여명세서</span></p>
+      <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">2026년 6월</span><span class="btn btn--pill">다운로드</span></div></div>
+      <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">2026년 5월</span><span class="btn btn--pill">다운로드</span></div></div>
+      <div class="card"><div class="actions"><span style="margin-right:auto">2026년 4월</span><span class="btn btn--pill">다운로드</span></div></div>
+    </div>
 prompt:
   en: >-
     Support keeps receiving tickets that say this page is "broken". What is

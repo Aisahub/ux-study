@@ -17,6 +17,41 @@ artefact:
     본문 단이 1440px 창 전체를 가로질러, 한 줄이 90자 가까이 이어지고 행간은
     1.2입니다. 문단 열한 개짜리 페이지인데, 직원들은 읽다가 중간에 포기한다고
     말합니다.
+screen:
+  en: |-
+    <div class="screen">
+      <h2>Leave policy</h2>
+      <div class="prose" style="font-size:16px;line-height:1.2;max-width:none;color:#333333">
+        <p>All full-time staff accrue twenty-five days of paid annual leave each calendar year, accruing monthly from the first full month of employment.</p>
+        <p>Leave does not carry over into the next year unless a manager approves the carry-over in writing before 15 December, and no more than five days may be carried.</p>
+        <p>Requests are made in the leave tool and go to your direct manager, who is asked to respond within three working days.</p>
+        <p>A request covering more than five consecutive working days should be made at least four weeks ahead, so that cover can be arranged.</p>
+        <p>Public holidays follow the calendar of the country you are contracted in, and are additional to your annual leave.</p>
+        <p>Sick leave is recorded separately and is not deducted from annual leave. Tell your manager on the first morning you are unwell.</p>
+        <p>A doctor's note is asked for from the fourth consecutive day of sickness, and goes to People Ops rather than to your manager.</p>
+        <p>Parental leave follows local statutory entitlement, and the company tops the pay up to full salary for the first twelve weeks.</p>
+        <p>Unpaid leave may be requested for periods of up to three months, and needs approval from both your manager and the department head.</p>
+        <p>Staff leaving the company are paid for accrued leave they have not taken, calculated to their last working day.</p>
+        <p>Questions this page does not answer go to People Ops, who keep the full policy document.</p>
+      </div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <h2>휴가 규정</h2>
+      <div class="prose" style="font-size:16px;line-height:1.2;max-width:none;color:#333333">
+        <p>정규 직원은 매 역년마다 유급 연차 25일이 발생하며, 입사 후 첫 온전한 달부터 매달 쌓입니다.</p>
+        <p>연차는 다음 해로 넘어가지 않습니다. 다만 12월 15일 전에 관리자가 서면으로 승인한 경우에 한해 최대 5일까지 이월할 수 있습니다.</p>
+        <p>신청은 휴가 도구에서 하며 직속 관리자에게 전달되고, 관리자는 영업일 기준 사흘 안에 회신하도록 되어 있습니다.</p>
+        <p>연속 5영업일을 넘는 신청은 업무 인수인계를 준비할 수 있도록 최소 4주 전에 해 주십시오.</p>
+        <p>공휴일은 계약한 국가의 달력을 따르며, 연차와 별도로 부여됩니다.</p>
+        <p>병가는 따로 기록되며 연차에서 차감하지 않습니다. 몸이 좋지 않은 첫날 아침에 관리자에게 알려 주십시오.</p>
+        <p>병가가 연속 나흘째부터는 진단서를 요청하며, 진단서는 관리자가 아니라 인사팀으로 보냅니다.</p>
+        <p>육아휴직은 해당 국가의 법정 기준을 따르며, 회사가 첫 12주 동안 급여를 전액까지 보전합니다.</p>
+        <p>무급 휴직은 최대 3개월까지 신청할 수 있고, 관리자와 부서장 양쪽의 승인이 필요합니다.</p>
+        <p>퇴사하는 직원에게는 쓰지 않고 남은 연차를 마지막 근무일 기준으로 계산해 지급합니다.</p>
+        <p>이 페이지에 없는 내용은 규정 전문을 보관하는 인사팀에 문의해 주십시오.</p>
+      </div>
+    </div>
 prompt:
   en: >-
     What change would let a reader actually finish this page?

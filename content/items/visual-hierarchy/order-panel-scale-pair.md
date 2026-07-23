@@ -25,6 +25,53 @@ artefact:
     B 버전은 맨 위 주문번호가 13px 회색입니다. 고객 이름과 주소는 15px,
     금액은 28px이고, "출고 처리"는 금액 높이만 한 채움 버튼에 18px
     글자입니다.
+screen:
+  en: |-
+    <div class="split">
+      <div>
+        <p class="pane-label">Version A</p>
+        <div class="screen">
+          <p style="font-size:28px;font-weight:700;margin:0 0 12px">20260714-0093</p>
+          <p style="font-size:15px;margin:0">Grace Tan</p>
+          <p style="font-size:15px;margin:0 0 10px">14 Marine Parade, Singapore 449287</p>
+          <p style="font-size:15px;margin:0 0 14px">Total $1,284</p>
+          <button class="btn btn--outline" style="font-size:15px">Ship now</button>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">Version B</p>
+        <div class="screen">
+          <p style="font-size:13px;color:#9ca3af;margin:0 0 12px">20260714-0093</p>
+          <p style="font-size:15px;margin:0">Grace Tan</p>
+          <p style="font-size:15px;margin:0 0 10px">14 Marine Parade, Singapore 449287</p>
+          <p style="font-size:28px;font-weight:700;margin:0 0 14px">Total $1,284</p>
+          <button class="btn btn--solid" style="font-size:18px;display:block;width:100%">Ship now</button>
+        </div>
+      </div>
+    </div>
+  ko: |-
+    <div class="split">
+      <div>
+        <p class="pane-label">A 버전</p>
+        <div class="screen">
+          <p style="font-size:28px;font-weight:700;margin:0 0 12px">20260714-0093</p>
+          <p style="font-size:15px;margin:0">김지우</p>
+          <p style="font-size:15px;margin:0 0 10px">서울 마포구 양화로 45, 302호</p>
+          <p style="font-size:15px;margin:0 0 14px">합계 1,284,000원</p>
+          <button class="btn btn--outline" style="font-size:15px">출고 처리</button>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">B 버전</p>
+        <div class="screen">
+          <p style="font-size:13px;color:#9ca3af;margin:0 0 12px">20260714-0093</p>
+          <p style="font-size:15px;margin:0">김지우</p>
+          <p style="font-size:15px;margin:0 0 10px">서울 마포구 양화로 45, 302호</p>
+          <p style="font-size:28px;font-weight:700;margin:0 0 14px">합계 1,284,000원</p>
+          <button class="btn btn--solid" style="font-size:18px;display:block;width:100%">출고 처리</button>
+        </div>
+      </div>
+    </div>
 prompt:
   en: >-
     Which version's scale matches the operator's job, and for which reason?

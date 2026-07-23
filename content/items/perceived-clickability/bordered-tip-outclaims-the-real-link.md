@@ -19,6 +19,41 @@ artefact:
     바로 옆 저작권 표시줄과 똑같은 작은 짙은 회색 글자인데, 그 평문이야말로
     지원 요청 폼을 여는 진짜 링크입니다. 새 사용자들은 안내 상자를 눌러
     보고, 링크는 끝내 찾지 못합니다.
+screen:
+  en: |-
+    <div class="screen">
+      <table class="table" style="margin-bottom:20px">
+        <thead><tr><th>Report</th><th>Period</th><th>Rows</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue by client</td><td>June</td><td>128</td></tr>
+          <tr><td>Refunds</td><td>June</td><td>14</td></tr>
+        </tbody>
+      </table>
+      <div style="border-top:1px solid #eceef1;padding-top:14px">
+        <div class="actions">
+          <div class="callout" style="max-width:340px">Tip: reports can be exported as CSV.</div>
+          <span style="font-size:13px;color:#4b5563">Contact support</span>
+          <span style="font-size:13px;color:#4b5563">© 2026 Aisahub</span>
+        </div>
+      </div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <table class="table" style="margin-bottom:20px">
+        <thead><tr><th>보고서</th><th>기간</th><th>행 수</th></tr></thead>
+        <tbody>
+          <tr><td>고객사별 매출</td><td>6월</td><td>128</td></tr>
+          <tr><td>환불</td><td>6월</td><td>14</td></tr>
+        </tbody>
+      </table>
+      <div style="border-top:1px solid #eceef1;padding-top:14px">
+        <div class="actions">
+          <div class="callout" style="max-width:340px">팁: 보고서는 CSV로 내보낼 수 있습니다.</div>
+          <span style="font-size:13px;color:#4b5563">고객 지원 문의</span>
+          <span style="font-size:13px;color:#4b5563">© 2026 Aisahub</span>
+        </div>
+      </div>
+    </div>
 prompt:
   en: >-
     Which change puts the signals where they belong?

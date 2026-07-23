@@ -15,6 +15,37 @@ artefact:
     카드와 상품권 확인하기"입니다. 탭 아래 페이지의 버튼과 항목 이름들은 앞
     네 탭과 같은 짧은 명사형을 따릅니다. "배송지 추가", "기본으로 지정",
     "카드 삭제".
+screen:
+  en: |-
+    <div class="screen">
+      <div class="tabs">
+        <div class="tab tab--on">Order history</div>
+        <div class="tab">Saved addresses</div>
+        <div class="tab">Payment methods</div>
+        <div class="tab">Email preferences</div>
+        <div class="tab">Gift Cards And Vouchers</div>
+      </div>
+      <div style="margin-top:16px">
+        <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">14 Marine Parade, Singapore 449287</span><button class="btn btn--hairline">Set as default</button></div></div>
+        <div class="card" style="margin-bottom:12px"><div class="actions"><span style="margin-right:auto">Visa ending 4417</span><button class="btn btn--hairline">Remove card</button></div></div>
+        <button class="btn btn--blue">Add address</button>
+      </div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <div class="tabs">
+        <div class="tab tab--on">주문 내역</div>
+        <div class="tab">배송지 관리</div>
+        <div class="tab">결제 수단</div>
+        <div class="tab">이메일 설정</div>
+        <div class="tab">기프트 카드와 상품권 확인하기</div>
+      </div>
+      <div style="margin-top:16px">
+        <div class="card" style="margin-bottom:8px"><div class="actions"><span style="margin-right:auto">서울 마포구 양화로 45, 302호</span><button class="btn btn--hairline">기본으로 지정</button></div></div>
+        <div class="card" style="margin-bottom:12px"><div class="actions"><span style="margin-right:auto">비자 4417로 끝나는 카드</span><button class="btn btn--hairline">카드 삭제</button></div></div>
+        <button class="btn btn--blue">배송지 추가</button>
+      </div>
+    </div>
 prompt:
   en: >-
     The newest tab is styled unlike the rest. Which style should the tab bar

@@ -18,6 +18,81 @@ artefact:
     태그에 씁니다. 밝은 회색은 요금제 카드 배경과 비교표의 줄무늬에 씁니다.
     보라색은 자주 묻는 질문 뒤에 깔린 띠에 씁니다. 초록색은 연간 결제 토글
     옆의 "20% 절약" 글자에 씁니다. 빨간색은 푸터 링크에 씁니다.
+screen:
+  en: |-
+    <div class="screen stack">
+      <div class="banner banner--navy">Bookly</div>
+      <p style="color:#1e3a5f;font-size:18px;font-weight:700;margin:0">Plans</p>
+      <p style="margin:0;font-size:14px">Billed annually <span style="color:#16a34a;font-weight:600">Save 20%</span></p>
+      <div class="stats stats--three">
+        <div style="background:#f3f4f6;border-radius:8px;padding:14px">
+          <p style="font-weight:600;margin:0 0 4px">Starter</p>
+          <p style="font-size:20px;font-weight:700;margin:0 0 10px">$9</p>
+          <button class="btn btn--teal" style="width:100%">Start free trial</button>
+        </div>
+        <div style="background:#f3f4f6;border:2px solid #0d9488;border-radius:8px;padding:14px">
+          <p style="margin:0 0 6px"><span class="badge badge--amber">Most popular</span></p>
+          <p style="font-weight:600;margin:0 0 4px">Team</p>
+          <p style="font-size:20px;font-weight:700;margin:0 0 10px">$29</p>
+          <button class="btn btn--teal" style="width:100%">Start free trial</button>
+        </div>
+        <div style="background:#f3f4f6;border-radius:8px;padding:14px">
+          <p style="font-weight:600;margin:0 0 4px">Business</p>
+          <p style="font-size:20px;font-weight:700;margin:0 0 10px">$79</p>
+          <button class="btn btn--teal" style="width:100%">Start free trial</button>
+        </div>
+      </div>
+      <p style="color:#1e3a5f;font-size:18px;font-weight:700;margin:0">Compare</p>
+      <table class="table">
+        <tbody>
+          <tr style="background:#f3f4f6"><td>Bookings per month</td><td>200</td><td>2,000</td><td>Unlimited</td></tr>
+          <tr><td>Team members</td><td>1</td><td>10</td><td>Unlimited</td></tr>
+          <tr style="background:#f3f4f6"><td>Carrier rate compare</td><td>—</td><td>Yes</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+      <div style="background:#6d28d9;color:#ffffff;border-radius:6px;padding:14px">
+        <p style="font-weight:600;margin:0 0 4px">Frequently asked</p>
+        <p style="font-size:13px;margin:0">Can I change plan later? Yes, at any time.</p>
+      </div>
+      <p style="font-size:13px;margin:0"><span style="color:#dc2626">Terms</span> · <span style="color:#dc2626">Privacy</span> · <span style="color:#dc2626">Contact</span></p>
+    </div>
+  ko: |-
+    <div class="screen stack">
+      <div class="banner banner--navy">Bookly</div>
+      <p style="color:#1e3a5f;font-size:18px;font-weight:700;margin:0">요금제</p>
+      <p style="margin:0;font-size:14px">연간 결제 <span style="color:#16a34a;font-weight:600">20% 절약</span></p>
+      <div class="stats stats--three">
+        <div style="background:#f3f4f6;border-radius:8px;padding:14px">
+          <p style="font-weight:600;margin:0 0 4px">스타터</p>
+          <p style="font-size:20px;font-weight:700;margin:0 0 10px">9,900원</p>
+          <button class="btn btn--teal" style="width:100%">무료로 시작하기</button>
+        </div>
+        <div style="background:#f3f4f6;border:2px solid #0d9488;border-radius:8px;padding:14px">
+          <p style="margin:0 0 6px"><span class="badge badge--amber">가장 인기</span></p>
+          <p style="font-weight:600;margin:0 0 4px">팀</p>
+          <p style="font-size:20px;font-weight:700;margin:0 0 10px">29,000원</p>
+          <button class="btn btn--teal" style="width:100%">무료로 시작하기</button>
+        </div>
+        <div style="background:#f3f4f6;border-radius:8px;padding:14px">
+          <p style="font-weight:600;margin:0 0 4px">비즈니스</p>
+          <p style="font-size:20px;font-weight:700;margin:0 0 10px">79,000원</p>
+          <button class="btn btn--teal" style="width:100%">무료로 시작하기</button>
+        </div>
+      </div>
+      <p style="color:#1e3a5f;font-size:18px;font-weight:700;margin:0">비교</p>
+      <table class="table">
+        <tbody>
+          <tr style="background:#f3f4f6"><td>월 예약 건수</td><td>200</td><td>2,000</td><td>무제한</td></tr>
+          <tr><td>팀 멤버</td><td>1</td><td>10</td><td>무제한</td></tr>
+          <tr style="background:#f3f4f6"><td>배송사 요금 비교</td><td>—</td><td>제공</td><td>제공</td></tr>
+        </tbody>
+      </table>
+      <div style="background:#6d28d9;color:#ffffff;border-radius:6px;padding:14px">
+        <p style="font-weight:600;margin:0 0 4px">자주 묻는 질문</p>
+        <p style="font-size:13px;margin:0">요금제는 나중에 바꿀 수 있나요? 언제든 가능합니다.</p>
+      </div>
+      <p style="font-size:13px;margin:0"><span style="color:#dc2626">이용약관</span> · <span style="color:#dc2626">개인정보</span> · <span style="color:#dc2626">문의</span></p>
+    </div>
 prompt:
   en: >-
     The team is cutting this page back to two primary and two secondary

@@ -17,6 +17,47 @@ artefact:
     짙은 회색이고, 테두리나 배경 패널은 어디에도 없습니다. 세로 간격은 전부
     정확히 20px입니다. 제목과 바로 아래 행 사이도, 한 구역의 마지막 행과 다음
     제목 사이도 똑같습니다.
+screen:
+  en: |-
+    <div class="screen" style="line-height:1.4">
+      <p style="font-size:20px;font-weight:600;margin:0">Profile</p>
+      <p style="font-size:15px;margin:20px 0 0">Display name — Alex Ferrer</p>
+      <p style="font-size:15px;margin:20px 0 0">Email — alex@example.com</p>
+      <p style="font-size:15px;margin:20px 0 0">Time zone — Asia/Seoul</p>
+      <p style="font-size:20px;font-weight:600;margin:20px 0 0">Notifications</p>
+      <p style="font-size:15px;margin:20px 0 0">Product updates — On</p>
+      <p style="font-size:15px;margin:20px 0 0">Weekly digest — Off</p>
+      <p style="font-size:15px;margin:20px 0 0">Mentions — On</p>
+      <p style="font-size:20px;font-weight:600;margin:20px 0 0">Billing</p>
+      <p style="font-size:15px;margin:20px 0 0">Plan — Team, $29 monthly</p>
+      <p style="font-size:15px;margin:20px 0 0">Payment card — Visa ending 4417</p>
+      <p style="font-size:15px;margin:20px 0 0">Billing email — finance@example.com</p>
+      <p style="font-size:15px;margin:20px 0 0">Invoices — Download</p>
+      <p style="font-size:20px;font-weight:600;margin:20px 0 0">Security</p>
+      <p style="font-size:15px;margin:20px 0 0">Password — Last changed in April</p>
+      <p style="font-size:15px;margin:20px 0 0">Two-factor — Off</p>
+      <p style="font-size:15px;margin:20px 0 0">Active sessions — 3</p>
+    </div>
+  ko: |-
+    <div class="screen" style="line-height:1.4">
+      <p style="font-size:20px;font-weight:600;margin:0">프로필</p>
+      <p style="font-size:15px;margin:20px 0 0">표시 이름 — 김지우</p>
+      <p style="font-size:15px;margin:20px 0 0">이메일 — jiwoo@example.com</p>
+      <p style="font-size:15px;margin:20px 0 0">시간대 — Asia/Seoul</p>
+      <p style="font-size:20px;font-weight:600;margin:20px 0 0">알림</p>
+      <p style="font-size:15px;margin:20px 0 0">제품 소식 — 켬</p>
+      <p style="font-size:15px;margin:20px 0 0">주간 요약 — 끔</p>
+      <p style="font-size:15px;margin:20px 0 0">멘션 — 켬</p>
+      <p style="font-size:20px;font-weight:600;margin:20px 0 0">결제</p>
+      <p style="font-size:15px;margin:20px 0 0">요금제 — 팀, 월 29,000원</p>
+      <p style="font-size:15px;margin:20px 0 0">결제 카드 — 비자 4417로 끝나는 카드</p>
+      <p style="font-size:15px;margin:20px 0 0">청구서 수신 메일 — finance@example.com</p>
+      <p style="font-size:15px;margin:20px 0 0">청구서 — 내려받기</p>
+      <p style="font-size:20px;font-weight:600;margin:20px 0 0">보안</p>
+      <p style="font-size:15px;margin:20px 0 0">비밀번호 — 4월에 마지막 변경</p>
+      <p style="font-size:15px;margin:20px 0 0">2단계 인증 — 끔</p>
+      <p style="font-size:15px;margin:20px 0 0">활성 세션 — 3개</p>
+    </div>
 prompt:
   en: >-
     A user has come here to change the card they pay with. What does the

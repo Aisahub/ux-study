@@ -15,6 +15,49 @@ artefact:
     행만 "12/07/2026" 꼴입니다. 표 위의 기간 필터에는 "2026-06-01부터
     2026-07-31까지"라고 적혀 있고, 표 아래 내보내기 안내문에는 "2026-07-31
     까지의 주문 포함"이라고 적혀 있습니다.
+screen:
+  en: |-
+    <div class="screen">
+      <p style="margin:0 0 12px"><span class="control">From 2026-06-01 to 2026-07-31</span></p>
+      <table class="table">
+        <thead><tr><th>Order</th><th>Customer</th><th>Ordered on</th><th>Total</th></tr></thead>
+        <tbody>
+          <tr><td>#2841</td><td>Ayu Lestari</td><td>2026-07-12</td><td>$64.00</td></tr>
+          <tr><td>#2840</td><td>Grace Tan</td><td>2026-07-12</td><td>$27.50</td></tr>
+          <tr><td>#2839</td><td>Putri Andini</td><td>12/07/2026</td><td>$112.00</td></tr>
+          <tr><td>#2838</td><td>Daniel Wong</td><td>2026-07-11</td><td>$45.90</td></tr>
+          <tr><td>#2837</td><td>Sari Dewi</td><td>2026-07-11</td><td>$88.20</td></tr>
+          <tr><td>#2836</td><td>Chen Wei</td><td>2026-07-10</td><td>$31.00</td></tr>
+          <tr><td>#2835</td><td>Nadia Rahman</td><td>11/07/2026</td><td>$76.40</td></tr>
+          <tr><td>#2834</td><td>Kim Jiwoo</td><td>2026-07-09</td><td>$52.10</td></tr>
+          <tr><td>#2833</td><td>Arif Santoso</td><td>2026-07-09</td><td>$19.90</td></tr>
+          <tr><td>#2832</td><td>Lee Minsu</td><td>2026-07-08</td><td>$140.00</td></tr>
+          <tr><td>#2831</td><td>Rina Halim</td><td>2026-07-08</td><td>$38.60</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Includes orders up to 2026-07-31</p>
+    </div>
+  ko: |-
+    <div class="screen">
+      <p style="margin:0 0 12px"><span class="control">2026-06-01부터 2026-07-31까지</span></p>
+      <table class="table">
+        <thead><tr><th>주문번호</th><th>고객</th><th>주문일</th><th>금액</th></tr></thead>
+        <tbody>
+          <tr><td>#2841</td><td>김지우</td><td>2026-07-12</td><td>64,000원</td></tr>
+          <tr><td>#2840</td><td>박서연</td><td>2026-07-12</td><td>27,500원</td></tr>
+          <tr><td>#2839</td><td>이도현</td><td>12/07/2026</td><td>112,000원</td></tr>
+          <tr><td>#2838</td><td>정하윤</td><td>2026-07-11</td><td>45,900원</td></tr>
+          <tr><td>#2837</td><td>최시우</td><td>2026-07-11</td><td>88,200원</td></tr>
+          <tr><td>#2836</td><td>강예린</td><td>2026-07-10</td><td>31,000원</td></tr>
+          <tr><td>#2835</td><td>윤서준</td><td>11/07/2026</td><td>76,400원</td></tr>
+          <tr><td>#2834</td><td>임하늘</td><td>2026-07-09</td><td>52,100원</td></tr>
+          <tr><td>#2833</td><td>오지호</td><td>2026-07-09</td><td>19,900원</td></tr>
+          <tr><td>#2832</td><td>한도윤</td><td>2026-07-08</td><td>140,000원</td></tr>
+          <tr><td>#2831</td><td>신유진</td><td>2026-07-08</td><td>38,600원</td></tr>
+        </tbody>
+      </table>
+      <p class="note">2026-07-31까지의 주문 포함</p>
+    </div>
 prompt:
   en: >-
     One date format has to go. Which one, and why that one?

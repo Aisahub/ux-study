@@ -18,6 +18,55 @@ artefact:
     채움도 없는 청록색 평문입니다. 주문 페이지의 "주문 추가"는 가는 회색
     테두리를 두른 흰 사각형입니다. 세 동작은 각자의 페이지에서 같은 급의
     일을 합니다.
+screen:
+  en: |-
+    <div class="split split--three">
+      <div>
+        <p class="pane-label">Customers</p>
+        <div class="screen">
+          <div class="actions" style="margin-bottom:12px"><h3 style="margin:0 auto 0 0">Customers</h3><button class="btn btn--blue">Add customer</button></div>
+          <table class="table"><tbody><tr><td>Northwind</td></tr><tr><td>Lakeside Co</td></tr><tr><td>Bright Foods</td></tr></tbody></table>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">Products</p>
+        <div class="screen">
+          <div class="actions" style="margin-bottom:12px"><h3 style="margin:0 auto 0 0">Products</h3><span class="btn btn--ghost-teal">+ Add product</span></div>
+          <table class="table"><tbody><tr><td>Cleanser</td></tr><tr><td>Toner</td></tr><tr><td>Serum</td></tr></tbody></table>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">Orders</p>
+        <div class="screen">
+          <div class="actions" style="margin-bottom:12px"><h3 style="margin:0 auto 0 0">Orders</h3><button class="btn btn--hairline" style="border-radius:0">Add order</button></div>
+          <table class="table"><tbody><tr><td>#2841</td></tr><tr><td>#2840</td></tr><tr><td>#2839</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+  ko: |-
+    <div class="split split--three">
+      <div>
+        <p class="pane-label">고객</p>
+        <div class="screen">
+          <div class="actions" style="margin-bottom:12px"><h3 style="margin:0 auto 0 0">고객</h3><button class="btn btn--blue">고객 추가</button></div>
+          <table class="table"><tbody><tr><td>노스윈드</td></tr><tr><td>레이크사이드</td></tr><tr><td>브라이트푸드</td></tr></tbody></table>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">상품</p>
+        <div class="screen">
+          <div class="actions" style="margin-bottom:12px"><h3 style="margin:0 auto 0 0">상품</h3><span class="btn btn--ghost-teal">+ 상품 추가</span></div>
+          <table class="table"><tbody><tr><td>클렌저</td></tr><tr><td>토너</td></tr><tr><td>세럼</td></tr></tbody></table>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">주문</p>
+        <div class="screen">
+          <div class="actions" style="margin-bottom:12px"><h3 style="margin:0 auto 0 0">주문</h3><button class="btn btn--hairline" style="border-radius:0">주문 추가</button></div>
+          <table class="table"><tbody><tr><td>#2841</td></tr><tr><td>#2840</td></tr><tr><td>#2839</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
 prompt:
   en: >-
     Which change lets a user who has learned one of these pages trust the

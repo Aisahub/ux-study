@@ -21,6 +21,37 @@ artefact:
     시도하기 전에, 이전 번호를 무효로 만드는 새 인증번호를 요청하십시오."
     새 번호를 요청해 놓고 이전 번호를 입력하는 사용자의 문의가 지원팀에
     끊이지 않습니다.
+screen:
+  en: |-
+    <div class="screen">
+      <h2>Reset your password</h2>
+      <div class="field" style="margin-bottom:10px">
+        <span class="field-label">Code</span>
+        <input class="control" value="" placeholder="6 digits">
+      </div>
+      <div class="prose" style="font-size:15px;line-height:1.6;max-width:60ch;color:#2B2B2B">
+        <p>If the code we sent has not arrived within ten minutes, and your spam folder, which some providers fill without notice, does not contain it, request a new code, which will invalidate the previous one, before attempting to sign in again.</p>
+      </div>
+      <div class="actions" style="margin-top:14px">
+        <button class="btn btn--solid">Continue</button>
+        <span class="link">Send a new code</span>
+      </div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <h2>비밀번호 재설정</h2>
+      <div class="field" style="margin-bottom:10px">
+        <span class="field-label">인증번호</span>
+        <input class="control" value="" placeholder="6자리">
+      </div>
+      <div class="prose" style="font-size:15px;line-height:1.6;max-width:35em;color:#2B2B2B">
+        <p>보내드린 인증번호가 10분 안에 도착하지 않았는데, 일부 서비스에서는 안내 없이 채워지는 스팸함에도 그것이 들어 있지 않다면, 다시 로그인을 시도하기 전에, 이전 번호를 무효로 만드는 새 인증번호를 요청하십시오.</p>
+      </div>
+      <div class="actions" style="margin-top:14px">
+        <button class="btn btn--solid">계속</button>
+        <span class="link">새 인증번호 받기</span>
+      </div>
+    </div>
 prompt:
   en: >-
     What change would stop users misreading this instruction?

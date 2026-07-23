@@ -15,6 +15,31 @@ artefact:
     개, 파랑 채움의 "계속"과 외곽선의 "뒤로"가 있습니다. "계속"을 누르면
     45건의 청구서가 그 즉시 고객들에게 메일로 나갑니다. 다음 단계는 없고,
     화면 어디에도 그렇다는 말이 없습니다.
+screen:
+  en: |-
+    <div class="screen">
+      <h2>Billing run — step 3 of 3</h2>
+      <div class="region" style="margin-bottom:16px">
+        <p style="font-size:20px;font-weight:600;margin:0">45 invoices · $18,300 total</p>
+        <p class="muted" style="margin:6px 0 0">Period 1–30 June · 45 customers</p>
+      </div>
+      <div class="actions">
+        <button class="btn btn--blue">Continue</button>
+        <button class="btn btn--outline">Back</button>
+      </div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <h2>청구서 발송 — 3단계 중 3단계</h2>
+      <div class="region" style="margin-bottom:16px">
+        <p style="font-size:20px;font-weight:600;margin:0">청구서 45건 · 합계 2,430만 원</p>
+        <p class="muted" style="margin:6px 0 0">6월 1일–30일 · 고객 45곳</p>
+      </div>
+      <div class="actions">
+        <button class="btn btn--blue">계속</button>
+        <button class="btn btn--outline">뒤로</button>
+      </div>
+    </div>
 prompt:
   en: >-
     Which change makes the click's consequence visible before anyone clicks?

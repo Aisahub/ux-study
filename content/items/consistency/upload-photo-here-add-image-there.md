@@ -20,6 +20,53 @@ artefact:
     "이메일 갱신", "번호 인증". 아바타 밑 설명문에는 "사진은 댓글 옆에
     표시됩니다"라고, 페이지 맨 아래 도움말에는 "사진은 5MB 이하여야
     합니다"라고 적혀 있습니다.
+screen:
+  en: |-
+    <div class="screen stack">
+      <div class="actions">
+        <div class="avatar"></div>
+        <div>
+          <button class="btn btn--blue">Upload photo</button>
+          <p class="muted" style="margin:6px 0 0">Your photo appears next to your comments</p>
+        </div>
+      </div>
+      <div>
+        <h2>About you</h2>
+        <div class="field" style="margin-bottom:10px"><span class="field-label">Display name</span><input class="control" value="Alex Ferrer"></div>
+        <div class="field" style="margin-bottom:10px"><span class="field-label">Job title</span><input class="control" value="Operations lead"></div>
+        <div class="field" style="margin-bottom:10px"><span class="field-label">Profile picture</span><span class="link--bare" style="color:#6b7280">Add image</span></div>
+        <button class="btn btn--blue">Save changes</button>
+      </div>
+      <div>
+        <div class="field" style="margin-bottom:10px"><span class="field-label">Email</span><input class="control" value="alex@example.com"></div>
+        <button class="btn btn--blue" style="margin-right:8px">Update email</button>
+        <button class="btn btn--blue">Verify number</button>
+      </div>
+      <p class="muted">Photos must be under 5 MB</p>
+    </div>
+  ko: |-
+    <div class="screen stack">
+      <div class="actions">
+        <div class="avatar"></div>
+        <div>
+          <button class="btn btn--blue">사진 올리기</button>
+          <p class="muted" style="margin:6px 0 0">사진은 댓글 옆에 표시됩니다</p>
+        </div>
+      </div>
+      <div>
+        <h2>자기 소개</h2>
+        <div class="field" style="margin-bottom:10px"><span class="field-label">표시 이름</span><input class="control" value="김지우"></div>
+        <div class="field" style="margin-bottom:10px"><span class="field-label">직함</span><input class="control" value="운영 리드"></div>
+        <div class="field" style="margin-bottom:10px"><span class="field-label">프로필 사진</span><span class="link--bare" style="color:#6b7280">이미지 추가</span></div>
+        <button class="btn btn--blue">변경사항 저장</button>
+      </div>
+      <div>
+        <div class="field" style="margin-bottom:10px"><span class="field-label">이메일</span><input class="control" value="jiwoo@example.com"></div>
+        <button class="btn btn--blue" style="margin-right:8px">이메일 갱신</button>
+        <button class="btn btn--blue">번호 인증</button>
+      </div>
+      <p class="muted">사진은 5MB 이하여야 합니다</p>
+    </div>
 prompt:
   en: >-
     The same action appears twice, worded and styled differently. Which

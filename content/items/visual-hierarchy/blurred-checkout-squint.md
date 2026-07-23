@@ -18,6 +18,97 @@ artefact:
     아래의 가늘고 옅은 윤곽선입니다. 선명한 쪽에서 보면 띠는 "4만원 이상
     무료배송" 홍보이고, 사각형은 "뉴스레터 구독" 카드이며, 옅은 윤곽선은
     "결제하기" 버튼입니다.
+screen:
+  en: |-
+    <div class="split">
+      <div>
+        <p class="pane-label">Sharp</p>
+        <div class="screen">
+          <div class="banner banner--navy">Free shipping over $40</div>
+          <div class="split" style="margin-top:12px">
+            <div>
+              <p class="muted" style="margin:0 0 6px">Your order</p>
+              <p style="font-size:13px;margin:0">Cleanser · $18.00</p>
+              <p style="font-size:13px;margin:0">Toner · $22.00</p>
+              <p style="font-size:13px;margin:8px 0 0"><strong>Total · $40.00</strong></p>
+            </div>
+            <div style="background:#1e3a5f;color:#ffffff;border-radius:6px;padding:18px;min-height:92px">
+              <p style="font-weight:600;margin:0 0 6px">Join our newsletter</p>
+              <p style="font-size:13px;margin:0">10% off your next order</p>
+            </div>
+          </div>
+          <div class="actions" style="margin-top:16px">
+            <button class="btn" style="border-color:#e5e7eb;color:#b6bcc4">Place order</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">Blurred</p>
+        <div class="screen blur">
+          <div class="banner banner--navy">Free shipping over $40</div>
+          <div class="split" style="margin-top:12px">
+            <div>
+              <p class="muted" style="margin:0 0 6px">Your order</p>
+              <p style="font-size:13px;margin:0">Cleanser · $18.00</p>
+              <p style="font-size:13px;margin:0">Toner · $22.00</p>
+              <p style="font-size:13px;margin:8px 0 0"><strong>Total · $40.00</strong></p>
+            </div>
+            <div style="background:#1e3a5f;color:#ffffff;border-radius:6px;padding:18px;min-height:92px">
+              <p style="font-weight:600;margin:0 0 6px">Join our newsletter</p>
+              <p style="font-size:13px;margin:0">10% off your next order</p>
+            </div>
+          </div>
+          <div class="actions" style="margin-top:16px">
+            <button class="btn" style="border-color:#e5e7eb;color:#b6bcc4">Place order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  ko: |-
+    <div class="split">
+      <div>
+        <p class="pane-label">선명</p>
+        <div class="screen">
+          <div class="banner banner--navy">4만원 이상 무료배송</div>
+          <div class="split" style="margin-top:12px">
+            <div>
+              <p class="muted" style="margin:0 0 6px">주문 내역</p>
+              <p style="font-size:13px;margin:0">클렌저 · 18,000원</p>
+              <p style="font-size:13px;margin:0">토너 · 22,000원</p>
+              <p style="font-size:13px;margin:8px 0 0"><strong>합계 · 40,000원</strong></p>
+            </div>
+            <div style="background:#1e3a5f;color:#ffffff;border-radius:6px;padding:18px;min-height:92px">
+              <p style="font-weight:600;margin:0 0 6px">뉴스레터 구독</p>
+              <p style="font-size:13px;margin:0">다음 주문 10% 할인</p>
+            </div>
+          </div>
+          <div class="actions" style="margin-top:16px">
+            <button class="btn" style="border-color:#e5e7eb;color:#b6bcc4">결제하기</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="pane-label">흐림</p>
+        <div class="screen blur">
+          <div class="banner banner--navy">4만원 이상 무료배송</div>
+          <div class="split" style="margin-top:12px">
+            <div>
+              <p class="muted" style="margin:0 0 6px">주문 내역</p>
+              <p style="font-size:13px;margin:0">클렌저 · 18,000원</p>
+              <p style="font-size:13px;margin:0">토너 · 22,000원</p>
+              <p style="font-size:13px;margin:8px 0 0"><strong>합계 · 40,000원</strong></p>
+            </div>
+            <div style="background:#1e3a5f;color:#ffffff;border-radius:6px;padding:18px;min-height:92px">
+              <p style="font-weight:600;margin:0 0 6px">뉴스레터 구독</p>
+              <p style="font-size:13px;margin:0">다음 주문 10% 할인</p>
+            </div>
+          </div>
+          <div class="actions" style="margin-top:16px">
+            <button class="btn" style="border-color:#e5e7eb;color:#b6bcc4">결제하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
 prompt:
   en: >-
     What does the blurred view tell the team about this page?

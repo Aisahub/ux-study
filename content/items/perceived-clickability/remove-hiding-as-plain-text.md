@@ -17,6 +17,23 @@ artefact:
     14px 검정 글자에 밑줄도, 색도, 테두리도 없습니다. 삭제는 누르면 멀쩡히
     동작하는데도, 운영자에게는 파일을 어떻게 지우느냐는 메일이 계속
     들어옵니다.
+screen:
+  en: |-
+    <div class="screen">
+      <div class="actions">
+        <span style="font-size:14px;color:#000000;margin-right:auto">Q3-forecast.xlsx</span>
+        <button class="btn btn--hairline">Download</button>
+        <span style="font-size:14px;color:#000000">Remove</span>
+      </div>
+    </div>
+  ko: |-
+    <div class="screen">
+      <div class="actions">
+        <span style="font-size:14px;color:#000000;margin-right:auto">3분기-실적전망.xlsx</span>
+        <button class="btn btn--hairline">다운로드</button>
+        <span style="font-size:14px;color:#000000">삭제</span>
+      </div>
+    </div>
 prompt:
   en: >-
     Which change makes Remove findable?
