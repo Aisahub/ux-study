@@ -193,7 +193,7 @@ test('while an attempt is open, the attempt owns the language: the other path re
   expect(response.headers.get('location')).toContain(`/ko/learn/visual-hierarchy/quiz/${attempt.id}`)
 })
 
-test('the switcher is absent from an open attempt and present on the doorstep', async () => {
+test('the switch is offered on the doorstep and refused, in words, inside an open attempt', async () => {
   const email = freshLearner()
   const cookie = await sessionCookieFor(email)
   const attempt = await openAttempt(email, slugs.slice(0, config.drawSize))
@@ -206,7 +206,14 @@ test('the switcher is absent from an open attempt and present on the doorstep', 
   ).text()
 
   expect(visibleText(doorstep)).toContain('한국어')
-  expect(visibleText(open)).not.toContain('한국어')
+  expect(doorstep).toContain('href="/ko/learn/visual-hierarchy/quiz"')
+
+  // Inside the attempt the other language is named but unreachable: no link to
+  // it anywhere on the page, and a reason given for the refusal. Naming it
+  // without linking it is the point — a control that vanishes teaches nothing.
+  expect(open).not.toMatch(/href="\/ko\//)
+  expect(visibleText(open)).toContain('한국어')
+  expect(visibleText(open)).toContain('fixed until you submit')
 })
 
 test("someone else's attempt does not exist for you", async () => {
