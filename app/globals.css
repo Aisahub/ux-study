@@ -22,5 +22,9 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* The face the layout actually loads. The scaffold left Arial here, which
+     overrode it everywhere a page had not asked for `font-sans` by name — so
+     the shell around each page rendered in a different typeface from the page
+     inside it. */
+  font-family: var(--font-geist-sans), sans-serif;
 }
