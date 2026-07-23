@@ -53,8 +53,10 @@ test('a saved preference wins over the Accept-Language guess', async () => {
 })
 
 test('each language segment serves its own page', async () => {
-  const korean = await get('/ko')
-  const english = await get('/en')
+  // The segment root is a front door that forwards rather than a page of its
+  // own, so the pair compared here is what it forwards an arriving visitor to.
+  const korean = await get('/ko/signin')
+  const english = await get('/en/signin')
 
   expect(korean.status).toBe(200)
   expect(english.status).toBe(200)
@@ -87,11 +89,11 @@ test('a preference outlives the browser session', async () => {
 })
 
 test('each page offers the switcher, pointing at its own counterpart', async () => {
-  const korean = await get('/ko')
-  const english = await get('/en')
+  const korean = await get('/ko/signin')
+  const english = await get('/en/signin')
 
-  expect(await korean.text()).toMatch(/href="\/en"/)
-  expect(await english.text()).toMatch(/href="\/ko"/)
+  expect(await korean.text()).toMatch(/href="\/en\/signin"/)
+  expect(await english.text()).toMatch(/href="\/ko\/signin"/)
 })
 
 test('a language we do not publish is not a page', async () => {

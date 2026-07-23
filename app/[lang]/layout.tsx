@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { notFound } from 'next/navigation'
 
 import { LanguageSwitcher } from './language-switcher'
+import { PlatformNav } from './platform-nav'
 import { LANGUAGES, isLanguage, type Language } from '@/lib/language'
 import '../globals.css'
 
@@ -60,9 +61,15 @@ export default async function LanguageLayout({
   return (
     <html lang={lang} className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <div className="flex justify-end p-4">
-          <LanguageSwitcher current={lang} />
-        </div>
+        {/* The switcher keeps its own right-hand corner whether or not there
+            is a nav beside it, so it does not move between signed-out and
+            signed-in pages. */}
+        <header className="flex items-baseline gap-4 p-4">
+          <PlatformNav lang={lang} />
+          <div className="ml-auto">
+            <LanguageSwitcher current={lang} />
+          </div>
+        </header>
         {children}
       </body>
     </html>

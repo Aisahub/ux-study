@@ -45,6 +45,66 @@ async function submittedReport(email: string, elements: string[]) {
   return report
 }
 
+// ------------------------------------------------------ the shell's navigation
+
+test('a signed-out visitor is offered no navigation — there is nowhere to go yet', async () => {
+  const html = await (await fetch(`${BASE_URL}/en/signin`)).text()
+
+  expect(html).not.toContain('href="/en/me"')
+  expect(html).not.toContain('href="/en/learn"')
+})
+
+test('a signed-in Learner can reach the overview and their own progress from anywhere', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  // From a page that is not the overview: the shell carries the links, not
+  // the page. Reaching /me is what makes signing out reachable at all.
+  const html = await (await fetch(`${BASE_URL}/en/learn/visual-hierarchy`, { headers: { cookie } })).text()
+
+  expect(html).toContain('href="/en/learn"')
+  expect(html).toContain('href="/en/me"')
+})
+
+test('the Self-Audit Report has no navigation slot of its own', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+
+  // Reachable from the bottom of the overview as its capstone (#20) — and
+  // nowhere in the shell, on any page.
+  const navSection = html.slice(0, html.indexOf('<main'))
+  expect(navSection).not.toContain('href="/en/audit"')
+})
+
+test('the Findings library is offered only after the reader has submitted', async () => {
+  const email = freshLearner()
+  const before = await sessionCookieFor(email)
+  const beforeHtml = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie: before } })).text()
+  expect(beforeHtml).not.toContain('href="/en/findings"')
+
+  await submittedReport(email, [practicePage.defects[0].element])
+  const afterHtml = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie: before } })).text()
+  expect(afterHtml).toContain('href="/en/findings"')
+})
+
+test('the maintainer surfaces are offered to a Maintainer and to nobody else', async () => {
+  const learnerCookie = await sessionCookieFor(freshLearner())
+  const learnerHtml = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie: learnerCookie } })).text()
+
+  for (const path of ['/en/maintain/learners', '/en/maintain/content', '/en/maintain/allowlist']) {
+    expect(learnerHtml).not.toContain(`href="${path}"`)
+  }
+
+  const maintainer = freshLearner()
+  await allow(maintainer, true)
+  const maintainerCookie = await sessionCookieFor(maintainer)
+  const maintainerHtml = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie: maintainerCookie } })).text()
+
+  for (const path of ['/en/maintain/learners', '/en/maintain/content', '/en/maintain/allowlist']) {
+    expect(maintainerHtml).toContain(`href="${path}"`)
+  }
+})
+
 // ------------------------------------------------------------------ #26 /me
 
 test('my progress shows attempts, report state and language preference, all derived', async () => {
