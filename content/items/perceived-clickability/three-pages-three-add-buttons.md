@@ -76,33 +76,35 @@ prompt:
     무엇을 바꿔야 할까요?
 options:
   en:
-    - text: >-
-        Give the same-rank action one primary style everywhere — the solid
-        blue button — so the clickability learned on Customers carries to
-        Products and Orders unchanged.
+    - text: Give the same-rank action one primary style everywhere
+      reason: >-
+        The solid blue button, so the clickability learned on Customers carries
+        to Products and Orders unchanged.
       correct: true
-    - text: >-
-        Each page is already right — a page's primary action should be its
-        most prominent element, and on each of the three it is.
-    - text: >-
-        Keep the three styles and add the "+" prefix to all three labels, so
-        the shared symbol ties them together.
-    - text: >-
-        Unify all three on the plain teal text, the quietest of the three
-        styles, so no page's corner shouts.
+    - text: Each page is already right
+      reason: >-
+        A page's primary action should be its most prominent element, and on
+        each of the three it is.
+    - text: Keep the three styles and add a "+" prefix to all three labels
+      reason: >-
+        The shared symbol then ties them together.
+    - text: Unify all three on the plain teal text
+      reason: >-
+        It is the quietest of the three styles, so no page's corner shouts.
   ko:
-    - text: >-
-        같은 급의 동작에는 어디서나 하나의 주요 버튼 스타일 — 파랑 채움
-        버튼 — 을 입힙니다. 고객 페이지에서 익힌 '눌리는 모양'이 상품과
-        주문 페이지에서도 그대로 통하게요.
+    - text: 같은 급의 동작에 어디서나 하나의 주요 버튼 스타일을 입힙니다
+      reason: >-
+        파랑 채움 버튼으로요. 고객 페이지에서 익힌 '눌리는 모양'이 상품과 주문
+        페이지에서도 그대로 통하게 합니다.
       correct: true
-    - text: >-
-        세 페이지 모두 지금이 맞습니다 — 페이지의 주요 동작은 그 페이지에서
-        가장 도드라진 요소여야 하는데, 세 곳 다 이미 그렇습니다.
-    - text: >-
-        세 가지 스타일은 유지하고 세 이름표 모두에 "+" 기호를 붙여서, 공통
-        기호가 셋을 묶어 주게 합니다.
-    - text: >-
-        셋 중 가장 조용한 청록색 평문으로 셋을 통일해서, 어느 페이지의
-        구석도 소리치지 않게 합니다.
+    - text: 세 페이지 모두 지금이 맞습니다
+      reason: >-
+        페이지의 주요 동작은 그 페이지에서 가장 도드라진 요소여야 하는데, 세
+        곳 다 이미 그렇습니다.
+    - text: 세 스타일은 두고 세 이름표에 "+" 기호를 붙입니다
+      reason: >-
+        공통 기호가 셋을 묶어 줍니다.
+    - text: 셋을 청록색 평문으로 통일합니다
+      reason: >-
+        셋 중 가장 조용한 스타일이라 어느 페이지의 구석도 소리치지 않습니다.
 ---

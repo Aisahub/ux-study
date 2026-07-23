@@ -49,33 +49,35 @@ prompt:
     내려졌습니다. 그동안 버튼의 겉모습은 어때야 할까요?
 options:
   en:
-    - text: >-
-        Dim it — desaturate the blue and lower its contrast so it reads as
-        unavailable, keep the label legible, and say beside it what enables it:
-        "Fill in Team and Role".
+    - text: Dim it, and say what enables it
+      reason: >-
+        Desaturate the blue and lower its contrast so it reads as unavailable,
+        keep the label legible, and add beside it: "Fill in Team and Role".
       correct: true
-    - text: >-
-        Leave the look as it is — unavailability is communicated through the
-        button's states, so it is enough that a press produces no response.
-    - text: >-
-        Hide the button entirely until both fields are filled, so nothing
-        unusable is ever shown.
-    - text: >-
-        Fade the whole button, label included, to the faintest grey the
-        background allows, so that nobody is tempted to try it.
+    - text: Leave the look as it is
+      reason: >-
+        Unavailability is communicated through the button's states, so it is
+        enough that a press produces no response.
+    - text: Hide the button until both fields are filled
+      reason: >-
+        Nothing unusable is ever shown then.
+    - text: Fade the whole button, label included, to the faintest grey
+      reason: >-
+        Then nobody is tempted to try it.
   ko:
-    - text: >-
-        흐리게 합니다 — 파랑의 채도와 대비를 낮춰 지금은 쓸 수 없다는 것이
-        보이게 하되 글자는 읽히게 남기고, 옆에 "소속 팀과 직무를 입력하세요"
-        라고 무엇이 버튼을 살리는지 적어 둡니다.
+    - text: 흐리게 하고, 무엇이 버튼을 살리는지 적습니다
+      reason: >-
+        파랑의 채도와 대비를 낮춰 지금은 쓸 수 없다는 것이 보이게 하되 글자는
+        읽히게 남기고, 옆에 "소속 팀과 직무를 입력하세요"라고 덧붙입니다.
       correct: true
-    - text: >-
-        겉모습은 그대로 둡니다 — 쓸 수 없다는 것은 버튼의 상태로 전달되는
-        것이므로, 눌러도 반응이 없으면 그것으로 충분합니다.
-    - text: >-
-        두 칸이 채워질 때까지 버튼을 아예 숨겨서, 쓸 수 없는 것은 화면에
-        보이지 않게 합니다.
-    - text: >-
-        글자까지 포함해 버튼 전체를 배경에 묻힐 만큼 옅은 회색으로 빼서,
-        아무도 눌러 볼 마음이 들지 않게 합니다.
+    - text: 겉모습은 그대로 둡니다
+      reason: >-
+        쓸 수 없다는 것은 버튼의 상태로 전달되는 것이므로, 눌러도 반응이
+        없으면 그것으로 충분합니다.
+    - text: 두 칸이 채워질 때까지 버튼을 숨깁니다
+      reason: >-
+        쓸 수 없는 것은 화면에 아예 보이지 않게 됩니다.
+    - text: 글자까지 포함해 버튼 전체를 가장 옅은 회색으로 뺍니다
+      reason: >-
+        그러면 아무도 눌러 볼 마음이 들지 않습니다.
 ---

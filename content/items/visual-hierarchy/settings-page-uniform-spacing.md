@@ -66,30 +66,33 @@ prompt:
     결제 카드를 바꾸러 온 사용자가 이 간격 때문에 치르는 대가는 무엇일까요?
 options:
   en:
-    - text: >-
+    - text: Nothing shows where the billing settings begin and end
+      reason: >-
         Each heading sits as far from its own rows as from the section above
-        it, so nothing on the page shows where the billing settings begin and
-        end.
+        it, so the page never marks out a section.
       correct: true
-    - text: >-
-        The headings do not read as headings, because they are set at the same
-        size and weight as the rows they label.
-    - text: >-
-        Too many colours compete for attention, so the eye has nowhere obvious
-        to settle.
-    - text: >-
-        The rows are packed too tightly to read comfortably, so the page gets
-        skimmed rather than read.
+    - text: The headings do not read as headings
+      reason: >-
+        They are set at the same size and weight as the rows they label.
+    - text: Too many colours compete for attention
+      reason: >-
+        The eye has nowhere obvious to settle.
+    - text: The rows are packed too tightly to read comfortably
+      reason: >-
+        The page gets skimmed rather than read.
   ko:
-    - text: >-
-        제목이 자기 행들과 떨어진 만큼 윗 구역과도 떨어져 있어서, 결제 설정이
-        어디서 시작해 어디서 끝나는지 페이지가 알려 주지 않습니다.
+    - text: 결제 설정이 어디서 시작해 어디서 끝나는지 알 수 없습니다
+      reason: >-
+        제목이 자기 행들과 떨어진 만큼 윗 구역과도 떨어져 있어서, 페이지가
+        구역을 구분해 주지 않습니다.
       correct: true
-    - text: >-
-        제목이 자기가 이름 붙인 행들과 크기도 굵기도 같아서 제목으로 읽히지
-        않습니다.
-    - text: >-
-        너무 많은 색이 서로 시선을 다투어서 눈이 머물 곳이 마땅치 않습니다.
-    - text: >-
-        행 사이가 너무 빽빽해서 읽기 불편하고, 결국 대충 훑고 지나가게 됩니다.
+    - text: 제목이 제목으로 읽히지 않습니다
+      reason: >-
+        자기가 이름 붙인 행들과 크기도 굵기도 같습니다.
+    - text: 너무 많은 색이 서로 시선을 다툽니다
+      reason: >-
+        눈이 머물 곳이 마땅치 않습니다.
+    - text: 행 사이가 너무 빽빽해서 읽기 불편합니다
+      reason: >-
+        결국 대충 훑고 지나가게 됩니다.
 ---

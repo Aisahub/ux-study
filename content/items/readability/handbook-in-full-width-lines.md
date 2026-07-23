@@ -59,33 +59,39 @@ prompt:
     독자가 이 페이지를 실제로 끝까지 읽게 하려면 무엇을 바꿔야 할까요?
 options:
   en:
-    - text: >-
-        Cap the column so a line carries far fewer characters and open up the
-        line height — the letters were never the problem; the shape of the
-        block is what wears the reader out.
+    - text: Cap the column and open up the line height
+      reason: >-
+        The letters were never the problem; a line carrying far fewer
+        characters is what stops the shape of the block wearing the reader out.
       correct: true
-    - text: >-
-        Raise the text from #333333 to pure black — the article calls for
-        high contrast between characters and background, and this grey falls
-        short of it.
-    - text: >-
-        Enlarge the type beyond 16px — visual acuity varies, and a size
-        readers cannot comfortably resolve is what makes them stop.
-    - text: >-
-        Swap the typeface — a page this long needs a face designed for
-        sustained reading, and the current one is what fatigues the eye.
+    - text: Raise the text from #333333 to pure black
+      reason: >-
+        The article calls for high contrast between characters and background,
+        and this grey falls short of it.
+    - text: Enlarge the type beyond 16px
+      reason: >-
+        Visual acuity varies, and a size readers cannot comfortably resolve is
+        what makes them stop.
+    - text: Swap the typeface
+      reason: >-
+        A page this long needs a face designed for sustained reading, and the
+        current one is what fatigues the eye.
   ko:
-    - text: >-
-        단 너비를 줄여 한 줄의 글자 수를 크게 낮추고 행간을 넓힙니다 — 글자는
-        애초에 문제가 아니었고, 덩어리의 형태가 독자를 지치게 하고 있습니다.
+    - text: 단 너비를 줄이고 행간을 넓힙니다
+      reason: >-
+        글자는 애초에 문제가 아니었습니다. 한 줄의 글자 수를 크게 낮춰야
+        독자를 지치게 하던 덩어리의 형태가 풀립니다.
       correct: true
-    - text: >-
-        글자색을 #333333에서 순검정으로 올립니다 — 글자와 배경 사이에 높은
-        대비를 두라는 것이 원문의 지침인데, 이 회색은 거기에 못 미칩니다.
-    - text: >-
-        16px보다 글자를 키웁니다 — 시력은 사람마다 다르고, 편하게 알아볼 수
-        없는 크기가 독자를 멈추게 하는 원인입니다.
-    - text: >-
-        서체를 바꿉니다 — 이만큼 긴 페이지에는 장문 읽기용으로 설계된 서체가
-        필요하고, 지금 서체가 눈을 피로하게 만들고 있습니다.
+    - text: 글자색을 #333333에서 순검정으로 올립니다
+      reason: >-
+        글자와 배경 사이에 높은 대비를 두라는 것이 원문의 지침인데, 이 회색은
+        거기에 못 미칩니다.
+    - text: 16px보다 글자를 키웁니다
+      reason: >-
+        시력은 사람마다 다르고, 편하게 알아볼 수 없는 크기가 독자를 멈추게 하는
+        원인입니다.
+    - text: 서체를 바꿉니다
+      reason: >-
+        이만큼 긴 페이지에는 장문 읽기용으로 설계된 서체가 필요하고, 지금
+        서체가 눈을 피로하게 만들고 있습니다.
 ---

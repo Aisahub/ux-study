@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 
 import { eq } from 'drizzle-orm'
 
@@ -58,10 +58,10 @@ const COPY: Record<
 
 /**
  * One attempt (#21): the wizard while it is open, the verdict once submitted.
- * While open, the attempt owns the language (ADR-0008 amendment, #6) — the
- * URL bends to the attempt, never the other way round. Failure feedback names
- * the missed items and their article sections and nothing else (#22): no
- * response anywhere carries the answer key.
+ * Both render in the language of the URL — the attempt no longer owns it
+ * (ADR-0008 amendment, 2026-07-23). Failure feedback names the missed items
+ * and their article sections and nothing else (#22): no response anywhere
+ * carries the answer key.
  */
 export default async function AttemptPage({
   params,
@@ -78,31 +78,34 @@ export default async function AttemptPage({
   // Someone else's attempt is indistinguishable from no attempt.
   if (!attempt || attempt.email !== session.email || attempt.competency !== slug) notFound()
 
-  const attemptLang = attempt.language as Language
-
   const pool = content.items[slug]
   const items = attempt.drawn.map((itemSlug) => pool.find((item) => item.slug === itemSlug)!)
 
   if (!attempt.submittedAt) {
-    // Open: the switch is forbidden, so an open attempt reached under the
-    // other language's path goes back to its own.
-    if (attemptLang !== lang) redirect(`/${attemptLang}/learn/${slug}/quiz/${attempt.id}`)
-
+    // Open, and rendered in the language of the URL like every other page. The
+    // switch used to be forbidden here and the URL bent to the attempt; it is
+    // allowed now, and the answers picked so far are persisted, so crossing
+    // over mid-attempt costs a Learner nothing.
     return (
       <QuizWizard
-        lang={attemptLang}
+        lang={lang}
         attemptId={attempt.id}
         screenCss={itemScreenCss}
+        initialChoices={attempt.draft ?? {}}
         items={items.map((item) => {
-          const order = shuffledOrder(`${attempt.id}:${item.slug}`, item.options[attemptLang].length)
+          const order = shuffledOrder(`${attempt.id}:${item.slug}`, item.options[lang].length)
           return {
             slug: item.slug,
-            artefact: item.artefact[attemptLang],
-            screen: item.screen?.[attemptLang],
-            prompt: item.prompt[attemptLang],
+            artefact: item.artefact[lang],
+            screen: item.screen?.[lang],
+            prompt: item.prompt[lang],
             // Original indices survive the shuffle so scoring is order-blind;
             // the keyed flag itself must never travel to the client (#22).
-            options: order.map((index) => ({ index, text: item.options[attemptLang][index].text })),
+            options: order.map((index) => ({
+              index,
+              text: item.options[lang][index].text,
+              reason: item.options[lang][index].reason,
+            })),
           }
         })}
       />

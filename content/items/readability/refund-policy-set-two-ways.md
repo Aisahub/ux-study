@@ -74,35 +74,42 @@ prompt:
     어느 안이 이겨야 하고, 그 이유는 무엇일까요?
 options:
   en:
-    - text: >-
-        B — both versions clear the bar for telling characters apart; what
-        separates them is the block. A's tight leading and 100-character
-        lines punish sustained reading, and no amount of contrast buys that
-        back.
+    - text: B
+      reason: >-
+        Both versions clear the bar for telling characters apart; what
+        separates them is the block. A's tight leading and 100-character lines
+        punish sustained reading, and no amount of contrast buys that back.
       correct: true
-    - text: >-
-        A — high contrast between characters and background is the stated
+    - text: A, for its contrast
+      reason: >-
+        High contrast between characters and background is the stated
         requirement, and #000000 on white meets it more fully than #333333
         does.
-    - text: >-
-        A — it fits the whole policy above the fold, and a page the reader
+    - text: A, for fitting above the fold
+      reason: >-
+        It holds the whole policy without scrolling, and a page the reader
         never has to scroll asks less of them than one they do.
-    - text: >-
-        Neither, yet — a judgement like this cannot be made from looking;
-        measure reading speed on both versions and let the numbers decide.
+    - text: Neither, yet
+      reason: >-
+        A judgement like this cannot be made from looking; measure reading
+        speed on both versions and let the numbers decide.
   ko:
-    - text: >-
-        B안 — 글자를 구별하는 문턱은 두 안 모두 넘습니다. 둘을 가르는 것은
-        덩어리 쪽입니다. A안의 좁은 행간과 85자짜리 줄은 이어 읽기를
-        벌주는데, 대비를 아무리 쌓아도 그것은 되사올 수 없습니다.
+    - text: B안
+      reason: >-
+        글자를 구별하는 문턱은 두 안 모두 넘습니다. 둘을 가르는 것은 덩어리
+        쪽입니다. A안의 좁은 행간과 85자짜리 줄은 이어 읽기를 벌주는데, 대비를
+        아무리 쌓아도 그것은 되사올 수 없습니다.
       correct: true
-    - text: >-
-        A안 — 글자와 배경 사이의 높은 대비가 명시된 요구이고, 흰 바탕의
-        #000000이 #333333보다 그것을 더 온전히 충족합니다.
-    - text: >-
-        A안 — 규정 전문이 스크롤 없이 한 화면에 들어가는데, 스크롤이 필요
-        없는 페이지는 필요한 페이지보다 독자에게 덜 요구합니다.
-    - text: >-
-        아직은 어느 쪽도 아닙니다 — 이런 판단은 눈으로 봐서 내릴 수 없으니,
-        두 안의 읽기 속도를 측정해 숫자가 결정하게 해야 합니다.
+    - text: A안 — 대비 때문에
+      reason: >-
+        글자와 배경 사이의 높은 대비가 명시된 요구이고, 흰 바탕의 #000000이
+        #333333보다 그것을 더 온전히 충족합니다.
+    - text: A안 — 한 화면에 들어가니까
+      reason: >-
+        규정 전문이 스크롤 없이 들어가는데, 스크롤이 필요 없는 페이지는 필요한
+        페이지보다 독자에게 덜 요구합니다.
+    - text: 아직은 어느 쪽도 아닙니다
+      reason: >-
+        이런 판단은 눈으로 봐서 내릴 수 없으니, 두 안의 읽기 속도를 측정해
+        숫자가 결정하게 해야 합니다.
 ---

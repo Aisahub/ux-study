@@ -47,33 +47,33 @@ prompt:
     누르기 전에 그 클릭의 결과가 보이게 하려면 무엇을 바꿔야 할까요?
 options:
   en:
-    - text: >-
-        Relabel the blue button to state the action it performs — "Send 45
-        invoices" — so the label alone says what happens, on a screen with no
-        next step to catch a mistake.
+    - text: Relabel the blue button "Send 45 invoices"
+      reason: >-
+        The label alone then says what happens, on a screen with no next step
+        to catch a mistake.
       correct: true
-    - text: >-
-        The label is fine — what is missing is a progress spinner after the
-        click, so the user knows the send is under way.
-    - text: >-
-        Keep "Continue" and colour the button red, so its weight warns that
-        this step matters more than the ones before.
-    - text: >-
-        Keep "Continue" and add a confirmation page after it, where the send
-        is finally described and approved.
+    - text: Keep the label and add a progress spinner after the click
+      reason: >-
+        The user then knows the send is under way.
+    - text: Keep "Continue" and colour the button red
+      reason: >-
+        Its weight then warns that this step matters more than the ones before.
+    - text: Keep "Continue" and add a confirmation page after it
+      reason: >-
+        The send is finally described and approved there.
   ko:
-    - text: >-
-        파란 버튼의 이름을 실제로 하는 일로 바꿉니다 — "청구서 45건 발송".
+    - text: 파란 버튼의 이름을 "청구서 45건 발송"으로 바꿉니다
+      reason: >-
         실수를 잡아 줄 다음 단계가 없는 화면이니, 이름표만으로 무슨 일이
         벌어지는지 말하게 합니다.
       correct: true
-    - text: >-
-        이름표는 문제없습니다 — 빠진 것은 누른 뒤의 진행 스피너입니다.
+    - text: 이름표는 두고 누른 뒤에 진행 스피너를 붙입니다
+      reason: >-
         그래야 발송이 진행 중임을 사용자가 알 수 있습니다.
-    - text: >-
-        "계속"은 그대로 두고 버튼을 빨강으로 칠해서, 이 단계가 앞
-        단계들보다 무겁다는 경고가 되게 합니다.
-    - text: >-
-        "계속"은 그대로 두고 그 뒤에 확인 페이지를 하나 더 붙여서, 발송
-        내용을 거기서 비로소 설명하고 승인받게 합니다.
+    - text: '"계속"은 두고 버튼을 빨강으로 칠합니다'
+      reason: >-
+        이 단계가 앞 단계들보다 무겁다는 경고가 됩니다.
+    - text: '"계속"은 두고 그 뒤에 확인 페이지를 하나 더 붙입니다'
+      reason: >-
+        발송 내용을 거기서 비로소 설명하고 승인받게 합니다.
 ---

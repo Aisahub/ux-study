@@ -55,33 +55,37 @@ prompt:
     할까요?
 options:
   en:
-    - text: >-
-        The first four tabs' style — every other label on this page, tabs and
-        buttons alike, already follows it, so the one tab written differently
-        is the one to rewrite.
+    - text: Rewrite the newest tab in the first four tabs' style
+      reason: >-
+        Every other label on this page, tabs and buttons alike, already follows
+        it, so the one tab written differently is the one to rewrite.
       correct: true
-    - text: >-
-        The newest tab's style — capitalising every word gives the labels
-        more presence, and a tab bar is a place worth dressing up.
-    - text: >-
-        Leave the tab bar alone — users read the words, not the styling, so
-        the odd tab costs nothing as long as its label is clear.
-    - text: >-
-        Put every tab in all-capitals instead, which ends the styling
-        question by giving neither variant the win.
+    - text: Rewrite the first four in the newest tab's style
+      reason: >-
+        Capitalising every word gives the labels more presence, and a tab bar
+        is a place worth dressing up.
+    - text: Leave the tab bar alone
+      reason: >-
+        Users read the words, not the styling, so the odd tab costs nothing as
+        long as its label is clear.
+    - text: Put every tab in all-capitals instead
+      reason: >-
+        It ends the styling question by giving neither variant the win.
   ko:
-    - text: >-
-        앞 네 탭의 방식 — 이 페이지의 다른 이름들은 탭이든 버튼이든 이미 전부
-        그 방식을 따르고 있으니, 다르게 적힌 탭 하나를 고쳐 쓰는 것이
-        맞습니다.
+    - text: 새 탭을 앞 네 탭의 방식으로 고쳐 씁니다
+      reason: >-
+        이 페이지의 다른 이름들은 탭이든 버튼이든 이미 전부 그 방식을 따르고
+        있으니, 다르게 적힌 탭 하나를 고쳐 쓰는 것이 맞습니다.
       correct: true
-    - text: >-
-        가장 새 탭의 방식 — 무엇을 하는 곳인지 문장으로 풀어 주는 이름이 더
-        친절하고, 탭 막대는 그만큼 공들일 가치가 있는 자리입니다.
-    - text: >-
-        탭 막대는 그대로 둡니다 — 사용자는 이름 짓는 방식이 아니라 낱말을
-        읽으니, 뜻만 분명하면 튀는 탭 하나가 치르게 하는 대가는 없습니다.
-    - text: >-
-        모든 탭 이름 뒤에 "확인하기"를 붙여 통일해서, 두 방식 중 어느 쪽도
-        이긴 것이 아니게 만듭니다.
+    - text: 앞 네 탭을 새 탭의 방식으로 고쳐 씁니다
+      reason: >-
+        무엇을 하는 곳인지 문장으로 풀어 주는 이름이 더 친절하고, 탭 막대는
+        그만큼 공들일 가치가 있는 자리입니다.
+    - text: 탭 막대는 그대로 둡니다
+      reason: >-
+        사용자는 이름 짓는 방식이 아니라 낱말을 읽으니, 뜻만 분명하면 튀는 탭
+        하나가 치르게 하는 대가는 없습니다.
+    - text: 모든 탭 이름 뒤에 "확인하기"를 붙여 통일합니다
+      reason: >-
+        그러면 두 방식 중 어느 쪽도 이긴 것이 아니게 됩니다.
 ---

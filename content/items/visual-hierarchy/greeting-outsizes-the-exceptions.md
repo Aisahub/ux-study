@@ -67,31 +67,33 @@ prompt:
     그 목적에 가장 잘 맞을까요?
 options:
   en:
-    - text: >-
+    - text: Shrink the greeting and enlarge the two exception numbers
+      reason: >-
         Drop the greeting to the size of the table rows, and make Overdue
         invoices and Failed payments the two largest numbers on the page.
       correct: true
-    - text: >-
-        Raise all four card numbers to 40px and drop the greeting to 14px, so
-        that no number can be missed.
-    - text: >-
-        Round the six sizes down to three — 40px, 20px and 13px — so the page
-        uses no more sizes than it needs.
-    - text: >-
-        Keep every size as it is and set the greeting in a lighter grey so it
-        stops competing.
+    - text: Raise all four card numbers to 40px and drop the greeting to 14px
+      reason: >-
+        Then no number can be missed.
+    - text: Round the six sizes down to three — 40px, 20px and 13px
+      reason: >-
+        The page then uses no more sizes than it needs.
+    - text: Keep every size and set the greeting in a lighter grey
+      reason: >-
+        It stops competing without anything being resized.
   ko:
-    - text: >-
-        인사말을 표 본문과 같은 크기로 낮추고, 미수금 청구서와 결제 실패 두
+    - text: 인사말을 줄이고 예외 숫자 둘을 키웁니다
+      reason: >-
+        인사말은 표 본문과 같은 크기로 낮추고, 미수금 청구서와 결제 실패 두
         숫자를 페이지에서 가장 큰 글자로 올립니다.
       correct: true
-    - text: >-
-        카드 숫자 네 개를 모두 40px로 올리고 인사말은 14px로 낮춰서, 어떤
-        숫자도 놓치지 않게 합니다.
-    - text: >-
-        여섯 단계인 글자 크기를 40px, 20px, 13px 세 단계로 정리해서 필요
-        이상으로 쓰지 않게 합니다.
-    - text: >-
-        크기는 전부 그대로 두고 인사말만 옅은 회색으로 바꿔 시선을 덜 끌게
-        합니다.
+    - text: 카드 숫자 네 개를 모두 40px로 올리고 인사말은 14px로 낮춥니다
+      reason: >-
+        그러면 어떤 숫자도 놓치지 않게 됩니다.
+    - text: 여섯 단계인 글자 크기를 40px, 20px, 13px 세 단계로 정리합니다
+      reason: >-
+        필요 이상으로 많은 크기를 쓰지 않게 됩니다.
+    - text: 크기는 그대로 두고 인사말만 옅은 회색으로 바꿉니다
+      reason: >-
+        아무것도 키우거나 줄이지 않고도 시선을 덜 끌게 됩니다.
 ---

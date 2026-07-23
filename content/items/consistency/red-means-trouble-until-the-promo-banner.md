@@ -73,34 +73,37 @@ prompt:
     색을 가져가야 할까요?
 options:
   en:
-    - text: >-
-        The problems keep red, and the banner is recoloured — three of the
-        four red elements already mean "something needs attention", and the
-        banner spends that alarm on an offer.
+    - text: Recolour the banner and leave red to the problems
+      reason: >-
+        Three of the four red elements already mean "something needs
+        attention", and the banner spends that alarm on an offer.
       correct: true
-    - text: >-
-        The banner keeps red — a promotion lives or dies by being noticed,
-        and red is the strongest attention colour this screen has.
-    - text: >-
-        Recolour "Delete account" instead — it is a button rather than a
-        status, so once it changes, red splits cleanly between errors and the
-        banner.
-    - text: >-
-        Keep all four red and add a megaphone icon to the banner, so users
-        can tell the promotional red from the problem red.
+    - text: Let the banner keep red
+      reason: >-
+        A promotion lives or dies by being noticed, and red is the strongest
+        attention colour this screen has.
+    - text: Recolour "Delete account" instead
+      reason: >-
+        It is a button rather than a status, so once it changes, red splits
+        cleanly between errors and the banner.
+    - text: Keep all four red and add a megaphone icon to the banner
+      reason: >-
+        Users can then tell the promotional red from the problem red.
   ko:
-    - text: >-
-        문제 상황들이 빨강을 가져가고 배너는 다른 색으로 바꿉니다 — 빨간 요소
-        넷 중 셋이 이미 "주의가 필요하다"는 뜻으로 쓰이고 있는데, 배너는 그
-        경보를 홍보에 써 버리고 있습니다.
+    - text: 배너를 다른 색으로 바꾸고 빨강은 문제 상황에 남깁니다
+      reason: >-
+        빨간 요소 넷 중 셋이 이미 "주의가 필요하다"는 뜻으로 쓰이고 있는데,
+        배너는 그 경보를 홍보에 써 버리고 있습니다.
       correct: true
-    - text: >-
-        배너가 빨강을 가져갑니다 — 홍보는 눈에 띄어야 사는 것이고, 빨강은 이
-        화면이 가진 가장 강한 주목 색입니다.
-    - text: >-
-        대신 "계정 삭제"의 색을 바꿉니다 — 그것은 상태가 아니라 버튼이니,
-        그것만 바꾸면 빨강이 오류와 배너로 깔끔하게 나뉩니다.
-    - text: >-
-        네 곳 모두 빨강을 유지하고 배너에 확성기 아이콘을 더해서, 홍보의
-        빨강과 문제의 빨강을 구별할 수 있게 합니다.
+    - text: 배너가 빨강을 가져갑니다
+      reason: >-
+        홍보는 눈에 띄어야 사는 것이고, 빨강은 이 화면이 가진 가장 강한 주목
+        색입니다.
+    - text: 대신 "계정 삭제"의 색을 바꿉니다
+      reason: >-
+        그것은 상태가 아니라 버튼이니, 그것만 바꾸면 빨강이 오류와 배너로
+        깔끔하게 나뉩니다.
+    - text: 네 곳 모두 빨강을 유지하고 배너에 확성기 아이콘을 더합니다
+      reason: >-
+        그러면 홍보의 빨강과 문제의 빨강을 구별할 수 있습니다.
 ---

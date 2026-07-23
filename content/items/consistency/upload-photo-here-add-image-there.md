@@ -76,36 +76,37 @@ prompt:
     쪽으로 맞춰야 할까요?
 options:
   en:
-    - text: >-
-        "Upload photo" as a filled blue button — the page's other actions all
-        take that form, and the page's own captions and help text already
-        call the thing a photo, never an image.
+    - text: Make both "Upload photo" as a filled blue button
+      reason: >-
+        The page's other actions all take that form, and its own captions and
+        help text already call the thing a photo, never an image.
       correct: true
-    - text: >-
-        "Add image" — "image" covers illustrations and logos as well as
-        photographs, so it is the more accurate word for what users might
-        upload.
-    - text: >-
-        Keep both as they are — the button serves the avatar and the link
-        serves the form, and two entry points to one action can dress for
-        where they live.
-    - text: >-
-        Remove the form's link entirely and keep only the avatar button, so
-        the question of matching them never arises.
+    - text: Make both "Add image"
+      reason: >-
+        "Image" covers illustrations and logos as well as photographs, so it is
+        the more accurate word for what users might upload.
+    - text: Keep both as they are
+      reason: >-
+        The button serves the avatar and the link serves the form, and two
+        entry points to one action can dress for where they live.
+    - text: Remove the form's link and keep only the avatar button
+      reason: >-
+        Then the question of matching them never arises.
   ko:
-    - text: >-
-        파란 채움 버튼의 "사진 올리기"로 맞춥니다 — 이 페이지의 다른 동작이
-        모두 그 형태이고, 페이지의 설명문과 도움말도 이미 줄곧 "이미지"가
-        아니라 "사진"이라고 부르고 있습니다.
+    - text: 둘 다 파란 채움 버튼의 "사진 올리기"로 맞춥니다
+      reason: >-
+        이 페이지의 다른 동작이 모두 그 형태이고, 페이지의 설명문과 도움말도
+        이미 줄곧 "이미지"가 아니라 "사진"이라고 부르고 있습니다.
       correct: true
-    - text: >-
-        "이미지 추가"로 맞춥니다 — "이미지"는 사진만 아니라 일러스트와
-        로고까지 아우르니, 사용자가 올릴 수 있는 것을 더 정확히 담는
-        말입니다.
-    - text: >-
-        지금 그대로 둡니다 — 버튼은 아바타를, 링크는 폼을 섬기는 것이니, 한
-        동작의 입구가 둘이라면 각자 놓인 자리에 맞게 차려입어도 됩니다.
-    - text: >-
-        폼의 링크를 아예 없애고 아바타 버튼만 남겨서, 둘을 맞추는 문제 자체가
-        생기지 않게 합니다.
+    - text: 둘 다 "이미지 추가"로 맞춥니다
+      reason: >-
+        "이미지"는 사진만 아니라 일러스트와 로고까지 아우르니, 사용자가 올릴
+        수 있는 것을 더 정확히 담는 말입니다.
+    - text: 지금 그대로 둡니다
+      reason: >-
+        버튼은 아바타를, 링크는 폼을 섬기는 것이니, 한 동작의 입구가 둘이라면
+        각자 놓인 자리에 맞게 차려입어도 됩니다.
+    - text: 폼의 링크를 없애고 아바타 버튼만 남깁니다
+      reason: >-
+        그러면 둘을 맞추는 문제 자체가 생기지 않습니다.
 ---

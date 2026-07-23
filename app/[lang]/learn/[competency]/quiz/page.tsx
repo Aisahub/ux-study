@@ -8,7 +8,7 @@ import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
-import { startAttempt } from './actions'
+import { restartAttempt, startAttempt } from './actions'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,6 +26,8 @@ const COPY: Record<
     failed: string
     open: string
     back: string
+    restart: string
+    restartNote: string
   }
 > = {
   en: {
@@ -35,6 +37,8 @@ const COPY: Record<
     start: 'Start',
     continueOpen: 'Continue the open attempt',
     retry: 'Try again',
+    restart: 'Start over with new items',
+    restartNote: 'Your open attempt has not been scored, so nothing is lost by starting again.',
     history: 'Your attempts',
     submittedOn: (date, score, draw) => `${date} — ${score} of ${draw}`,
     passed: 'Passed',
@@ -49,6 +53,8 @@ const COPY: Record<
     start: '시작',
     continueOpen: '진행 중인 시도 이어서 하기',
     retry: '다시 도전',
+    restart: '새 문항으로 다시 시작',
+    restartNote: '진행 중인 시도는 아직 채점되지 않았으므로, 다시 시작해도 잃는 것은 없습니다.',
     history: '나의 시도',
     submittedOn: (date, score, draw) => `${date} — ${draw}문항 중 ${score}문항`,
     passed: '통과',
@@ -84,6 +90,7 @@ export default async function QuizStart({
   const open = attempts.find((attempt) => attempt.submittedAt === null)
 
   const start = startAttempt.bind(null, lang, slug)
+  const restart = restartAttempt.bind(null, lang, slug)
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
@@ -95,14 +102,36 @@ export default async function QuizStart({
       <h1 className="text-2xl font-semibold tracking-tight">{copy.heading(competency.name[lang])}</h1>
       <p className="text-zinc-600 dark:text-zinc-400">{copy.rules(drawSize, passThreshold)}</p>
 
-      <form action={start}>
-        <button
-          type="submit"
-          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-zinc-900"
-        >
-          {open ? copy.continueOpen : attempts.length > 0 ? copy.retry : copy.start}
-        </button>
-      </form>
+      {/*
+        An open attempt used to leave one button, "carry on", and no way to
+        abandon a draw a Learner no longer wants — the retry #22 promises was
+        reachable from every state except the one people are actually in. Both
+        are offered now, with the secondary looking secondary, and the note
+        says why discarding is safe rather than leaving it to be guessed.
+      */}
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <form action={start}>
+            <button
+              type="submit"
+              className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-zinc-900"
+            >
+              {open ? copy.continueOpen : attempts.length > 0 ? copy.retry : copy.start}
+            </button>
+          </form>
+          {open && (
+            <form action={restart}>
+              <button
+                type="submit"
+                className="rounded-md border border-zinc-300 px-4 py-2 text-sm hover:border-zinc-900 dark:border-zinc-700 dark:hover:border-zinc-100"
+              >
+                {copy.restart}
+              </button>
+            </form>
+          )}
+        </div>
+        {open && <p className="text-sm text-zinc-500">{copy.restartNote}</p>}
+      </div>
 
       {attempts.length > 0 && (
         <section>

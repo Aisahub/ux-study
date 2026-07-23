@@ -94,12 +94,16 @@ prompt:
 options:
   en:
     - text: The confirm button
+      reason: It is the action the page exists for.
       correct: true
     - text: The upgrade banner
+      reason: It is the brightest thing on the page.
   ko:
     - text: 확정 버튼
+      reason: 이 페이지가 존재하는 이유인 동작입니다.
       correct: true
     - text: 업그레이드 배너
+      reason: 페이지에서 가장 선명한 요소입니다.
 ---
 `
 
@@ -114,12 +118,16 @@ prompt:
 options:
   en:
     - text: The monthly revenue
+      reason: It is what the dashboard is read for.
       correct: true
     - text: The refresh time
+      reason: It tells the reader how fresh the numbers are.
   ko:
     - text: 월 매출
+      reason: 이 대시보드를 보는 이유인 숫자입니다.
       correct: true
     - text: 갱신 시각
+      reason: 숫자가 얼마나 최신인지 알려 줍니다.
 ---
 `
 
@@ -276,9 +284,37 @@ test('a quiz item with no keyed correct answer fails the build', () => {
   write(
     root,
     'items/visual-hierarchy/washed-out-confirm.md',
-    edit(ITEM_ONE, '    - text: The confirm button\n      correct: true', '    - text: The confirm button'),
+    edit(
+      ITEM_ONE,
+      '      reason: It is the action the page exists for.\n      correct: true',
+      '      reason: It is the action the page exists for.',
+    ),
   )
   expectProblem(root, /washed-out-confirm\.md: options\.en keys 0 correct answers where exactly one is required/)
+})
+
+test('a quiz item option with no reason fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'items/visual-hierarchy/washed-out-confirm.md',
+    edit(ITEM_ONE, '      reason: It is the brightest thing on the page.\n', ''),
+  )
+  expectProblem(root, /washed-out-confirm\.md: an option in options\.en has no reason/)
+})
+
+test('a quiz item whose keyed option sits at a different index per language fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'items/visual-hierarchy/washed-out-confirm.md',
+    edit(
+      edit(ITEM_ONE, '      reason: 이 페이지가 존재하는 이유인 동작입니다.\n      correct: true', '      reason: 이 페이지가 존재하는 이유인 동작입니다.'),
+      '      reason: 페이지에서 가장 선명한 요소입니다.',
+      '      reason: 페이지에서 가장 선명한 요소입니다.\n      correct: true',
+    ),
+  )
+  expectProblem(root, /washed-out-confirm\.md: the correct option is #1 in en but #2 in ko/)
 })
 
 test('a quiz item with two keyed correct answers in one language fails the build', () => {

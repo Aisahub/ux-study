@@ -61,34 +61,36 @@ prompt:
     신호를 제자리에 돌려놓으려면 무엇을 바꿔야 할까요?
 options:
   en:
-    - text: >-
-        Move the signifiers onto the element that can act — style "Contact
-        support" as a link or button, and flatten the tip to plain text on the
-        page background so its box stops claiming a click.
+    - text: Move the signifiers onto the element that can act
+      reason: >-
+        Style "Contact support" as a link or button, and flatten the tip to
+        plain text on the page background so its box stops claiming a click.
       correct: true
-    - text: >-
-        Leave both as they are — the tip box shows no cursor change or hover
-        response, and that absence is how users learn it is not clickable.
-    - text: >-
-        Make the tip box clickable — have it open the CSV export page — so
-        the promise its border makes is honoured.
-    - text: >-
-        Enlarge "Contact support" until it is the biggest text in the help
-        area, so it can no longer be overlooked.
+    - text: Leave both as they are
+      reason: >-
+        The tip box shows no cursor change or hover response, and that absence
+        is how users learn it is not clickable.
+    - text: Make the tip box clickable
+      reason: >-
+        Have it open the CSV export page, so the promise its border makes is
+        honoured.
+    - text: Enlarge "Contact support" until it is the biggest text in the help area
+      reason: >-
+        Then it can no longer be overlooked.
   ko:
-    - text: >-
-        시그니파이어를 동작할 수 있는 요소로 옮깁니다 — "고객 지원 문의"를
-        링크나 버튼답게 입히고, 안내 상자는 배경에 그대로 얹힌 평문으로
-        눕혀서 그 테두리가 클릭을 주장하지 못하게 합니다.
+    - text: 시그니파이어를 동작할 수 있는 요소로 옮깁니다
+      reason: >-
+        "고객 지원 문의"를 링크나 버튼답게 입히고, 안내 상자는 배경에 그대로
+        얹힌 평문으로 눕혀서 그 테두리가 클릭을 주장하지 못하게 합니다.
       correct: true
-    - text: >-
-        둘 다 그대로 둡니다 — 안내 상자 위에서는 커서도 바뀌지 않고 아무
-        반응도 없는데, 바로 그 무반응이 눌리지 않는다는 것을 배우게 하는
-        방법입니다.
-    - text: >-
-        안내 상자를 실제로 눌리게 만듭니다 — CSV 내보내기 화면이 열리게
-        해서, 테두리가 한 약속을 지키게 합니다.
-    - text: >-
-        "고객 지원 문의"를 도움말 영역에서 가장 큰 글자가 될 때까지 키워서
-        더는 지나칠 수 없게 합니다.
+    - text: 둘 다 그대로 둡니다
+      reason: >-
+        안내 상자 위에서는 커서도 바뀌지 않고 아무 반응도 없는데, 바로 그
+        무반응이 눌리지 않는다는 것을 배우게 하는 방법입니다.
+    - text: 안내 상자를 실제로 눌리게 만듭니다
+      reason: >-
+        CSV 내보내기 화면이 열리게 해서, 테두리가 한 약속을 지키게 합니다.
+    - text: '"고객 지원 문의"를 도움말 영역에서 가장 큰 글자로 키웁니다'
+      reason: >-
+        그러면 더는 지나칠 수 없습니다.
 ---

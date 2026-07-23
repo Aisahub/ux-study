@@ -66,33 +66,38 @@ prompt:
     그쪽일까요?
 options:
   en:
-    - text: >-
-        Keep "2026-07-12" — nine of the eleven rows, the filter above the
-        table and the banner below it already use it; only the two imported
-        rows disagree with the rest of the screen.
+    - text: Keep "2026-07-12"
+      reason: >-
+        Nine of the eleven rows, the filter above the table and the banner
+        below it already use it; only the two imported rows disagree with the
+        rest of the screen.
       correct: true
-    - text: >-
-        Keep "12/07/2026" — day-first reads more like how people say dates
-        aloud, so it is the friendlier of the two for a customer-facing table.
-    - text: >-
-        Leave both — every row is still legible either way, so this is worth a
-        note to the team but not worth a change.
-    - text: >-
-        Replace both with relative dates like "3 days ago", which sidesteps
-        the format question entirely.
+    - text: Keep "12/07/2026"
+      reason: >-
+        Day-first reads more like how people say dates aloud, so it is the
+        friendlier of the two for a customer-facing table.
+    - text: Leave both formats
+      reason: >-
+        Every row is still legible either way, so this is worth a note to the
+        team but not worth a change.
+    - text: Replace both with relative dates like "3 days ago"
+      reason: >-
+        It sidesteps the format question entirely.
   ko:
-    - text: >-
-        "2026-07-12" 꼴을 남깁니다 — 열한 행 중 아홉 행과 표 위의 필터, 표
-        아래 안내문까지 이미 그 표기를 쓰고 있습니다. 화면의 나머지와 어긋난
-        것은 가져온 두 행뿐입니다.
+    - text: '"2026-07-12" 꼴을 남깁니다'
+      reason: >-
+        열한 행 중 아홉 행과 표 위의 필터, 표 아래 안내문까지 이미 그 표기를
+        쓰고 있습니다. 화면의 나머지와 어긋난 것은 가져온 두 행뿐입니다.
       correct: true
-    - text: >-
-        "12/07/2026" 꼴을 남깁니다 — 일이 먼저 오는 표기가 날짜를 소리 내어
-        말하는 순서에 가까워서, 고객이 보는 표에는 더 친근합니다.
-    - text: >-
-        둘 다 그대로 둡니다 — 어느 표기든 읽는 데 지장은 없으니, 팀에 메모만
-        남기고 고치지는 않아도 됩니다.
-    - text: >-
-        둘 다 "3일 전" 같은 상대 날짜로 바꿔서, 표기를 고르는 문제 자체를
-        피해 갑니다.
+    - text: '"12/07/2026" 꼴을 남깁니다'
+      reason: >-
+        일이 먼저 오는 표기가 날짜를 소리 내어 말하는 순서에 가까워서, 고객이
+        보는 표에는 더 친근합니다.
+    - text: 두 표기를 그대로 둡니다
+      reason: >-
+        어느 표기든 읽는 데 지장은 없으니, 팀에 메모만 남기고 고치지는 않아도
+        됩니다.
+    - text: 둘 다 "3일 전" 같은 상대 날짜로 바꿉니다
+      reason: >-
+        표기를 고르는 문제 자체를 피해 갑니다.
 ---

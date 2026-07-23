@@ -38,33 +38,36 @@ prompt:
     이 페이지가 "고장 났다"는 문의가 계속 들어옵니다. 결함은 무엇일까요?
 options:
   en:
-    - text: >-
-        The heading borrows the portal's button signifiers — pill shape,
-        border, shadow — and so promises a click it cannot honour. Set "Your
-        payslips" as plain heading text and the promise disappears.
+    - text: The heading borrows the portal's button signifiers
+      reason: >-
+        Pill shape, border and shadow promise a click it cannot honour; set
+        "Your payslips" as plain heading text and the promise disappears.
       correct: true
-    - text: >-
-        The Download buttons lack a pressed state, so users who click one
-        cannot tell the portal registered it and report the page as broken.
-    - text: >-
-        The heading looks clickable, so make it clickable — collapsing and
-        expanding the payslip list — and its look and behaviour will match.
-    - text: >-
-        The heading and the Download buttons are too close in size; enlarge
-        the heading until the two are clearly different ranks.
+    - text: The Download buttons lack a pressed state
+      reason: >-
+        Users who click one cannot tell the portal registered it, and report
+        the page as broken.
+    - text: The heading looks clickable, so make it clickable
+      reason: >-
+        Have it collapse and expand the payslip list, and its look and
+        behaviour will match.
+    - text: The heading and the Download buttons are too close in size
+      reason: >-
+        Enlarge the heading until the two are clearly different ranks.
   ko:
-    - text: >-
-        제목이 이 포털의 버튼 시그니파이어 — 알약 모양, 테두리, 그림자 —
-        를 빌려 입어서, 지킬 수 없는 클릭을 약속하고 있습니다.
+    - text: 제목이 이 포털의 버튼 시그니파이어를 빌려 입었습니다
+      reason: >-
+        알약 모양, 테두리, 그림자가 지킬 수 없는 클릭을 약속합니다.
         "급여명세서"를 평범한 제목 글자로 되돌리면 그 약속이 사라집니다.
       correct: true
-    - text: >-
-        다운로드 버튼에 눌림 상태가 없어서, 눌러도 포털이 받았는지 알 수
-        없는 사용자들이 페이지가 고장 났다고 신고하는 것입니다.
-    - text: >-
-        제목이 눌릴 것처럼 보이니 실제로 눌리게 만듭니다 — 명세서 목록을
-        접었다 펴게 하면 겉모습과 동작이 맞아떨어집니다.
-    - text: >-
-        제목과 다운로드 버튼의 크기가 너무 비슷합니다. 제목을 더 키워서
-        둘의 급이 확실히 달라 보이게 합니다.
+    - text: 다운로드 버튼에 눌림 상태가 없습니다
+      reason: >-
+        눌러도 포털이 받았는지 알 수 없는 사용자들이 페이지가 고장 났다고
+        신고하는 것입니다.
+    - text: 제목이 눌릴 것처럼 보이니 실제로 눌리게 만듭니다
+      reason: >-
+        명세서 목록을 접었다 펴게 하면 겉모습과 동작이 맞아떨어집니다.
+    - text: 제목과 다운로드 버튼의 크기가 너무 비슷합니다
+      reason: >-
+        제목을 더 키워서 둘의 급이 확실히 달라 보이게 합니다.
 ---

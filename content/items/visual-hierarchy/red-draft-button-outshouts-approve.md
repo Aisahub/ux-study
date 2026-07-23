@@ -47,32 +47,33 @@ prompt:
     이 화면의 색이 하는 말을 바로잡으려면 무엇을 바꿔야 할까요?
 options:
   en:
-    - text: >-
-        Give "Approve payment" the strongest contrast on the screen, and put
-        "Save draft" back to a quiet outline — red should be held back for
-        telling someone something has gone wrong, not spent on a routine
-        action.
+    - text: Give "Approve payment" the strongest contrast, and return "Save draft" to a quiet outline
+      reason: >-
+        Red should be held back for telling someone something has gone wrong,
+        not spent on a routine action.
       correct: true
-    - text: >-
-        Take the red off "Save draft" and leave everything else as it is.
-    - text: >-
-        Make "Approve payment" red as well, so the two buttons a user chooses
-        between look like a matched pair.
-    - text: >-
-        Leave the colours alone and enlarge "Approve payment" until it is the
-        biggest thing on the screen.
+    - text: Take the red off "Save draft" and change nothing else
+      reason: >-
+        The shouting stops without touching the rest of the screen.
+    - text: Make "Approve payment" red as well
+      reason: >-
+        The two buttons a user chooses between then look like a matched pair.
+    - text: Leave the colours alone and enlarge "Approve payment"
+      reason: >-
+        Grow it until it is the biggest thing on the screen.
   ko:
-    - text: >-
-        "결재 승인"에 화면에서 가장 강한 대비를 주고, "임시 저장"은 다시 조용한
-        외곽선 버튼으로 되돌립니다. 빨강은 무언가 잘못됐다고 알릴 때 쓰려고
-        아껴 두는 색이지, 일상적인 동작에 쓸 색이 아닙니다.
+    - text: '"결재 승인"에 가장 강한 대비를 주고, "임시 저장"은 조용한 외곽선으로 되돌립니다'
+      reason: >-
+        빨강은 무언가 잘못됐다고 알릴 때 쓰려고 아껴 두는 색이지, 일상적인
+        동작에 쓸 색이 아닙니다.
       correct: true
-    - text: >-
-        "임시 저장"에서 빨강만 걷어내고 나머지는 그대로 둡니다.
-    - text: >-
-        "결재 승인"도 빨강으로 칠해서, 사용자가 둘 중 하나를 고르는 버튼끼리
-        한 쌍으로 보이게 합니다.
-    - text: >-
-        색은 그대로 두고 "결재 승인"만 화면에서 가장 큰 요소가 될 때까지
-        키웁니다.
+    - text: '"임시 저장"에서 빨강만 걷어내고 나머지는 그대로 둡니다'
+      reason: >-
+        화면의 다른 곳을 건드리지 않고도 소리치는 것은 멈춥니다.
+    - text: '"결재 승인"도 빨강으로 칠합니다'
+      reason: >-
+        사용자가 둘 중 하나를 고르는 버튼끼리 한 쌍으로 보이게 됩니다.
+    - text: 색은 그대로 두고 "결재 승인"을 키웁니다
+      reason: >-
+        화면에서 가장 큰 요소가 될 때까지 키웁니다.
 ---

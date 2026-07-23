@@ -75,34 +75,39 @@ prompt:
     이 페이지에는 어느 시안을 실어야 할까요?
 options:
   en:
-    - text: >-
-        Draft A — its terms are the ones this audience reads every working
-        day, while Draft B trades a named, checkable measurement for a longer
-        paraphrase that is vaguer for exactly these readers.
+    - text: Draft A
+      reason: >-
+        Its terms are the ones this audience reads every working day, while
+        Draft B trades a named, checkable measurement for a longer paraphrase
+        that is vaguer for exactly these readers.
       correct: true
-    - text: >-
-        Draft B — the guidance for broad readerships is an 8th-grade reading
-        level, and Draft B is the one that reaches it.
-    - text: >-
-        Draft B, with the two clinical terms restored in parentheses — plain
-        language first, jargon as a fallback, serves every reader.
-    - text: >-
-        Run both through a readability calculator and ship whichever scores
-        the lower grade level — the formula settles it more reliably than
-        judgement.
+    - text: Draft B
+      reason: >-
+        The guidance for broad readerships is an 8th-grade reading level, and
+        Draft B is the one that reaches it.
+    - text: Draft B, with the two clinical terms restored in parentheses
+      reason: >-
+        Plain language first, jargon as a fallback, serves every reader.
+    - text: Whichever a readability calculator scores lower
+      reason: >-
+        Run both through it and ship that one — the formula settles it more
+        reliably than judgement.
   ko:
-    - text: >-
-        시안 A — 이 용어들은 이 독자층이 매일 업무에서 읽는 말이고, 시안 B는
-        이름 붙은 확인 가능한 측정 지표를, 바로 이 독자들에게는 더 모호한 긴
-        풀어쓰기와 맞바꿨습니다.
+    - text: 시안 A
+      reason: >-
+        이 용어들은 이 독자층이 매일 업무에서 읽는 말이고, 시안 B는 이름 붙은
+        확인 가능한 측정 지표를, 바로 이 독자들에게는 더 모호한 긴 풀어쓰기와
+        맞바꿨습니다.
       correct: true
-    - text: >-
-        시안 B — 폭넓은 독자층을 위한 지침은 중학생 수준의 문장이고, 거기에
-        도달한 쪽은 시안 B입니다.
-    - text: >-
-        시안 B에 임상 용어 두 개를 괄호로 되살린 절충안 — 쉬운 말을 앞세우고
-        전문 용어를 보조로 두면 모든 독자에게 통합니다.
-    - text: >-
-        둘 다 가독성 계산기에 돌려 더 낮은 학년 수준이 나오는 쪽을 싣습니다 —
-        판단보다 공식이 더 믿을 만하게 결론을 내려 줍니다.
+    - text: 시안 B
+      reason: >-
+        폭넓은 독자층을 위한 지침은 중학생 수준의 문장이고, 거기에 도달한 쪽은
+        시안 B입니다.
+    - text: 시안 B에 임상 용어 두 개를 괄호로 되살린 절충안
+      reason: >-
+        쉬운 말을 앞세우고 전문 용어를 보조로 두면 모든 독자에게 통합니다.
+    - text: 가독성 계산기 점수가 더 낮게 나오는 쪽
+      reason: >-
+        둘 다 돌려 보고 그쪽을 싣습니다 — 판단보다 공식이 더 믿을 만하게
+        결론을 내려 줍니다.
 ---

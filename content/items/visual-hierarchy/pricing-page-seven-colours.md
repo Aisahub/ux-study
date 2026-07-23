@@ -102,31 +102,37 @@ prompt:
     두 색은 무엇일까요?
 options:
   en:
-    - text: >-
-        Navy and teal — navy holds the page's structure together, and teal
-        marks the one action the page exists to get.
+    - text: Navy and teal
+      reason: >-
+        Navy holds the page's structure together, and teal marks the one action
+        the page exists to get.
       correct: true
-    - text: >-
-        Amber and green — they mark the two things this page is selling
-        hardest, the popular plan and the annual discount.
-    - text: >-
-        Navy and light grey — between them they cover more of the page than all
-        the other colours put together.
-    - text: >-
-        Purple and red — each appears in exactly one place, which makes them
-        the page's most distinctive colours.
+    - text: Amber and green
+      reason: >-
+        They mark the two things this page is selling hardest, the popular plan
+        and the annual discount.
+    - text: Navy and light grey
+      reason: >-
+        Between them they cover more of the page than all the other colours put
+        together.
+    - text: Purple and red
+      reason: >-
+        Each appears in exactly one place, which makes them the page's most
+        distinctive colours.
   ko:
-    - text: >-
-        남색과 청록색 — 남색은 페이지의 뼈대를 잡아 주고, 청록색은 이 페이지가
-        존재하는 이유인 단 하나의 동작을 가리킵니다.
+    - text: 남색과 청록색
+      reason: >-
+        남색은 페이지의 뼈대를 잡아 주고, 청록색은 이 페이지가 존재하는 이유인
+        단 하나의 동작을 가리킵니다.
       correct: true
-    - text: >-
-        주황색과 초록색 — 가장 인기 있는 요금제와 연간 할인, 이 페이지가 가장
-        밀고 있는 두 가지를 표시합니다.
-    - text: >-
-        남색과 밝은 회색 — 이 둘이 차지하는 면적이 나머지 색을 전부 합친 것보다
-        넓습니다.
-    - text: >-
-        보라색과 빨간색 — 각각 한 군데에만 쓰이니 이 페이지에서 가장 개성 있는
-        색입니다.
+    - text: 주황색과 초록색
+      reason: >-
+        가장 인기 있는 요금제와 연간 할인, 이 페이지가 가장 밀고 있는 두 가지를
+        표시합니다.
+    - text: 남색과 밝은 회색
+      reason: >-
+        이 둘이 차지하는 면적이 나머지 색을 전부 합친 것보다 넓습니다.
+    - text: 보라색과 빨간색
+      reason: >-
+        각각 한 군데에만 쓰이니 이 페이지에서 가장 개성 있는 색입니다.
 ---

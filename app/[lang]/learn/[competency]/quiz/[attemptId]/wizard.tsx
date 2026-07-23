@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 
 import type { Language } from '@/lib/language'
 
-import { submitAttempt } from '../actions'
+import { saveDraft, submitAttempt } from '../actions'
 import { ItemScreen } from './screen'
 
 interface WizardItem {
@@ -14,7 +14,7 @@ interface WizardItem {
   screen?: string
   prompt: string
   /** Shuffled for display; index is the option's authored position, which is what scoring understands. */
-  options: { index: number; text: string }[]
+  options: { index: number; text: string; reason: string }[]
 }
 
 const COPY: Record<
@@ -58,16 +58,29 @@ export function QuizWizard({
   attemptId,
   items,
   screenCss,
+  initialChoices,
 }: {
   lang: Language
   attemptId: number
   items: WizardItem[]
   screenCss: string
+  initialChoices: Record<string, number>
 }) {
   const copy = COPY[lang]
   const [current, setCurrent] = useState(0)
-  const [choices, setChoices] = useState<Record<string, number>>({})
+  const [choices, setChoices] = useState<Record<string, number>>(initialChoices)
   const [pending, startTransition] = useTransition()
+
+  // Every pick is sent as it is made, and the whole map goes each time so two
+  // quick clicks cannot interleave into a half-written answer. Nothing waits
+  // on it: the radio is already checked locally, and a Learner should never
+  // watch a spinner to answer a question. The point is that closing the tab,
+  // refreshing, or crossing to the other language keeps the work.
+  function choose(slug: string, index: number) {
+    const next = { ...choices, [slug]: index }
+    setChoices(next)
+    void saveDraft(attemptId, next)
+  }
 
   const item = items[current]
   const last = current === items.length - 1
@@ -99,19 +112,30 @@ export function QuizWizard({
       )}
       <p className="mx-auto w-full max-w-2xl font-medium">{item.prompt}</p>
 
+      {/*
+        Two lines to an option: what it proposes, then the grounds for it in
+        smaller grey. Four options of forty words each is a wall, and a wall
+        gets skimmed — but the grounds are what separate the keyed answer from
+        a plausible one, so they cannot simply be cut. Splitting them lets the
+        four actions be compared at a glance and the reasoning be read where
+        the comparison does not settle it.
+      */}
       <fieldset className="mx-auto flex w-full max-w-2xl flex-col gap-2">
         {item.options.map((option) => (
           <label
             key={option.index}
-            className="flex cursor-pointer items-baseline gap-3 rounded-md border border-zinc-200 p-3 text-sm has-checked:border-zinc-900 dark:border-zinc-800 dark:has-checked:border-zinc-100"
+            className="flex cursor-pointer items-baseline gap-3 rounded-md border border-zinc-200 p-3 has-checked:border-zinc-900 dark:border-zinc-800 dark:has-checked:border-zinc-100"
           >
             <input
               type="radio"
               name={item.slug}
               checked={choices[item.slug] === option.index}
-              onChange={() => setChoices((previous) => ({ ...previous, [item.slug]: option.index }))}
+              onChange={() => choose(item.slug, option.index)}
             />
-            <span>{option.text}</span>
+            <span className="flex flex-col gap-1">
+              <span className="text-sm font-medium">{option.text}</span>
+              <span className="text-sm text-zinc-500 dark:text-zinc-400">{option.reason}</span>
+            </span>
           </label>
         ))}
       </fieldset>
@@ -137,7 +161,7 @@ export function QuizWizard({
           <button
             type="button"
             disabled={pending || unanswered > 0}
-            onClick={() => startTransition(() => submitAttempt(attemptId, choices))}
+            onClick={() => startTransition(() => submitAttempt(attemptId, lang, choices))}
             className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-40 dark:bg-white dark:text-zinc-900"
           >
             {pending ? copy.submitting : copy.submit}

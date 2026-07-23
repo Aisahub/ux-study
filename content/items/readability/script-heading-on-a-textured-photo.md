@@ -51,33 +51,41 @@ prompt:
     이 페이지는 실제로 어디에서, 어떤 종류의 문제로 무너지고 있을까요?
 options:
   en:
-    - text: >-
-        In the heading, as a legibility problem — script letterforms in pale
-        gold over a busy photo cannot be told apart. The body block is short,
-        plain, and comfortably set; it is not the trouble.
+    - text: In the heading, as a legibility problem
+      reason: >-
+        Script letterforms in pale gold over a busy photo cannot be told apart.
+        The body block is short, plain, and comfortably set; it is not the
+        trouble.
       correct: true
-    - text: >-
-        In the body, as a readability problem — the copy should be rewritten
-        to a lower reading level so more visitors can follow it.
-    - text: >-
-        Nowhere serious — at 64px the heading is far above any minimum size,
-        and a reasonably large size is what the guidance asks of a heading.
-    - text: >-
-        In both, equally — mixing a script face with a plain face is the
-        defect, and setting the whole page in one typeface resolves it.
+    - text: In the body, as a readability problem
+      reason: >-
+        The copy should be rewritten to a lower reading level so more visitors
+        can follow it.
+    - text: Nowhere serious
+      reason: >-
+        At 64px the heading is far above any minimum size, and a reasonably
+        large size is what the guidance asks of a heading.
+    - text: In both, equally
+      reason: >-
+        Mixing a script face with a plain face is the defect, and setting the
+        whole page in one typeface resolves it.
   ko:
-    - text: >-
-        제목에서, 판독성 문제로 무너집니다 — 복잡한 사진 위에 옅은 금색
-        손글씨 획이 얹혀 글자를 서로 구별할 수 없습니다. 본문 덩어리는 짧고
-        평이하며 편하게 짜여 있으니 문제가 아닙니다.
+    - text: 제목에서, 판독성 문제로
+      reason: >-
+        복잡한 사진 위에 옅은 금색 손글씨 획이 얹혀 글자를 서로 구별할 수
+        없습니다. 본문 덩어리는 짧고 평이하며 편하게 짜여 있으니 문제가
+        아닙니다.
       correct: true
-    - text: >-
-        본문에서, 가독성 문제로 무너집니다 — 더 많은 방문자가 따라올 수 있게
-        본문을 더 쉬운 수준의 문장으로 다시 써야 합니다.
-    - text: >-
-        심각한 곳은 없습니다 — 64px면 어떤 최소 크기든 훨씬 웃돌고, 제목에
-        요구되는 것은 충분히 큰 크기이기 때문입니다.
-    - text: >-
-        둘 다에서 똑같이 무너집니다 — 손글씨체와 고딕체를 섞은 것 자체가
-        결함이고, 페이지 전체를 한 서체로 통일하면 해결됩니다.
+    - text: 본문에서, 가독성 문제로
+      reason: >-
+        더 많은 방문자가 따라올 수 있게 본문을 더 쉬운 수준의 문장으로 다시
+        써야 합니다.
+    - text: 심각한 곳은 없습니다
+      reason: >-
+        64px면 어떤 최소 크기든 훨씬 웃돌고, 제목에 요구되는 것은 충분히 큰
+        크기이기 때문입니다.
+    - text: 둘 다에서 똑같이
+      reason: >-
+        손글씨체와 고딕체를 섞은 것 자체가 결함이고, 페이지 전체를 한 서체로
+        통일하면 해결됩니다.
 ---

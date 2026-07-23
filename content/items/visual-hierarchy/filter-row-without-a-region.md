@@ -84,31 +84,33 @@ prompt:
     변경은 무엇일까요?
 options:
   en:
-    - text: >-
-        Put the five controls inside a single bordered region, the way the
-        summary cards already are, and leave the rest of the page alone.
+    - text: Put the five controls inside a single bordered region
+      reason: >-
+        The way the summary cards already are — and leave the rest of the page
+        alone.
       correct: true
-    - text: >-
-        Give each of the five controls its own bordered box, so it is clear
-        where one control ends and the next begins.
-    - text: >-
-        Wrap every part of the page — heading, controls, table, pagination — in
-        a panel of its own, so the whole structure becomes explicit.
-    - text: >-
-        Put a bright amber background behind the row of controls so it
-        separates itself from the table below.
+    - text: Give each of the five controls its own bordered box
+      reason: >-
+        It is then clear where one control ends and the next begins.
+    - text: Wrap every part of the page in a panel of its own
+      reason: >-
+        Heading, controls, table and pagination alike, so the whole structure
+        becomes explicit.
+    - text: Put a bright amber background behind the row of controls
+      reason: >-
+        It then separates itself from the table below.
   ko:
-    - text: >-
-        요약 카드가 이미 그렇듯 컨트롤 다섯 개를 테두리 영역 하나에 담고,
-        페이지의 나머지는 그대로 둡니다.
+    - text: 컨트롤 다섯 개를 테두리 영역 하나에 담습니다
+      reason: >-
+        요약 카드가 이미 그렇듯이요. 페이지의 나머지는 그대로 둡니다.
       correct: true
-    - text: >-
-        컨트롤 다섯 개에 각각 테두리 상자를 둘러서, 어디까지가 한 컨트롤인지
-        분명하게 만듭니다.
-    - text: >-
-        제목, 컨트롤, 표, 페이지 이동까지 페이지의 모든 부분을 각자의 패널에
-        넣어 구조를 눈에 보이게 만듭니다.
-    - text: >-
-        컨트롤 줄 뒤에 선명한 주황색 배경을 깔아서 아래 표와 확실히 갈라
-        놓습니다.
+    - text: 컨트롤 다섯 개에 각각 테두리 상자를 두릅니다
+      reason: >-
+        어디까지가 한 컨트롤인지 분명해집니다.
+    - text: 페이지의 모든 부분을 각자의 패널에 넣습니다
+      reason: >-
+        제목, 컨트롤, 표, 페이지 이동까지 넣어 구조를 눈에 보이게 만듭니다.
+    - text: 컨트롤 줄 뒤에 선명한 주황색 배경을 깝니다
+      reason: >-
+        아래 표와 확실히 갈라 놓게 됩니다.
 ---

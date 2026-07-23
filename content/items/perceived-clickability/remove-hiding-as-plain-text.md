@@ -41,31 +41,35 @@ prompt:
     어떻게 바꿔야 삭제를 찾을 수 있게 될까요?
 options:
   en:
-    - text: >-
-        Give Remove a signifier that plain text lacks — link styling with an
-        underline, or the same bordered button treatment Download already has.
+    - text: Give Remove a signifier that plain text lacks
+      reason: >-
+        Link styling with an underline, or the same bordered button treatment
+        Download already has.
       correct: true
-    - text: >-
-        No change is needed — Remove already shows a pointer cursor, which is
-        the standard signal that an element can be operated.
-    - text: >-
-        Move Remove to the start of the row, ahead of the file name, where a
-        reader's eye lands first.
-    - text: >-
-        Add a note above the list saying that every row can be removed from
-        its right-hand end.
+    - text: No change is needed
+      reason: >-
+        Remove already shows a pointer cursor, which is the standard signal
+        that an element can be operated.
+    - text: Move Remove to the start of the row
+      reason: >-
+        Ahead of the file name, where a reader's eye lands first.
+    - text: Add a note above the list
+      reason: >-
+        It would say that every row can be removed from its right-hand end.
   ko:
-    - text: >-
-        평문에는 없는 시그니파이어를 "삭제"에 줍니다 — 밑줄 있는 링크
-        스타일이나, "다운로드"가 이미 갖춘 것과 같은 테두리 버튼 차림으로요.
+    - text: 평문에는 없는 시그니파이어를 "삭제"에 줍니다
+      reason: >-
+        밑줄 있는 링크 스타일이나, "다운로드"가 이미 갖춘 것과 같은 테두리
+        버튼 차림으로요.
       correct: true
-    - text: >-
-        바꿀 것이 없습니다 — "삭제" 위에서는 이미 커서가 손가락 모양으로
-        바뀌는데, 그것이 조작할 수 있다는 표준 신호입니다.
-    - text: >-
-        "삭제"를 행의 맨 앞, 파일명보다 먼저 나오는 자리로 옮깁니다. 읽는
-        눈이 가장 먼저 닿는 곳이니까요.
-    - text: >-
-        목록 위에 각 행의 오른쪽 끝에서 파일을 지울 수 있다는 안내 문구를
-        답니다.
+    - text: 바꿀 것이 없습니다
+      reason: >-
+        "삭제" 위에서는 이미 커서가 손가락 모양으로 바뀌는데, 그것이 조작할
+        수 있다는 표준 신호입니다.
+    - text: '"삭제"를 행의 맨 앞으로 옮깁니다'
+      reason: >-
+        파일명보다 먼저 나오는, 읽는 눈이 가장 먼저 닿는 자리입니다.
+    - text: 목록 위에 안내 문구를 답니다
+      reason: >-
+        각 행의 오른쪽 끝에서 파일을 지울 수 있다고 적어 둡니다.
 ---

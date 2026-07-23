@@ -41,34 +41,37 @@ prompt:
     알림 대화상자의 "저장"은 어디에 있어야 하고, 그 근거는 무엇일까요?
 options:
   en:
-    - text: >-
-        Bottom-right — four dialogs in this same app have already trained the
-        user's hand to go there, and the fifth dialog breaks a habit the app
-        itself built.
+    - text: Move Save to the bottom-right
+      reason: >-
+        Four dialogs in this same app have already trained the user's hand to
+        go there, and the fifth breaks a habit the app itself built.
       correct: true
-    - text: >-
-        Bottom-left — the eye starts reading on the left, so the redesign puts
-        the primary action where it is found first.
-    - text: >-
-        Keep the redesign as it is, and note the other four dialogs as the
-        ones to flip whenever they get their own redesign.
-    - text: >-
-        Either side works — the button is filled and the same colour in all
-        five dialogs, so users will find it by its look rather than its
-        position.
+    - text: Leave Save at the bottom-left
+      reason: >-
+        The eye starts reading on the left, so the redesign puts the primary
+        action where it is found first.
+    - text: Keep the redesign and flip the other four later
+      reason: >-
+        Note them as the ones to change whenever they get their own redesign.
+    - text: Either side works
+      reason: >-
+        The button is filled and the same colour in all five dialogs, so users
+        will find it by its look rather than its position.
   ko:
-    - text: >-
-        오른쪽 아래 — 같은 앱의 대화상자 넷이 이미 사용자의 손을 그 자리로
-        길들여 놓았고, 다섯 번째 대화상자는 앱이 스스로 만든 습관을 깨고
-        있습니다.
+    - text: '"저장"을 오른쪽 아래로 옮깁니다'
+      reason: >-
+        같은 앱의 대화상자 넷이 이미 사용자의 손을 그 자리로 길들여 놓았고,
+        다섯 번째 대화상자는 앱이 스스로 만든 습관을 깨고 있습니다.
       correct: true
-    - text: >-
-        왼쪽 아래 — 시선은 왼쪽에서 읽기 시작하므로, 새 디자인이 주요 동작을
-        가장 먼저 발견되는 자리에 둔 것입니다.
-    - text: >-
-        새 디자인은 그대로 두고, 나머지 대화상자 넷을 각자 재설계할 때
-        뒤집어야 할 대상으로 기록해 둡니다.
-    - text: >-
-        어느 쪽이든 상관없습니다 — 다섯 대화상자 모두 버튼이 같은 색으로
-        채워져 있으니, 사용자는 위치가 아니라 생김새로 버튼을 찾습니다.
+    - text: '"저장"을 왼쪽 아래에 그대로 둡니다'
+      reason: >-
+        시선은 왼쪽에서 읽기 시작하므로, 새 디자인이 주요 동작을 가장 먼저
+        발견되는 자리에 둔 것입니다.
+    - text: 새 디자인은 두고 나머지 넷을 나중에 뒤집습니다
+      reason: >-
+        각자 재설계할 때 바꿔야 할 대상으로 기록해 둡니다.
+    - text: 어느 쪽이든 상관없습니다
+      reason: >-
+        다섯 대화상자 모두 버튼이 같은 색으로 채워져 있으니, 사용자는 위치가
+        아니라 생김새로 버튼을 찾습니다.
 ---

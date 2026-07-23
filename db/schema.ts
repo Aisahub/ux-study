@@ -65,10 +65,22 @@ export const attempts = pgTable(
     id: serial('id').primaryKey(),
     email: text('email').notNull(),
     competency: text('competency').notNull(),
-    /** The language every item was seen and answered in — the switch is forbidden mid-attempt (ADR-0008, #6). */
+    /**
+     * The language the attempt was started in. It is no longer the language it
+     * was necessarily finished in: switching mid-attempt is allowed (ADR-0008
+     * amendment, 2026-07-23), so this records where a Learner began, not a
+     * claim about every item they saw.
+     */
     language: text('language').notNull(),
     /** The item slugs drawn for this attempt, in presentation order. */
     drawn: text('drawn').array().notNull(),
+    /**
+     * Answers as they are picked, before submission — item slug to the chosen
+     * option's authored index. Persisted so a refresh, a closed tab or a
+     * language switch does not throw away work already done. It carries no
+     * correctness: the key stays on the server until scoring (#22).
+     */
+    draft: jsonb('draft').$type<Record<string, number>>(),
     /**
      * One entry per drawn item once submitted: the option index chosen and
      * whether it was the keyed answer at scoring time. Null while open.

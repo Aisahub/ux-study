@@ -44,32 +44,39 @@ prompt:
     무엇일까요?
 options:
   en:
-    - text: >-
-        "Delete" — five of the six menus already say it, so every user of this
-        tool has been taught that word; the one new menu should fall in line.
+    - text: '"Delete" wins'
+      reason: >-
+        Five of the six menus already say it, so every user of this tool has
+        been taught that word; the one new menu should fall in line.
       correct: true
-    - text: >-
-        "Remove" — the automations screen is the team's most recent work, so
-        it reflects the naming direction the product is heading in.
-    - text: >-
-        "Remove" — it sounds less alarming than "Delete", and a gentler word
-        makes a destructive action feel safer to users.
-    - text: >-
-        Neither needs to change — the trash-can icon is identical in all six
-        menus, and the icon carries the meaning regardless of the word.
+    - text: '"Remove" wins, as the newest work'
+      reason: >-
+        The automations screen is the team's most recent work, so it reflects
+        the naming direction the product is heading in.
+    - text: '"Remove" wins, as the gentler word'
+      reason: >-
+        It sounds less alarming than "Delete", and a gentler word makes a
+        destructive action feel safer to users.
+    - text: Neither changes
+      reason: >-
+        The trash-can icon is identical in all six menus, and the icon carries
+        the meaning regardless of the word.
   ko:
-    - text: >-
-        "삭제" — 여섯 메뉴 중 다섯이 이미 그 이름을 쓰고 있어서 이 도구의
-        사용자는 전부 그 단어로 배웠습니다. 새로 생긴 메뉴 하나가 따라와야
-        합니다.
+    - text: '"삭제"로 통일합니다'
+      reason: >-
+        여섯 메뉴 중 다섯이 이미 그 이름을 쓰고 있어서 이 도구의 사용자는 전부
+        그 단어로 배웠습니다. 새로 생긴 메뉴 하나가 따라와야 합니다.
       correct: true
-    - text: >-
-        "제거" — 자동화 화면이 팀의 가장 최근 작업이므로, 제품이 앞으로
-        나아갈 이름 방향을 반영한 쪽은 그쪽입니다.
-    - text: >-
-        "제거" — "삭제"보다 어감이 부드러워서, 파괴적인 동작을 사용자에게 덜
-        위협적으로 느끼게 해 줍니다.
-    - text: >-
-        둘 다 바꿀 필요 없습니다 — 여섯 메뉴 모두 휴지통 아이콘이 똑같으니,
-        단어가 무엇이든 의미는 아이콘이 전달합니다.
+    - text: '"제거"로 통일합니다 — 가장 최근 작업이므로'
+      reason: >-
+        자동화 화면이 팀의 가장 최근 작업이므로, 제품이 앞으로 나아갈 이름
+        방향을 반영한 쪽은 그쪽입니다.
+    - text: '"제거"로 통일합니다 — 어감이 부드러우므로'
+      reason: >-
+        "삭제"보다 어감이 부드러워서, 파괴적인 동작을 사용자에게 덜 위협적으로
+        느끼게 해 줍니다.
+    - text: 둘 다 바꾸지 않습니다
+      reason: >-
+        여섯 메뉴 모두 휴지통 아이콘이 똑같으니, 단어가 무엇이든 의미는
+        아이콘이 전달합니다.
 ---

@@ -79,31 +79,38 @@ prompt:
     담당자가 하는 일에 크기가 맞게 쓰인 쪽은 어디이고, 그 이유는 무엇일까요?
 options:
   en:
-    - text: >-
-        Version B — the two things the job turns on, the total and Ship now,
-        are the two largest elements on the panel.
+    - text: Version B
+      reason: >-
+        The two things the job turns on, the total and Ship now, are the two
+        largest elements on the panel.
       correct: true
-    - text: >-
-        Version A — the order number is what identifies the order, so it has to
-        be the first thing found.
-    - text: >-
-        Version A — Version B makes two elements large, and only one element on
-        a screen should ever be the largest.
-    - text: >-
-        Neither — both versions use three type sizes, and a panel this small
-        should stay at one.
+    - text: Version A, for the order number
+      reason: >-
+        It is what identifies the order, so it has to be the first thing found.
+    - text: Version A, because only one element should be largest
+      reason: >-
+        Version B makes two elements large, and a screen should never have two
+        at the top.
+    - text: Neither
+      reason: >-
+        Both versions use three type sizes, and a panel this small should stay
+        at one.
   ko:
-    - text: >-
-        B 버전 — 이 일의 성패가 걸린 두 가지, 금액과 출고 처리 버튼이 패널에서
-        가장 큰 요소입니다.
+    - text: B 버전
+      reason: >-
+        이 일의 성패가 걸린 두 가지, 금액과 출고 처리 버튼이 패널에서 가장 큰
+        요소입니다.
       correct: true
-    - text: >-
-        A 버전 — 주문번호는 어느 주문인지 특정하는 정보이므로 가장 먼저 눈에
-        들어와야 합니다.
-    - text: >-
-        A 버전 — B 버전은 큰 요소를 둘이나 두었는데, 한 화면에서 가장 큰 요소는
+    - text: A 버전 — 주문번호 때문에
+      reason: >-
+        주문번호는 어느 주문인지 특정하는 정보이므로 가장 먼저 눈에 들어와야
+        합니다.
+    - text: A 버전 — 가장 큰 요소는 하나여야 하므로
+      reason: >-
+        B 버전은 큰 요소를 둘이나 두었는데, 한 화면에서 가장 큰 요소는
         하나뿐이어야 합니다.
-    - text: >-
-        둘 다 아닙니다 — 두 버전 모두 글자 크기를 세 단계 쓰는데, 이만한 패널
-        하나에는 한 단계면 충분합니다.
+    - text: 둘 다 아닙니다
+      reason: >-
+        두 버전 모두 글자 크기를 세 단계 쓰는데, 이만한 패널 하나에는 한
+        단계면 충분합니다.
 ---

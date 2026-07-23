@@ -63,7 +63,15 @@ export interface Competency {
 }
 
 export interface QuizItemOption {
+  /** What the option proposes doing — short enough to compare four at a glance. */
   text: string
+  /**
+   * The grounds for it. Held apart from `text` so the four actions can be
+   * scanned as a set and the reasoning read only where it is needed: the
+   * reasoning is what separates a keyed answer from a plausible one, so it
+   * must be present, but a wall of it is what stopped Learners reading.
+   */
+  reason: string
   correct: boolean
 }
 
@@ -341,12 +349,33 @@ function loadItems(
           if (typeof record.text !== 'string' || record.text.trim() === '') {
             problems.push(`${rel}: an option in options.${lang} has no text`)
           }
-          return { text: stringOrEmpty(record.text), correct: record.correct === true }
+          // Required on every option, never on some. An option that alone
+          // carries its grounds — or alone lacks them — is answerable from its
+          // shape, which is the format cue the pool exists to avoid.
+          if (typeof record.reason !== 'string' || record.reason.trim() === '') {
+            problems.push(`${rel}: an option in options.${lang} has no reason`)
+          }
+          return {
+            text: stringOrEmpty(record.text),
+            reason: stringOrEmpty(record.reason),
+            correct: record.correct === true,
+          }
         })
         const correct = options[lang].filter((option) => option.correct).length
         if (correct !== 1) {
           problems.push(`${rel}: options.${lang} keys ${correct} correct answers where exactly one is required`)
         }
+      }
+
+      // The keyed option must sit at the same index in both languages. Display
+      // order is shuffled from a seed that ignores language, and scoring reads
+      // the key from whichever pool is to hand, so a pair that disagrees would
+      // mark a Learner wrong for the language they chose.
+      const keyed = LANGS.map((lang) => options[lang].findIndex((option) => option.correct))
+      if (keyed[0] !== -1 && keyed[1] !== -1 && keyed[0] !== keyed[1]) {
+        problems.push(
+          `${rel}: the correct option is #${keyed[0] + 1} in en but #${keyed[1] + 1} in ko — they must be the same`,
+        )
       }
 
       // A drawn screen is optional, but a half-authored one is a mistake: the

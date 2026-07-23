@@ -87,29 +87,32 @@ prompt:
     되돌려 주려면 무엇을 바꿔야 할까요?
 options:
   en:
-    - text: >-
-        Give each state a shape of its own as well as its colour — a filled
-        circle, a hollow circle, a triangle.
+    - text: Give each state a shape of its own as well as its colour
+      reason: >-
+        A filled circle, a hollow circle, a triangle.
       correct: true
-    - text: >-
-        Write the state beside the dot in every row — Delivered, In transit,
-        Delayed — and leave the dot as it is.
-    - text: >-
-        Add a legend under the table saying which colour stands for which
-        state.
-    - text: >-
-        Swap the three colours for a set that is easier to tell apart with a
-        colour-vision deficiency.
+    - text: Write the state beside the dot in every row
+      reason: >-
+        Delivered, In transit, Delayed — and leave the dot as it is.
+    - text: Add a legend under the table
+      reason: >-
+        It would say which colour stands for which state.
+    - text: Swap the three colours for a more distinguishable set
+      reason: >-
+        Choose one that is easier to tell apart with a colour-vision
+        deficiency.
   ko:
-    - text: >-
-        색과 함께 상태마다 모양을 따로 줍니다 — 채운 동그라미, 빈 동그라미,
-        세모.
+    - text: 색과 함께 상태마다 모양을 따로 줍니다
+      reason: >-
+        채운 동그라미, 빈 동그라미, 세모.
       correct: true
-    - text: >-
-        행마다 동그라미 옆에 상태를 글자로 적습니다 — 배송 완료, 배송 중, 지연.
-        동그라미는 그대로 둡니다.
-    - text: >-
-        표 아래에 어떤 색이 어떤 상태인지 알려 주는 범례를 답니다.
-    - text: >-
-        색약이 있어도 구분하기 쉬운 조합으로 세 가지 색을 바꿉니다.
+    - text: 행마다 동그라미 옆에 상태를 글자로 적습니다
+      reason: >-
+        배송 완료, 배송 중, 지연. 동그라미는 그대로 둡니다.
+    - text: 표 아래에 범례를 답니다
+      reason: >-
+        어떤 색이 어떤 상태인지 알려 줍니다.
+    - text: 세 가지 색을 더 구분하기 쉬운 조합으로 바꿉니다
+      reason: >-
+        색약이 있어도 구분되는 조합을 고릅니다.
 ---

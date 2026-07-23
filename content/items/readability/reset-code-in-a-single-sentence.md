@@ -59,34 +59,38 @@ prompt:
     사용자가 이 안내를 잘못 읽지 않게 하려면 무엇을 바꿔야 할까요?
 options:
   en:
-    - text: >-
-        Break the one sentence into short, active ones — it asks the reader
-        to hold three conditions and a side effect in mind at once, and that
-        structure is what loses them, not the type.
+    - text: Break the one sentence into short, active ones
+      reason: >-
+        It asks the reader to hold three conditions and a side effect in mind
+        at once, and that structure is what loses them, not the type.
       correct: true
-    - text: >-
-        Narrow the column — a line that carries too many characters is what
-        makes a block hard to follow, and capping the measure restores it.
-    - text: >-
-        Take the text from #2B2B2B to full black — characters need the
-        highest contrast available before anything else about the text can
-        work.
-    - text: >-
-        Bold the phrase about the new code — readers scan rather than read,
-        so the key step has to be made to stand out inside the sentence.
+    - text: Narrow the column
+      reason: >-
+        A line that carries too many characters is what makes a block hard to
+        follow, and capping the measure restores it.
+    - text: Take the text from #2B2B2B to full black
+      reason: >-
+        Characters need the highest contrast available before anything else
+        about the text can work.
+    - text: Bold the phrase about the new code
+      reason: >-
+        Readers scan rather than read, so the key step has to be made to stand
+        out inside the sentence.
   ko:
-    - text: >-
-        한 문장을 짧은 능동형 문장 여러 개로 쪼갭니다 — 조건 세 개와 부수
-        효과 하나를 동시에 붙들고 있으라고 요구하는 그 구조가 독자를 놓치게
-        만드는 원인이지, 조판이 아닙니다.
+    - text: 한 문장을 짧은 능동형 문장 여러 개로 쪼갭니다
+      reason: >-
+        조건 세 개와 부수 효과 하나를 동시에 붙들고 있으라고 요구하는 그 구조가
+        독자를 놓치게 만드는 원인이지, 조판이 아닙니다.
       correct: true
-    - text: >-
-        단 너비를 줄입니다 — 한 줄에 글자가 너무 많으면 덩어리를 따라가기
-        어려워지니, 줄 길이를 제한하면 회복됩니다.
-    - text: >-
-        글자색을 #2B2B2B에서 완전한 검정으로 올립니다 — 글에 대해 무엇을
-        하든 그 전에 글자부터 최대한의 대비를 갖춰야 합니다.
-    - text: >-
-        새 인증번호에 관한 구절을 굵게 표시합니다 — 독자는 읽지 않고
-        훑으므로, 핵심 단계를 문장 안에서 도드라지게 만들어야 합니다.
+    - text: 단 너비를 줄입니다
+      reason: >-
+        한 줄에 글자가 너무 많으면 덩어리를 따라가기 어려워지니, 줄 길이를
+        제한하면 회복됩니다.
+    - text: 글자색을 #2B2B2B에서 완전한 검정으로 올립니다
+      reason: >-
+        글에 대해 무엇을 하든 그 전에 글자부터 최대한의 대비를 갖춰야 합니다.
+    - text: 새 인증번호에 관한 구절을 굵게 표시합니다
+      reason: >-
+        독자는 읽지 않고 훑으므로, 핵심 단계를 문장 안에서 도드라지게 만들어야
+        합니다.
 ---

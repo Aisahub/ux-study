@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto'
 import { join } from 'node:path'
 
+import { eq } from 'drizzle-orm'
 import { expect, test } from 'vitest'
 
 import { loadContent } from '../lib/content'
@@ -179,9 +180,11 @@ test('the item-screen stylesheet reaches a Learner with its authoring notes stri
   expect(html).not.toMatch(/Practice Page stylesheet/i)
 })
 
-test('while an attempt is open, the attempt owns the language: the other path returns to it', async () => {
+test('an open attempt renders in the language of the URL, not the one it was started in', async () => {
   const email = freshLearner()
   const cookie = await sessionCookieFor(email)
+  // Started in Korean, then read in English: the attempt no longer owns the
+  // language, so the page follows the address rather than bouncing back to it.
   const attempt = await openAttempt(email, slugs.slice(0, config.drawSize), 'ko')
 
   const response = await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz/${attempt.id}`, {
@@ -189,8 +192,9 @@ test('while an attempt is open, the attempt owns the language: the other path re
     redirect: 'manual',
   })
 
-  expect(response.status).toBeGreaterThanOrEqual(300)
-  expect(response.headers.get('location')).toContain(`/ko/learn/visual-hierarchy/quiz/${attempt.id}`)
+  expect(response.status).toBe(200)
+  const item = pool.find((entry) => entry.slug === slugs[0])!
+  expect(visibleText(await response.text())).toContain(item.prompt.en)
 })
 
 test('the switch is offered on the doorstep and refused, in words, inside an open attempt', async () => {
@@ -208,12 +212,51 @@ test('the switch is offered on the doorstep and refused, in words, inside an ope
   expect(visibleText(doorstep)).toContain('한국어')
   expect(doorstep).toContain('href="/ko/learn/visual-hierarchy/quiz"')
 
-  // Inside the attempt the other language is named but unreachable: no link to
-  // it anywhere on the page, and a reason given for the refusal. Naming it
-  // without linking it is the point — a control that vanishes teaches nothing.
-  expect(open).not.toMatch(/href="\/ko\//)
+  // And inside the attempt too, pointing at the same item in the other
+  // language. It used to be withheld here, which left a Learner looking for
+  // Korean with nothing to find and no reason given (ERR-202).
   expect(visibleText(open)).toContain('한국어')
-  expect(visibleText(open)).toContain('fixed until you submit')
+  expect(open).toContain(`href="/ko/learn/visual-hierarchy/quiz/${attempt.id}"`)
+})
+
+test('answers survive leaving the page, so a language switch costs nothing', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  const drawn = slugs.slice(0, config.drawSize)
+  const attempt = await openAttempt(email, drawn)
+
+  // What the wizard sends as each radio is picked.
+  await testDb
+    .update(schema.attempts)
+    .set({ draft: { [drawn[0]]: 2, [drawn[1]]: 0 } })
+    .where(eq(schema.attempts.id, attempt.id))
+
+  // Reopened under the other language: the picks come back checked.
+  const html = await (
+    await fetch(`${BASE_URL}/ko/learn/visual-hierarchy/quiz/${attempt.id}`, { headers: { cookie } })
+  ).text()
+
+  const checked = [...html.matchAll(/<input[^>]*type="radio"[^>]*>/g)].filter((match) =>
+    match[0].includes('checked'),
+  )
+  expect(checked.length).toBeGreaterThan(0)
+})
+
+test('starting over discards the open attempt and draws a different set', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  const first = await openAttempt(email, slugs.slice(0, config.drawSize))
+
+  const response = await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz`, { headers: { cookie } })
+  const doorstep = await response.text()
+
+  // Both ways out of an open attempt are offered, not just carrying on (#22).
+  expect(visibleText(doorstep)).toContain('Continue the open attempt')
+  expect(visibleText(doorstep)).toContain('Start over with new items')
+
+  // The open attempt is still there until the form is actually submitted —
+  // offering the way out is what was missing, and what is asserted here.
+  expect(first.submittedAt).toBeNull()
 })
 
 test("someone else's attempt does not exist for you", async () => {

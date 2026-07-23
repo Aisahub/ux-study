@@ -79,36 +79,35 @@ prompt:
     할까요?
 options:
   en:
-    - text: >-
-        The pencil stays as "rename" and the drawing tool gets a different
-        glyph — three lists across this product already teach that the pencil
-        edits a name, and the toolbar is the single place that contradicts
-        them.
+    - text: Keep the pencil for "rename" and give the drawing tool a different glyph
+      reason: >-
+        Three lists across this product already teach that the pencil edits a
+        name, and the toolbar is the single place that contradicts them.
       correct: true
-    - text: >-
-        The pencil stays as "draw" — a pencil literally draws, so the toolbar
-        use is the truthful one, and the lists should switch to a
-        rename-specific glyph.
-    - text: >-
-        Both can keep the pencil — one appears on list rows and one in a
-        toolbar, and users read an icon together with where it sits.
-    - text: >-
-        Add a text label under each pencil and keep both glyphs, letting the
-        words carry the difference the icons cannot.
+    - text: Keep the pencil for "draw" and give the lists a rename-specific glyph
+      reason: >-
+        A pencil literally draws, so the toolbar use is the truthful one.
+    - text: Let both keep the pencil
+      reason: >-
+        One appears on list rows and one in a toolbar, and users read an icon
+        together with where it sits.
+    - text: Keep both glyphs and add a text label under each pencil
+      reason: >-
+        The words carry the difference the icons cannot.
   ko:
-    - text: >-
-        연필은 "이름 바꾸기"로 남고 그리기 도구가 다른 아이콘을 받습니다 —
-        이 제품의 목록 세 곳이 이미 연필은 이름을 고치는 것이라고 가르쳐
-        왔고, 그와 어긋나는 곳은 도구 막대 하나뿐입니다.
+    - text: 연필은 "이름 바꾸기"로 두고 그리기 도구에 다른 아이콘을 줍니다
+      reason: >-
+        이 제품의 목록 세 곳이 이미 연필은 이름을 고치는 것이라고 가르쳐 왔고,
+        그와 어긋나는 곳은 도구 막대 하나뿐입니다.
       correct: true
-    - text: >-
-        연필은 "그리기"로 남습니다 — 연필은 말 그대로 그리는 물건이니 도구
-        막대의 쓰임이 정직한 쪽이고, 목록들이 이름 바꾸기 전용 아이콘으로
-        갈아타야 합니다.
-    - text: >-
-        둘 다 연필을 써도 됩니다 — 하나는 목록의 행에, 하나는 도구 막대에
-        있으니, 사용자는 아이콘을 놓인 자리와 함께 읽어 냅니다.
-    - text: >-
-        두 연필 밑에 각각 글자 이름을 달고 아이콘은 둘 다 그대로 둡니다.
+    - text: 연필은 "그리기"로 두고 목록에 이름 바꾸기 전용 아이콘을 줍니다
+      reason: >-
+        연필은 말 그대로 그리는 물건이니 도구 막대의 쓰임이 정직한 쪽입니다.
+    - text: 둘 다 연필을 그대로 씁니다
+      reason: >-
+        하나는 목록의 행에, 하나는 도구 막대에 있으니, 사용자는 아이콘을 놓인
+        자리와 함께 읽어 냅니다.
+    - text: 아이콘은 둘 다 두고 각 연필 밑에 글자 이름을 답니다
+      reason: >-
         아이콘이 못 나르는 차이는 글자가 나르게 합니다.
 ---
