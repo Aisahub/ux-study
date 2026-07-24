@@ -2,8 +2,10 @@ import { spawn } from 'node:child_process'
 import { setTimeout as sleep } from 'node:timers/promises'
 
 import { config } from 'dotenv'
+import { sql } from 'drizzle-orm'
 
 import { BASE_URL, PORT } from './config'
+import { schema, testDb } from './db'
 
 config({ path: '.env.local', quiet: true })
 
@@ -41,7 +43,40 @@ export default async function setup() {
 
   return async () => {
     server.kill('SIGTERM')
+    await sweep()
   }
+}
+
+/**
+ * Returns the branch to what a migrated database holds before anyone signs in:
+ * the two seeded allowlist rows, and nothing else.
+ *
+ * Sweeping by what survives rather than by what tests create is deliberate.
+ * Fixture addresses have drifted over the life of the suite — `learner-`,
+ * `someone@`, `arrival-`, and rows left by a `view-` fixture whose test is no
+ * longer in the tree — so a rule that enumerates them is a list that goes
+ * stale, and this one already had. `added_by = 'seed migration'` (0002) is the
+ * one marker the suite never invents, and it cannot be restored by re-running
+ * migrations: 0002 is already applied on every branch that has one, so its
+ * ON CONFLICT re-runnability only ever helps a fresh branch. Deleting these
+ * rows would strand the suite, which is why they are matched precisely.
+ *
+ * IS DISTINCT FROM, not <>: an entry a test added carries no added_by at all,
+ * and NULL <> 'seed migration' is NULL, which deletes nothing.
+ *
+ * Emptying tables is safe here only because setup() has already refused to run
+ * against the branch that serves Learners.
+ */
+async function sweep() {
+  await testDb.execute(sql`
+    TRUNCATE TABLE
+      ${schema.users}, ${schema.sessions}, ${schema.attempts},
+      ${schema.reports}, ${schema.findings}, ${schema.agreements}
+    RESTART IDENTITY CASCADE
+  `)
+  await testDb
+    .delete(schema.allowlist)
+    .where(sql`${schema.allowlist.addedBy} IS DISTINCT FROM 'seed migration'`)
 }
 
 function run(command: string, args: string[], env: NodeJS.ProcessEnv) {

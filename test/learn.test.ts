@@ -7,10 +7,11 @@ import { schema, sessionCookieFor, testDb } from './db'
 import { visibleText } from './html'
 
 /**
- * The Learn overview and the Competency page (#20). The test branch persists
- * between runs, so every test works as its own freshly-invented Learner —
+ * The Learn overview and the Competency page (#20). Tests within a run share
+ * one branch, so every test works as its own freshly-invented Learner —
  * progress shown for one address can only have come from that address's rows,
- * which is itself the no-leak property the ticket demands.
+ * which is itself the no-leak property the ticket demands. Between runs the
+ * branch is swept back to the seed (#33), so nothing here inherits.
  */
 
 function freshLearner(): string {
