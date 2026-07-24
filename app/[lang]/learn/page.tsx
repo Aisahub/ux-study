@@ -119,9 +119,9 @@ type StopState = QuizStatus | 'terminus-locked' | 'terminus-open' | 'terminus-do
 
 /** The connector to the previous stop. Solid behind you, dotted ahead. */
 const TRACK =
-  "before:absolute before:top-[31px] before:right-1/2 before:-left-1/2 before:h-1 before:rounded-sm before:bg-oxblood before:content-['']"
+  "before:absolute before:top-[41px] before:right-1/2 before:-left-1/2 before:h-1 before:rounded-sm before:bg-oxblood before:content-['']"
 const TRACK_AHEAD =
-  "before:absolute before:top-[31px] before:right-1/2 before:-left-1/2 before:h-0 before:border-t-4 before:border-dotted before:border-blue-grey before:content-['']"
+  "before:absolute before:top-[41px] before:right-1/2 before:-left-1/2 before:h-0 before:border-t-4 before:border-dotted before:border-blue-grey before:content-['']"
 
 /**
  * A station mark. Shape carries the state as well as colour does — filled,
@@ -129,16 +129,36 @@ const TRACK_AHEAD =
  * cannot separate the two colours still has to be able to read this line.
  */
 function Mark({ state }: { state: StopState }) {
-  const terminus = state.startsWith('terminus')
   const reached = state === 'passed' || state === 'terminus-done'
   const current = state === 'in-progress' || state === 'terminus-open'
+
+  // The capstone carries the same sheet of paper here as it does in the station
+  // list: one object, one mark, wherever it appears. It was a rotated square
+  // until 2026-07-24 — geometry alone said "a different kind of stop" without
+  // saying which kind, and the list below had already stopped saying it that
+  // way. State is still told the same three ways as every other mark.
+  if (state.startsWith('terminus')) {
+    return (
+      <span
+        aria-hidden
+        className={`relative z-1 mx-auto grid size-6 place-items-center rounded-[8px] ${
+          reached
+            ? 'bg-oxblood text-white'
+            : current
+              ? 'bg-white text-oxblood shadow-[inset_0_0_0_2.5px_var(--oxblood)]'
+              : 'bg-white text-ink-2 shadow-[inset_0_0_0_2.5px_var(--blue-grey)]'
+        }`}
+      >
+        <ReportMark className="size-[13px]" />
+      </span>
+    )
+  }
 
   return (
     <span
       aria-hidden
       className={[
-        'relative z-1 mx-auto block size-6',
-        terminus ? 'rotate-45 rounded-[7px]' : 'rounded-full',
+        'relative z-1 mx-auto block size-6 rounded-full',
         reached
           ? 'bg-oxblood shadow-[inset_0_0_0_4px_var(--oxblood)]'
           : current
@@ -146,6 +166,33 @@ function Mark({ state }: { state: StopState }) {
             : 'bg-white shadow-[inset_0_0_0_4px_var(--blue-grey)]',
       ].join(' ')}
     />
+  )
+}
+
+/**
+ * The capstone's mark in the station list. It carries a sheet of paper rather
+ * than a fifth number, because the report is not a fifth Competency — and
+ * because a number in a badge is what the four rows above already are. A
+ * rotated badge was tried first and read as one more rounded square: same
+ * shape family, so the difference never registered.
+ */
+function ReportMark({ className }: { className: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+      <path d="M14 3v5h5" />
+      <path d="M9 13h6" />
+      <path d="M9 17h4" />
+    </svg>
   )
 }
 
@@ -164,10 +211,22 @@ function Stop({
 }) {
   const ahead = state === 'unstarted' || state === 'terminus-locked'
   return (
-    <div className={`relative pt-6 text-center ${first ? '' : ahead ? TRACK_AHEAD : TRACK}`}>
+    <div className={`relative pt-[34px] text-center ${first ? '' : ahead ? TRACK_AHEAD : TRACK}`}>
+      {/* The one pointing element the design system allows. It used to be a
+          bare line of text led by a "▼" character, whose size and baseline are
+          whatever the font decides — so it could not be aimed at the station,
+          only placed near it. The label now sits in a sunk chip, the way every
+          other inset chip on a card does, and the point below it is drawn, so
+          it lands on the mark's centre line. */}
       {here && (
-        <span className="absolute top-0 left-1/2 -translate-x-1/2 text-[11px] font-bold tracking-[0.14em] whitespace-nowrap">
-          ▼ {here}
+        <span className="absolute top-0 left-1/2 flex -translate-x-1/2 flex-col items-center">
+          <span className="rounded-full bg-sunk px-2.5 py-1 text-[11px] font-bold tracking-[0.2em] whitespace-nowrap">
+            {here}
+          </span>
+          <span
+            aria-hidden
+            className="size-0 border-x-4 border-t-5 border-x-transparent border-t-sunk"
+          />
         </span>
       )}
       <Mark state={state} />
@@ -371,7 +430,7 @@ export default async function Learn({ params }: { params: Promise<{ lang: string
                 list — and a locked stop has to say what unlocks it. */}
             <div className="grid grid-cols-[40px_minmax(0,1fr)_auto] items-center gap-3.5 border-t border-khaki/40 py-[15px]">
               <span
-                className={`grid size-10 rotate-45 place-items-center rounded-badge text-[12px] font-bold ${
+                className={`grid size-10 place-items-center rounded-badge ${
                   progress.reportSubmitted
                     ? 'bg-oxblood text-white'
                     : progress.allPassed
@@ -379,7 +438,7 @@ export default async function Learn({ params }: { params: Promise<{ lang: string
                       : 'bg-sunk text-ink-2 shadow-[inset_0_0_0_2px_var(--blue-grey)]'
                 }`}
               >
-                <span className="-rotate-45">05</span>
+                <ReportMark className="size-[19px]" />
               </span>
               <span>
                 <span className="text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">

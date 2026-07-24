@@ -27,18 +27,22 @@ export function LanguageSwitcher({ current }: { current: Language }) {
   const target: Language = current === 'ko' ? 'en' : 'ko'
 
   return (
+    // The two segments carry a fixed 34px height rather than vertical padding,
+    // so this pill lands at the same 42px as the account pill beside it: the
+    // account pill's height is set by its 30px avatar and two lines of text and
+    // cannot be dialled to match, so the switcher is the one that gives way.
     <div className="flex gap-0.5 rounded-full bg-surface p-1 shadow-pill">
       <span
         lang={current}
         aria-current="true"
-        className="rounded-full bg-oxblood px-3 py-[5px] text-[12px] font-bold text-white"
+        className="flex h-[34px] items-center rounded-full bg-oxblood px-3 text-[12px] font-bold text-white"
       >
         {LABEL[current]}
       </span>
       <Link
         href={counterpartPath(pathname, target)}
         lang={target}
-        className="rounded-full px-3 py-[5px] text-[12px] font-bold text-ink-2"
+        className="flex h-[34px] items-center rounded-full px-3 text-[12px] font-bold text-ink-2"
       >
         {LABEL[target]}
       </Link>

@@ -212,7 +212,9 @@ Every lift is a stack of at least two shadows: a short, comparatively dark **con
 
 Generously rounded and consistently so: `22px` on cards, `30px` on the outer frame, `14px` on the small inset badges, fully round on anything that behaves like a control — buttons, chips, the language switcher, the account pill, rail icons. The rule is behavioural rather than decorative: **if you can press it, it is a pill; if it holds content, it is a `22px` rectangle.**
 
-Station marks are the one place geometry carries meaning. A passed station is a filled circle, the current one a half-filled circle, an unvisited one a hollow ring, and the terminus a rotated square. Shape is doing real work there — see the Do's.
+Station marks are the one place geometry carries meaning. A passed station is a filled circle, the current one a half-filled circle, an unvisited one a hollow ring, and the terminus — the Self-Audit Report — a rounded square holding a drawn sheet of paper. Shape is doing real work there — see the Do's.
+
+The terminus was a rotated square until 2026-07-24. Geometry alone said "a different kind of stop" without saying which kind, and in the station list, where the four Competencies wear numbered rounded badges, a fifth rounded badge standing on its corner read as one more of the same. The report now carries one mark, and carries it identically on the line and in the list.
 
 ## Components
 
@@ -239,7 +241,7 @@ Station marks are the one place geometry carries meaning. A passed station is a 
 - **Mobile:** The rail becomes a bottom bar with the same marks.
 
 ### Route Line (signature component)
-The overview's centrepiece and the quiz's progress indicator, so it must survive both. A horizontal run of stations: `4px` solid oxblood between passed stations, `4px` dotted blue-grey ahead. Stations are `24px` marks — filled oxblood (passed), half-filled (in progress), hollow blue-grey ring (not started), rotated square (terminus). A `▼ 현재 위치` marker sits above the current station and is the only pointing element permitted on the page.
+The overview's centrepiece and the quiz's progress indicator, so it must survive both. A horizontal run of stations: `4px` solid oxblood between passed stations, `4px` dotted blue-grey ahead. Stations are `24px` marks — filled oxblood (passed), half-filled (in progress), hollow blue-grey ring (not started), a sheet of paper in a rounded square (the terminus, which is the Self-Audit Report). A `현재 위치` marker sits above the current station and is the only pointing element permitted on the page: the label in a sunk chip, with the point below it drawn rather than typed. A `▼` character was there first, and a text glyph's size and baseline belong to the font — it could be placed near the station but never aimed at it.
 
 In a Gate Quiz the same line carries the five drawn items; an unanswered item is a hollow station the Learner can click to return to. Movement between items is a hard cut — a train arrives at the next station, it does not dissolve into it.
 
