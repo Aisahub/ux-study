@@ -65,6 +65,26 @@ const COPY: Record<
 }
 
 /**
+ * How one earlier attempt came out, told the three ways every status on this
+ * platform is told: colour, shape, and the word beside it. Same marks the
+ * route line uses, so an attempt reads as a stop that has been made.
+ */
+function AttemptMark({ state }: { state: 'passed' | 'failed' | 'open' }) {
+  return (
+    <i
+      aria-hidden
+      className={`size-[14px] rounded-full ${
+        state === 'passed'
+          ? 'bg-oxblood'
+          : state === 'open'
+            ? 'bg-linear-[90deg,var(--oxblood)_0_50%,#fff_50%_100%] shadow-[inset_0_0_0_2.5px_var(--oxblood)]'
+            : 'bg-white shadow-[inset_0_0_0_2.5px_var(--blue-grey)]'
+      }`}
+    />
+  )
+}
+
+/**
  * The doorstep of a Gate Quiz (#21): the Learner is told how many items and
  * how many they need right before anything starts, and every earlier attempt
  * is preserved and visible (#22) — failing is a step, not a secret.
@@ -93,75 +113,104 @@ export default async function QuizStart({
   const restart = restartAttempt.bind(null, lang, slug)
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
-      <nav className="text-sm">
-        <Link href={`/${lang}/learn/${slug}`} className="text-zinc-500 underline-offset-4 hover:underline">
-          ← {copy.back}
+    // The attempt runs in a column, not on the wide two-column grid the map
+    // pages use. A doorstep is one thing to decide, and a Learner standing at
+    // it should not be given a second column to scan first.
+    <main className="mx-auto w-full max-w-[720px] px-0.5">
+      <nav className="px-1.5 pb-3.5">
+        <Link
+          href={`/${lang}/learn/${slug}`}
+          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill"
+        >
+          <span aria-hidden>←</span>
+          {copy.back}
         </Link>
       </nav>
-      <h1 className="text-2xl font-semibold tracking-tight">{copy.heading(competency.name[lang])}</h1>
-      <p className="text-zinc-600 dark:text-zinc-400">{copy.rules(drawSize, passThreshold)}</p>
 
-      {/*
-        An open attempt used to leave one button, "carry on", and no way to
-        abandon a draw a Learner no longer wants — the retry #22 promises was
-        reachable from every state except the one people are actually in. Both
-        are offered now, with the secondary looking secondary, and the note
-        says why discarding is safe rather than leaving it to be guessed.
-      */}
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-3">
+      <h1 className="px-1.5 pb-5 font-serif text-[44px] leading-[1.1] font-bold tracking-[-0.02em] text-ink">
+        {copy.heading(competency.name[lang])}
+      </h1>
+
+      <div className="flex flex-col gap-3.5">
+        {/*
+          The one warm field: the gate itself, and the single way through it.
+
+          An open attempt used to leave one button, "carry on", and no way to
+          abandon a draw a Learner no longer wants — the retry #22 promises was
+          reachable from every state except the one people are actually in.
+          Both are offered now; the discard is a link rather than a second
+          button, because this screen has one action and everything else beside
+          it is a link. The note says why discarding is safe rather than
+          leaving it to be guessed.
+        */}
+        <section className="rounded-card bg-sand p-[26px] shadow-warm">
+          <p className="max-w-[56ch] text-[16px] leading-[1.55]">{copy.rules(drawSize, passThreshold)}</p>
           <form action={start}>
             <button
               type="submit"
-              className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-zinc-900"
+              className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
             >
               {open ? copy.continueOpen : attempts.length > 0 ? copy.retry : copy.start}
             </button>
           </form>
           {open && (
-            <form action={restart}>
-              <button
-                type="submit"
-                className="rounded-md border border-zinc-300 px-4 py-2 text-sm hover:border-zinc-900 dark:border-zinc-700 dark:hover:border-zinc-100"
-              >
-                {copy.restart}
-              </button>
-            </form>
+            <>
+              {/* Full ink, not the 72% fade: that value is measured against
+                  white and drops below AA on the sand field. */}
+              <p className="mt-4.5 max-w-[56ch] text-[13.5px] leading-[1.55]">{copy.restartNote}</p>
+              <form action={restart}>
+                <button type="submit" className="mt-2 text-[16px] font-bold text-oxblood">
+                  {copy.restart}
+                </button>
+              </form>
+            </>
           )}
-        </div>
-        {open && <p className="text-sm text-zinc-500">{copy.restartNote}</p>}
-      </div>
+        </section>
 
-      {attempts.length > 0 && (
-        <section>
-          <h2 className="text-sm font-medium text-zinc-500">{copy.history}</h2>
-          <ul className="mt-2 flex flex-col gap-1 text-sm">
-            {attempts.map((attempt) => (
-              <li key={attempt.id}>
-                {attempt.submittedAt ? (
-                  <Link
-                    href={`/${lang}/learn/${slug}/quiz/${attempt.id}`}
-                    className="underline-offset-4 hover:underline"
-                  >
-                    {copy.submittedOn(
-                      attempt.submittedAt.toISOString().slice(0, 10),
-                      attempt.score ?? 0,
-                      attempt.drawn.length,
-                    )}
-                    {' · '}
-                    <span className={attempt.passed ? 'text-green-700 dark:text-green-400' : 'text-zinc-500'}>
-                      {attempt.passed ? copy.passed : copy.failed}
+        {attempts.length > 0 && (
+          <section className="rounded-card bg-surface p-[26px] shadow-card">
+            <h2 className="mb-4.5 font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              {copy.history}
+            </h2>
+            <div className="flex flex-col">
+              {attempts.map((attempt) => {
+                const state = attempt.submittedAt ? (attempt.passed ? 'passed' : 'failed') : 'open'
+                const row = (
+                  <>
+                    <AttemptMark state={state} />
+                    <span className="text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
+                      {attempt.submittedAt
+                        ? copy.submittedOn(
+                            attempt.submittedAt.toISOString().slice(0, 10),
+                            attempt.score ?? 0,
+                            attempt.drawn.length,
+                          )
+                        : copy.open}
                     </span>
+                    <span className="text-[12px] font-bold whitespace-nowrap text-ink-2">
+                      {state === 'passed' ? copy.passed : state === 'failed' ? copy.failed : ''}
+                    </span>
+                  </>
+                )
+                const cells =
+                  'grid grid-cols-[14px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5'
+
+                // An open attempt has no verdict to read, so it is not a way
+                // back into one — it is reached by the button above.
+                return attempt.submittedAt ? (
+                  <Link key={attempt.id} href={`/${lang}/learn/${slug}/quiz/${attempt.id}`} className={cells}>
+                    {row}
                   </Link>
                 ) : (
-                  <span className="text-zinc-500">{copy.open}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+                  <div key={attempt.id} className={cells}>
+                    {row}
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+        )}
+      </div>
     </main>
   )
 }

@@ -103,7 +103,10 @@ export function ItemScreen({
       sandbox="allow-scripts"
       scrolling="no"
       style={{ height }}
-      className="w-full rounded-lg border border-zinc-200 bg-white dark:border-zinc-800"
+      // Lifted off the card rather than outlined on it: this system draws no
+      // borders, and the artefact has to read as a separate object from the
+      // page asking about it.
+      className="w-full rounded-badge bg-white shadow-card"
     />
   )
 }

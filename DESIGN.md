@@ -139,7 +139,7 @@ The page is not a flat fill; it is a soft field of four radial blooms the froste
 
 ### Named Rules
 
-**The One Warm Field Rule.** Exactly one sand surface per screen, and it is always the single next action. A second sand card is a bug: it means the screen has stopped saying what to do next.
+**The One Warm Field Rule.** Exactly one sand surface per screen, and it is always the single next action. A second sand card is a bug: it means the screen has stopped saying what to do next. One screen carries none: inside an open Gate Quiz the next action is the item itself, and a warm field there would be a coloured ground beside an artefact whose colours are the question — see the Route Line.
 
 **The One Coloured Card Rule.** At most one card on any screen carries a fill. Every other card is white. Colour is scarce here on purpose — a screen with two filled cards has spent the budget that makes the next action obvious.
 
@@ -186,6 +186,8 @@ A glass stack, outermost first: the colour field (page) → a frosted board fill
 Paired cards share a row. The working area is one grid, not two stacked columns — the route card and the next-action card are row one, the station list and what-comes-next are row two — so each pair's cards are the same height, the way the reference lays its media block against its sidebar. A stretched card puts its action at the foot rather than leaving a hole beneath it.
 
 Content sits in a `1240px`-wide centred column with a `26px` page margin. A two-column layout runs `78px` navigation rail | content, both on the frosted board; the content column is inset `22px` off the board's edges. Inside it, the working area is a two-column grid at roughly `1.62fr / 1fr` with a `14px` gutter — the wide column carries the route and the station list, the narrow column carries the next action and what lies beyond this line.
+
+**The map is wide; an attempt is a column.** The pages that show where a Learner stands — the overview and a Competency — use that grid across the full content width. The three Gate Quiz surfaces do not: the doorstep and the verdict are a `720px` centred column, and the wizard a `880px` one, cards stacked in a single file. A quiz is one thread with one thing to decide at a time, and a second column beside it is somewhere else to look. The wizard is the wider of the two because a drawn screen is being examined rather than read; the prose inside its card is still held to the `56ch` reading measure.
 
 One spacing rhythm throughout: `14px` between siblings, `22px` content inset off the board, `26px` inside a card. More space above a heading than below it.
 
@@ -244,6 +246,8 @@ The terminus was a rotated square until 2026-07-24. Geometry alone said "a diffe
 The overview's centrepiece and the quiz's progress indicator, so it must survive both. A horizontal run of stations: `4px` solid oxblood between passed stations, `4px` dotted blue-grey ahead. Stations are `24px` marks — filled oxblood (passed), half-filled (in progress), hollow blue-grey ring (not started), a sheet of paper in a rounded square (the terminus, which is the Self-Audit Report). A `현재 위치` marker sits above the current station and is the only pointing element permitted on the page: the label in a sunk chip, with the point below it drawn rather than typed. A `▼` character was there first, and a text glyph's size and baseline belong to the font — it could be placed near the station but never aimed at it.
 
 In a Gate Quiz the same line carries the five drawn items; an unanswered item is a hollow station the Learner can click to return to. Movement between items is a hard cut — a train arrives at the next station, it does not dissolve into it.
+
+Two channels there, saying two different things. The **mark** says whether that item has been answered — filled oxblood if it has, a hollow blue-grey ring if it has not — and every station is clickable, answered or not, so checking an earlier answer does not mean stepping back one item at a time. The **line** says where the Learner is standing: solid up to the marker, dotted after it. They come apart on purpose, because a Learner can be on item 5 with item 2 still blank, and one channel cannot draw both. No half-filled mark appears here: "current" is what the `현재 위치` marker is for, and having the mark say it too would leave an answered item that happens to be current looking less finished than the one before it.
 
 ## Do's and Don'ts
 

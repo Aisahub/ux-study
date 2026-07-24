@@ -122,67 +122,110 @@ export default async function AttemptPage({
   const wrong = (attempt.selections ?? []).filter((selection) => !selection.correct)
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
-      <h1 className="text-2xl font-semibold tracking-tight">
-        {attempt.passed ? copy.verdictPassed : copy.verdictFailed}
-      </h1>
-      <p className="text-zinc-600 dark:text-zinc-400">
-        {copy.score(attempt.score ?? 0, attempt.drawn.length)}{' '}
-        {attempt.passed ? copy.passedExplanation : copy.failedExplanation}
-      </p>
-
-      {/* The written explanation (#29) lands here rather than on the Competency
-          page: read before the quiz it is a second thing to study, read after
-          passing it is the recap of what the Learner has just shown they can
-          do. It is withheld on a failed attempt on purpose — that screen sends
-          the Learner back to the article section by section (ADR-0006), and a
-          summary offered in its place would be read instead of the article. */}
-      {attempt.passed && competency.explanation && (
-        <section>
-          <h2 className="text-sm font-medium text-zinc-500">{copy.summaryHeading}</h2>
-          <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-            {competency.explanation[lang]}
-          </p>
-        </section>
-      )}
-
-      {!attempt.passed && wrong.length > 0 && (
-        <section>
-          <h2 className="text-sm font-medium text-zinc-500">{copy.wrongHeading}</h2>
-          <ul className="mt-2 flex flex-col gap-3">
-            {wrong.map((selection) => {
-              const item = items.find((candidate) => candidate.slug === selection.item)!
-              return (
-                <li key={selection.item} className="rounded-lg border border-zinc-200 p-4 text-sm dark:border-zinc-800">
-                  <p>{item.prompt[lang]}</p>
-                  <p className="mt-1 text-zinc-500">
-                    {copy.coveredIn}:{' '}
-                    <a
-                      href={competency.source.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="underline underline-offset-4"
-                    >
-                      {item.sourceSection}
-                    </a>
-                  </p>
-                </li>
-              )
-            })}
-          </ul>
-        </section>
-      )}
-
-      <p className="flex gap-4 text-sm">
-        {!attempt.passed && (
-          <Link href={`/${lang}/learn/${slug}/quiz`} className="font-medium underline underline-offset-4">
-            {copy.retry}
-          </Link>
-        )}
-        <Link href={`/${lang}/learn`} className="text-zinc-500 underline-offset-4 hover:underline">
+    // A column like the doorstep and the wizard: the attempt is one thread,
+    // and it ends the way it began rather than spreading back onto the grid
+    // the map pages use.
+    <main className="mx-auto w-full max-w-[720px] px-0.5">
+      <nav className="px-1.5 pb-3.5">
+        <Link
+          href={`/${lang}/learn`}
+          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill"
+        >
+          <span aria-hidden>←</span>
           {copy.backToLearn}
         </Link>
-      </p>
+      </nav>
+
+      <h1 className="px-1.5 pb-5 font-serif text-[44px] leading-[1.1] font-bold tracking-[-0.02em] text-ink">
+        {attempt.passed ? copy.verdictPassed : copy.verdictFailed}
+      </h1>
+
+      <div className="flex flex-col gap-3.5">
+        {attempt.passed ? (
+          // Nothing is outstanding, so nothing here wears the warm field.
+          <section className="rounded-card bg-surface p-[26px] shadow-card">
+            <p className="max-w-[56ch] text-[16px] leading-[1.55]">
+              {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.passedExplanation}
+            </p>
+          </section>
+        ) : (
+          // The one warm field: the single next action, which is to go again.
+          // The prose points down at the list below before the button is
+          // pressed — the retry is offered, not urged.
+          <section className="rounded-card bg-sand p-[26px] shadow-warm">
+            <p className="max-w-[56ch] text-[16px] leading-[1.55]">
+              {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.failedExplanation}
+            </p>
+            <Link
+              href={`/${lang}/learn/${slug}/quiz`}
+              className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
+            >
+              {copy.retry}
+            </Link>
+          </section>
+        )}
+
+        {/* The written explanation (#29) lands here rather than on the Competency
+            page: read before the quiz it is a second thing to study, read after
+            passing it is the recap of what the Learner has just shown they can
+            do. It is withheld on a failed attempt on purpose — that screen sends
+            the Learner back to the article section by section (ADR-0006), and a
+            summary offered in its place would be read instead of the article. */}
+        {attempt.passed && competency.explanation && (
+          <section className="rounded-card bg-surface p-[26px] shadow-card">
+            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              {copy.summaryHeading}
+            </h2>
+            <p className="mt-3.5 max-w-[56ch] text-[16px] leading-[1.55] whitespace-pre-line">
+              {competency.explanation[lang]}
+            </p>
+          </section>
+        )}
+
+        {!attempt.passed && wrong.length > 0 && (
+          <section className="rounded-card bg-surface p-[26px] shadow-card">
+            <h2 className="mb-4.5 font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              {copy.wrongHeading}
+            </h2>
+            <div className="flex flex-col">
+              {wrong.map((selection) => {
+                const item = items.find((candidate) => candidate.slug === selection.item)!
+                return (
+                  <div
+                    key={selection.item}
+                    className="grid grid-cols-[14px_minmax(0,1fr)] items-start gap-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5"
+                  >
+                    {/* A hollow blue-grey ring: real, and not yet reached. The
+                        same mark an unvisited station wears, because that is
+                        exactly what this item still is. */}
+                    <i
+                      aria-hidden
+                      className="mt-[7px] size-[14px] rounded-full shadow-[inset_0_0_0_2.5px_var(--blue-grey)]"
+                    />
+                    <span>
+                      <span className="block max-w-[56ch] text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
+                        {item.prompt[lang]}
+                      </span>
+                      <span className="mt-1 block text-[13.5px] leading-[1.55] text-ink-2">
+                        {copy.coveredIn}:{' '}
+                        <a
+                          href={competency.source.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-bold text-oxblood"
+                        >
+                          {item.sourceSection}
+                          <span aria-hidden> ↗</span>
+                        </a>
+                      </span>
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+        )}
+      </div>
     </main>
   )
 }
