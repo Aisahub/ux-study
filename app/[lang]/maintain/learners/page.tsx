@@ -21,6 +21,7 @@ const COPY: Record<
     today: string
     never: string
     attemptsLabel: string
+    nobodyYet: string
   }
 > = {
   en: {
@@ -34,6 +35,7 @@ const COPY: Record<
     today: 'today',
     never: 'no activity yet',
     attemptsLabel: 'attempts',
+    nobodyYet: 'No one has signed in yet. Anyone who does appears here from their first visit.',
   },
   ko: {
     heading: '학습자',
@@ -46,6 +48,7 @@ const COPY: Record<
     today: '오늘',
     never: '아직 활동 없음',
     attemptsLabel: '시도',
+    nobodyYet: '아직 아무도 로그인하지 않았습니다. 로그인한 사람은 첫 방문부터 여기에 나타납니다.',
   },
 }
 
@@ -73,47 +76,54 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
       <h1 className="text-2xl font-semibold tracking-tight">{copy.heading}</h1>
       <p className="text-sm text-zinc-600 dark:text-zinc-400">{copy.explanation}</p>
 
-      <ul className="flex flex-col gap-2">
-        {users.map((user) => {
-          const own = attempts.filter((attempt) => attempt.email === user.email)
-          const report = reports.find((entry) => entry.email === user.email)
-          const passed = slugs.filter((slug) =>
-            own.some((attempt) => attempt.competency === slug && attempt.passed === true),
-          ).length
+      {users.length === 0 ? (
+        // A cohort that has not arrived yet looks exactly like a broken page
+        // unless the page says which it is. Reachable on a freshly deployed
+        // branch, before the first sign-in writes the first row.
+        <p className="text-sm text-zinc-500">{copy.nobodyYet}</p>
+      ) : (
+        <ul className="flex flex-col gap-2">
+          {users.map((user) => {
+            const own = attempts.filter((attempt) => attempt.email === user.email)
+            const report = reports.find((entry) => entry.email === user.email)
+            const passed = slugs.filter((slug) =>
+              own.some((attempt) => attempt.competency === slug && attempt.passed === true),
+            ).length
 
-          const timestamps = [
-            ...own.map((attempt) => attempt.submittedAt ?? attempt.createdAt),
-            ...(report ? [report.submittedAt ?? report.createdAt] : []),
-          ].map((date) => date.getTime())
-          const last = timestamps.length > 0 ? Math.max(...timestamps) : null
-          const days = last === null ? null : Math.floor((now - last) / (24 * 60 * 60 * 1000))
+            const timestamps = [
+              ...own.map((attempt) => attempt.submittedAt ?? attempt.createdAt),
+              ...(report ? [report.submittedAt ?? report.createdAt] : []),
+            ].map((date) => date.getTime())
+            const last = timestamps.length > 0 ? Math.max(...timestamps) : null
+            const days = last === null ? null : Math.floor((now - last) / (24 * 60 * 60 * 1000))
 
-          return (
-            <li key={user.email} className="rounded-md border border-zinc-200 p-3 text-sm dark:border-zinc-800">
-              <p className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="font-medium">{user.email}</span>
-                <span className="text-zinc-500">
-                  {copy.lastActivity}:{' '}
-                  {days === null ? copy.never : days === 0 ? copy.today : copy.daysAgo(days)}
-                </span>
-              </p>
-              <p className="mt-1 text-zinc-600 dark:text-zinc-400">
-                {copy.position(passed, slugs.length)}
-                {report?.submittedAt && <> · {copy.reportSubmitted}</>}
-              </p>
-              <p className="mt-1 text-xs text-zinc-500">
-                {copy.attemptsLabel}:{' '}
-                {slugs
-                  .map((slug) => {
-                    const n = own.filter((attempt) => attempt.competency === slug).length
-                    return `${content.competencies.find((c) => c.slug === slug)!.name[lang]} ${n}`
-                  })
-                  .join(' · ')}
-              </p>
-            </li>
-          )
-        })}
-      </ul>
+            return (
+              <li key={user.email} className="rounded-md border border-zinc-200 p-3 text-sm dark:border-zinc-800">
+                <p className="flex flex-wrap items-baseline justify-between gap-2">
+                  <span className="font-medium">{user.email}</span>
+                  <span className="text-zinc-500">
+                    {copy.lastActivity}:{' '}
+                    {days === null ? copy.never : days === 0 ? copy.today : copy.daysAgo(days)}
+                  </span>
+                </p>
+                <p className="mt-1 text-zinc-600 dark:text-zinc-400">
+                  {copy.position(passed, slugs.length)}
+                  {report?.submittedAt && <> · {copy.reportSubmitted}</>}
+                </p>
+                <p className="mt-1 text-xs text-zinc-500">
+                  {copy.attemptsLabel}:{' '}
+                  {slugs
+                    .map((slug) => {
+                      const n = own.filter((attempt) => attempt.competency === slug).length
+                      return `${content.competencies.find((c) => c.slug === slug)!.name[lang]} ${n}`
+                    })
+                    .join(' · ')}
+                </p>
+              </li>
+            )
+          })}
+        </ul>
+      )}
     </main>
   )
 }
