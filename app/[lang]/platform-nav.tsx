@@ -1,7 +1,6 @@
-import Link from 'next/link'
-
 import { eq } from 'drizzle-orm'
 
+import { NavRail, type RailItem } from './nav-rail'
 import { db, schema } from '@/db'
 import { getSession } from '@/lib/auth'
 import type { Language } from '@/lib/language'
@@ -48,7 +47,7 @@ const COPY: Record<
 export async function PlatformNav({ lang }: { lang: Language }) {
   const session = await getSession()
   // Signed out: the sign-in and not-enrolled pages have nowhere to go yet.
-  if (!session) return null
+  if (!session) return <div />
   const copy = COPY[lang]
 
   const [report] = await db
@@ -56,37 +55,22 @@ export async function PlatformNav({ lang }: { lang: Language }) {
     .from(schema.reports)
     .where(eq(schema.reports.email, session.email))
 
-  const link = 'text-zinc-600 underline-offset-4 hover:text-zinc-900 hover:underline dark:text-zinc-400 dark:hover:text-zinc-100'
+  const items: RailItem[] = [
+    { id: 'learn', href: `/${lang}/learn`, label: copy.learn },
+    { id: 'me', href: `/${lang}/me`, label: copy.me },
+  ]
 
-  return (
-    <nav className="flex flex-wrap items-baseline gap-x-4 gap-y-1 text-sm">
-      <Link href={`/${lang}/learn`} className={link}>
-        {copy.learn}
-      </Link>
-      <Link href={`/${lang}/me`} className={link}>
-        {copy.me}
-      </Link>
-      {report?.submittedAt && (
-        <Link href={`/${lang}/findings`} className={link}>
-          {copy.findings}
-        </Link>
-      )}
-      {session.isMaintainer && (
-        <>
-          <span aria-hidden className="text-zinc-300 dark:text-zinc-700">
-            |
-          </span>
-          <Link href={`/${lang}/maintain/learners`} className={link}>
-            {copy.learners}
-          </Link>
-          <Link href={`/${lang}/maintain/content`} className={link}>
-            {copy.content}
-          </Link>
-          <Link href={`/${lang}/maintain/allowlist`} className={link}>
-            {copy.allowlist}
-          </Link>
-        </>
-      )}
-    </nav>
-  )
+  if (report?.submittedAt) {
+    items.push({ id: 'findings', href: `/${lang}/findings`, label: copy.findings })
+  }
+
+  if (session.isMaintainer) {
+    items.push(
+      { id: 'learners', href: `/${lang}/maintain/learners`, label: copy.learners },
+      { id: 'content', href: `/${lang}/maintain/content`, label: copy.content },
+      { id: 'allowlist', href: `/${lang}/maintain/allowlist`, label: copy.allowlist },
+    )
+  }
+
+  return <NavRail items={items} />
 }

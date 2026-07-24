@@ -1,30 +1,98 @@
 @import "tailwindcss";
 
+/*
+ * The tokens DESIGN.md declares. Values live here once; every surface reads
+ * them through Tailwind utilities or var() directly.
+ *
+ * Light only. The scaffold's `prefers-color-scheme: dark` block is gone on
+ * purpose (confirmed 2026-07-23): this world is a cool paper ground with white
+ * cards lifted off it, and a dark counterpart was decided against rather than
+ * left unfinished.
+ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── palette ─────────────────────────────────────────── */
+  /* A glass stack. A soft colour field (blue-grey + sand + a warm haze) is
+     laid on the page; one frosted board floats over it as the app's background,
+     the colour showing through the frost; white cards sit on the board. The
+     blue-grey the world used to paint flat now lives in the field behind the
+     glass — see body{} and DESIGN.md. */
+  --ground: #eef2f5;         /* the base under the colour field */
+  --ground-bed: rgb(255 255 255 / 0.5);   /* the frosted content panel on the board */
+  --surface: #ffffff;        /* every reading surface */
+  --surface-sunk: #f4f8f9;   /* inset chips inside a card */
+  --sand: #e1d0b3;           /* the one warm field: the next action */
+  --blue-grey: #9bb4c0;      /* real, but not yet reached */
+  --khaki: #a18d6d;          /* hairlines and small icons — never text */
+  --oxblood: #703b3b;        /* an action, or a station already passed */
+  --ink: #2e2723;            /* all body copy — 14.2:1 on white */
+  --ink-2: rgb(46 39 35 / 0.72); /* secondary copy, on white only — 5.9:1 */
+
+  /* ── elevation ───────────────────────────────────────── */
+  /* Every stack leads with a contact layer at <=2px blur; without one the
+     edge reads as fog rather than an edge. */
+  --lift-card:
+    0 1px 2px rgb(28 44 52 / 0.13),
+    0 4px 8px rgb(28 44 52 / 0.07),
+    0 14px 26px rgb(28 44 52 / 0.06);
+  /* A shadow on a tinted card reads weaker than the same shadow on white, so
+     the one colour field on a screen carries its own stronger stack. */
+  --lift-warm:
+    0 1px 2px rgb(74 46 30 / 0.16),
+    0 4px 8px rgb(74 46 30 / 0.09),
+    0 14px 26px rgb(74 46 30 / 0.08);
+  --lift-pill:
+    0 1px 2px rgb(28 44 52 / 0.12),
+    0 3px 6px rgb(28 44 52 / 0.06);
+  /* The bed is a brighter frost inside the board, so its edge is a top sheen. */
+  --sheen-bed: inset 0 1px 0 rgb(255 255 255 / 0.55);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-ground: var(--ground);
+  --color-bed: var(--ground-bed);
+  --color-surface: var(--surface);
+  --color-sunk: var(--surface-sunk);
+  --color-sand: var(--sand);
+  --color-blue-grey: var(--blue-grey);
+  --color-khaki: var(--khaki);
+  --color-oxblood: var(--oxblood);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-display);
+
+  --radius-card: 22px;
+  --radius-badge: 14px;
+
+  --shadow-card: var(--lift-card);
+  --shadow-warm: var(--lift-warm);
+  --shadow-pill: var(--lift-pill);
+  --inset-shadow-bed: var(--sheen-bed);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  /* The face the layout actually loads. The scaffold left Arial here, which
-     overrode it everywhere a page had not asked for `font-sans` by name — so
-     the shell around each page rendered in a different typeface from the page
-     inside it. */
-  font-family: var(--font-geist-sans), sans-serif;
+  /* The colour field the glass floats on: four soft blooms — blue-grey top-left
+     and bottom-left, sand top-right, a warm oxblood haze bottom-right — over a
+     near-white base. It is what the frosted frame shows through at its edges. */
+  background:
+    radial-gradient(52% 55% at 12% 16%, rgb(155 180 192 / 0.70), transparent 72%),
+    radial-gradient(46% 50% at 90% 10%, rgb(225 208 179 / 0.66), transparent 72%),
+    radial-gradient(62% 58% at 84% 90%, rgb(112 59 59 / 0.18), transparent 70%),
+    radial-gradient(56% 55% at 22% 94%, rgb(155 180 192 / 0.50), transparent 72%),
+    var(--ground);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  letter-spacing: -0.008em;
+}
+
+/* This platform teaches keyboard operability in Stage 3; it may not remove
+   its own focus ring. Applied globally so no component can forget it. */
+/* No border-radius here: it would reshape the focused element itself, not the
+   ring. The outline already follows each element's own corners. */
+:focus-visible {
+  outline: 3px solid var(--oxblood);
+  outline-offset: 3px;
 }

@@ -17,18 +17,31 @@ const LABEL: Record<Language, string> = { en: 'English', ko: '한국어' }
  * is what records the preference (see `middleware.ts`). The counterpart is
  * computed from the current path, so a Learner on a deep page stays where
  * they are instead of being returned to a section root.
+ *
+ * Both languages are shown rather than only the one on offer. A single "한국어"
+ * link states what you would get but not what you are currently reading, and
+ * on a bilingual platform the second half is the half a Learner checks.
  */
 export function LanguageSwitcher({ current }: { current: Language }) {
   const pathname = usePathname()
   const target: Language = current === 'ko' ? 'en' : 'ko'
 
   return (
-    <Link
-      href={counterpartPath(pathname, target)}
-      lang={target}
-      className="text-sm text-zinc-600 underline underline-offset-4 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-    >
-      {LABEL[target]}
-    </Link>
+    <div className="flex gap-0.5 rounded-full bg-surface p-1 shadow-pill">
+      <span
+        lang={current}
+        aria-current="true"
+        className="rounded-full bg-oxblood px-3 py-[5px] text-[12px] font-bold text-white"
+      >
+        {LABEL[current]}
+      </span>
+      <Link
+        href={counterpartPath(pathname, target)}
+        lang={target}
+        className="rounded-full px-3 py-[5px] text-[12px] font-bold text-ink-2"
+      >
+        {LABEL[target]}
+      </Link>
+    </div>
   )
 }
