@@ -21,6 +21,7 @@ const COPY: Record<
     score: (score: number, of: number) => string
     passedExplanation: string
     failedExplanation: string
+    summaryHeading: string
     wrongHeading: string
     coveredIn: string
     retry: string
@@ -33,6 +34,7 @@ const COPY: Record<
     verdictFailed: 'Not passed',
     score: (score, of) => `${score} of ${of} correct.`,
     passedExplanation: 'This Competency is cleared.',
+    summaryHeading: 'The key points',
     failedExplanation:
       'Below are the items you missed and where the article covers each one. The answers stay hidden — reread, then draw a fresh set.',
     wrongHeading: 'Worth another look',
@@ -46,6 +48,7 @@ const COPY: Record<
     verdictFailed: '미통과',
     score: (score, of) => `${of}문항 중 ${score}문항 정답.`,
     passedExplanation: '이 역량을 통과했습니다.',
+    summaryHeading: '핵심 요약',
     failedExplanation:
       '아래는 틀린 문항과, 기사에서 그 내용을 다루는 위치입니다. 정답은 공개하지 않습니다 — 다시 읽고, 새로 뽑힌 문항으로 도전하세요.',
     wrongHeading: '다시 볼 문항',
@@ -127,6 +130,21 @@ export default async function AttemptPage({
         {copy.score(attempt.score ?? 0, attempt.drawn.length)}{' '}
         {attempt.passed ? copy.passedExplanation : copy.failedExplanation}
       </p>
+
+      {/* The written explanation (#29) lands here rather than on the Competency
+          page: read before the quiz it is a second thing to study, read after
+          passing it is the recap of what the Learner has just shown they can
+          do. It is withheld on a failed attempt on purpose — that screen sends
+          the Learner back to the article section by section (ADR-0006), and a
+          summary offered in its place would be read instead of the article. */}
+      {attempt.passed && competency.explanation && (
+        <section>
+          <h2 className="text-sm font-medium text-zinc-500">{copy.summaryHeading}</h2>
+          <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
+            {competency.explanation[lang]}
+          </p>
+        </section>
+      )}
 
       {!attempt.passed && wrong.length > 0 && (
         <section>
