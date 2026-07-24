@@ -5,17 +5,51 @@ import { randomInt } from 'node:crypto'
  * the database writes live in the quiz actions.
  */
 
-/** A random draw of `count` slugs, never identical to the previous attempt's set (#22). */
-export function drawItems(pool: string[], count: number, previous: string[] | null): string[] {
+/**
+ * A random draw of `count` slugs, never identical to the previous attempt's
+ * set (#22), and setting aside every item this Learner has already answered
+ * correctly so a retry spends its slots on what they have not shown yet.
+ *
+ * `mastered` cannot always be honoured. The pool is 8 and a draw is 5, so from
+ * the fourth item set aside onward there are no longer five others to take.
+ * The draw is then topped up from the mastered ones rather than served short:
+ * an attempt of four items would quietly change what the pass threshold means.
+ */
+export function drawItems(
+  pool: string[],
+  count: number,
+  previous: string[] | null,
+  mastered: string[] = [],
+): string[] {
+  const setAside = new Set(mastered)
+  const open = pool.filter((slug) => !setAside.has(slug))
+
+  // Too few left: make the shortfall up from the set-aside items, at random,
+  // so two retries in this state still differ from each other.
+  if (open.length < count) {
+    const topUp = take(pool.filter((slug) => setAside.has(slug)), count - open.length)
+    return take([...open, ...topUp], count)
+  }
+
+  // Exactly enough left means there is a single possible set, so asking for a
+  // different one than last time would never return.
+  if (open.length === count) return take(open, count)
+
   // 5 of 8 leaves 56 possible sets, so redrawing on a collision ends fast.
   for (;;) {
-    const remaining = [...pool]
-    const drawn: string[] = []
-    while (drawn.length < count) {
-      drawn.push(...remaining.splice(randomInt(remaining.length), 1))
-    }
+    const drawn = take(open, count)
     if (!previous || !sameSet(drawn, previous)) return drawn
   }
+}
+
+/** `count` of `from`, without replacement, in random order. */
+function take(from: string[], count: number): string[] {
+  const remaining = [...from]
+  const taken: string[] = []
+  while (taken.length < count && remaining.length > 0) {
+    taken.push(...remaining.splice(randomInt(remaining.length), 1))
+  }
+  return taken
 }
 
 function sameSet(a: string[], b: string[]): boolean {

@@ -33,16 +33,28 @@ export async function startAttempt(lang: Language, competency: string): Promise<
     )
   if (open) redirect(`/${lang}/learn/${competency}/quiz/${open.id}`)
 
-  // The previous submitted draw, so the next one can refuse to repeat it (#22).
-  const [previous] = await db
-    .select({ drawn: schema.attempts.drawn })
+  // This Learner's history on this Competency, newest first. It carries two
+  // things the draw needs: the previous set, so the next one can refuse to
+  // repeat it (#22), and every item ever answered correctly, so a retry does
+  // not spend a slot re-asking something already shown.
+  const history = await db
+    .select({ drawn: schema.attempts.drawn, selections: schema.attempts.selections })
     .from(schema.attempts)
     .where(and(eq(schema.attempts.email, session.email), eq(schema.attempts.competency, competency)))
     .orderBy(desc(schema.attempts.id))
-    .limit(1)
+
+  const mastered = [
+    ...new Set(
+      history.flatMap((attempt) =>
+        (attempt.selections ?? [])
+          .filter((selection) => selection.correct)
+          .map((selection) => selection.item),
+      ),
+    ),
+  ]
 
   const pool = content.items[competency].map((item) => item.slug)
-  const drawn = drawItems(pool, content.config.drawSize, previous?.drawn ?? null)
+  const drawn = drawItems(pool, content.config.drawSize, history[0]?.drawn ?? null, mastered)
 
   const [attempt] = await db
     .insert(schema.attempts)

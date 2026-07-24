@@ -45,6 +45,37 @@ test('a redraw after a failure is never the identical set', () => {
   }
 })
 
+test('a retry sets aside the items already answered correctly', () => {
+  const mastered = slugs.slice(0, 3)
+
+  for (let i = 0; i < 50; i++) {
+    const drawn = drawItems(slugs, config.drawSize, null, mastered)
+
+    expect(drawn).toHaveLength(config.drawSize)
+    for (const slug of mastered) expect(drawn).not.toContain(slug)
+  }
+})
+
+test('a draw is topped up rather than shrunk once too few unmastered items remain', () => {
+  // Six of eight already right leaves two — an attempt of two would quietly
+  // move the pass threshold, so the draw borrows back from the mastered set.
+  const mastered = slugs.slice(0, 6)
+
+  const sets = new Set<string>()
+  for (let i = 0; i < 50; i++) {
+    const drawn = drawItems(slugs, config.drawSize, null, mastered)
+
+    expect(drawn).toHaveLength(config.drawSize)
+    expect(new Set(drawn).size).toBe(config.drawSize)
+    // The two never answered correctly are in every draw; the rest is borrowed.
+    for (const slug of slugs.slice(6)) expect(drawn).toContain(slug)
+    sets.add([...drawn].sort().join())
+  }
+  // And the borrowing is random, so a Learner in this state is not handed the
+  // same five every time.
+  expect(sets.size).toBeGreaterThan(1)
+})
+
 test('four of five passes, three fails, and an unanswered item is simply wrong', () => {
   const drawn = ['a', 'b', 'c', 'd', 'e']
   const keyed = { a: 0, b: 1, c: 2, d: 0, e: 1 }
