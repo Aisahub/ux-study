@@ -42,7 +42,8 @@ test('a fresh Learner sees four Competencies unstarted, and the remaining work w
   const text = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
 
   expect(text.match(/Not started/g)).toHaveLength(4)
-  expect(text).toContain('0 of 5 steps done — 5 to go.')
+  expect(text).toContain('0 / 5 done')
+  expect(text).toContain('5 stops to go')
   // Understanding and application are shown separately, and the capstone is
   // locked rather than merely absent.
   expect(text).toContain('Understanding')
@@ -86,7 +87,8 @@ test('a passed Gate Quiz shows as passed, and progress survives a brand-new sess
 
   expect(text).toContain('Passed')
   expect(text).toContain('1 attempt')
-  expect(text).toContain('1 of 5 steps done — 4 to go.')
+  expect(text).toContain('1 / 5 done')
+  expect(text).toContain('4 stops to go')
 })
 
 test("one Learner's progress never colours another's overview", async () => {

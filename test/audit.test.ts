@@ -157,7 +157,8 @@ test('completion never arrives with a Competency outstanding', async () => {
   const overview = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
 
   expect(overview).not.toContain('Stage 1 is complete')
-  expect(overview).toContain('4 of 5 steps done')
+  expect(overview).toContain('4 / 5 done')
+  expect(overview).toContain('1 stop to go')
 })
 
 test('the reveal shows the issue-url slot, absent when not supplied', async () => {
