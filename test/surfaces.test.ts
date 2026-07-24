@@ -281,6 +281,32 @@ test('the people half shows position, inactivity and attempts across everyone', 
   expect(text).toContain('last activity: today')
 })
 
+test('the people half says nobody has arrived yet rather than showing an empty list', async () => {
+  // The state a freshly deployed branch is in before the first sign-in, and
+  // the one every test run is left in. Emptying the table is safe here only
+  // because no other test file writes users and tests within a file run in
+  // order — the tests above have already made their assertions.
+  await testDb.delete(schema.users)
+
+  const maintainer = freshLearner()
+  await allow(maintainer, true)
+  const cookie = await sessionCookieFor(maintainer)
+
+  const text = visibleText(
+    await (await fetch(`${BASE_URL}/en/maintain/learners`, { headers: { cookie } })).text(),
+  )
+
+  expect(text).toContain('No one has signed in yet')
+  // Every row carries its position, so the phrase's absence is an empty list
+  // — asserted without counting anything the rest of the suite also writes.
+  expect(text).not.toContain('quizzes passed')
+
+  const ko = visibleText(
+    await (await fetch(`${BASE_URL}/ko/maintain/learners`, { headers: { cookie } })).text(),
+  )
+  expect(ko).toContain('아직 아무도 로그인하지 않았습니다')
+})
+
 test('the content half shows per-item rates beside draw counts, and the location comparison', async () => {
   const korean = freshLearner()
   const indonesian = freshPersonal()
