@@ -23,8 +23,8 @@ screen:
   en: |-
     <div class="screen">
       <h2>Create account</h2>
-      <div class="field" style="margin-bottom:10px"><span class="field-label">Full name</span><input class="control" value="Alex Ferrer"></div>
-      <div class="field" style="margin-bottom:10px"><span class="field-label">Email</span><input class="control" value="alex@aisahub.com"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">Full name</span><input class="control" value="Sam Rivera"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">Email</span><input class="control" value="sam@example.com"></div>
       <div class="field" style="margin-bottom:10px"><span class="field-label">Team</span><input class="control control--empty" value="" placeholder="Choose a team"><span class="required">Required</span></div>
       <div class="field" style="margin-bottom:10px"><span class="field-label">Role</span><input class="control control--empty" value="" placeholder="Choose a role"><span class="required">Required</span></div>
       <div class="field" style="margin-bottom:16px"><span class="field-label">Start date</span><input class="control" value="2026-08-01"></div>
@@ -33,8 +33,8 @@ screen:
   ko: |-
     <div class="screen">
       <h2>계정 만들기</h2>
-      <div class="field" style="margin-bottom:10px"><span class="field-label">이름</span><input class="control" value="김지우"></div>
-      <div class="field" style="margin-bottom:10px"><span class="field-label">이메일</span><input class="control" value="jiwoo@aisahub.com"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">이름</span><input class="control" value="한서연"></div>
+      <div class="field" style="margin-bottom:10px"><span class="field-label">이메일</span><input class="control" value="seoyeon@example.com"></div>
       <div class="field" style="margin-bottom:10px"><span class="field-label">소속 팀</span><input class="control control--empty" value="" placeholder="팀 선택"><span class="required">필수</span></div>
       <div class="field" style="margin-bottom:10px"><span class="field-label">직무</span><input class="control control--empty" value="" placeholder="직무 선택"><span class="required">필수</span></div>
       <div class="field" style="margin-bottom:16px"><span class="field-label">입사일</span><input class="control" value="2026-08-01"></div>
