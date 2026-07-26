@@ -1,0 +1,50 @@
+# Runs the full suite on every pull request into main, and is the check the
+# branch ruleset requires green before a merge. In this project a merge to main
+# is a production deploy, so this is the gate that stands between an unproven
+# commit and Learners — the same `next build && vitest run` that runs locally,
+# in a canonical environment nobody has to remember to invoke.
+name: test
+
+on:
+  pull_request:
+    branches: [main]
+
+# One shared Neon test branch backs the suite, and test/server.ts migrates and
+# then sweeps it on every run, so two runs at once would write over each other.
+# A single group shared by every pull request serialises them; runs queue
+# rather than cancel, because killing a run mid-migration would leave the
+# branch half-changed for the next one.
+concurrency:
+  group: integration-suite
+  cancel-in-progress: false
+
+# The suite only reads the checkout and talks to Neon over the network; it
+# never writes back to the repository, so the token is read-only.
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+        env:
+          # The real credential is DATABASE_URL_TEST, and it is the only one:
+          # the dummy DATABASE_URL exists so `next build` (the first half of
+          # `npm test`) does not throw where db/index.ts reads it at import.
+          # Every page is force-dynamic, so the build never opens that handle —
+          # verified by building against this exact dummy. Keeping the sole live
+          # credential in DATABASE_URL_TEST means CI structurally cannot reach
+          # the branch that serves Learners, even if this file is misedited.
+          DATABASE_URL: postgresql://build:build@localhost:5432/build
+          DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
+          # Dummy OAuth values: the sign-in routes build their redirects from
+          # them and the suite never presents them to Google (#11).
+          GOOGLE_CLIENT_ID: ci.apps.googleusercontent.com
+          GOOGLE_CLIENT_SECRET: ci-secret
