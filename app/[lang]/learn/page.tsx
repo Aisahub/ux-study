@@ -13,17 +13,13 @@ const COPY: Record<
   {
     heading: string
     stage: string
-    routeTitle: string
-    understanding: string
-    application: string
-    remaining: (left: number) => string
-    complete: string
+    contentsTitle: string
+    stageOne: string
     competencyCount: (n: number) => string
     done: (done: number, total: number) => string
     here: string
     status: Record<QuizStatus, string>
     attempts: (n: number) => string
-    listTitle: string
     nextKicker: string
     continueQuiz: string
     startQuiz: string
@@ -35,7 +31,6 @@ const COPY: Record<
     capstoneSubmitted: string
     completeHeading: string
     completeBody: string
-    aheadTitle: string
     stages: { name: string; detail: string }[]
     preparing: string
     visibility: string
@@ -44,17 +39,13 @@ const COPY: Record<
   en: {
     heading: 'Learn',
     stage: 'Stage 1 · Visible at a glance',
-    routeTitle: 'The Stage 1 line',
-    understanding: 'Understanding',
-    application: 'Application',
-    remaining: (left) => (left === 1 ? '1 stop to go' : `${left} stops to go`),
-    complete: 'Every stop reached',
+    contentsTitle: 'Programme contents',
+    stageOne: 'Stage 1',
     competencyCount: (n) => `${n} competencies`,
     done: (done, total) => `${done} / ${total} done`,
     here: 'You are here',
     status: { unstarted: 'Not started', 'in-progress': 'In progress', passed: 'Passed' },
     attempts: (n) => (n === 1 ? '1 attempt' : `${n} attempts`),
-    listTitle: 'Stations',
     nextKicker: 'Next stop',
     continueQuiz: 'Continue the Gate Quiz',
     startQuiz: 'Start the Gate Quiz',
@@ -67,7 +58,6 @@ const COPY: Record<
     capstoneSubmitted: 'Submitted',
     completeHeading: 'Stage 1 complete',
     completeBody: 'Four Gate Quizzes passed and the Self-Audit Report submitted.',
-    aheadTitle: 'After this line',
     stages: [
       { name: 'Stage 2', detail: 'Visible by walking the flow' },
       { name: 'Stage 3', detail: 'Visible only to someone else' },
@@ -79,20 +69,13 @@ const COPY: Record<
   ko: {
     heading: '학습',
     stage: '1단계 · 한눈에 보이는 결함',
-    routeTitle: '1단계 노선',
-    understanding: '이해',
-    application: '적용',
-    // The old copy read "5단계 중 2단계 완료", which used 단계 for a step as
-    // well as for a Stage — the one word CONTEXT.md reserves for the three
-    // Stages. Counting is 개 now, and 단계 means only what the glossary says.
-    remaining: (left) => `${left}개 남았습니다`,
-    complete: '모든 역에 도착했습니다',
+    contentsTitle: '목차',
+    stageOne: '1단계',
     competencyCount: (n) => `역량 ${n}개`,
     done: (done, total) => `${total}개 중 ${done}개 완료`,
     here: '현재 위치',
     status: { unstarted: '시작 전', 'in-progress': '진행 중', passed: '통과' },
     attempts: (n) => `${n}회 시도`,
-    listTitle: '역 목록',
     nextKicker: '다음 역',
     continueQuiz: '관문 퀴즈 이어서 하기',
     startQuiz: '관문 퀴즈 시작하기',
@@ -104,7 +87,6 @@ const COPY: Record<
     capstoneSubmitted: '제출 완료',
     completeHeading: '1단계 수료',
     completeBody: '관문 퀴즈 네 개를 모두 통과하고 자가 점검 리포트를 제출했습니다.',
-    aheadTitle: '이 노선 다음',
     stages: [
       { name: '2단계', detail: '플로우를 따라가야 보이는 결함' },
       { name: '3단계', detail: '남이 봐야 보이는 결함' },
@@ -113,60 +95,6 @@ const COPY: Record<
     visibility:
       '프로그램 관리자는 여러분의 진행 상황을 볼 수 있습니다 — 1단계에서 어디까지 왔는지, 마지막 활동이 얼마나 지났는지, 퀴즈마다 몇 번 시도했는지. 누구와도 순위를 매기지 않습니다.',
   },
-}
-
-type StopState = QuizStatus | 'terminus-locked' | 'terminus-open' | 'terminus-done'
-
-/** The connector to the previous stop. Solid behind you, dotted ahead. */
-const TRACK =
-  "before:absolute before:top-[41px] before:right-1/2 before:-left-1/2 before:h-1 before:rounded-sm before:bg-oxblood before:content-['']"
-const TRACK_AHEAD =
-  "before:absolute before:top-[41px] before:right-1/2 before:-left-1/2 before:h-0 before:border-t-4 before:border-dotted before:border-blue-grey before:content-['']"
-
-/**
- * A station mark. Shape carries the state as well as colour does — filled,
- * half, hollow, and a rotated square for the terminus — because a Learner who
- * cannot separate the two colours still has to be able to read this line.
- */
-function Mark({ state }: { state: StopState }) {
-  const reached = state === 'passed' || state === 'terminus-done'
-  const current = state === 'in-progress' || state === 'terminus-open'
-
-  // The capstone carries the same sheet of paper here as it does in the station
-  // list: one object, one mark, wherever it appears. It was a rotated square
-  // until 2026-07-24 — geometry alone said "a different kind of stop" without
-  // saying which kind, and the list below had already stopped saying it that
-  // way. State is still told the same three ways as every other mark.
-  if (state.startsWith('terminus')) {
-    return (
-      <span
-        aria-hidden
-        className={`relative z-1 mx-auto grid size-6 place-items-center rounded-[8px] ${
-          reached
-            ? 'bg-oxblood text-white'
-            : current
-              ? 'bg-white text-oxblood shadow-[inset_0_0_0_2.5px_var(--oxblood)]'
-              : 'bg-white text-ink-2 shadow-[inset_0_0_0_2.5px_var(--blue-grey)]'
-        }`}
-      >
-        <ReportMark className="size-[13px]" />
-      </span>
-    )
-  }
-
-  return (
-    <span
-      aria-hidden
-      className={[
-        'relative z-1 mx-auto block size-6 rounded-full',
-        reached
-          ? 'bg-oxblood shadow-[inset_0_0_0_4px_var(--oxblood)]'
-          : current
-            ? 'bg-linear-[90deg,var(--oxblood)_0_50%,#fff_50%_100%] shadow-[inset_0_0_0_4px_var(--oxblood)]'
-            : 'bg-white shadow-[inset_0_0_0_4px_var(--blue-grey)]',
-      ].join(' ')}
-    />
-  )
 }
 
 /**
@@ -196,56 +124,10 @@ function ReportMark({ className }: { className: string }) {
   )
 }
 
-function Stop({
-  state,
-  label,
-  meta,
-  first,
-  here,
-}: {
-  state: StopState
-  label: string
-  meta: string
-  first?: boolean
-  here?: string
-}) {
-  const ahead = state === 'unstarted' || state === 'terminus-locked'
-  return (
-    <div className={`relative pt-[34px] text-center ${first ? '' : ahead ? TRACK_AHEAD : TRACK}`}>
-      {/* The one pointing element the design system allows. It used to be a
-          bare line of text led by a "▼" character, whose size and baseline are
-          whatever the font decides — so it could not be aimed at the station,
-          only placed near it. The label now sits in a sunk chip, the way every
-          other inset chip on a card does, and the point below it is drawn, so
-          it lands on the mark's centre line. */}
-      {here && (
-        <span className="absolute top-0 left-1/2 flex -translate-x-1/2 flex-col items-center">
-          <span className="rounded-full bg-sunk px-2.5 py-1 text-[11px] font-bold tracking-[0.2em] whitespace-nowrap">
-            {here}
-          </span>
-          <span
-            aria-hidden
-            className="size-0 border-x-4 border-t-5 border-x-transparent border-t-sunk"
-          />
-        </span>
-      )}
-      <Mark state={state} />
-      <span
-        className={`mt-[15px] block px-1.5 text-[13.5px] leading-[1.4] ${ahead ? '' : 'font-bold'}`}
-      >
-        {label}
-      </span>
-      <span className="mt-[5px] block text-[12px] font-bold text-ink-2">{meta}</span>
-    </div>
-  )
-}
-
 /**
- * Where a Learner lands (#20): the whole of Stage 1 as one line — four
- * Competencies and the report that closes them, with the position marked, so
- * a programme with no deadline still reads as finite. Everything shown is
- * derived from this Learner's own records; nobody else's progress is queried,
- * so none can leak.
+ * Where a Learner lands (#20): the whole programme as one table of contents,
+ * with Stage 1 expanded and the current position marked. Everything shown is
+ * derived from this Learner's own records; nobody else's progress is queried.
  */
 export default async function Learn({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
@@ -263,14 +145,6 @@ export default async function Learn({ params }: { params: Promise<{ lang: string
   const nextCompetency = competencies.find(
     (competency) => progress.quizzes[competency.slug].status !== 'passed',
   )
-  const terminusState: StopState = progress.reportSubmitted
-    ? 'terminus-done'
-    : progress.allPassed
-      ? 'terminus-open'
-      : 'terminus-locked'
-
-  const left = progress.stepsTotal - progress.stepsDone
-
   return (
     <main className="px-0.5">
       <div className="flex flex-wrap items-center gap-4 px-1.5 pb-5">
@@ -290,115 +164,38 @@ export default async function Learn({ params }: { params: Promise<{ lang: string
         </div>
       </div>
 
-      <div className="grid gap-3.5 lg:grid-cols-[minmax(0,1.62fr)_minmax(0,1fr)]">
-        {/* ── the line ─────────────────────────────────── */}
-        <section className="rounded-card bg-surface p-[30px] shadow-card">
-          <div className="mb-4.5 flex items-baseline gap-3">
+      <div className="grid gap-3.5">
+        {/* One table of contents establishes the whole programme and current
+            position before the page asks the Learner to take the next action. */}
+        <section className="rounded-card bg-surface p-5 shadow-card sm:p-[26px]">
+          <div className="mb-3 flex flex-wrap items-baseline gap-3">
             <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
-              {copy.routeTitle}
+              {copy.contentsTitle}
             </h2>
             <p className="ml-auto text-[12px] font-bold text-ink-2">
-              {left === 0 ? copy.complete : copy.remaining(left)}
+              {copy.done(progress.stepsDone, progress.stepsTotal)}
             </p>
           </div>
 
-          {/* The two things Stage 1 assesses, kept apart: four Gate Quizzes
-              test that a Learner understands, the report tests that they can
-              apply it unaided. Losing this distinction loses why the last
-              stop is shaped differently from the other four. */}
-          <div className="mt-6 grid grid-cols-5 text-[11px] font-bold tracking-[0.2em] text-ink-2">
-            <span className="col-span-4">{copy.understanding}</span>
-            <span className="col-span-1 text-center">{copy.application}</span>
-          </div>
-
-          <div className="mt-2 grid grid-cols-5">
-            {competencies.map((competency, index) => {
-              const quiz = progress.quizzes[competency.slug]
-              return (
-                <Stop
-                  key={competency.slug}
-                  first={index === 0}
-                  state={quiz.status}
-                  label={competency.name[lang]}
-                  meta={
-                    quiz.attempts > 0
-                      ? `${copy.status[quiz.status]} · ${copy.attempts(quiz.attempts)}`
-                      : copy.status[quiz.status]
-                  }
-                  here={nextCompetency?.slug === competency.slug ? copy.here : undefined}
-                />
-              )
-            })}
-            <Stop
-              state={terminusState}
-              label={copy.capstoneHeading}
-              meta={progress.reportSubmitted ? copy.capstoneSubmitted : ''}
-              here={!nextCompetency && !progress.reportSubmitted ? copy.here : undefined}
-            />
-          </div>
-        </section>
-
-        {/* ── the one warm field: the single next action ── */}
-        {nextCompetency ? (
-          <section className="flex flex-col rounded-card bg-sand p-[26px] shadow-warm">
-            <span className="text-[11px] font-bold tracking-[0.2em] text-ink-2">
-              {copy.nextKicker}
-            </span>
-            <h2 className="mt-2.5 font-serif text-[34px] leading-[1.15] font-bold tracking-[-0.02em] text-ink">
-              {nextCompetency.name[lang]}
-            </h2>
-            <p className="mt-4 flex-1 text-[16px] leading-[1.55]">{nextCompetency.objective[lang]}</p>
-            <Link
-              href={`/${lang}/learn/${nextCompetency.slug}/quiz`}
-              className="mt-5.5 flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
-            >
-              {progress.quizzes[nextCompetency.slug].status === 'in-progress'
-                ? copy.continueQuiz
-                : copy.startQuiz}
-              <span className="text-[12px] font-normal opacity-70">
-                {copy.items(content.config.drawSize)}
-              </span>
-            </Link>
-          </section>
-        ) : progress.reportSubmitted ? (
-          // Nothing left to do, so nothing wears the warm field.
-          <section className="rounded-card bg-surface p-[26px] shadow-card">
-            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
-              {copy.completeHeading}
-            </h2>
-            <p className="mt-2.5 text-[16px] leading-[1.55]">{copy.completeBody}</p>
-          </section>
-        ) : (
-          <section className="flex flex-col rounded-card bg-sand p-[26px] shadow-warm">
-            <span className="text-[11px] font-bold tracking-[0.2em] text-ink-2">
-              {copy.nextKicker}
-            </span>
-            <h2 className="mt-2.5 font-serif text-[34px] leading-[1.15] font-bold tracking-[-0.02em] text-ink">
-              {copy.capstoneHeading}
-            </h2>
-            <p className="mt-4 flex-1 text-[16px] leading-[1.55]">{copy.capstoneExplanation}</p>
-            <Link
-              href={`/${lang}/audit`}
-              className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
-            >
-              {copy.capstoneOpen}
-            </Link>
-          </section>
-        )}
-
-        {/* ── every station, as a way in ────────────────── */}
-        <section className="rounded-card bg-surface p-[26px] shadow-card">
-          <h2 className="mb-4.5 font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
-            {copy.listTitle}
-          </h2>
+          <h3 className="border-b border-khaki/60 py-3 text-[12px] font-bold tracking-[0.2em] text-ink-2">
+            {copy.stageOne}
+          </h3>
           <div className="flex flex-col">
             {competencies.map((competency, index) => {
               const quiz = progress.quizzes[competency.slug]
+              const rowMeta = [
+                nextCompetency?.slug === competency.slug ? copy.here : null,
+                copy.status[quiz.status],
+                quiz.attempts > 0 ? copy.attempts(quiz.attempts) : null,
+              ]
+                .filter(Boolean)
+                .join(' · ')
+
               return (
                 <Link
                   key={competency.slug}
                   href={`/${lang}/learn/${competency.slug}`}
-                  className="grid grid-cols-[40px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5"
+                  className="grid grid-cols-[40px_minmax(0,1fr)] items-start gap-x-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5 sm:grid-cols-[40px_minmax(0,1fr)_auto] sm:items-center"
                 >
                   <span
                     className={`grid size-10 place-items-center rounded-badge text-[12px] font-bold ${
@@ -419,8 +216,11 @@ export default async function Learn({ params }: { params: Promise<{ lang: string
                       {competency.objective[lang]}
                     </span>
                   </span>
-                  <span className="text-[12px] font-bold whitespace-nowrap text-ink-2">
-                    {quiz.attempts > 0 ? copy.attempts(quiz.attempts) : ''}
+                  {/* Narrow, there is no third column to hold this without
+                      squeezing the objective into a ribbon, so the count drops
+                      under the name it belongs to. */}
+                  <span className="col-start-2 mt-1.5 text-[12px] font-bold whitespace-nowrap text-ink-2 empty:mt-0 sm:col-start-auto sm:mt-0">
+                    {rowMeta}
                   </span>
                 </Link>
               )
@@ -428,7 +228,7 @@ export default async function Learn({ params }: { params: Promise<{ lang: string
 
             {/* The report is a station too, so it belongs in the station
                 list — and a locked stop has to say what unlocks it. */}
-            <div className="grid grid-cols-[40px_minmax(0,1fr)_auto] items-center gap-3.5 border-t border-khaki/40 py-[15px]">
+            <div className="grid grid-cols-[40px_minmax(0,1fr)] items-start gap-x-3.5 border-t border-khaki/40 py-[15px] sm:grid-cols-[40px_minmax(0,1fr)_auto] sm:items-center">
               <span
                 className={`grid size-10 place-items-center rounded-badge ${
                   progress.reportSubmitted
@@ -452,23 +252,21 @@ export default async function Learn({ params }: { params: Promise<{ lang: string
                       : copy.capstoneLocked}
                 </span>
               </span>
-              <span className="text-[12px] font-bold whitespace-nowrap text-ink-2">
-                {progress.reportSubmitted ? copy.capstoneSubmitted : ''}
+              <span className="col-start-2 mt-1.5 text-[12px] font-bold whitespace-nowrap text-ink-2 empty:mt-0 sm:col-start-auto sm:mt-0">
+                {progress.reportSubmitted
+                  ? copy.capstoneSubmitted
+                  : !nextCompetency
+                    ? copy.here
+                    : ''}
               </span>
             </div>
           </div>
-        </section>
 
-        {/* ── real, and not yet open ────────────────────── */}
-        <section className="rounded-card bg-surface p-[26px] shadow-card">
-          <h2 className="mb-4.5 font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
-            {copy.aheadTitle}
-          </h2>
-          <div className="flex flex-col">
+          <div className="mt-2 border-t border-khaki/60 pt-2">
             {copy.stages.map((stage) => (
               <div
                 key={stage.name}
-                className="grid grid-cols-[14px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5"
+                className="grid grid-cols-[14px_minmax(0,1fr)] items-start gap-x-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5 sm:grid-cols-[14px_minmax(0,1fr)_auto] sm:items-center"
               >
                 <i className="size-[14px] rounded-full shadow-[inset_0_0_0_2.5px_var(--blue-grey)]" />
                 <span>
@@ -479,13 +277,60 @@ export default async function Learn({ params }: { params: Promise<{ lang: string
                     {stage.detail}
                   </span>
                 </span>
-                <span className="text-[12px] font-bold whitespace-nowrap text-ink-2">
+                <span className="col-start-2 mt-1.5 text-[12px] font-bold whitespace-nowrap text-ink-2 sm:col-start-auto sm:mt-0">
                   {copy.preparing}
                 </span>
               </div>
             ))}
           </div>
         </section>
+
+        {/* The state-dependent action comes only after the whole route. */}
+        {nextCompetency ? (
+          <section className="flex flex-col rounded-card bg-sand p-5 shadow-warm sm:p-[26px]">
+            <span className="text-[11px] font-bold tracking-[0.2em] text-ink-2">
+              {copy.nextKicker}
+            </span>
+            <h2 className="mt-2.5 font-serif text-[34px] leading-[1.15] font-bold tracking-[-0.02em] text-ink">
+              {nextCompetency.name[lang]}
+            </h2>
+            <p className="mt-4 flex-1 text-[16px] leading-[1.55]">{nextCompetency.objective[lang]}</p>
+            <Link
+              href={`/${lang}/learn/${nextCompetency.slug}/quiz`}
+              className="mt-5.5 flex min-h-11 w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
+            >
+              {progress.quizzes[nextCompetency.slug].status === 'in-progress'
+                ? copy.continueQuiz
+                : copy.startQuiz}
+              <span className="text-[12px] font-normal opacity-70">
+                {copy.items(content.config.drawSize)}
+              </span>
+            </Link>
+          </section>
+        ) : progress.reportSubmitted ? (
+          <section className="rounded-card bg-surface p-5 shadow-card sm:p-[26px]">
+            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              {copy.completeHeading}
+            </h2>
+            <p className="mt-2.5 text-[16px] leading-[1.55]">{copy.completeBody}</p>
+          </section>
+        ) : (
+          <section className="flex flex-col rounded-card bg-sand p-5 shadow-warm sm:p-[26px]">
+            <span className="text-[11px] font-bold tracking-[0.2em] text-ink-2">
+              {copy.nextKicker}
+            </span>
+            <h2 className="mt-2.5 font-serif text-[34px] leading-[1.15] font-bold tracking-[-0.02em] text-ink">
+              {copy.capstoneHeading}
+            </h2>
+            <p className="mt-4 flex-1 text-[16px] leading-[1.55]">{copy.capstoneExplanation}</p>
+            <Link
+              href={`/${lang}/audit`}
+              className="mt-5.5 flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
+            >
+              {copy.capstoneOpen}
+            </Link>
+          </section>
+        )}
       </div>
 
       {/* Visible on the page every Learner lands on, before any first

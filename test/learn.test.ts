@@ -37,19 +37,28 @@ test('the overview is a Learner surface: unauthenticated requests are refused', 
   expect(response.headers.get('location')).toContain('/en/signin')
 })
 
-test('a fresh Learner sees four Competencies unstarted, and the remaining work without arithmetic', async () => {
+test('a fresh Learner sees four Competencies unstarted and their current progress', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 
   const text = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
 
   expect(text.match(/Not started/g)).toHaveLength(4)
   expect(text).toContain('0 / 5 done')
-  expect(text).toContain('5 stops to go')
-  // Understanding and application are shown separately, and the capstone is
-  // locked rather than merely absent.
-  expect(text).toContain('Understanding')
-  expect(text).toContain('Application')
+  // The capstone is locked rather than merely absent.
   expect(text).toContain('Unlocks when all four Gate Quizzes are passed')
+})
+
+test('the programme contents gives the whole route and current position before the next action', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  const text = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
+
+  expect(text).toContain('Programme contents')
+  expect(text).not.toContain('The Stage 1 line')
+  expect(text).not.toContain('After this line')
+  expect(text.indexOf('Programme contents')).toBeLessThan(text.indexOf('Stage 2'))
+  expect(text.indexOf('Stage 2')).toBeLessThan(text.indexOf('Stage 3'))
+  expect(text.indexOf('Stage 3')).toBeLessThan(text.indexOf('Next stop'))
 })
 
 test('being watched is stated before any first attempt, in both languages (#30)', async () => {
@@ -89,7 +98,6 @@ test('a passed Gate Quiz shows as passed, and progress survives a brand-new sess
   expect(text).toContain('Passed')
   expect(text).toContain('1 attempt')
   expect(text).toContain('1 / 5 done')
-  expect(text).toContain('4 stops to go')
 })
 
 test("one Learner's progress never colours another's overview", async () => {
