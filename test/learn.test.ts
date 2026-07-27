@@ -18,6 +18,13 @@ function freshLearner(): string {
   return `learner-${randomBytes(6).toString('hex')}@aisahub.com`
 }
 
+const STAGE_ONE_COMPETENCIES = [
+  'visual-hierarchy',
+  'readability',
+  'consistency',
+  'perceived-clickability',
+]
+
 async function passQuiz(email: string, competency: string) {
   await testDb.insert(schema.attempts).values({
     email,
@@ -51,13 +58,28 @@ test('a fresh Learner sees four Competencies unstarted and their current progres
 test('the programme contents shows the whole route without inventing a next Competency', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 
-  const text = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
+  const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+  const text = visibleText(html)
 
   expect(text).toContain('Programme contents')
+  expect(text).toContain('Choose any Competency')
+  expect(html).toContain('role="progressbar"')
+  expect(html).toContain('aria-label="Stage 1 progress"')
+  expect(html).toContain('aria-label="Programme stages"')
+  expect(html).toContain('style="width:0%"')
+  const stageSection = html.match(
+    /<section aria-label="Programme stages">[\s\S]*?<\/section>/,
+  )?.[0]
+  expect(stageSection).toBeDefined()
+  expect(stageSection).not.toContain('<a')
+  expect(stageSection).not.toContain('<button')
+  expect(stageSection).not.toContain('aria-expanded')
   expect(text).not.toContain('The Stage 1 line')
   expect(text).not.toContain('After this line')
-  expect(text.indexOf('Programme contents')).toBeLessThan(text.indexOf('Stage 2'))
+  expect(text.indexOf('Programme stages')).toBeLessThan(text.indexOf('Stage 2'))
   expect(text.indexOf('Stage 2')).toBeLessThan(text.indexOf('Stage 3'))
+  expect(text.indexOf('Stage 3')).toBeLessThan(text.indexOf('Programme contents'))
+  expect(text.indexOf('Programme contents')).toBeLessThan(text.indexOf('Visual hierarchy'))
   expect(text).not.toContain('Next stop')
   expect(text).not.toContain('You are here')
 })
@@ -68,12 +90,7 @@ test('every Stage 1 Competency exposes its own Gate Quiz', async () => {
   const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
   const text = visibleText(html)
 
-  for (const slug of [
-    'visual-hierarchy',
-    'readability',
-    'consistency',
-    'perceived-clickability',
-  ]) {
+  for (const slug of STAGE_ONE_COMPETENCIES) {
     expect(html).toContain(`href="/en/learn/${slug}/quiz"`)
   }
   expect(text.match(/Open the Gate Quiz/g)).toHaveLength(4)
@@ -100,6 +117,8 @@ test('both languages present the same Competency set', async () => {
 
   expect(en).toContain('Visual hierarchy')
   expect(ko).toContain('시각적 위계')
+  expect(en).toContain('Choose any Competency')
+  expect(ko).toContain('원하는 역량부터')
   expect(en.match(/Not started/g)).toHaveLength(4)
   expect(ko.match(/시작 전/g)).toHaveLength(4)
 })
@@ -118,9 +137,23 @@ test('a passed Gate Quiz shows as passed, and progress survives a brand-new sess
   expect(text).toContain('1 / 5 done')
 })
 
+test('the labelled progress bar reaches 100% when Stage 1 is complete', async () => {
+  const email = freshLearner()
+  for (const slug of STAGE_ONE_COMPETENCIES) {
+    await passQuiz(email, slug)
+  }
+  await testDb.insert(schema.reports).values({ email, submittedAt: new Date() })
+
+  const cookie = await sessionCookieFor(email)
+  const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+
+  expect(html).toContain('aria-valuenow="5"')
+  expect(html).toContain('style="width:100%"')
+})
+
 test("one Learner's progress never colours another's overview", async () => {
   const accomplished = freshLearner()
-  for (const slug of ['visual-hierarchy', 'readability', 'consistency', 'perceived-clickability']) {
+  for (const slug of STAGE_ONE_COMPETENCIES) {
     await passQuiz(accomplished, slug)
   }
 

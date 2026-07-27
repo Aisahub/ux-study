@@ -12,11 +12,13 @@ const COPY: Record<
   Language,
   {
     heading: string
-    stage: string
+    intro: string
+    stageProgress: string
+    programmeStages: string
+    open: string
     contentsTitle: string
     stageOne: string
     stageOneDetail: string
-    competencyCount: (n: number) => string
     done: (done: number, total: number) => string
     status: Record<QuizStatus, string>
     attempts: (n: number) => string
@@ -33,11 +35,13 @@ const COPY: Record<
 > = {
   en: {
     heading: 'Learn',
-    stage: 'Stage 1 · Visible at a glance',
+    intro: 'Choose any Competency and train the observation skill you need now.',
+    stageProgress: 'Stage 1 progress',
+    programmeStages: 'Programme stages',
+    open: 'Open',
     contentsTitle: 'Programme contents',
     stageOne: 'Stage 1',
     stageOneDetail: 'Visible at a glance',
-    competencyCount: (n) => `${n} competencies`,
     done: (done, total) => `${done} / ${total} done`,
     status: {
       unstarted: 'Not started',
@@ -62,11 +66,13 @@ const COPY: Record<
   },
   ko: {
     heading: '학습',
-    stage: '1단계 · 한눈에 보이는 결함',
+    intro: '원하는 역량부터 골라 지금 필요한 관찰력을 훈련하세요.',
+    stageProgress: '1단계 진도',
+    programmeStages: '프로그램 단계',
+    open: '열림',
     contentsTitle: '목차',
     stageOne: '1단계',
     stageOneDetail: '한눈에 보이는 결함',
-    competencyCount: (n) => `역량 ${n}개`,
     done: (done, total) => `${total}개 중 ${done}개 완료`,
     status: { unstarted: '시작 전', 'in-progress': '진행 중', passed: '통과' },
     attempts: (n) => `${n}회 시도`,
@@ -114,38 +120,40 @@ function ReportMark({ className }: { className: string }) {
   )
 }
 
-function StageHeading({
+function StageCard({
+  number,
   name,
   detail,
   status,
-  current = false,
+  state,
 }: {
+  number: number
   name: string
   detail: string
   status: string
-  current?: boolean
+  state: 'open' | 'preparing'
 }) {
+  const isOpen = state === 'open'
+
   return (
-    <div className="grid grid-cols-[14px_minmax(0,1fr)] items-start gap-x-3.5 sm:grid-cols-[14px_minmax(0,1fr)_auto] sm:items-center">
-      <i
-        aria-hidden
-        className={`mt-1 size-[14px] rounded-full sm:mt-0 ${
-          current
-            ? 'bg-sunk shadow-[inset_0_0_0_2.5px_var(--oxblood)]'
-            : 'shadow-[inset_0_0_0_2.5px_var(--blue-grey)]'
-        }`}
-      />
-      <span>
-        <span className="text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
-          {name}
+    <div className="rounded-card bg-surface p-5 text-ink shadow-card sm:p-[26px]">
+      <div className="flex items-start justify-between gap-[14px]">
+        <span
+          aria-hidden
+          className={`grid size-9 place-items-center rounded-full text-[12px] font-bold ${
+            isOpen
+              ? 'bg-oxblood text-white'
+              : 'shadow-[inset_0_0_0_2px_var(--blue-grey)]'
+          }`}
+        >
+          {number}
         </span>
-        <span className="mt-0.5 block text-[13.5px] leading-[1.55] text-ink-2">
-          {detail}
-        </span>
-      </span>
-      <span className="col-start-2 mt-1.5 text-[12px] font-bold whitespace-nowrap text-ink-2 sm:col-start-auto sm:mt-0">
-        {status}
-      </span>
+        <span className="text-[12px] font-bold">{status}</span>
+      </div>
+      <h3 className="mt-4 text-[16px] leading-[1.4] font-bold tracking-[-0.015em] text-ink">
+        {name}
+      </h3>
+      <p className="mt-1 text-[13.5px] leading-[1.55]">{detail}</p>
     </div>
   )
 }
@@ -169,41 +177,73 @@ export default async function Learn({
   const competencies = content.config.stage1Competencies.map((slug) =>
     content.competencies.find((competency) => competency.slug === slug)!,
   )
+  const completionPercent =
+    progress.stepsTotal === 0
+      ? 0
+      : Math.min(100, Math.round((progress.stepsDone / progress.stepsTotal) * 100))
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
-      <div className="flex flex-wrap items-center gap-4 px-1.5 pb-5">
-        <h1 className="font-serif text-[44px] leading-[1.1] font-bold tracking-[-0.02em] text-ink">
-          {copy.heading}
-        </h1>
-        <div className="ml-auto flex flex-wrap gap-2.5">
-          <span className="rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill">
-            {copy.stage}
-          </span>
-          <span className="rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill">
-            {copy.competencyCount(competencies.length)}
-          </span>
-          <span className="rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill">
-            {copy.done(progress.stepsDone, progress.stepsTotal)}
-          </span>
+      <header className="grid gap-5 px-1.5 pb-6 sm:grid-cols-[minmax(0,1fr)_240px] sm:items-end">
+        <div>
+          <h1 className="font-serif text-[44px] leading-[1.1] font-bold tracking-[-0.02em] text-ink">
+            {copy.heading}
+          </h1>
+          <p className="mt-3 max-w-[58ch] text-[16px] leading-[1.55] text-ink">
+            {copy.intro}
+          </p>
         </div>
-      </div>
+        <div>
+          <div className="flex items-center justify-between gap-[14px] text-[12px] font-bold">
+            <span>{copy.stageProgress}</span>
+            <span>{copy.done(progress.stepsDone, progress.stepsTotal)}</span>
+          </div>
+          <div
+            className="mt-2 h-2 overflow-hidden rounded-full bg-blue-grey/35"
+            role="progressbar"
+            aria-label={copy.stageProgress}
+            aria-valuemin={0}
+            aria-valuemax={progress.stepsTotal}
+            aria-valuenow={progress.stepsDone}
+          >
+            <span
+              className="block h-full rounded-full bg-oxblood"
+              style={{ width: `${completionPercent}%` }}
+            />
+          </div>
+        </div>
+      </header>
 
-      <section className="rounded-card bg-surface p-5 shadow-card sm:p-[26px]">
+      <section aria-label={copy.programmeStages}>
+        <h2 className="sr-only">{copy.programmeStages}</h2>
+        <div className="grid gap-[14px] sm:grid-cols-3">
+          <StageCard
+            number={1}
+            name={copy.stageOne}
+            detail={copy.stageOneDetail}
+            status={copy.open}
+            state="open"
+          />
+          {copy.stages.map((stage, index) => (
+            <StageCard
+              key={stage.name}
+              number={index + 2}
+              name={stage.name}
+              detail={stage.detail}
+              status={copy.preparing}
+              state="preparing"
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-4 rounded-card bg-surface p-5 shadow-card sm:p-[26px]">
         <div className="mb-3">
           <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
             {copy.contentsTitle}
           </h2>
         </div>
 
-        <div className="border-b border-khaki/60 py-4">
-          <StageHeading
-            name={copy.stageOne}
-            detail={copy.stageOneDetail}
-            status={copy.done(progress.stepsDone, progress.stepsTotal)}
-            current
-          />
-        </div>
         <div className="ml-3 flex flex-col sm:ml-7">
           {competencies.map((competency, index) => {
             const quiz = progress.quizzes[competency.slug]
@@ -302,16 +342,6 @@ export default async function Learn({
           </div>
         </div>
 
-        <div className="mt-6 space-y-6 border-t border-khaki/60 pt-6">
-          {copy.stages.map((stage) => (
-            <StageHeading
-              key={stage.name}
-              name={stage.name}
-              detail={stage.detail}
-              status={copy.preparing}
-            />
-          ))}
-        </div>
       </section>
 
       {/* Visible on the page every Learner lands on, before any first
