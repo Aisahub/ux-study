@@ -158,7 +158,8 @@ test('completion never arrives with a Competency outstanding', async () => {
 
   expect(overview).not.toContain('Stage 1 is complete')
   expect(overview).toContain('4 / 5 done')
-  expect(overview).toContain('You are here · Not started')
+  expect(overview).toContain('Not started')
+  expect(overview).not.toContain('You are here')
 })
 
 test('the reveal shows the issue-url slot, absent when not supplied', async () => {

@@ -48,7 +48,7 @@ test('a fresh Learner sees four Competencies unstarted and their current progres
   expect(text).toContain('Unlocks when all four Gate Quizzes are passed')
 })
 
-test('the programme contents gives the whole route and current position before the next action', async () => {
+test('the programme contents shows the whole route without inventing a next Competency', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 
   const text = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
@@ -58,7 +58,25 @@ test('the programme contents gives the whole route and current position before t
   expect(text).not.toContain('After this line')
   expect(text.indexOf('Programme contents')).toBeLessThan(text.indexOf('Stage 2'))
   expect(text.indexOf('Stage 2')).toBeLessThan(text.indexOf('Stage 3'))
-  expect(text.indexOf('Stage 3')).toBeLessThan(text.indexOf('Next stop'))
+  expect(text).not.toContain('Next stop')
+  expect(text).not.toContain('You are here')
+})
+
+test('every Stage 1 Competency exposes its own Gate Quiz', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+  const text = visibleText(html)
+
+  for (const slug of [
+    'visual-hierarchy',
+    'readability',
+    'consistency',
+    'perceived-clickability',
+  ]) {
+    expect(html).toContain(`href="/en/learn/${slug}/quiz"`)
+  }
+  expect(text.match(/Open the Gate Quiz/g)).toHaveLength(4)
 })
 
 test('being watched is stated before any first attempt, in both languages (#30)', async () => {
