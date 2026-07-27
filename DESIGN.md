@@ -191,7 +191,7 @@ Content sits in a `1240px`-wide centred column with a `26px` page margin. A two-
 
 One spacing rhythm throughout: `14px` between siblings, `22px` content inset off the board, `26px` inside a card. More space above a heading than below it.
 
-Desktop and mobile are equally primary. On narrow screens the rail becomes a bottom bar, the two columns stack with the next-action card first, and the route line turns vertical — stations run top to bottom with the position marker still the only pointing element on the screen.
+Desktop and mobile are equally primary. On narrow screens the rail becomes a bottom bar. In the Learn directory, each Gate Quiz action drops below its Competency description and keeps a `44px` minimum touch height; the programme order itself does not change.
 
 ## Elevation & Depth
 
