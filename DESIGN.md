@@ -1,6 +1,6 @@
 ---
 name: ux-study
-description: An internal UX learning platform whose overview page is a route diagram, not a course dashboard.
+description: An internal UX learning platform whose overview page is a Studio Board, not a course dashboard.
 colors:
   ground: "#EEF2F5"
   surface: "#FFFFFF"
@@ -96,9 +96,14 @@ components:
 
 ## Overview
 
-**Creative North Star: "The Line"**
+**Creative North Star: "The Studio Board"**
 
-A metro route diagram, not a course dashboard. The programme is self-paced with no deadline, which makes drop-out — not difficulty — the way it fails. A route diagram is the object that answers, without being read, the only three questions a returning Learner has: where am I, what is next, how much is left. It also has no leaderboard: a line gives you a position, never a rank.
+A working board, not a course dashboard. The programme is self-paced and its
+Stage 1 Competencies may be learned in any order. The board first shows the
+whole programme, the open Stage, and total progress; beneath that, each
+Competency is a practical task panel with its own learning and Gate Quiz
+actions. The structure answers the returning Learner's questions without
+inventing a prescribed next course or ranking anyone.
 
 The surface it is drawn on is glass over a soft colour field: blue-grey and sand blooms lie on a near-white page, a frosted panel floats over them and lets the colour read through, and white cards float above the frost. The warmth is rationed on purpose: a single sand card per screen carries the one thing the Learner should do next. The colour lives in the atmosphere, not on the working surfaces.
 
@@ -187,7 +192,27 @@ Paired cards share a row. The working area is one grid, not two stacked columns 
 
 Content sits in a `1240px`-wide centred column with a `26px` page margin. A two-column layout runs `78px` navigation rail | content, both on the frosted board; the content column is inset `22px` off the board's edges. The Learn overview narrows its programme directory to a centred `896px` (`max-w-4xl`) reading column so its rows remain scannable on a wide desktop.
 
-**A directory is a column; an attempt is a column.** The Learn overview is one centred directory: Stage 1 expands its independent Competencies and their Gate Quiz actions, while Stage 2 and Stage 3 use the same heading structure and remain collapsed as `In preparation`. The three Gate Quiz surfaces are also single columns: the doorstep and the verdict use `720px`, and the wizard `880px`. A quiz is one thread with one thing to decide at a time. The wizard is wider because a drawn screen is being examined rather than read; prose inside its card is still held to the `56ch` reading measure.
+**A board is a column; an attempt is a column.** The Learn overview is one
+centred Studio Board: all three Stages establish the whole route first, then
+Stage 1 expands into independent Competency task panels and their Gate Quiz
+actions. Stage 2 and Stage 3 use the same information structure and remain
+non-interactive as `In preparation`. The three Gate Quiz surfaces are also
+single columns: the doorstep and the verdict use `720px`, and the wizard
+`880px`. A quiz is one thread with one thing to decide at a time. The wizard is
+wider because a drawn screen is being examined rather than read; prose inside
+its card is still held to the `56ch` reading measure.
+
+**The Studio Board Rule.** Show orientation before work: programme Stages and
+progress precede the task stack. Each open Competency gets one white task panel
+with a Learning Objective, status, Attempt count, Competency link, and separate
+Gate Quiz action. The Self-Audit Report is the final task panel, but its
+document mark keeps it distinct from the numbered Competencies.
+
+**The No False Current Rule.** When tasks may be chosen in any order, no panel
+receives a unique full-card current treatment and the page never names a
+`next` Competency. Several panels may simultaneously say `In progress`; status
+is encoded on each panel through its mark's colour and shape plus explicit
+words. Progress describes completion, not sequence.
 
 One spacing rhythm throughout: `14px` between siblings, `22px` content inset off the board, `26px` inside a card. More space above a heading than below it.
 

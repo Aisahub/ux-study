@@ -26,6 +26,7 @@ const COPY: Record<
     capstoneHeading: string
     capstoneExplanation: string
     capstoneLocked: string
+    locked: string
     capstoneOpen: string
     capstoneSubmitted: string
     stages: { name: string; detail: string }[]
@@ -54,6 +55,7 @@ const COPY: Record<
     capstoneExplanation:
       'The capstone: audit a real page unaided, using everything the four Competencies taught.',
     capstoneLocked: 'Unlocks when all four Gate Quizzes are passed.',
+    locked: 'Locked',
     capstoneOpen: 'Open the Self-Audit Report',
     capstoneSubmitted: 'Submitted',
     stages: [
@@ -81,6 +83,7 @@ const COPY: Record<
     capstoneExplanation:
       '마무리 과제: 네 역량에서 배운 것으로, 도움 없이 실제 페이지를 감사합니다.',
     capstoneLocked: '관문 퀴즈 네 개를 모두 통과하면 열립니다.',
+    locked: '잠김',
     capstoneOpen: '자가 점검 리포트 열기',
     capstoneSubmitted: '제출 완료',
     stages: [
@@ -237,111 +240,123 @@ export default async function Learn({
         </div>
       </section>
 
-      <section className="mt-4 rounded-card bg-surface p-5 shadow-card sm:p-[26px]">
-        <div className="mb-3">
-          <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+      <section className="mt-7" aria-labelledby="programme-contents">
+        <div className="px-1.5">
+          <h2
+            id="programme-contents"
+            className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink"
+          >
             {copy.contentsTitle}
           </h2>
         </div>
 
-        <div className="ml-3 flex flex-col sm:ml-7">
+        <div className="mt-[14px] grid gap-[14px]">
           {competencies.map((competency, index) => {
             const quiz = progress.quizzes[competency.slug]
-            const rowMeta = [
-              copy.status[quiz.status],
-              quiz.attempts > 0 ? copy.attempts(quiz.attempts) : null,
-            ]
-              .filter(Boolean)
-              .join(' · ')
 
             return (
-              <div
+              <article
                 key={competency.slug}
-                className="grid grid-cols-1 gap-3 border-b border-khaki/40 py-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+                data-competency={competency.slug}
+                data-quiz-status={quiz.status}
+                className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-center"
               >
-                <Link
-                  href={`/${lang}/learn/${competency.slug}`}
-                  className="grid grid-cols-[40px_minmax(0,1fr)] items-start gap-x-3.5 sm:items-center"
+                <span
+                  aria-hidden
+                  className={`grid size-11 place-items-center rounded-badge text-[12px] font-bold ${
+                    quiz.status === 'passed'
+                      ? 'bg-oxblood text-white'
+                      : quiz.status === 'in-progress'
+                        ? 'relative text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood)]'
+                        : 'text-ink shadow-[inset_0_0_0_2px_var(--blue-grey)]'
+                  }`}
                 >
-                  <span
-                    className={`grid size-10 place-items-center rounded-badge text-[12px] font-bold ${
-                      quiz.status === 'passed'
-                        ? 'bg-oxblood text-white'
-                        : quiz.status === 'in-progress'
-                          ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood)]'
-                          : 'bg-sunk text-ink-2 shadow-[inset_0_0_0_2px_var(--blue-grey)]'
-                    }`}
-                  >
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <span>
-                    <span className="text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
+                  {String(index + 1).padStart(2, '0')}
+                  {quiz.status === 'in-progress' && (
+                    <span className="absolute right-1 bottom-1 size-1.5 rounded-full bg-oxblood" />
+                  )}
+                </span>
+
+                <div className="min-w-0">
+                  <h3 className="flex min-h-11 items-center text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
+                    <Link
+                      href={`/${lang}/learn/${competency.slug}`}
+                      className="underline-offset-4 hover:underline"
+                    >
                       {competency.name[lang]}
-                    </span>
-                    <span className="mt-0.5 block text-[13.5px] leading-[1.55] text-ink-2">
-                      {competency.objective[lang]}
-                    </span>
-                  </span>
-                </Link>
-                <span className="ml-[54px] flex flex-wrap items-center justify-between gap-3 sm:ml-0 sm:flex-col sm:items-end">
-                  <span className="text-[12px] font-bold whitespace-nowrap text-ink-2">
-                    {rowMeta}
-                  </span>
+                    </Link>
+                  </h3>
+                  <p className="mt-1 max-w-[62ch] text-[13.5px] leading-[1.55] text-ink-2">
+                    {competency.objective[lang]}
+                  </p>
+                </div>
+
+                <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
+                  <p className="text-[12px] font-bold text-ink">
+                    {copy.status[quiz.status]}
+                    <span className="text-ink-2"> · {copy.attempts(quiz.attempts)}</span>
+                  </p>
                   <Link
                     href={`/${lang}/learn/${competency.slug}/quiz`}
-                    className="inline-flex min-h-11 items-center justify-center rounded-full bg-sunk px-4 text-[12px] font-bold text-oxblood shadow-pill"
+                    className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[12px] font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none"
                   >
                     {copy.openQuiz}
                   </Link>
-                </span>
-              </div>
+                </div>
+              </article>
             )
           })}
 
-          {/* The report is a station too, so it belongs in the station
-                list — and a locked stop has to say what unlocks it. */}
-          <div className="grid grid-cols-1 gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
-            <div className="grid grid-cols-[40px_minmax(0,1fr)] items-start gap-x-3.5 sm:items-center">
-              <span
-                className={`grid size-10 place-items-center rounded-badge ${
-                  progress.reportSubmitted
-                    ? 'bg-oxblood text-white'
-                    : progress.allPassed
-                      ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood)]'
-                      : 'bg-sunk text-ink-2 shadow-[inset_0_0_0_2px_var(--blue-grey)]'
-                }`}
-              >
-                <ReportMark className="size-[19px]" />
-              </span>
-              <span>
-                <span className="text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
-                  {copy.capstoneHeading}
-                </span>
-                <span className="mt-0.5 block text-[13.5px] leading-[1.55] text-ink-2">
-                  {progress.allPassed
-                    ? copy.capstoneExplanation
-                    : copy.capstoneLocked}
-                </span>
-              </span>
+          <article
+            data-report-status={
+              progress.reportSubmitted ? 'submitted' : progress.allPassed ? 'open' : 'locked'
+            }
+            className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-center"
+          >
+            <span
+              aria-hidden
+              className={`grid size-11 place-items-center rounded-badge ${
+                progress.reportSubmitted
+                  ? 'bg-oxblood text-white'
+                  : progress.allPassed
+                    ? 'relative text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood)]'
+                    : 'text-ink shadow-[inset_0_0_0_2px_var(--blue-grey)]'
+              }`}
+            >
+              <ReportMark className="size-[19px]" />
+              {progress.allPassed && !progress.reportSubmitted && (
+                <span className="absolute right-1 bottom-1 size-1.5 rounded-full bg-oxblood" />
+              )}
+            </span>
+
+            <div className="min-w-0">
+              <h3 className="flex min-h-11 items-center text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
+                {copy.capstoneHeading}
+              </h3>
+              <p className="mt-1 max-w-[62ch] text-[13.5px] leading-[1.55] text-ink-2">
+                {progress.allPassed ? copy.capstoneExplanation : copy.capstoneLocked}
+              </p>
             </div>
-            {(progress.allPassed || progress.reportSubmitted) && (
-              <span className="ml-[54px] flex flex-wrap items-center justify-between gap-3 sm:ml-0 sm:flex-col sm:items-end">
-                {progress.reportSubmitted && (
-                  <span className="text-[12px] font-bold whitespace-nowrap text-ink-2">
-                    {copy.capstoneSubmitted}
-                  </span>
-                )}
+
+            <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
+              <p className="text-[12px] font-bold text-ink">
+                {progress.reportSubmitted
+                  ? copy.capstoneSubmitted
+                  : progress.allPassed
+                    ? copy.open
+                    : copy.locked}
+              </p>
+              {(progress.allPassed || progress.reportSubmitted) && (
                 <Link
                   href={`/${lang}/audit`}
-                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-sunk px-4 text-[12px] font-bold text-oxblood shadow-pill"
+                  className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[12px] font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none"
                 >
                   {copy.capstoneOpen}
                 </Link>
-              </span>
-            )}
-          </div>
+              )}
+            </div>
+          </article>
         </div>
-
       </section>
 
       {/* Visible on the page every Learner lands on, before any first

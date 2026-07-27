@@ -50,6 +50,7 @@ test('a fresh Learner sees four Competencies unstarted and their current progres
   const text = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
 
   expect(text.match(/Not started/g)).toHaveLength(4)
+  expect(text.match(/0 attempts/g)).toHaveLength(4)
   expect(text).toContain('0 / 5 done')
   // The capstone is locked rather than merely absent.
   expect(text).toContain('Unlocks when all four Gate Quizzes are passed')
@@ -94,6 +95,45 @@ test('every Stage 1 Competency exposes its own Gate Quiz', async () => {
     expect(html).toContain(`href="/en/learn/${slug}/quiz"`)
   }
   expect(text.match(/Open the Gate Quiz/g)).toHaveLength(4)
+})
+
+test('Stage 1 is four distinct task panels with separate learning and quiz links', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+
+  const panels = [...html.matchAll(/<article data-competency="([^"]+)"[\s\S]*?<\/article>/g)]
+  expect(panels.map((panel) => panel[1])).toEqual(STAGE_ONE_COMPETENCIES)
+  for (const [panel, slug] of panels.map((match) => [match[0], match[1]])) {
+    expect(panel).toContain(`href="/en/learn/${slug}"`)
+    expect(panel).toContain(`href="/en/learn/${slug}/quiz"`)
+    expect(panel).not.toMatch(/<a\b[^>]*>[^<]*<a/)
+  }
+})
+
+test('several in-progress Competencies do not invent one current panel', async () => {
+  const email = freshLearner()
+  for (const competency of STAGE_ONE_COMPETENCIES.slice(0, 2)) {
+    await testDb.insert(schema.attempts).values({
+      email,
+      competency,
+      language: 'en',
+      drawn: ['a', 'b', 'c', 'd', 'e'],
+      selections: [],
+      score: 1,
+      passed: false,
+      submittedAt: new Date(),
+    })
+  }
+
+  const cookie = await sessionCookieFor(email)
+  const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+
+  const panels = [...html.matchAll(/<article data-competency="[^"]+"[\s\S]*?<\/article>/g)]
+    .map((match) => match[0])
+    .join('')
+  expect(panels.match(/data-quiz-status="in-progress"/g)).toHaveLength(2)
+  expect(panels).not.toContain('aria-current=')
 })
 
 test('being watched is stated before any first attempt, in both languages (#30)', async () => {
@@ -149,6 +189,29 @@ test('the labelled progress bar reaches 100% when Stage 1 is complete', async ()
 
   expect(html).toContain('aria-valuenow="5"')
   expect(html).toContain('style="width:100%"')
+})
+
+test('the report panel stays locked until every quiz passes and remains revisitable after submission', async () => {
+  const email = freshLearner()
+  const lockedCookie = await sessionCookieFor(email)
+  const locked = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie: lockedCookie } })).text()
+
+  expect(locked).toContain('data-report-status="locked"')
+  expect(locked).not.toContain('href="/en/audit"')
+
+  for (const slug of STAGE_ONE_COMPETENCIES) {
+    await passQuiz(email, slug)
+  }
+  await testDb.insert(schema.reports).values({ email, submittedAt: new Date() })
+
+  const submittedCookie = await sessionCookieFor(email)
+  const submitted = await (
+    await fetch(`${BASE_URL}/en/learn`, { headers: { cookie: submittedCookie } })
+  ).text()
+
+  expect(submitted).toContain('data-report-status="submitted"')
+  expect(submitted).toContain('href="/en/audit"')
+  expect(visibleText(submitted)).toContain('Submitted')
 })
 
 test("one Learner's progress never colours another's overview", async () => {
