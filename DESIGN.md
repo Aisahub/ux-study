@@ -188,7 +188,7 @@ Seven steps, and no eighth. The first draft of this system used thirteen sizes b
 
 A glass stack, outermost first: the colour field (page) → a frosted board filling the viewport (translucent white + `blur(22px)`, `14px` inset, no radius, no shadow) → a brighter frosted bed (`22px` radius, `22px` padding) → opaque white cards (`22px` radius, `26px` padding). The board's translucency is load-bearing — it is what makes the colour read through as glass; do not make it opaque. The page itself carries no padding: the board is the background, so anything outside it would read as a margin around the app rather than as the app.
 
-A working stack is never split into two columns of unlike cards. Cards may share a row only when they are peers of one kind and carry no order between them — the three Stage cards on the Learn overview are the case that qualifies, and a row is right for them precisely because Stage 1, 2 and 3 are being compared rather than stepped through. Everything else reads down one column. The one side-by-side arrangement left is the Self-Audit Report's, and that is two *surfaces* — the Practice Page and the report drawer — rather than two columns of one page (last paragraph of this section).
+A working stack is never split into two columns of unlike cards. Cards may share a row only when they are peers of one kind and carry no order between them — the three Stage cards on the Learn overview are the case that qualifies, and a row is right for them precisely because Stage 1, 2 and 3 are being compared rather than stepped through. Everything else reads down one column. Two side-by-side arrangements survive that rule, and neither is a sequence laid out sideways: the Self-Audit Report's, which is two *surfaces* — the Practice Page and the report drawer — rather than two columns of one page (last paragraph of this section), and the Gate Quiz item card, which is one card holding the drawn screen beside the question about it. Both are the same relationship: something being examined, and what the Learner does about it, kept in view at once. Neither has an order a row could get wrong, because the eye is meant to cross between them continuously rather than finish one and start the other.
 
 The paired-card grid, which used to hold a content card beside its action card, was removed from the Competency page on 2026-07-28. Reading order forks at the top of every row, so a grid cannot say that one card comes after another: it had put the Gate Quiz — the last step of that page — second on a wide screen, and on a phone `order-first` handed the Learner the assessment before the article it examines. Where cards are a sequence, the sequence has to be the layout.
 
@@ -204,11 +204,30 @@ will be able to do, the questions to carry into the reading, the source article,
 then the Gate Quiz. It takes the doorstep's width rather than the board's
 because it is the same thread of reading, continued — and because its prose is
 held at `56ch` either way, so a wider card would only add blank space beside a
-fixed measure. The three Gate Quiz surfaces are also single columns: the
-doorstep and the verdict use `720px`, and the wizard `880px`. A quiz is one
-thread with one thing to decide at a time. The wizard is wider because a drawn
-screen is being examined rather than read; prose inside its card is still held
-to the `56ch` reading measure.
+fixed measure. The Gate Quiz doorstep and verdict are single columns of `720px`
+too. A quiz is one thread with one thing to decide at a time.
+
+The wizard is the one surface that outgrew that (amended 2026-07-28). It ran at
+`880px` on the reasoning that a drawn screen is examined rather than read and
+wants more room than prose; the omission was that the screen and the question
+about it were stacked, so the Learner scrolled between the thing being judged
+and the judgment, and by the fourth option the screen was off the top of the
+window. From `wide` the wizard takes the full `1240px` content column, and its
+item card lays the screen and the question in one row as soon as the card is
+`1198px` — the `720px` screen floor, a `26px` gap, the `400px` least a column of
+options can be read in, and the card's own padding. The threshold is asked of
+the card, not the viewport, so the row appears when the room is really there.
+Below it the card stacks, and its four options pair into two columns wherever
+the card is at least `880px`. Prose is held to the `56ch` reading measure in
+every one of those arrangements; it is the edge that moves, from centred in a
+stacked card to flush with the screen's own left edge.
+
+Two consequences, both accepted. The screen sits at exactly its `720px` floor in
+the two-column row rather than the `824px` a stacked `880px` card gave it — the
+floor is the width the screens are authored to survive, and seeing the screen
+beside the options is worth more than the `104px`. And the left column ends
+where the drawn screen ends, which on a short item leaves the card taller than
+its screen. Nothing is invented to fill that; the artefact is as tall as it is.
 
 **The Studio Board Rule.** Show orientation before work: programme Stages and
 progress precede the task stack. Each open Competency gets one white task panel
@@ -237,6 +256,8 @@ One spacing rhythm throughout: `14px` between siblings, `22px` content inset off
 Desktop and mobile are equally primary. On narrow screens the rail becomes a bottom bar. In the Learn directory, each Gate Quiz action drops below its Competency description and keeps a `44px` minimum touch height; the programme order itself does not change.
 
 Three bands, cut by available width rather than device class (decided 2026-07-27, #38). Below `640px` the bottom bar carries the marks with their labels — there is no hover on a phone to recover a word from, and a platform teaching Perceived clickability does not ship unlabelled circles as its only navigation. From `640px` the rail returns: a portrait tablet keeps the rail because it has the width for it. From `1100px` — not Tailwind's 1024, which is exactly iPad Pro 13" portrait and would hand a portrait screen the landscape grid — the Self-Audit Report sets its two surfaces side by side. Since 2026-07-28 that is the only split in the app: every other surface is one column at every width, so for them the third band changes nothing. The Gate Quiz's drawn screens never reflow below their authored width: the arrangement on those screens is the question, so a phone pans them, told once that it can.
+
+Three bands, and no fourth. Where a component needs a threshold of its own — the Gate Quiz item card, which seats its screen beside its options at `1198px` and pairs its options at `880px` — it asks the container it is standing in, not the viewport. A fourth viewport band would be a claim about the platform; a container query is a claim about one component, which is all any of these thresholds ever knew.
 
 The Self-Audit Report becomes a finding-at-a-time flow below `1100px` (decided 2026-07-27, #37). The Practice Page owns the available screen until the Learner selects an element; that selection opens one focused Finding composer, and a successful save returns to the page at the same position. A floating count opens the saved Findings and final submission as their own surface. This deliberately changes the report from a document drafted beside its subject into a stream of short entries: a narrow screen cannot keep both surfaces useful, and preserving the Learner's place between entries matters more than preserving a sliver of the page while the keyboard and form cover the rest. At `1100px` and above, the established two-surface layout remains: Practice Page and report drawer side by side.
 

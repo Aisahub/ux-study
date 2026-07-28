@@ -190,12 +190,26 @@ export function QuizWizard({
   // One width for both would either cramp the screens or stretch the options
   // past a comfortable line. The card is the wide one; the prose inside it is
   // held to the reading measure.
+  //
+  // The card is allowed the full content column from `wide` up, and asks for it
+  // because of what the item card does with the room: at 1198px it can stand
+  // the screen and the options beside each other, and the Learner stops
+  // scrolling between the thing being judged and the judgment. Below that
+  // there is no second column to give, so the card asks for nothing extra.
   return (
-    <main className="mx-auto w-full max-w-[880px] px-0.5">
+    <main className="@container mx-auto w-full max-w-[880px] px-0.5 wide:max-w-[1240px]">
       {/* ── the line, carrying the five drawn items ─────── */}
       <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-        <p className="text-[12px] font-bold text-ink-2">{copy.progress(current + 1, items.length)}</p>
-        <div className="mt-3.5 grid grid-cols-5">
+        {/* Said in words only where the line cannot say it. From `sm` the
+            stations carry their own labels and the marker names the current
+            one, so this line repeats them — and it repeats them in the band
+            above the line, which is the one place on this page where an extra
+            row pushes the item itself down the screen. Below `sm` the stations
+            are bare numbers and this is where the words live. */}
+        <p className="text-[12px] font-bold text-ink-2 sm:hidden">
+          {copy.progress(current + 1, items.length)}
+        </p>
+        <div className="mt-3.5 grid grid-cols-5 sm:mt-0">
           {items.map((candidate, index) => (
             <ItemStop
               key={candidate.slug}
@@ -212,8 +226,28 @@ export function QuizWizard({
         </div>
       </section>
 
-      {/* ── the item under judgment ─────────────────────── */}
-      <section className="mt-3.5 rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+      {/*
+        ── the item under judgment ───────────────────────
+
+        The screen and the question are one row once the card is wide enough to
+        hold both, and stacked when it is not. Side by side is the arrangement
+        the task actually wants: the Learner is comparing an option against
+        what is drawn, and stacked they can only hold one of the two at a time
+        — by option four the screen is off the top of the window and the answer
+        is being chosen from memory of it.
+
+        The threshold is measured, not chosen: `720px` is the floor the drawn
+        screens may never be squeezed below, `26px` is the gap between them,
+        and `400px` is the least a column of options can be read in. Padding
+        included, that is `1198px` of card. It is asked of the card rather than
+        of the viewport, so the row appears when the room is really there —
+        whatever the rail, the bed and the board have taken first.
+      */}
+      {/* `grid-cols-1` is load-bearing, not a default written out: an implicit
+          grid track is sized to its content, and the prose column asks for its
+          full 56ch. On a phone that is wider than the whole card, and the
+          options would hang off the right edge of it. */}
+      <section className="mt-3.5 grid grid-cols-1 gap-[26px] rounded-card bg-surface p-5 sm:p-[26px] shadow-card @min-[1198px]:grid-cols-[var(--item-screen-floor)_minmax(0,1fr)] @min-[1198px]:items-start">
         {/*
           One channel, never both. An item with a drawn screen keeps its prose
           as the frame's accessible name rather than printing it alongside: a
@@ -229,15 +263,24 @@ export function QuizWizard({
           </div>
         )}
 
-        {/* One column for everything that is read, at one measure and one edge.
-            The prompt is inside it rather than sized on its own: 56ch of a 25px
-            serif is nearly twice 56ch of the 16px body face, so a prompt given
-            its own measure would start on a different line from the options
-            beneath it. */}
-        <div className="mx-auto mt-[26px] w-full max-w-[56ch]">
-          <h1 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
-            {item.prompt}
-          </h1>
+        {/* One measure and one edge. The prompt keeps the reading measure at
+            every width — 56ch of a 25px serif is nearly twice 56ch of the 16px
+            body face, so a prompt sized on its own would run far past a
+            comfortable line. What changes at `wide` is the edge it is measured
+            from: the column stops being centred in the card and lines up with
+            the left edge of the screen — beside it in the two-column row, above
+            it when the card is stacked. */}
+        <div className="mx-auto w-full max-w-[56ch] wide:mx-0 wide:max-w-none">
+          {/* The measure is held by this wrapper rather than by the heading
+              itself: `ch` is a property of the font it is set in, and 56ch of
+              the 25px serif is over 1000px — a heading given its own 56ch
+              would not be held at all. Set here, in the body face, it is the
+              same 56ch every other card on the platform is measured by. */}
+          <div className="max-w-[56ch]">
+            <h1 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              {item.prompt}
+            </h1>
+          </div>
 
           {/*
             Two lines to an option: what it proposes, then the grounds for it
@@ -250,9 +293,21 @@ export function QuizWizard({
             The chosen option is marked by an inset oxblood ring rather than a
             border — the same ring the station list wears, and the only way to
             draw a chosen edge in a system that has no strokes.
+
+            Four stacked options run past the fold, and an option the Learner
+            has to scroll to is one they compare from memory. So they pair up
+            in the one band where pairing is what buys the room back: a card
+            wide enough to seat them in two readable columns but not wide
+            enough to seat the screen beside them. Below that the columns would
+            be too narrow to read; above it the options are already a column of
+            their own next to the screen, and splitting that column again would
+            hand each option half of 442px.
           */}
-          <fieldset className="mt-5.5 flex flex-col gap-2.5">
+          <fieldset className="mt-5.5 grid gap-2.5 [@container(880px<=width<1198px)]:grid-cols-2">
             {item.options.map((option) => (
+              // Left to stretch rather than sized to its own text: two options
+              // side by side with different-length grounds would otherwise
+              // leave a step between them, and the pair reads as one row.
               <label
                 key={option.index}
                 className="flex cursor-pointer items-start gap-3.5 rounded-badge bg-sunk p-[17px] has-checked:shadow-[inset_0_0_0_2px_var(--oxblood)]"
