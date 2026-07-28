@@ -98,7 +98,7 @@ export function NavRail({ items }: { items: RailItem[] }) {
                 shortened for the bar (see platform-nav). */}
             <span
               aria-hidden
-              className={`line-clamp-2 min-h-[34px] w-full text-center text-[12px] leading-[1.4] font-bold text-balance sm:hidden ${
+              className={`line-clamp-2 min-h-[34px] w-full text-center text-label font-bold text-balance sm:hidden ${
                 active ? 'text-oxblood' : 'text-ink-2'
               }`}
             >

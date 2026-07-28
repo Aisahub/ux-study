@@ -140,12 +140,12 @@ export default async function LanguageLayout({
               {session ? (
                 <Link
                   href={`/${lang}/learn`}
-                  className="text-[12px] font-bold tracking-[0.26em] uppercase"
+                  className="text-label font-bold tracking-[0.26em] uppercase"
                 >
                   ux&thinsp;·&thinsp;study
                 </Link>
               ) : (
-                <span className="text-[12px] font-bold tracking-[0.26em] uppercase">
+                <span className="text-label font-bold tracking-[0.26em] uppercase">
                   ux&thinsp;·&thinsp;study
                 </span>
               )}
@@ -161,13 +161,13 @@ export default async function LanguageLayout({
                   >
                     <span
                       aria-hidden
-                      className="grid size-[30px] shrink-0 place-items-center rounded-full bg-oxblood text-xs font-bold text-white"
+                      className="grid size-[30px] shrink-0 place-items-center rounded-full bg-oxblood text-label font-bold text-white"
                     >
                       {session.email.slice(0, 1).toUpperCase()}
                     </span>
-                    <span className="min-w-0 truncate text-[13.5px] leading-tight font-bold">
+                    <span className="min-w-0 truncate text-body-sm leading-tight font-bold">
                       {session.email.split('@')[0]}
-                      <span className="block text-[12px] text-ink-2">
+                      <span className="block text-label text-ink-2">
                         {session.isMaintainer ? role.maintainer : role.learner}
                       </span>
                     </span>

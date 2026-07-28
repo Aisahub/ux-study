@@ -1,9 +1,7 @@
-import { eq } from 'drizzle-orm'
-
 import { NavRail, type RailItem } from './nav-rail'
-import { db, schema } from '@/db'
 import { getSession } from '@/lib/auth'
 import type { Language } from '@/lib/language'
+import { reportFor } from '@/lib/progress'
 
 const COPY: Record<
   Language,
@@ -50,10 +48,8 @@ export async function PlatformNav({ lang }: { lang: Language }) {
   if (!session) return <div />
   const copy = COPY[lang]
 
-  const [report] = await db
-    .select({ submittedAt: schema.reports.submittedAt })
-    .from(schema.reports)
-    .where(eq(schema.reports.email, session.email))
+  // Shared with the page's own progress read, so the row is fetched once.
+  const report = await reportFor(session.email)
 
   const items: RailItem[] = [
     { id: 'learn', href: `/${lang}/learn`, label: copy.learn },

@@ -1,4 +1,5 @@
 import { and, eq } from 'drizzle-orm'
+import { cache } from 'react'
 
 import { db, schema } from '@/db'
 import { content } from '@/lib/server-content'
@@ -22,12 +23,26 @@ export interface Progress {
   stepsTotal: number
 }
 
+/**
+ * This Learner's report row, or null.
+ *
+ * Wrapped in React's `cache` because two independent server components want it
+ * on the same render: the page, to place the capstone, and the navigation, to
+ * decide whether the Findings library is reachable yet. They cannot see each
+ * other, and every Learner surface is `force-dynamic`, so without this the
+ * table is read twice on every request for the length of the programme.
+ */
+export const reportFor = cache(async (email: string) => {
+  const [report] = await db.select().from(schema.reports).where(eq(schema.reports.email, email))
+  return report ?? null
+})
+
 export async function progressFor(email: string): Promise<Progress> {
   const rows = await db
     .select({ competency: schema.attempts.competency, passed: schema.attempts.passed })
     .from(schema.attempts)
     .where(eq(schema.attempts.email, email))
-  const [report] = await db.select().from(schema.reports).where(eq(schema.reports.email, email))
+  const report = await reportFor(email)
 
   const quizzes: Progress['quizzes'] = {}
   for (const slug of content.config.stage1Competencies) {
