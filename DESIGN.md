@@ -247,15 +247,36 @@ receives a unique full-card current treatment and the page never names a
 is encoded on each panel through its mark's colour and shape plus explicit
 words. Progress describes completion, not sequence.
 
-**The Numbered Steps Rule.** Cards are numbered on exactly one surface — the
-Competency page — because there the order *is* the information. The numerals
-are set in the display face at `25px`, sit in a fixed `34px` gutter (`26px`
-below `sm`) so the four of them line up down the left edge of the column, and
-are `aria-hidden`: reading order already carries the sequence to a screen
-reader, and speaking "01" before every heading would say it twice. Numbering
-appears nowhere else. On a surface whose tasks may be taken in any order,
-numbering the cards invents the very sequence the No False Current Rule exists
-to refuse — the two rules are one decision seen from either side.
+**The Numbered Steps Rule.** Two surfaces carry numerals, for two different
+reasons, and the difference is what keeps them from contradicting each other.
+
+On the **Competency page** the numerals say *do this, then this*: the order is
+the information. They are set in the display face at `25px`, sit in a fixed
+`34px` gutter (`26px` below `sm`) so the four of them line up down the left
+edge of the column, and are `aria-hidden` — reading order already carries the
+sequence to a screen reader, and speaking "01" before every heading would say
+it twice.
+
+On the **Learn overview** the numerals label the entries of a table of
+contents, which is what that section is called. A table of contents numbers its
+chapters without demanding you read chapter 3 last; the number is a stable
+handle, so a Learner in Seoul and one in Jakarta can name the same Competency
+without reciting its title in two languages. They ride inside the status mark
+at `label` size, not in the display face, precisely so they never read as
+headline steps. They are `aria-hidden` for the same reason as above.
+
+The boundary between them is what the No False Current Rule actually forbids:
+**a numeral may label an entry; it may never be the thing that says what to do
+next.** That is why the Learn overview still names no `next` Competency, gives
+no panel a current treatment, lets several rows say `In progress` at once, and
+spends its marks on status rather than on position. Take the numbers away and
+nothing about the order of that programme changes — which is the test. On a
+surface where removing the numerals *would* change what a Learner does next,
+they were carrying the sequence, and they are the defect the two rules exist
+to refuse. (Confirmed 2026-07-28: this rule arrived with #48 saying numbering
+appears nowhere but the Competency page, while the Learn overview had carried
+its `01`–`04` since #43. The overview keeps them; the rule is what was
+incomplete.)
 
 One spacing rhythm throughout: `14px` between siblings, `22px` content inset off the board, `26px` inside a card. More space above a heading than below it.
 
