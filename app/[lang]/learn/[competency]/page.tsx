@@ -43,7 +43,7 @@ const COPY: Record<
     station: (number) => `Stop ${number}`,
     status: { unstarted: 'Not started', 'in-progress': 'In progress', passed: 'Passed' },
     attempts: (n) => (n === 1 ? '1 attempt' : `${n} attempts`),
-    nextKicker: 'Do this next',
+    nextKicker: 'The final gate',
     quizTitle: 'Gate Quiz',
     quizRules: (draw, threshold) =>
       `${draw} items, drawn from this Competency's pool. ${threshold} correct passes.`,
@@ -63,7 +63,7 @@ const COPY: Record<
     station: (number) => `${number}번 역`,
     status: { unstarted: '시작 전', 'in-progress': '진행 중', passed: '통과' },
     attempts: (n) => `${n}회 시도`,
-    nextKicker: '다음 할 일',
+    nextKicker: '마지막 관문',
     quizTitle: '관문 퀴즈',
     quizRules: (draw, threshold) =>
       `이 역량의 문항 풀에서 ${draw}문항이 나옵니다. ${threshold}문항을 맞히면 통과합니다.`,
@@ -95,6 +95,50 @@ function StatusChip({ status, label }: { status: QuizStatus; label: string }) {
 }
 
 /**
+ * The head of one step: its place in the order, then what the step is.
+ *
+ * The numeral is the whole reason this page reads as a sequence rather than as
+ * four cards that happen to be stacked, so it is set in the display face at
+ * the headline size and given a fixed column — the four of them line up down
+ * the left edge of the column and the four headings start at the same x.
+ *
+ * It is `aria-hidden` because a screen reader already has the order: the cards
+ * are read in it. "01" spoken before every heading would be the sequence said
+ * twice, and the second time as noise.
+ *
+ * `mutedNumeral` exists for the one card that is not white. Ink at 72% is
+ * measured against white and drops below AA on the sand field, so the warm
+ * card's numeral is full ink and separates by being the display face instead.
+ */
+function StepHead({
+  step,
+  children,
+  mutedNumeral = true,
+}: {
+  step: string
+  children: React.ReactNode
+  mutedNumeral?: boolean
+}) {
+  return (
+    // `break-keep` because the numeral takes width the heading used to have,
+    // and Korean without it breaks inside a word — 할 수 있 / 는 것. English
+    // is unaffected: it already only breaks at spaces. The gutter is narrower
+    // on a phone, where those same pixels are the ones the heading needs.
+    <div className="grid grid-cols-[26px_minmax(0,1fr)] items-baseline gap-x-2.5 break-keep sm:grid-cols-[34px_minmax(0,1fr)] sm:gap-x-3.5">
+      <span
+        aria-hidden
+        className={`font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] ${
+          mutedNumeral ? 'text-ink-2' : 'text-ink'
+        }`}
+      >
+        {step}
+      </span>
+      {children}
+    </div>
+  )
+}
+
+/**
  * One Competency (#20): what the Learner should be able to do afterwards,
  * where to point it given their role, the questions to read the article with,
  * and the article itself. Flat route per ADR-0008 — no stage segment.
@@ -102,6 +146,15 @@ function StatusChip({ status, label }: { status: QuizStatus; label: string }) {
  * The station between the line and the quiz, so it is drawn as one: the page
  * says which stop this is and how it stands, and the single warm card is the
  * Gate Quiz — the one thing there is to do here.
+ *
+ * It is one numbered column, in the order the work is actually done: know what
+ * you are after (01), take the questions (02), read the article (03), then
+ * stand at the gate (04). It was a two-column grid until now, and the grid put
+ * the Gate Quiz second on a wide screen and *first* on a phone — the last step
+ * of the sequence was the loudest thing on the page and the first thing a
+ * Learner met, before the article it examines. Two columns cannot carry an
+ * order: reading order forks at the top of every row, so the only way to say
+ * "this comes after that" is to put it after it.
  */
 export default async function CompetencyPage({
   params,
@@ -121,7 +174,11 @@ export default async function CompetencyPage({
   const station = String(content.config.stage1Competencies.indexOf(slug) + 1).padStart(2, '0')
 
   return (
-    <main className="px-0.5">
+    // A column, the width the Gate Quiz doorstep next door uses. The
+    // Competency is one thread of reading that ends at that doorstep, and
+    // handing it the full working area would only widen the cards around a
+    // measure that is fixed at 56ch anyway.
+    <main className="mx-auto w-full max-w-[720px] px-0.5">
       <nav className="px-1.5 pb-3.5">
         <Link
           href={`/${lang}/learn`}
@@ -159,72 +216,42 @@ export default async function CompetencyPage({
         </div>
       </div>
 
-      <div className="grid gap-3.5 wide:grid-cols-[minmax(0,1.62fr)_minmax(0,1fr)]">
-        {/* ── what this station is for, and where to aim it ── */}
+      <div className="flex flex-col gap-3.5">
+        {/* ── 01 · what this station is for, and where to aim it ── */}
         <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-          <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
-            {copy.objective}
-          </h2>
+          <StepHead step="01">
+            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              {copy.objective}
+            </h2>
+          </StepHead>
           <p className="mt-3.5 max-w-[56ch] text-[16px] leading-[1.55]">
             {competency.objective[lang]}
           </p>
 
           {/* The same Competency pointed at this Learner's own work. It shares
               the card because it is not a second subject: it is the objective
-              with an address on it. */}
-          <h2 className="mt-[26px] border-t border-khaki/40 pt-[22px] font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              with an address on it — so it takes no number of its own. */}
+          <h3 className="mt-[26px] border-t border-khaki/40 pt-[22px] font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
             {copy.roleHint}
-          </h2>
+          </h3>
           <p className="mt-3.5 max-w-[56ch] text-[16px] leading-[1.55]">
             {competency.roleHint[lang]}
           </p>
         </section>
 
-        {/* ── the one warm field: the single next action ── */}
-        {quiz.status === 'passed' ? (
-          // Nothing here is outstanding any more, so nothing here wears the
-          // warm field — retrying is offered as a link, not as a second action.
-          <section className="order-first flex flex-col rounded-card bg-surface p-5 shadow-card sm:p-[26px] wide:order-none">
-            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
-              {copy.quizPassed}
-            </h2>
-            <p className="mt-3.5 flex-1 text-[16px] leading-[1.55]">{copy.passedBody}</p>
-            <Link
-              href={`/${lang}/learn/${slug}/quiz`}
-              className="mt-5.5 text-[16px] font-bold text-oxblood"
-            >
-              {copy.quizStart(quiz.attempts)}
-            </Link>
-          </section>
-        ) : (
-          <section className="order-first flex flex-col rounded-card bg-sand p-5 sm:p-[26px] shadow-warm wide:order-none">
-            <span className="text-[11px] font-bold tracking-[0.2em] text-ink-2">
-              {copy.nextKicker}
-            </span>
-            <h2 className="mt-2.5 font-serif text-[34px] leading-[1.15] font-bold tracking-[-0.02em] text-ink">
-              {copy.quizTitle}
-            </h2>
-            <p className="mt-4 flex-1 text-[16px] leading-[1.55]">
-              {copy.quizRules(drawSize, passThreshold)}
-            </p>
-            <Link
-              href={`/${lang}/learn/${slug}/quiz`}
-              className="mt-5.5 flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
-            >
-              {copy.quizStart(quiz.attempts)}
-              <span className="text-[12px] font-normal opacity-70">{copy.items(drawSize)}</span>
-            </Link>
-          </section>
-        )}
-
-        {/* ── the questions, and the article they are for ── */}
+        {/* ── 02 · the questions to carry into the reading ── */}
         <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-          <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
-            {copy.questionsHeading}
-          </h2>
+          <StepHead step="02">
+            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              {copy.questionsHeading}
+            </h2>
+          </StepHead>
           <p className="mt-2.5 max-w-[56ch] text-[13.5px] leading-[1.55] text-ink-2">
             {copy.questionsExplanation}
           </p>
+          {/* The question markers are sunk chips rather than a second run of
+              display numerals: inside a step, the ordinals belong to the step,
+              and only the four step numbers own the column's left edge. */}
           <ol className="mt-5.5 flex flex-col gap-3.5">
             {competency.preReadingQuestions.map((question, index) => (
               <li
@@ -240,11 +267,13 @@ export default async function CompetencyPage({
           </ol>
         </section>
 
-        {/* ── what the questions are carried into ────────── */}
-        <section className="flex flex-col rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-          <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
-            {copy.articleTitle}
-          </h2>
+        {/* ── 03 · what the questions are carried into ── */}
+        <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+          <StepHead step="03">
+            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              {copy.articleTitle}
+            </h2>
+          </StepHead>
           <p className="mt-3.5 text-[13.5px] leading-[1.55] text-ink-2">
             {competency.source.attribution}
           </p>
@@ -259,7 +288,7 @@ export default async function CompetencyPage({
 
           <a
             href={competency.source.url}
-            className="mt-auto self-start pt-5.5 text-[16px] font-bold text-oxblood"
+            className="mt-5.5 inline-flex text-[16px] font-bold text-oxblood"
             target="_blank"
             rel="noreferrer"
           >
@@ -268,6 +297,52 @@ export default async function CompetencyPage({
           </a>
         </section>
 
+        {/* ── 04 · the gate the three steps above lead to ── */}
+        {quiz.status === 'passed' ? (
+          // Nothing here is outstanding any more, so nothing here wears the
+          // warm field — retrying is offered as a link, not as a second action.
+          <section className="rounded-card bg-surface p-5 shadow-card sm:p-[26px]">
+            <StepHead step="04">
+              <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+                {copy.quizPassed}
+              </h2>
+            </StepHead>
+            <p className="mt-3.5 max-w-[56ch] text-[16px] leading-[1.55]">{copy.passedBody}</p>
+            <Link
+              href={`/${lang}/learn/${slug}/quiz`}
+              className="mt-5.5 inline-flex text-[16px] font-bold text-oxblood"
+            >
+              {copy.quizStart(quiz.attempts)}
+            </Link>
+          </section>
+        ) : (
+          // The one warm field, and now it is where the order puts it: the last
+          // card rather than the first thing a Learner meets. It says it is the
+          // last of the four, not that it is the next thing to do — before the
+          // article is read, "do this next" was not true.
+          <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
+            {/* Full ink, not the 72% fade: that value is measured against
+                white and is marginal on the sand field. */}
+            <span className="mb-2.5 block text-[11px] font-bold tracking-[0.2em] text-ink">
+              {copy.nextKicker}
+            </span>
+            <StepHead step="04" mutedNumeral={false}>
+              <h2 className="font-serif text-[34px] leading-[1.15] font-bold tracking-[-0.02em] text-ink">
+                {copy.quizTitle}
+              </h2>
+            </StepHead>
+            <p className="mt-4 max-w-[56ch] text-[16px] leading-[1.55]">
+              {copy.quizRules(drawSize, passThreshold)}
+            </p>
+            <Link
+              href={`/${lang}/learn/${slug}/quiz`}
+              className="mt-5.5 flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
+            >
+              {copy.quizStart(quiz.attempts)}
+              <span className="text-[12px] font-normal opacity-70">{copy.items(drawSize)}</span>
+            </Link>
+          </section>
+        )}
       </div>
     </main>
   )
