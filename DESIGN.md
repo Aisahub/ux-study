@@ -163,7 +163,9 @@ The page is not a flat fill; it is a soft field of four radial blooms the froste
 
 ### Hierarchy
 
-Seven steps, and no eighth. The first draft of this system used thirteen sizes between 10.5px and 44px — most of them one-offs invented at the moment they were needed. That is not a scale, and a platform that teaches Consistency cannot ship one.
+Eight steps, and no ninth. The first draft of this system used thirteen sizes between 10.5px and 44px — most of them one-offs invented at the moment they were needed. That is not a scale, and a platform that teaches Consistency cannot ship one.
+
+(This section said "seven steps, and no eighth" until 2026-07-28 while listing eight. The rule below was named after the miscount, and an audit found the ninth step it was supposed to prevent had already shipped — 11px regular in the standing visibility notice. A rule whose own name cannot count is not a rule; both are corrected here.)
 
 - **Display** (serif, 700, 44px, 1.1, -0.02em): The page title. One per screen.
 - **Headline-lg** (serif, 700, 34px, 1.15, -0.02em): The next-action card's subject. One per screen at most.
@@ -178,7 +180,11 @@ Seven steps, and no eighth. The first draft of this system used thirteen sizes b
 
 **The Two Weights Rule.** The body face ships Regular (400) and Bold (700) and nothing between. A Korean weight costs ~262KB, so a third was not bought; anything else the code asks for is synthesised by the browser into a stretched fake bold, which Hangul shows badly. Weights 500, 600 and 800 do not exist in this system.
 
-**The Seven Steps Rule.** Every piece of type on every screen is one of the seven steps above. A size that is not on the list is not a smaller heading; it is an unfinished decision. If a case genuinely needs an eighth, add it here first.
+**The Fixed Scale Rule.** Every piece of type on every screen is one of the eight steps above. A size that is not on the list is not a smaller heading; it is an unfinished decision. If a case genuinely needs a ninth, add it here first.
+
+The steps are tokens, not numbers retyped at each call site: `text-display`, `text-headline-lg`, `text-headline`, `text-title`, `text-body`, `text-body-sm`, `text-label`, `text-micro`, declared once in `app/globals.css`. Each carries its own size, line height and letter spacing; weight stays an explicit `font-bold` so the two never fight over which declaration wins. A written-down scale cannot refuse an addition — that is how the ninth step arrived unnoticed — and a utility can.
+
+**The Reader's Size Rule.** The scale is declared in `rem`, against the reader's own browser default. At the default setting 1rem is 16px and every step renders at the pixel size listed above, so nothing moves for anyone who has not asked it to. A Learner who has raised their browser's default font size gets a page that answers. Accessibility is a Stage 3 Competency here; a scale nailed to px ignores the one accessibility preference a reader sets before they ever arrive. Fixed `px` in a type size is now a defect, not a shorthand.
 
 **The White-Only Fade Rule.** Faded text (ink at 72%) is allowed on white cards and nowhere else. On the blue-grey ground the same value drops to 3.6:1 and fails; there, secondary text stays full ink and separates by weight instead.
 
@@ -255,6 +261,10 @@ One spacing rhythm throughout: `14px` between siblings, `22px` content inset off
 
 Desktop and mobile are equally primary. On narrow screens the rail becomes a bottom bar. In the Learn directory, each Gate Quiz action drops below its Competency description and keeps a `44px` minimum touch height; the programme order itself does not change.
 
+**The Stage Strip Rule** (decided 2026-07-28). The three Stage cards are three cards in a row from `sm`, and three rows inside one card below it. Only the container count changes with the band; the grouping does not, because the strip is one object at both. Three stacked cards cost 446px on a phone — 53% of the viewport — to say that Stage 1 is open and the other two are not written yet, and that pushed the first Competency, the only thing on the page a Learner can act on, entirely below the fold. Orientation precedes work on this board; it may not consume the screen the work needed. Any future summary strip on a narrow screen owes the same test: what does the Learner's first screen let them do?
+
+**The Target Is The Link Rule.** A `44px` row height belongs to whatever actually answers a tap, not to the element around it. A heading given `min-h-11` with an inline link inside it looks like a 44px target and offers 22px — which is the Perceived clickability defect this platform's fourth Competency teaches, committed by the page that lists it.
+
 Three bands, cut by available width rather than device class (decided 2026-07-27, #38). Below `640px` the bottom bar carries the marks with their labels — there is no hover on a phone to recover a word from, and a platform teaching Perceived clickability does not ship unlabelled circles as its only navigation. From `640px` the rail returns: a portrait tablet keeps the rail because it has the width for it. From `1100px` — not Tailwind's 1024, which is exactly iPad Pro 13" portrait and would hand a portrait screen the landscape grid — the Self-Audit Report sets its two surfaces side by side. Since 2026-07-28 that is the only split in the app: every other surface is one column at every width, so for them the third band changes nothing. The Gate Quiz's drawn screens never reflow below their authored width: the arrangement on those screens is the question, so a phone pans them, told once that it can.
 
 Three bands, and no fourth. Where a component needs a threshold of its own — the Gate Quiz item card, which seats its screen beside its options at `1198px` and pairs its options at `880px` — it asks the container it is standing in, not the viewport. A fourth viewport band would be a claim about the platform; a container query is a claim about one component, which is all any of these thresholds ever knew.
@@ -286,6 +296,16 @@ Station marks are the one place geometry carries meaning. A passed station is a 
 
 The terminus was a rotated square until 2026-07-24. Geometry alone said "a different kind of stop" without saying which kind, and in the station list, where the four Competencies wear numbered rounded badges, a fifth rounded badge standing on its corner read as one more of the same. The report now carries one mark, and carries it identically on the line and in the list.
 
+**The Filling Mark Rule** (decided 2026-07-28). Wherever a mark carries a three-state progress — the Learn directory's numbered badges, the Gate Quiz doorstep's attempt marks — the states are told by **how full the mark is**, and nothing is ever attached to it to say so:
+
+- **not started** — an even hollow ring, blue-grey;
+- **started, not finished** — an oxblood ring whose base is thickened to `5px`, so the mark reads as filling from the bottom;
+- **finished** — solid oxblood.
+
+Three silhouettes, distinguishable with no hue at all, which is the point: colour alone is unreadable to some Learners and this platform teaches that in its first Stage.
+
+The Learn badge carried a `6px` dot in its lower-right corner for this until 2026-07-28. Two things were wrong with it. It was a second vocabulary for a state the doorstep's attempt mark already drew as a partial fill — the Consistency defect the third Competency teaches, in the list that teaches it. And a small circle stuck to the corner of a numbered badge is the notification-count pattern everywhere else on the web, so it read as an alert rather than as a state. A mark says its state by its own shape; it does not wear a second object to say it.
+
 ## Components
 
 ### Buttons
@@ -293,6 +313,10 @@ The terminus was a rotated square until 2026-07-24. Geometry alone said "a diffe
 - **Primary:** Oxblood ground, white label, `15px 26px`, full width inside its card. A trailing `small` carries a quiet detail ("5문항") at 72% opacity.
 - **Hover / Focus:** Oxblood deepens; focus shows a visible ring — never removed, this platform teaches keyboard operability.
 - There is no secondary button. A screen has one action; anything else is a link.
+
+**The Row Action Exception.** A directory is the one place the rule above does not hold: where a screen lists peers that may be entered in any order, each row carries the same primary button, and the repetition is the point. The Learn overview ships four (five once the report opens). This is not four competing actions — it is one action offered four times, once per independent entry point, and picking one of them out with a heavier treatment would invent the sequence the No False Current Rule exists to refuse.
+
+The exception is narrow. It applies only to a list of peers, only to the identical action repeated, and never alongside a second differently-weighted button on the same screen. Everywhere else, one action per screen still holds. (Recorded 2026-07-28: the Layout section had described this per-row action since the Studio Board was built, while this section still said one action per screen. The build followed Layout; the rule had simply never been written down.)
 
 ### Chips
 - **Style:** White pill, `9px 17px`, pill lift, `12.5px/600` label with a `15px` khaki-stroked icon. Numerals inside a chip go bold and oxblood.

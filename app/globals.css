@@ -87,6 +87,53 @@
   --font-sans: var(--font-body);
   --font-serif: var(--font-display);
 
+  /* ── the type scale ──────────────────────────────────── */
+  /* The eight steps DESIGN.md names, as tokens rather than as a number typed
+     at each call site. They were inline arbitrary values until an audit found
+     a ninth step (11px/400/1.55) had appeared in the standing visibility
+     notice without anyone deciding to add one. A scale that is only written
+     down cannot refuse an addition; one that is a utility can.
+     Only font-size, line-height and letter-spacing travel in the token —
+     weight stays an explicit `font-bold`, so the two never fight over
+     which declaration wins.
+     rem, not px: at the browser default 1rem is 16px, so nothing moves for
+     anyone who has not asked it to — but a Learner who raises their browser's
+     default font size now gets a page that answers. WCAG 2.2 AA is a hard
+     acceptance line here (accessibility is itself a Stage 3 Competency), and
+     a scale nailed to px ignores the one accessibility preference a reader
+     sets before they ever arrive. */
+  --text-display: 2.75rem; /* 44px */
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-headline-lg: 2.125rem; /* 34px */
+  --text-headline-lg--line-height: 1.15;
+  --text-headline-lg--letter-spacing: -0.02em;
+
+  --text-headline: 1.5625rem; /* 25px */
+  --text-headline--line-height: 1.2;
+  --text-headline--letter-spacing: -0.015em;
+
+  --text-title: 1rem; /* 16px — body's size, bold is the difference */
+  --text-title--line-height: 1.4;
+  --text-title--letter-spacing: -0.015em;
+
+  --text-body: 1rem; /* 16px */
+  --text-body--line-height: 1.55;
+  --text-body--letter-spacing: -0.008em;
+
+  --text-body-sm: 0.84375rem; /* 13.5px */
+  --text-body-sm--line-height: 1.55;
+  --text-body-sm--letter-spacing: -0.008em;
+
+  --text-label: 0.75rem; /* 12px */
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0;
+
+  --text-micro: 0.6875rem; /* 11px — uppercase kickers only */
+  --text-micro--line-height: 1.4;
+  --text-micro--letter-spacing: 0.2em;
+
   --radius-card: 22px;
   --radius-badge: 14px;
 

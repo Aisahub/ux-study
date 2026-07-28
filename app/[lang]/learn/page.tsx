@@ -123,6 +123,25 @@ function ReportMark({ className }: { className: string }) {
   )
 }
 
+/**
+ * One Stage, in two arrangements.
+ *
+ * From `sm` it is the card DESIGN.md draws: mark and status on the first line,
+ * the Stage's name and its one-line description beneath. Below `sm` the same
+ * four pieces become a single row inside the strip's shared card — mark, name
+ * and status across one line, the description under the name.
+ *
+ * The reason is what a phone's first screen was spending. Three separate
+ * stacked cards cost 446px to say "Stage 1 is open and the other two are not
+ * written yet", which is 53% of an iPhone viewport, and pushed the first
+ * Competency — the only thing on this page a Learner can act on — entirely
+ * below the fold. Drop-out is this programme's failure mode, and a first
+ * screen carrying no work is where it starts.
+ *
+ * The grouping does not change with the band, only the container count: three
+ * cards in a row above `sm`, three rows in one card below it. Both read as one
+ * object, which is what the strip is.
+ */
 function StageCard({
   number,
   name,
@@ -139,24 +158,24 @@ function StageCard({
   const isOpen = state === 'open'
 
   return (
-    <div className="rounded-card bg-surface p-5 text-ink shadow-card sm:p-[26px]">
-      <div className="flex items-start justify-between gap-[14px]">
-        <span
-          aria-hidden
-          className={`grid size-9 place-items-center rounded-full text-[12px] font-bold ${
-            isOpen
-              ? 'bg-oxblood text-white'
-              : 'shadow-[inset_0_0_0_2px_var(--blue-grey)]'
-          }`}
-        >
-          {number}
-        </span>
-        <span className="text-[12px] font-bold">{status}</span>
-      </div>
-      <h3 className="mt-4 text-[16px] leading-[1.4] font-bold tracking-[-0.015em] text-ink">
+    <div className="grid grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-x-3.5 text-ink sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-[14px] sm:rounded-card sm:bg-surface sm:p-[26px] sm:shadow-card">
+      <span
+        aria-hidden
+        className={`col-start-1 row-start-1 grid size-7 place-items-center rounded-full text-label font-bold sm:size-9 ${
+          isOpen ? 'bg-oxblood text-white' : 'shadow-[inset_0_0_0_2px_var(--blue-grey)]'
+        }`}
+      >
+        {number}
+      </span>
+      <span className="col-start-3 row-start-1 justify-self-end text-label font-bold sm:col-start-2">
+        {status}
+      </span>
+      <h3 className="col-start-2 row-start-1 min-w-0 text-title font-bold text-ink sm:col-span-2 sm:col-start-1 sm:row-start-2 sm:mt-[14px]">
         {name}
       </h3>
-      <p className="mt-1 text-[13.5px] leading-[1.55]">{detail}</p>
+      <p className="col-span-2 col-start-2 row-start-2 mt-1 text-body-sm text-ink-2 sm:col-span-2 sm:col-start-1 sm:row-start-3">
+        {detail}
+      </p>
     </div>
   )
 }
@@ -187,17 +206,13 @@ export default async function Learn({
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
-      <header className="grid gap-5 px-1.5 pb-6 sm:grid-cols-[minmax(0,1fr)_240px] sm:items-end">
+      <header className="grid gap-[22px] px-1.5 pb-[26px] sm:grid-cols-[minmax(0,1fr)_240px] sm:items-end">
         <div>
-          <h1 className="font-serif text-[44px] leading-[1.1] font-bold tracking-[-0.02em] text-ink">
-            {copy.heading}
-          </h1>
-          <p className="mt-3 max-w-[58ch] text-[16px] leading-[1.55] text-ink">
-            {copy.intro}
-          </p>
+          <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
+          <p className="mt-3 max-w-[58ch] text-body text-ink">{copy.intro}</p>
         </div>
         <div>
-          <div className="flex items-center justify-between gap-[14px] text-[12px] font-bold">
+          <div className="flex items-center justify-between gap-[14px] text-label font-bold">
             <span>{copy.stageProgress}</span>
             <span>{copy.done(progress.stepsDone, progress.stepsTotal)}</span>
           </div>
@@ -208,6 +223,10 @@ export default async function Learn({
             aria-valuemin={0}
             aria-valuemax={progress.stepsTotal}
             aria-valuenow={progress.stepsDone}
+            // Without this a screen reader announces a bare "20%", which counts
+            // nothing a Learner can name. The visible line beside the bar
+            // already says what is being counted; this makes them say it alike.
+            aria-valuetext={copy.done(progress.stepsDone, progress.stepsTotal)}
           >
             <span
               className="block h-full rounded-full bg-oxblood"
@@ -217,9 +236,15 @@ export default async function Learn({
         </div>
       </header>
 
-      <section aria-label={copy.programmeStages}>
-        <h2 className="sr-only">{copy.programmeStages}</h2>
-        <div className="grid gap-[14px] sm:grid-cols-3">
+      {/* Labelled by its own heading rather than by a duplicate `aria-label`,
+          which made a screen reader announce the region's name twice — and
+          left two sibling sections on one page naming themselves two
+          different ways. */}
+      <section aria-labelledby="programme-stages">
+        <h2 id="programme-stages" className="sr-only">
+          {copy.programmeStages}
+        </h2>
+        <div className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-3 sm:bg-transparent sm:p-0 sm:shadow-none">
           <StageCard
             number={1}
             name={copy.stageOne}
@@ -240,12 +265,9 @@ export default async function Learn({
         </div>
       </section>
 
-      <section className="mt-7" aria-labelledby="programme-contents">
+      <section className="mt-[26px]" aria-labelledby="programme-contents">
         <div className="px-1.5">
-          <h2
-            id="programme-contents"
-            className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink"
-          >
+          <h2 id="programme-contents" className="font-serif text-headline font-bold text-ink">
             {copy.contentsTitle}
           </h2>
         </div>
@@ -259,46 +281,54 @@ export default async function Learn({
                 key={competency.slug}
                 data-competency={competency.slug}
                 data-quiz-status={quiz.status}
-                className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-center"
+                className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
               >
                 <span
                   aria-hidden
-                  className={`grid size-11 place-items-center rounded-badge text-[12px] font-bold ${
+                  className={`grid size-11 place-items-center rounded-badge text-label font-bold ${
                     quiz.status === 'passed'
                       ? 'bg-oxblood text-white'
                       : quiz.status === 'in-progress'
-                        ? 'relative text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood)]'
+                        ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood),inset_0_-5px_0_0_var(--oxblood)]'
                         : 'text-ink shadow-[inset_0_0_0_2px_var(--blue-grey)]'
                   }`}
                 >
                   {String(index + 1).padStart(2, '0')}
-                  {quiz.status === 'in-progress' && (
-                    <span className="absolute right-1 bottom-1 size-1.5 rounded-full bg-oxblood" />
-                  )}
                 </span>
 
                 <div className="min-w-0">
-                  <h3 className="flex min-h-11 items-center text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
+                  {/* The 44px row height belongs to the link, not to the
+                      heading around it. It was on the heading, so the row
+                      looked like a 44px target and only the 22px of text
+                      actually answered a tap. */}
+                  <h3 className="text-title font-bold">
                     <Link
                       href={`/${lang}/learn/${competency.slug}`}
-                      className="underline-offset-4 hover:underline"
+                      className="inline-flex min-h-11 items-center underline-offset-4 hover:underline"
                     >
                       {competency.name[lang]}
                     </Link>
                   </h3>
-                  <p className="mt-1 max-w-[62ch] text-[13.5px] leading-[1.55] text-ink-2">
+                  <p className="mt-1 max-w-[56ch] text-body-sm text-ink-2">
                     {competency.objective[lang]}
                   </p>
                 </div>
 
                 <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
-                  <p className="text-[12px] font-bold text-ink">
-                    {copy.status[quiz.status]}
-                    <span className="text-ink-2"> · {copy.attempts(quiz.attempts)}</span>
+                  {/* The 44px is what holds this line level with the row's
+                      name and mark. The inner span is load-bearing: as direct
+                      flex children the status and the attempt count become
+                      separate flex items, and flex layout drops the space
+                      before the separator. */}
+                  <p className="text-label font-bold text-ink sm:flex sm:min-h-11 sm:items-center">
+                    <span>
+                      {copy.status[quiz.status]}
+                      <span className="text-ink-2"> · {copy.attempts(quiz.attempts)}</span>
+                    </span>
                   </p>
                   <Link
                     href={`/${lang}/learn/${competency.slug}/quiz`}
-                    className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[12px] font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none"
+                    className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none"
                   >
                     {copy.openQuiz}
                   </Link>
@@ -311,7 +341,7 @@ export default async function Learn({
             data-report-status={
               progress.reportSubmitted ? 'submitted' : progress.allPassed ? 'open' : 'locked'
             }
-            className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-center"
+            className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
           >
             <span
               aria-hidden
@@ -319,27 +349,27 @@ export default async function Learn({
                 progress.reportSubmitted
                   ? 'bg-oxblood text-white'
                   : progress.allPassed
-                    ? 'relative text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood)]'
+                    ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood),inset_0_-5px_0_0_var(--oxblood)]'
                     : 'text-ink shadow-[inset_0_0_0_2px_var(--blue-grey)]'
               }`}
             >
               <ReportMark className="size-[19px]" />
-              {progress.allPassed && !progress.reportSubmitted && (
-                <span className="absolute right-1 bottom-1 size-1.5 rounded-full bg-oxblood" />
-              )}
             </span>
 
             <div className="min-w-0">
-              <h3 className="flex min-h-11 items-center text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
+              {/* Not a link, so the 44px lives on the heading here — it is
+                  holding the row's first line level with the mark beside it,
+                  not offering a target. */}
+              <h3 className="flex min-h-11 items-center text-title font-bold">
                 {copy.capstoneHeading}
               </h3>
-              <p className="mt-1 max-w-[62ch] text-[13.5px] leading-[1.55] text-ink-2">
+              <p className="mt-1 max-w-[56ch] text-body-sm text-ink-2">
                 {progress.allPassed ? copy.capstoneExplanation : copy.capstoneLocked}
               </p>
             </div>
 
             <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
-              <p className="text-[12px] font-bold text-ink">
+              <p className="text-label font-bold text-ink sm:flex sm:min-h-11 sm:items-center">
                 {progress.reportSubmitted
                   ? copy.capstoneSubmitted
                   : progress.allPassed
@@ -349,7 +379,7 @@ export default async function Learn({
               {(progress.allPassed || progress.reportSubmitted) && (
                 <Link
                   href={`/${lang}/audit`}
-                  className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[12px] font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none"
+                  className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none"
                 >
                   {copy.capstoneOpen}
                 </Link>
@@ -360,8 +390,16 @@ export default async function Learn({
       </section>
 
       {/* Visible on the page every Learner lands on, before any first
-          attempt — being watched is stated, not discovered (ADR-0005, #30). */}
-      <p className="mt-3.5 px-2 text-[11px] leading-[1.7]">{copy.visibility}</p>
+          attempt — being watched is stated, not discovered (ADR-0005, #30).
+
+          Body-sm, the step DESIGN.md names for this notice, and held to the
+          reading measure. It was 11px running the full width of the board —
+          the smallest type and the longest line on a page whose second
+          Competency teaches that those two are how text stops being readable.
+          A notice about who can see you may not be the fine print. Full ink,
+          not faded: this sits on the bed rather than on a white card, and the
+          fade is allowed only on white. */}
+      <p className="mt-3.5 max-w-[56ch] px-1.5 text-body-sm">{copy.visibility}</p>
     </main>
   )
 }

@@ -66,10 +66,13 @@ test('the programme contents shows the whole route without inventing a next Comp
   expect(text).toContain('Choose any Competency')
   expect(html).toContain('role="progressbar"')
   expect(html).toContain('aria-label="Stage 1 progress"')
-  expect(html).toContain('aria-label="Programme stages"')
+  // The region is named by its own heading rather than by a duplicate
+  // `aria-label`, which made a screen reader announce the name twice.
+  expect(html).toContain('aria-labelledby="programme-stages"')
+  expect(html).toContain('id="programme-stages"')
   expect(html).toContain('style="width:0%"')
   const stageSection = html.match(
-    /<section aria-label="Programme stages">[\s\S]*?<\/section>/,
+    /<section aria-labelledby="programme-stages">[\s\S]*?<\/section>/,
   )?.[0]
   expect(stageSection).toBeDefined()
   expect(stageSection).not.toContain('<a')

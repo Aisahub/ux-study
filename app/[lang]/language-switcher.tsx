@@ -35,14 +35,14 @@ export function LanguageSwitcher({ current }: { current: Language }) {
       <span
         lang={current}
         aria-current="true"
-        className="flex h-[34px] items-center rounded-full bg-oxblood px-3 text-[12px] font-bold text-white"
+        className="flex h-[34px] items-center rounded-full bg-oxblood px-3 text-label font-bold text-white"
       >
         {LABEL[current]}
       </span>
       <Link
         href={counterpartPath(pathname, target)}
         lang={target}
-        className="flex h-[34px] items-center rounded-full px-3 text-[12px] font-bold text-ink-2"
+        className="flex h-[34px] items-center rounded-full px-3 text-label font-bold text-ink-2"
       >
         {LABEL[target]}
       </Link>
