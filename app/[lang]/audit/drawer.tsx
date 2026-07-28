@@ -18,6 +18,7 @@ const COPY: Record<
   Language,
   {
     toggle: string
+    close: string
     formHeading: string
     element: string
     elementHint: string
@@ -36,6 +37,7 @@ const COPY: Record<
 > = {
   en: {
     toggle: 'Findings',
+    close: 'Close',
     formHeading: 'New Finding',
     element: 'Element',
     elementHint: 'Click it on the page.',
@@ -61,6 +63,7 @@ const COPY: Record<
   },
   ko: {
     toggle: 'Finding 목록',
+    close: '닫기',
     formHeading: '새 Finding',
     element: '요소',
     elementHint: '페이지에서 직접 클릭해 선택하세요.',
@@ -104,6 +107,7 @@ export function FindingsDrawer({
 }) {
   const copy = COPY[lang]
   const [open, setOpen] = useState(true)
+  const [mobileSheet, setMobileSheet] = useState<'none' | 'composer' | 'list'>('none')
   const [element, setElement] = useState('')
   const [principle, setPrinciple] = useState('')
   const [description, setDescription] = useState('')
@@ -116,7 +120,13 @@ export function FindingsDrawer({
       // Only the embedded Practice Page speaks this message; same origin.
       if (event.origin !== window.location.origin) return
       const data = event.data as { type?: string; element?: string | null }
-      if (data?.type === 'element-selected') setElement(data.element ?? '')
+      if (data?.type === 'element-selected') {
+        const selected = data.element ?? ''
+        setElement(selected)
+        if (selected !== '' && window.matchMedia('(max-width: 1099px)').matches) {
+          setMobileSheet('composer')
+        }
+      }
     }
     window.addEventListener('message', onMessage)
     return () => window.removeEventListener('message', onMessage)
@@ -124,123 +134,193 @@ export function FindingsDrawer({
 
   const missing = Math.max(0, minFindings - findings.length)
 
-  return (
-    <aside className="flex w-full flex-col gap-4 border-l border-zinc-200 p-4 lg:max-w-sm dark:border-zinc-800">
+  function clearDraft() {
+    setElement('')
+    setPrinciple('')
+    setDescription('')
+    setFix('')
+  }
+
+  function saveCurrentFinding(onSaved?: () => void) {
+    startTransition(async () => {
+      const result = await saveFinding(lang, { element, principle, description, fix })
+      setError(result)
+      if (result === null) {
+        clearDraft()
+        onSaved?.()
+      }
+    })
+  }
+
+  const findingForm = (onSaved?: () => void) => (
+    <section className="flex flex-col gap-2">
+      <h2 className="text-sm font-medium text-zinc-500">{copy.formHeading}</h2>
+      <label className="text-sm">
+        {copy.element}
+        <output className="mt-1 block rounded-md border border-zinc-200 px-2 py-1.5 font-mono text-xs dark:border-zinc-800">
+          {element === '' ? copy.elementHint : element}
+        </output>
+      </label>
+      <label className="text-sm">
+        {copy.principle}
+        <select
+          value={principle}
+          onChange={(event) => setPrinciple(event.target.value)}
+          className="mt-1 block min-h-11 w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
+        >
+          <option value="">{copy.principlePlaceholder}</option>
+          {glossary.map((entry) => (
+            <option key={entry.slug} value={entry.slug}>
+              {entry.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className="text-sm">
+        {copy.description}
+        <textarea
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+          rows={3}
+          className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
+        />
+      </label>
+      <label className="text-sm">
+        {copy.fix}
+        <textarea
+          value={fix}
+          onChange={(event) => setFix(event.target.value)}
+          rows={2}
+          className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
+        />
+      </label>
       <button
         type="button"
-        onClick={() => setOpen(!open)}
-        className="w-fit text-sm font-medium underline-offset-4 hover:underline"
-        aria-expanded={open}
+        disabled={pending}
+        onClick={() => saveCurrentFinding(onSaved)}
+        className="min-h-11 w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40 dark:bg-white dark:text-zinc-900"
       >
-        {copy.toggle} {open ? '▾' : '▸'}
+        {copy.add}
       </button>
+      {error && <p className="text-sm text-red-700 dark:text-red-400">{copy.errors[error] ?? error}</p>}
+    </section>
+  )
 
-      {open && (
-        <>
-          <section className="flex flex-col gap-2">
-            <h2 className="text-sm font-medium text-zinc-500">{copy.formHeading}</h2>
-            <label className="text-sm">
-              {copy.element}
-              <output className="mt-1 block rounded-md border border-zinc-200 px-2 py-1.5 font-mono text-xs dark:border-zinc-800">
-                {element === '' ? copy.elementHint : element}
-              </output>
-            </label>
-            <label className="text-sm">
-              {copy.principle}
-              <select
-                value={principle}
-                onChange={(event) => setPrinciple(event.target.value)}
-                className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
-              >
-                <option value="">{copy.principlePlaceholder}</option>
-                {glossary.map((entry) => (
-                  <option key={entry.slug} value={entry.slug}>
-                    {entry.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="text-sm">
-              {copy.description}
-              <textarea
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
-                rows={3}
-                className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
-              />
-            </label>
-            <label className="text-sm">
-              {copy.fix}
-              <textarea
-                value={fix}
-                onChange={(event) => setFix(event.target.value)}
-                rows={2}
-                className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
-              />
-            </label>
+  const savedFindings = (
+    <section className="flex flex-col gap-2">
+      <h2 className="text-sm font-medium text-zinc-500">{copy.saved(findings.length)}</h2>
+      <ul className="flex flex-col gap-2">
+        {findings.map((finding) => (
+          <li key={finding.id} className="rounded-md border border-zinc-200 p-2 text-sm dark:border-zinc-800">
+            <p className="font-mono text-xs">{finding.element}</p>
+            <p className="mt-1">{finding.description}</p>
             <button
               type="button"
-              disabled={pending}
-              onClick={() =>
-                startTransition(async () => {
-                  const result = await saveFinding(lang, { element, principle, description, fix })
-                  setError(result)
-                  if (result === null) {
-                    setElement('')
-                    setPrinciple('')
-                    setDescription('')
-                    setFix('')
-                  }
-                })
-              }
-              className="w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40 dark:bg-white dark:text-zinc-900"
+              onClick={() => startTransition(() => removeFinding(lang, finding.id))}
+              className="mt-1 min-h-11 text-xs text-zinc-500 underline-offset-4 hover:underline"
             >
-              {copy.add}
+              {copy.remove}
             </button>
-            {error && <p className="text-sm text-red-700 dark:text-red-400">{copy.errors[error] ?? error}</p>}
-          </section>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
 
-          <section className="flex flex-col gap-2">
-            <h2 className="text-sm font-medium text-zinc-500">{copy.saved(findings.length)}</h2>
-            <ul className="flex flex-col gap-2">
-              {findings.map((finding) => (
-                <li key={finding.id} className="rounded-md border border-zinc-200 p-2 text-sm dark:border-zinc-800">
-                  <p className="font-mono text-xs">{finding.element}</p>
-                  <p className="mt-1">{finding.description}</p>
-                  <button
-                    type="button"
-                    onClick={() => startTransition(() => removeFinding(lang, finding.id))}
-                    className="mt-1 text-xs text-zinc-500 underline-offset-4 hover:underline"
-                  >
-                    {copy.remove}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="mt-auto flex flex-col gap-2 border-t border-zinc-200 pt-3 dark:border-zinc-800">
-            {/* Told before submitting, not at the moment of refusal (#24). */}
-            {missing > 0 ? (
-              <p className="text-sm text-zinc-500">{copy.needMore(missing)}</p>
-            ) : (
-              <p className="text-sm text-zinc-500">{copy.submitWarning}</p>
-            )}
-            <button
-              type="button"
-              disabled={pending || missing > 0}
-              onClick={() =>
-                startTransition(async () => {
-                  setError(await submitReport(lang))
-                })
-              }
-              className="w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40 dark:bg-white dark:text-zinc-900"
-            >
-              {copy.submit}
-            </button>
-          </section>
-        </>
+  const submission = (
+    <section className="mt-auto flex flex-col gap-2 border-t border-zinc-200 pt-3 dark:border-zinc-800">
+      {/* Told before submitting, not at the moment of refusal (#24). */}
+      {missing > 0 ? (
+        <p className="text-sm text-zinc-500">{copy.needMore(missing)}</p>
+      ) : (
+        <p className="text-sm text-zinc-500">{copy.submitWarning}</p>
       )}
-    </aside>
+      <button
+        type="button"
+        disabled={pending || missing > 0}
+        onClick={() =>
+          startTransition(async () => {
+            setError(await submitReport(lang))
+          })
+        }
+        className="min-h-11 w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40 dark:bg-white dark:text-zinc-900"
+      >
+        {copy.submit}
+      </button>
+    </section>
+  )
+
+  return (
+    <>
+      {/* A phone cannot keep the Practice Page and a growing report useful at
+          the same time. The page therefore owns the screen: selecting an
+          element opens one focused composer, saving returns to the page, and
+          the floating count opens the report as a separate surface (#37). */}
+      <div className="pointer-events-none absolute inset-0 z-20 wide:hidden">
+        {mobileSheet === 'none' && (
+          <button
+            type="button"
+            onClick={() => setMobileSheet('list')}
+            className="pointer-events-auto absolute right-3 bottom-3 flex min-h-14 items-center rounded-full bg-oxblood px-5 text-sm font-bold text-white shadow-card"
+          >
+            {copy.toggle} · {findings.length}
+          </button>
+        )}
+
+        {mobileSheet === 'composer' && (
+          <aside className="pointer-events-auto absolute inset-0 flex flex-col rounded-card bg-surface p-4 shadow-card">
+            <div className="flex items-center justify-between pb-3">
+              <h2 className="text-base font-bold">{copy.formHeading}</h2>
+              <button
+                type="button"
+                onClick={() => setMobileSheet('none')}
+                className="min-h-11 px-2 text-sm font-medium text-zinc-500"
+              >
+                {copy.close}
+              </button>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto">{findingForm(() => setMobileSheet('none'))}</div>
+          </aside>
+        )}
+
+        {mobileSheet === 'list' && (
+          <aside className="pointer-events-auto absolute inset-0 flex flex-col gap-4 overflow-y-auto rounded-card bg-surface p-4 shadow-card">
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-bold">{copy.saved(findings.length)}</h2>
+              <button
+                type="button"
+                onClick={() => setMobileSheet('none')}
+                className="min-h-11 px-2 text-sm font-medium text-zinc-500"
+              >
+                {copy.close}
+              </button>
+            </div>
+            {savedFindings}
+            {submission}
+          </aside>
+        )}
+      </div>
+
+      {/* The desktop keeps the established two-surface report: the page and
+          its drawer remain visible beside one another. */}
+      <aside className="hidden w-full flex-col gap-4 border-l border-zinc-200 p-4 wide:flex wide:max-w-sm dark:border-zinc-800">
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          className="min-h-11 w-fit text-sm font-medium underline-offset-4 hover:underline"
+          aria-expanded={open}
+        >
+          {copy.toggle} {open ? '▾' : '▸'}
+        </button>
+
+        {open && (
+          <>
+            {findingForm()}
+            {savedFindings}
+            {submission}
+          </>
+        )}
+      </aside>
+    </>
   )
 }

@@ -46,9 +46,33 @@
     0 3px 6px rgb(28 44 52 / 0.06);
   /* The bed is a brighter frost inside the board, so its edge is a top sheen. */
   --sheen-bed: inset 0 1px 0 rgb(255 255 255 / 0.55);
+
+  /* ── the bottom bar ──────────────────────────────────── */
+  /* Below `sm` the navigation rail becomes a fixed bottom bar (DESIGN.md), so
+     it is out of flow and the page has to reserve its height itself. One
+     value, read by the bar and by the layout that clears it, because the two
+     drifting apart means either a gap under the page or a mark no thumb can
+     reach. 8px padding + a 44px mark + 5px + two lines of 12px label + 8px. */
+  --bottom-bar: calc(99px + env(safe-area-inset-bottom));
+
+  /* ── the item screen's floor ─────────────────────────── */
+  /* A Gate Quiz artefact is authored HTML, and in thirteen of the thirty-two
+     items its arrangement is the question — two panes compared, a row of
+     figures read across. Below this width it is panned rather than reflowed,
+     so a Learner on a phone judges the screen the author drew. Wide enough for
+     a three-pane split to still be legible; see screen.tsx. */
+  --item-screen-floor: 720px;
 }
 
 @theme inline {
+  /* Where the working area may take its second column. Not Tailwind's lg
+     (1024px): iPad Pro 13" portrait is exactly 1024 points wide, and at that
+     width the two-column grid is a landscape layout on a portrait screen.
+     1100 sits in the gap between the widest portrait tablet (1024) and the
+     narrowest landscape one (1180) — so the second column appears by available
+     width, never by accident of a device class straddling the default. */
+  --breakpoint-wide: 1100px;
+
   --color-ground: var(--ground);
   --color-bed: var(--ground-bed);
   --color-surface: var(--surface);

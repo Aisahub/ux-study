@@ -44,15 +44,28 @@ const ICON: Record<RailId, React.ReactNode> = {
  * The rail. A client component only because the active mark needs the current
  * path; every item it renders was decided on the server (see platform-nav).
  *
- * Labels live in `aria-label` and `title` rather than under the glyphs, which
- * is how the approved design draws it. Worth revisiting: an icon-only rail is
- * exactly the kind of thing this platform trains Learners to flag.
+ * Two forms, one component. From `sm` up it is the vertical rail DESIGN.md
+ * draws: a column of circular marks, labels in `aria-label` alone. Below `sm`
+ * it becomes the bottom bar — the same marks, laid along the bottom edge,
+ * where a thumb can reach them.
+ *
+ * The bar shows its labels. Icon-only was survivable on the rail, where a
+ * tooltip and a wide screen sit behind every glyph; on a phone there is no
+ * hover to recover the word from, and a platform that teaches Perceived
+ * clickability may not ship six unlabelled circles as its only navigation.
+ *
+ * It is fixed rather than stacked below the content because the pages here are
+ * long and self-paced: navigation a Learner has to scroll to the end of a Gate
+ * Quiz to reach is navigation they will not use. The layout reserves the
+ * matching space, so nothing is ever hidden underneath it.
  */
 export function NavRail({ items }: { items: RailItem[] }) {
   const pathname = usePathname()
 
   return (
-    <nav className="flex flex-col items-center gap-3 py-2.5">
+    <nav
+      className="fixed inset-x-0 bottom-0 z-40 flex h-(--bottom-bar) items-start justify-around gap-1 bg-white/72 px-2 pt-2 pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_2px_rgb(28_44_52/0.10),0_-10px_24px_rgb(28_44_52/0.06)] backdrop-blur-[22px] backdrop-saturate-150 sm:static sm:h-auto sm:flex-col sm:items-center sm:justify-start sm:gap-3 sm:bg-transparent sm:px-0 sm:pt-2.5 sm:pb-2.5 sm:shadow-none sm:backdrop-blur-none"
+    >
       {items.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`)
         return (
@@ -62,17 +75,35 @@ export function NavRail({ items }: { items: RailItem[] }) {
             title={item.label}
             aria-label={item.label}
             aria-current={active ? 'page' : undefined}
-            className={`grid size-11 place-items-center rounded-full ${
-              active ? 'bg-oxblood text-white' : 'bg-surface text-ink-2 shadow-pill'
-            }`}
+            className="flex min-w-0 flex-1 flex-col items-center gap-[5px] rounded-[14px] py-0.5 sm:flex-none sm:gap-0 sm:py-0"
           >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden
-              className="size-[19px] fill-none stroke-current stroke-[1.7] [stroke-linecap:round] [stroke-linejoin:round]"
+            <span
+              className={`grid size-11 shrink-0 place-items-center rounded-full ${
+                active ? 'bg-oxblood text-white' : 'bg-surface text-ink-2 shadow-pill'
+              }`}
             >
-              {ICON[item.id]}
-            </svg>
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden
+                className="size-[19px] fill-none stroke-current stroke-[1.7] [stroke-linecap:round] [stroke-linejoin:round]"
+              >
+                {ICON[item.id]}
+              </svg>
+            </span>
+            {/* Two lines' worth of room is reserved whether or not the label
+                needs it, so the bar is the same height for a Learner with two
+                marks and a Maintainer with six — a navigation that changed
+                height as you moved through it would be the Consistency defect
+                this platform's third Competency teaches. Labels are never
+                shortened for the bar (see platform-nav). */}
+            <span
+              aria-hidden
+              className={`line-clamp-2 min-h-[34px] w-full text-center text-[12px] leading-[1.4] font-bold text-balance sm:hidden ${
+                active ? 'text-oxblood' : 'text-ink-2'
+              }`}
+            >
+              {item.label}
+            </span>
           </Link>
         )
       })}
