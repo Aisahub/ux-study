@@ -63,7 +63,7 @@ test('the audit is locked until all four Gate Quizzes pass, and says so over the
   expect(text).not.toContain('New Finding')
 })
 
-test('with the quizzes passed, the audit shows the brief and the page beside its drawer', async () => {
+test('with the quizzes passed, the audit shows the brief, the page, and the phone Finding entry point', async () => {
   const email = freshLearner()
   await passAllQuizzes(email)
   const cookie = await sessionCookieFor(email)
@@ -75,6 +75,7 @@ test('with the quizzes passed, the audit shows the brief and the page beside its
   expect(text).toContain('at least three Findings')
   expect(html).toContain(`src="/en/audit/page"`)
   expect(text).toContain('New Finding')
+  expect(text).toContain('Findings · 0')
 })
 
 test('before submission, no response carries the manifest, the count, or any defect status', async () => {

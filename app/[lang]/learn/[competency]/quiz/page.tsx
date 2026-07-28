@@ -143,7 +143,7 @@ export default async function QuizStart({
           it is a link. The note says why discarding is safe rather than
           leaving it to be guessed.
         */}
-        <section className="rounded-card bg-sand p-[26px] shadow-warm">
+        <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
           <p className="max-w-[56ch] text-[16px] leading-[1.55]">{copy.rules(drawSize, passThreshold)}</p>
           <form action={start}>
             <button
@@ -168,7 +168,7 @@ export default async function QuizStart({
         </section>
 
         {attempts.length > 0 && (
-          <section className="rounded-card bg-surface p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
             <h2 className="mb-4.5 font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
               {copy.history}
             </h2>
@@ -187,13 +187,15 @@ export default async function QuizStart({
                           )
                         : copy.open}
                     </span>
-                    <span className="text-[12px] font-bold whitespace-nowrap text-ink-2">
+                    {/* Narrow, the verdict drops under the date rather than
+                        competing with it for a third column that is not there. */}
+                    <span className="col-start-2 mt-1 text-[12px] font-bold whitespace-nowrap text-ink-2 empty:mt-0 sm:col-start-auto sm:mt-0">
                       {state === 'passed' ? copy.passed : state === 'failed' ? copy.failed : ''}
                     </span>
                   </>
                 )
                 const cells =
-                  'grid grid-cols-[14px_minmax(0,1fr)_auto] items-center gap-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5'
+                  'grid grid-cols-[14px_minmax(0,1fr)] items-start gap-x-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5 sm:grid-cols-[14px_minmax(0,1fr)_auto] sm:items-center'
 
                 // An open attempt has no verdict to read, so it is not a way
                 // back into one — it is reached by the button above.

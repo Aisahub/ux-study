@@ -143,7 +143,7 @@ export default async function AttemptPage({
       <div className="flex flex-col gap-3.5">
         {attempt.passed ? (
           // Nothing is outstanding, so nothing here wears the warm field.
-          <section className="rounded-card bg-surface p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
             <p className="max-w-[56ch] text-[16px] leading-[1.55]">
               {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.passedExplanation}
             </p>
@@ -152,7 +152,7 @@ export default async function AttemptPage({
           // The one warm field: the single next action, which is to go again.
           // The prose points down at the list below before the button is
           // pressed — the retry is offered, not urged.
-          <section className="rounded-card bg-sand p-[26px] shadow-warm">
+          <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
             <p className="max-w-[56ch] text-[16px] leading-[1.55]">
               {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.failedExplanation}
             </p>
@@ -172,7 +172,7 @@ export default async function AttemptPage({
             the Learner back to the article section by section (ADR-0006), and a
             summary offered in its place would be read instead of the article. */}
         {attempt.passed && competency.explanation && (
-          <section className="rounded-card bg-surface p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
             <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
               {copy.summaryHeading}
             </h2>
@@ -183,7 +183,7 @@ export default async function AttemptPage({
         )}
 
         {!attempt.passed && wrong.length > 0 && (
-          <section className="rounded-card bg-surface p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
             <h2 className="mb-4.5 font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
               {copy.wrongHeading}
             </h2>

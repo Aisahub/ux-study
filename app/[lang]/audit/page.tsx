@@ -199,7 +199,7 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
           <p>{briefField('advice')[lang]}</p>
         </div>
       </details>
-      <div className="flex flex-1 flex-col gap-4 lg:flex-row">
+      <div className="relative flex min-h-[70vh] flex-1 flex-col gap-4 wide:flex-row">
         <iframe
           src={`/${lang}/audit/page`}
           title={briefField('title')[lang]}

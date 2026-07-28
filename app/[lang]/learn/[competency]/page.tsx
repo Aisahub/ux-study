@@ -159,9 +159,9 @@ export default async function CompetencyPage({
         </div>
       </div>
 
-      <div className="grid gap-3.5 lg:grid-cols-[minmax(0,1.62fr)_minmax(0,1fr)]">
+      <div className="grid gap-3.5 wide:grid-cols-[minmax(0,1.62fr)_minmax(0,1fr)]">
         {/* ── what this station is for, and where to aim it ── */}
-        <section className="rounded-card bg-surface p-[26px] shadow-card">
+        <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
           <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
             {copy.objective}
           </h2>
@@ -184,7 +184,7 @@ export default async function CompetencyPage({
         {quiz.status === 'passed' ? (
           // Nothing here is outstanding any more, so nothing here wears the
           // warm field — retrying is offered as a link, not as a second action.
-          <section className="flex flex-col rounded-card bg-surface p-[26px] shadow-card">
+          <section className="order-first flex flex-col rounded-card bg-surface p-5 shadow-card sm:p-[26px] wide:order-none">
             <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
               {copy.quizPassed}
             </h2>
@@ -197,7 +197,7 @@ export default async function CompetencyPage({
             </Link>
           </section>
         ) : (
-          <section className="flex flex-col rounded-card bg-sand p-[26px] shadow-warm">
+          <section className="order-first flex flex-col rounded-card bg-sand p-5 sm:p-[26px] shadow-warm wide:order-none">
             <span className="text-[11px] font-bold tracking-[0.2em] text-ink-2">
               {copy.nextKicker}
             </span>
@@ -218,7 +218,7 @@ export default async function CompetencyPage({
         )}
 
         {/* ── the questions, and the article they are for ── */}
-        <section className="rounded-card bg-surface p-[26px] shadow-card">
+        <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
           <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
             {copy.questionsHeading}
           </h2>
@@ -241,7 +241,7 @@ export default async function CompetencyPage({
         </section>
 
         {/* ── what the questions are carried into ────────── */}
-        <section className="flex flex-col rounded-card bg-surface p-[26px] shadow-card">
+        <section className="flex flex-col rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
           <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
             {copy.articleTitle}
           </h2>

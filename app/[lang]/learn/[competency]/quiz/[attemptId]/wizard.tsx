@@ -78,6 +78,7 @@ const TRACK_AHEAD =
  */
 function ItemStop({
   label,
+  short,
   meta,
   answered,
   behind,
@@ -86,6 +87,8 @@ function ItemStop({
   onSelect,
 }: {
   label: string
+  /** The same stop said in the room a phone gives it: the number alone. */
+  short: string
   meta: string
   answered: boolean
   behind: boolean
@@ -123,10 +126,18 @@ function ItemStop({
               : 'bg-white shadow-[inset_0_0_0_4px_var(--blue-grey)]'
           }`}
         />
-        <span className={`mt-[15px] block px-1.5 text-[13.5px] leading-[1.4] ${answered ? 'font-bold' : ''}`}>
-          {label}
+        {/* Five stops across a phone leave about 55px each, which breaks
+            "1번 문항" across two lines and turns a progress indicator into a
+            paragraph. The wizard already says which item this is in words
+            above the line ("5문항 중 1번째"), so narrow the marks carry only
+            their number and the line stays one line. */}
+        <span
+          className={`mt-[15px] block px-1.5 text-[13.5px] leading-[1.4] ${answered ? 'font-bold' : ''}`}
+        >
+          <span className="sm:hidden">{short}</span>
+          <span className="hidden sm:inline">{label}</span>
         </span>
-        <span className="mt-[5px] block text-[12px] font-bold text-ink-2">{meta}</span>
+        <span className="mt-[5px] hidden text-[12px] font-bold text-ink-2 sm:block">{meta}</span>
       </button>
     </div>
   )
@@ -182,7 +193,7 @@ export function QuizWizard({
   return (
     <main className="mx-auto w-full max-w-[880px] px-0.5">
       {/* ── the line, carrying the five drawn items ─────── */}
-      <section className="rounded-card bg-surface p-[26px] shadow-card">
+      <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
         <p className="text-[12px] font-bold text-ink-2">{copy.progress(current + 1, items.length)}</p>
         <div className="mt-3.5 grid grid-cols-5">
           {items.map((candidate, index) => (
@@ -190,6 +201,7 @@ export function QuizWizard({
               key={candidate.slug}
               first={index === 0}
               label={copy.stop(index + 1)}
+              short={String(index + 1)}
               answered={choices[candidate.slug] !== undefined}
               meta={choices[candidate.slug] !== undefined ? copy.answered : copy.notAnswered}
               behind={index <= current}
@@ -201,7 +213,7 @@ export function QuizWizard({
       </section>
 
       {/* ── the item under judgment ─────────────────────── */}
-      <section className="mt-3.5 rounded-card bg-surface p-[26px] shadow-card">
+      <section className="mt-3.5 rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
         {/*
           One channel, never both. An item with a drawn screen keeps its prose
           as the frame's accessible name rather than printing it alongside: a
