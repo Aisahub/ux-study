@@ -25,7 +25,6 @@ const COPY: Record<
     reportDraft: string
     reportNone: string
     complete: string
-    signOut: string
   }
 > = {
   en: {
@@ -41,7 +40,6 @@ const COPY: Record<
     reportDraft: 'Draft in progress',
     reportNone: 'Not started',
     complete: 'Stage 1 complete',
-    signOut: 'Sign out',
   },
   ko: {
     heading: '나의 진행',
@@ -56,7 +54,6 @@ const COPY: Record<
     reportDraft: '작성 중',
     reportNone: '시작 전',
     complete: '1단계 수료',
-    signOut: '로그아웃',
   },
 }
 
@@ -124,12 +121,6 @@ export default async function Me({ params }: { params: Promise<{ lang: string }>
       {isComplete(progress) && (
         <p className="text-sm font-medium text-green-700 dark:text-green-400">{copy.complete}</p>
       )}
-
-      <form action={`/api/auth/signout?lang=${lang}`} method="POST">
-        <button type="submit" className="text-sm text-zinc-500 underline-offset-4 hover:underline">
-          {copy.signOut}
-        </button>
-      </form>
     </main>
   )
 }

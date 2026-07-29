@@ -353,9 +353,11 @@ The exception is narrow. It applies only to a list of peers, only to the identic
 - **Internal Padding:** `26px`.
 
 ### Navigation
-- **Rail:** A `78px` column of `44px` circular icon buttons on white pills, the active one filled oxblood with a white glyph. Labels live in `aria-label`, not on screen.
+- **Rail:** A `78px` column in two parts. The **marks** sit at the top — `44px` circular icon buttons on white pills, the active one filled oxblood with a white glyph, labels in `aria-label` and not on screen. **Signing out** sits at the foot, drawn as one more mark and never filled, because it is an action and not a place. The gap between the two absorbs whatever height the marks do not use, so the control lands identically for a Learner with two marks and a Maintainer with six. The column is sticky and viewport-tall: the foot has to be the foot of the screen, or on a Gate Quiz signing out is several screens below the fold.
 - **Language switcher:** A white pill holding two segments; the current language is an oxblood pill with white text, the other is plain ink. It navigates to the counterpart of the current page, never to a section root.
-- **Mobile:** The rail becomes a bottom bar with the same marks.
+- **Mobile:** Below `640px` the rail's two parts go to two different edges. The marks become the bottom bar, where a thumb reaches them and where they show their labels. Signing out goes to the **top bar**, last in the trailing group after the account pill — the bottom bar is full at six marks, and a seventh puts every target under `44px` on a `320px` screen. It sits after the pill rather than before the language switcher so that who you are and how you leave stay adjacent, and so the pill, the only item in that group that truncates, keeps the slack between two fixed widths.
+
+  A control that changes place with width is normally the Consistency defect the third Competency teaches, so the reason is recorded here rather than left to be rediscovered: on a phone the rail does not shrink, it is dismantled, and its two parts are re-housed in the two bars that remain. What stays constant is the drawing — the same `44px` mark, at both widths — and that the control is never a link.
 
 ### Route Line (signature component)
 The Gate Quiz's progress indicator. A horizontal run of stations uses a `4px` solid oxblood line before the current position and a `4px` dotted blue-grey line after it. Stations are `24px` marks: filled oxblood when answered and hollow blue-grey when unanswered. A `현재 위치` marker sits above the current item and is the only pointing element permitted on the page: the label is set in a sunk chip, with its point drawn rather than typed.
