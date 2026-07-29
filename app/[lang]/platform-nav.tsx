@@ -9,7 +9,7 @@ const COPY: Record<
 > = {
   en: {
     learn: 'Learn',
-    me: 'My progress',
+    me: 'My page',
     findings: 'Findings',
     learners: 'Learners',
     content: 'Content',
@@ -17,7 +17,7 @@ const COPY: Record<
   },
   ko: {
     learn: '학습',
-    me: '나의 진행',
+    me: '마이페이지',
     findings: 'Finding',
     learners: '학습자',
     content: '콘텐츠',
@@ -34,8 +34,14 @@ const COPY: Record<
  *
  * Signing out is not one of these items. It is not a place, so it is not a
  * link; it sits at the foot of the rail as its own control (see nav-rail).
- * Until 2026-07-29 it lived on My progress and nowhere else, which made
- * reaching that page the only way to leave.
+ * Until 2026-07-29 it lived on My page and nowhere else, which made reaching
+ * that page the only way to leave.
+ *
+ * That page was called My progress until the same day. It was renamed because
+ * the name was the duplication: it promised the sentence this overview already
+ * says — every Competency's status, its attempt count, the Stage total — and
+ * so restated all of it. Progress is Learn's to say; My page holds the account
+ * and the attempt history (#54).
  *
  * Two surfaces are deliberately absent. The Self-Audit Report has no
  * navigation slot of its own (#20) — it is the end of Stage 1, reached from
