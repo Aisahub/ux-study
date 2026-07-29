@@ -47,7 +47,7 @@ One pass through a Gate Quiz by one Learner. Records which items were drawn, wha
 _Avoid_: try, submission, run
 
 **Self-Audit Report** (자가 점검 리포트 / 自查报告):
-The artefact a Learner produces at the end of a Stage, testing whether they can *apply* what they know. Nobody frames the problem for them — finding it is the assessment. In Stage 1 the subject is the Practice Page. Whether and when the subject becomes a page from the Learner's own real client work is an open question, not a settled part of the design (ADR-0007). Written in the Learner's working language, but its Findings are structurally comparable across both languages because the element and the Principle are selections rather than typed text.
+The artefact a Learner produces at the end of a Stage, testing whether they can *apply* what they know. Nobody frames the problem for them — finding it is the assessment. In Stage 1 the subject is the Practice Page. Every Stage's subject is authored by this project so that the reference answer is known; auditing a page from the Learner's own real client work is not part of the programme at any Stage (ADR-0009). Written in the Learner's working language, but its Findings are structurally comparable across both languages because the element and the Principle are selections rather than typed text.
 _Avoid_: assignment, homework, project, final exam
 
 **Finding** (발견 / 发现):

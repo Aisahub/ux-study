@@ -45,7 +45,7 @@ Four mechanisms distinguish this from a generic course platform, and each was de
 - **Self-paced, no deadline.** Drop-out — not difficulty — is the primary failure mode. A Learner may sit mid-Stage for weeks.
 - **Distributed across time zones.** Anything that requires a person to notice something about another person does not work here; "just ask them" is unavailable between Seoul and Jakarta. This is why progress is displayed rather than discussed.
 - **Learning happens beside real work.** A Learner is a working developer or PM, not a student. The Glossary in particular is consulted mid-task.
-- **Both desktop and mobile are primary** (confirmed 2026-07-23). Learners advance the programme on their work machine *and* in fragments away from it. Every flow must complete on a phone — including answering a Gate Quiz and writing a Finding. The hardest case is the Self-Audit Report: examining the Practice Page for defects while composing Findings about it is a two-surface task that a phone gives one surface for. Future work owes that case a real answer rather than a desktop-only escape.
+- **Both desktop and mobile are primary** (confirmed 2026-07-23). Learners advance the programme on their work machine *and* in fragments away from it. Every flow must complete on a phone — including answering a Gate Quiz and writing a Finding. The hardest case is the Self-Audit Report: examining the Practice Page for defects while composing Findings about it is a two-surface task that a phone gives one surface for. That case was answered on 2026-07-27 (#37) and the answer is in `DESIGN.md`: below `1100px` the report becomes a finding-at-a-time flow, the Practice Page owning the screen until an element is selected. The obligation the sentence recorded still binds every future two-surface flow — a desktop-only escape is not an answer to one.
 - The programme runs on the team's standard stack — Next.js, Neon Postgres, Google sign-in — deliberately, so it is not new operational ground.
 
 ## Capabilities and Constraints
@@ -67,13 +67,13 @@ Four mechanisms distinguish this from a generic course platform, and each was de
 - No reproduction of NN/g article text or images. Cite and link only.
 - No disclosure of the Planted Defect count before submission — the Learner must look at the page rather than count toward a number.
 - The Findings library is unreachable until the reader has submitted their own report; before that it is an answer key.
+- No assessment against a Learner's own real client work, at any Stage. Every Self-Audit subject is authored by this project so the reference answer is known rather than inferred (ADR-0009). Reaching real work is the Glossary's job — a justification sentence used in a pull request — not a submission's.
 
 **Terminology is owned by `CONTEXT.md`** and is binding on interface copy. It carries an explicit _Avoid_ list per term — "student", "admin", "grader", "test", "homework", "question", "bug", and others are wrong in this product, not merely off-tone. English is canonical; Korean is the other Learner-facing language; Chinese glosses in `CONTEXT.md` are for the project team and never appear in the interface.
 
 **Open, not undecided-by-omission:**
 
-- Whether and when the Self-Audit subject becomes a page from the Learner's own real client work, rather than the authored Practice Page (ADR-0007).
-- Stage 2 and Stage 3 content is not authored yet. Only Stage 1's four Competencies exist.
+- Stage 2 and Stage 3 content is not authored yet. Only Stage 1's four Competencies exist, and neither later Stage has an authored subject for its Self-Audit Report — Stage 2's must additionally support detection by interaction (ADR-0009).
 - Peer Review is specified for Stage 3 and not built.
 
 ## Brand Commitments
