@@ -3,6 +3,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import { SignOut } from './sign-out'
+import type { Language } from '@/lib/language'
+
 export type RailId = 'learn' | 'me' | 'findings' | 'learners' | 'content' | 'allowlist'
 
 export interface RailItem {
@@ -58,13 +61,25 @@ const ICON: Record<RailId, React.ReactNode> = {
  * long and self-paced: navigation a Learner has to scroll to the end of a Gate
  * Quiz to reach is navigation they will not use. The layout reserves the
  * matching space, so nothing is ever hidden underneath it.
+ *
+ * From `sm` up the rail is two parts, not one: the marks at the top and
+ * signing out at the foot, with the gap between them absorbing whatever height
+ * the marks do not use — two for a Learner, six for a Maintainer.
+ *
+ * That foot has to be the foot of the *viewport*, which is why the column is
+ * sticky and viewport-tall here. Left to stretch with the grid row it would be
+ * as tall as the page, and on a Gate Quiz that puts signing out several
+ * screens below the fold — the same defect the paragraph above refuses for the
+ * bottom bar, arrived at from the other side. `min-h` rather than `h` so that
+ * a viewport too short for six marks and the control grows the column and
+ * scrolls instead of overlapping them.
  */
-export function NavRail({ items }: { items: RailItem[] }) {
+export function NavRail({ items, lang }: { items: RailItem[]; lang: Language }) {
   const pathname = usePathname()
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 flex h-(--bottom-bar) items-start justify-around gap-1 bg-white/72 px-2 pt-2 pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_2px_rgb(28_44_52/0.10),0_-10px_24px_rgb(28_44_52/0.06)] backdrop-blur-[22px] backdrop-saturate-150 sm:static sm:h-auto sm:flex-col sm:items-center sm:justify-start sm:gap-3 sm:bg-transparent sm:px-0 sm:pt-2.5 sm:pb-2.5 sm:shadow-none sm:backdrop-blur-none"
+      className="fixed inset-x-0 bottom-0 z-40 flex h-(--bottom-bar) items-start justify-around gap-1 bg-white/72 px-2 pt-2 pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_2px_rgb(28_44_52/0.10),0_-10px_24px_rgb(28_44_52/0.06)] backdrop-blur-[22px] backdrop-saturate-150 sm:sticky sm:top-3.5 sm:h-auto sm:min-h-[calc(100dvh-28px)] sm:flex-col sm:items-center sm:justify-start sm:gap-3 sm:self-start sm:bg-transparent sm:px-0 sm:pt-2.5 sm:pb-2.5 sm:shadow-none sm:backdrop-blur-none"
     >
       {items.map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`)
@@ -112,6 +127,13 @@ export function NavRail({ items }: { items: RailItem[] }) {
           </Link>
         )
       })}
+
+      {/* `mt-auto` is what puts it at the foot: the marks keep their natural
+          height at the top and this takes up the slack, so the control sits in
+          the same place whether two marks are above it or six. Hidden below
+          `sm`, where the bar has no room for a seventh mark and the top bar
+          carries it instead (see the layout). */}
+      <SignOut lang={lang} className="mt-auto hidden shrink-0 sm:block" />
     </nav>
   )
 }

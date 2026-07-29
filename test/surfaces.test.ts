@@ -65,6 +65,39 @@ test('a signed-in Learner can reach the overview and their own progress from any
   expect(html).toContain('href="/en/me"')
 })
 
+test('a signed-in Learner can sign out from wherever they are, and only by asking for it', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  // A page that is not My progress: the shell carries the control now, so
+  // leaving no longer means finding your own record first.
+  const html = await (await fetch(`${BASE_URL}/en/learn/visual-hierarchy`, { headers: { cookie } })).text()
+  // Scripts dropped before matching: the streamed RSC payload repeats markup
+  // inside <script>, so a raw slice can pass on a shell that rendered nothing.
+  const shell = html
+    .slice(0, html.indexOf('<main'))
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+
+  expect(shell).toContain('action="/api/auth/signout?lang=en"')
+  // Never a link. The browser follows links on its own, so an image tag on any
+  // page could end the session without the Learner touching anything.
+  expect(shell).not.toContain('href="/api/auth/signout')
+})
+
+test('no route that ends a session answers GET', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+  const token = cookie.split('=')[1]
+
+  const response = await fetch(`${BASE_URL}/api/auth/signout?lang=en`, {
+    headers: { cookie },
+    redirect: 'manual',
+  })
+
+  // Refused, and — the part that matters — the session outlives the attempt.
+  expect(response.status).toBeGreaterThanOrEqual(400)
+  const rows = await testDb.select().from(schema.sessions).where(eq(schema.sessions.token, token))
+  expect(rows).toHaveLength(1)
+})
+
 test('the Self-Audit Report has no navigation slot of its own', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 
@@ -129,7 +162,10 @@ test('my progress shows attempts, report state and language preference, all deri
   expect(text).toContain('In progress')
   // The saved preference from the users row, not this device's path.
   expect(text).toContain('Korean')
-  expect(text).toContain('Sign out')
+  // Signing out is no longer this page's job — it moved to the rail on
+  // 2026-07-29. The shell's control carries its name in `aria-label` and shows
+  // no word, so nothing here should be visible text either.
+  expect(text).not.toContain('Sign out')
 })
 
 test('nothing on /me compares the Learner against a colleague', async () => {

@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation'
 
 import { LanguageSwitcher } from './language-switcher'
 import { PlatformNav } from './platform-nav'
+import { SignOut } from './sign-out'
 import { getSession } from '@/lib/auth'
 import { LANGUAGES, isLanguage, type Language } from '@/lib/language'
 import '../globals.css'
@@ -160,8 +161,9 @@ export default async function LanguageLayout({
               <div className="ml-auto flex min-w-0 items-center gap-2.5">
                 <LanguageSwitcher current={lang} />
                 {session && (
-                  // Not a menu: a link to the page that already holds sign-out
-                  // and this Learner's own record.
+                  // Not a menu: a link to this Learner's own record. It held
+                  // sign-out too until 2026-07-29, which is why the pill was
+                  // ever the way out of the platform.
                   <Link
                     href={`/${lang}/me`}
                     className="flex min-w-0 items-center gap-2.5 rounded-full bg-surface py-[5px] pr-[15px] pl-[5px] shadow-pill"
@@ -180,6 +182,13 @@ export default async function LanguageLayout({
                     </span>
                   </Link>
                 )}
+                {/* Below `sm` only: the bottom bar is full at six marks, so the
+                    rail's other half comes here instead of vanishing. Last in
+                    the row rather than beside the switcher, so the two pieces
+                    of "who you are and how you leave" stay adjacent, and the
+                    account pill — the one item here that truncates — keeps the
+                    slack between two fixed widths. */}
+                {session && <SignOut lang={lang} className="shrink-0 sm:hidden" />}
               </div>
             </div>
 

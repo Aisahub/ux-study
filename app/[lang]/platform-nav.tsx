@@ -30,7 +30,12 @@ const COPY: Record<
  *
  * Without these each page is an island: a Learner who lands on the overview
  * can go deeper into a Competency and nowhere else — not to their own
- * progress, and so not to the sign-out that lives there.
+ * progress, and not back out to the rest of the platform.
+ *
+ * Signing out is not one of these items. It is not a place, so it is not a
+ * link; it sits at the foot of the rail as its own control (see nav-rail).
+ * Until 2026-07-29 it lived on My progress and nowhere else, which made
+ * reaching that page the only way to leave.
  *
  * Two surfaces are deliberately absent. The Self-Audit Report has no
  * navigation slot of its own (#20) — it is the end of Stage 1, reached from
@@ -68,5 +73,5 @@ export async function PlatformNav({ lang }: { lang: Language }) {
     )
   }
 
-  return <NavRail items={items} />
+  return <NavRail items={items} lang={lang} />
 }
