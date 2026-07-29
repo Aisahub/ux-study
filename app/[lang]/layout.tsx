@@ -166,7 +166,12 @@ export default async function LanguageLayout({
                   // ever the way out of the platform.
                   <Link
                     href={`/${lang}/me`}
-                    className="flex min-w-0 items-center gap-2.5 rounded-full bg-surface py-[5px] pr-[15px] pl-[5px] shadow-pill"
+                    // min-w-11/min-h-11 below `sm`, not padding: with the text
+                    // gone the pill is its 30px avatar plus 5px, and 40px is
+                    // under the 44px this platform teaches. The target is the
+                    // link, so the minimum goes on the link and is measured on
+                    // the rendered box (ERR-206).
+                    className="flex min-h-11 min-w-11 items-center justify-center gap-2.5 rounded-full bg-surface p-[5px] shadow-pill sm:min-h-0 sm:min-w-0 sm:justify-start sm:py-[5px] sm:pr-[15px] sm:pl-[5px]"
                   >
                     <span
                       aria-hidden
@@ -174,7 +179,16 @@ export default async function LanguageLayout({
                     >
                       {session.email.slice(0, 1).toUpperCase()}
                     </span>
-                    <span className="min-w-0 truncate text-body-sm leading-tight font-bold">
+                    {/* Below `sm` the pill is the avatar alone. There is room
+                        for exactly 44px here once the switcher and sign-out
+                        have taken theirs, and 44px is the avatar — so the text
+                        was not shrinking, it was being shown as "c…" over a
+                        half-drawn "Mai". A truncate that truncates everything
+                        is not a graceful degradation, it is a defect on the
+                        platform that teaches Readability. The address and the
+                        role are on My page, one tap away, which is what that
+                        page is for. */}
+                    <span className="hidden min-w-0 truncate text-body-sm leading-tight font-bold sm:block">
                       {session.email.split('@')[0]}
                       <span className="block text-label text-ink-2">
                         {session.isMaintainer ? role.maintainer : role.learner}
