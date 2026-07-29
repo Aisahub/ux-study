@@ -129,14 +129,14 @@ export default async function AttemptPage({
       <nav className="px-1.5 pb-3.5">
         <Link
           href={`/${lang}/learn`}
-          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill"
+          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
         >
           <span aria-hidden>←</span>
           {copy.backToLearn}
         </Link>
       </nav>
 
-      <h1 className="px-1.5 pb-5 font-serif text-[44px] leading-[1.1] font-bold tracking-[-0.02em] text-ink">
+      <h1 className="px-1.5 pb-5 font-serif text-display font-bold text-ink">
         {attempt.passed ? copy.verdictPassed : copy.verdictFailed}
       </h1>
 
@@ -144,7 +144,7 @@ export default async function AttemptPage({
         {attempt.passed ? (
           // Nothing is outstanding, so nothing here wears the warm field.
           <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-            <p className="max-w-[56ch] text-[16px] leading-[1.55]">
+            <p className="max-w-[56ch] text-body">
               {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.passedExplanation}
             </p>
           </section>
@@ -153,12 +153,12 @@ export default async function AttemptPage({
           // The prose points down at the list below before the button is
           // pressed — the retry is offered, not urged.
           <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
-            <p className="max-w-[56ch] text-[16px] leading-[1.55]">
+            <p className="max-w-[56ch] text-body">
               {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.failedExplanation}
             </p>
             <Link
               href={`/${lang}/learn/${slug}/quiz`}
-              className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
+              className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
             >
               {copy.retry}
             </Link>
@@ -173,10 +173,10 @@ export default async function AttemptPage({
             summary offered in its place would be read instead of the article. */}
         {attempt.passed && competency.explanation && (
           <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+            <h2 className="font-serif text-headline font-bold text-ink">
               {copy.summaryHeading}
             </h2>
-            <p className="mt-3.5 max-w-[56ch] text-[16px] leading-[1.55] whitespace-pre-line">
+            <p className="mt-3.5 max-w-[56ch] text-body whitespace-pre-line">
               {competency.explanation[lang]}
             </p>
           </section>
@@ -184,7 +184,7 @@ export default async function AttemptPage({
 
         {!attempt.passed && wrong.length > 0 && (
           <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-            <h2 className="mb-4.5 font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+            <h2 className="mb-4.5 font-serif text-headline font-bold text-ink">
               {copy.wrongHeading}
             </h2>
             <div className="flex flex-col">
@@ -203,10 +203,10 @@ export default async function AttemptPage({
                       className="mt-[7px] size-[14px] rounded-full shadow-[inset_0_0_0_2.5px_var(--blue-grey)]"
                     />
                     <span>
-                      <span className="block max-w-[56ch] text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
+                      <span className="block max-w-[56ch] text-title font-bold">
                         {item.prompt[lang]}
                       </span>
-                      <span className="mt-1 block text-[13.5px] leading-[1.55] text-ink-2">
+                      <span className="mt-1 block text-body-sm text-ink-2">
                         {copy.coveredIn}:{' '}
                         <a
                           href={competency.source.url}

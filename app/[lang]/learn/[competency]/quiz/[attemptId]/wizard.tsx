@@ -103,7 +103,7 @@ function ItemStop({
           the mark's centre line rather than wherever a text glyph falls. */}
       {here && (
         <span className="absolute top-0 left-1/2 flex -translate-x-1/2 flex-col items-center">
-          <span className="rounded-full bg-sunk px-2.5 py-1 text-[11px] font-bold tracking-[0.2em] whitespace-nowrap">
+          <span className="rounded-full bg-sunk px-2.5 py-1 text-micro font-bold whitespace-nowrap">
             {here}
           </span>
           <span aria-hidden className="size-0 border-x-4 border-t-5 border-x-transparent border-t-sunk" />
@@ -132,12 +132,12 @@ function ItemStop({
             above the line ("5문항 중 1번째"), so narrow the marks carry only
             their number and the line stays one line. */}
         <span
-          className={`mt-[15px] block px-1.5 text-[13.5px] leading-[1.4] ${answered ? 'font-bold' : ''}`}
+          className={`mt-[15px] block px-1.5 text-label ${answered ? 'font-bold' : ''}`}
         >
           <span className="sm:hidden">{short}</span>
           <span className="hidden sm:inline">{label}</span>
         </span>
-        <span className="mt-[5px] hidden text-[12px] font-bold text-ink-2 sm:block">{meta}</span>
+        <span className="mt-[5px] hidden text-label font-bold text-ink-2 sm:block">{meta}</span>
       </button>
     </div>
   )
@@ -206,7 +206,7 @@ export function QuizWizard({
             above the line, which is the one place on this page where an extra
             row pushes the item itself down the screen. Below `sm` the stations
             are bare numbers and this is where the words live. */}
-        <p className="text-[12px] font-bold text-ink-2 sm:hidden">
+        <p className="text-label font-bold text-ink-2 sm:hidden">
           {copy.progress(current + 1, items.length)}
         </p>
         <div className="mt-3.5 grid grid-cols-5 sm:mt-0">
@@ -258,7 +258,7 @@ export function QuizWizard({
         {item.screen ? (
           <ItemScreen slug={item.slug} lang={lang} html={item.screen} css={screenCss} description={item.artefact} />
         ) : (
-          <div className="rounded-badge bg-sunk p-[17px] text-[16px] leading-[1.55] whitespace-pre-line">
+          <div className="rounded-badge bg-sunk p-[17px] text-body whitespace-pre-line">
             {item.artefact}
           </div>
         )}
@@ -277,7 +277,7 @@ export function QuizWizard({
               would not be held at all. Set here, in the body face, it is the
               same 56ch every other card on the platform is measured by. */}
           <div className="max-w-[56ch]">
-            <h1 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+            <h1 className="font-serif text-headline font-bold text-ink">
               {item.prompt}
             </h1>
           </div>
@@ -320,8 +320,8 @@ export function QuizWizard({
                   className="mt-[3px] size-[17px] accent-oxblood"
                 />
                 <span className="flex flex-col gap-1">
-                  <span className="text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">{option.text}</span>
-                  <span className="text-[13.5px] leading-[1.55] text-ink-2">{option.reason}</span>
+                  <span className="text-title font-bold">{option.text}</span>
+                  <span className="text-body-sm text-ink-2">{option.reason}</span>
                 </span>
               </label>
             ))}
@@ -332,7 +332,7 @@ export function QuizWizard({
               type="button"
               disabled={current === 0}
               onClick={() => setCurrent(current - 1)}
-              className="rounded-full bg-surface px-[26px] py-[15px] text-[16px] font-bold shadow-pill disabled:opacity-40"
+              className="rounded-full bg-surface px-[26px] py-[15px] text-title font-bold shadow-pill disabled:opacity-40"
             >
               {copy.back}
             </button>
@@ -340,7 +340,7 @@ export function QuizWizard({
               <button
                 type="button"
                 onClick={() => setCurrent(current + 1)}
-                className="rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
+                className="rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
               >
                 {copy.forward}
               </button>
@@ -349,13 +349,13 @@ export function QuizWizard({
                 type="button"
                 disabled={pending || unanswered > 0}
                 onClick={() => startTransition(() => submitAttempt(attemptId, lang, choices))}
-                className="rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white disabled:opacity-40"
+                className="rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white disabled:opacity-40"
               >
                 {pending ? copy.submitting : copy.submit}
               </button>
             )}
             {last && unanswered > 0 && (
-              <p className="text-[13.5px] leading-[1.55] text-ink-2">{copy.unanswered(unanswered)}</p>
+              <p className="text-body-sm text-ink-2">{copy.unanswered(unanswered)}</p>
             )}
           </div>
         </div>

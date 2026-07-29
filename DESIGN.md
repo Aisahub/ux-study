@@ -50,13 +50,13 @@ typography:
     letterSpacing: "-0.008em"
   label:
     fontFamily: "Pretendard, sans-serif"
-    fontSize: "12px"
+    fontSize: "13.5px"
     fontWeight: 700
     lineHeight: 1.4
     letterSpacing: "0"
   micro:
     fontFamily: "Pretendard, sans-serif"
-    fontSize: "11px"
+    fontSize: "13.5px"
     fontWeight: 700
     lineHeight: 1.4
     letterSpacing: "0.2em"
@@ -173,8 +173,8 @@ Eight steps, and no ninth. The first draft of this system used thirteen sizes be
 - **Title** (sans, 700, 16px, 1.4, -0.015em): Row names — a competency inside a list. Same size as body; the weight is the difference.
 - **Body** (sans, 400, 16px, 1.55, -0.008em): Prose. Objectives wrap at roughly 56ch.
 - **Body-sm** (sans, 400, 13.5px, 1.55): Supporting lines — a row's one-line objective, a station's label, breadcrumbs, the standing visibility notice.
-- **Label** (sans, 700, 12px, 1.4): Status words, counts, chips, station meta.
-- **Micro** (sans, 700, 11px, 0.2em, usually uppercase): Kickers above a card title, English competency names under their Korean name.
+- **Label** (sans, 700, 13.5px, 1.4): Status words, counts, chips, station meta. Body-sm's size; the weight and the tighter line box are the difference. (Raised from 12px on 2026-07-29, because 12px was the hardest thing on the platform to read at arm's length and it carried every status word, count and chip — which a platform teaching Readability cannot ship. Raising the step rather than exempting a call site is what kept it one decision: the scale is still eight named steps, now over **five** distinct sizes — 44, 34, 25, 16, 13.5 — and Label pairs with Body-sm exactly as Title pairs with Body. Micro was raised to 13.5 in the same decision, so Body-sm, Label and Micro now share a size and are separated by weight, tracking and case alone.)
+- **Micro** (sans, 700, 13.5px, 0.2em, usually uppercase): Kickers above a card title, English competency names under their Korean name. (Raised from 11px on 2026-07-29, in the same decision as Label. 11px was the platform's actual type floor — smaller than the step raised above it — so leaving it would have moved the complaint rather than answered it. The tracking and the case, not the size, are what set a kicker apart now. This step also had no token users at all until this change: all three call sites wrote `text-[11px]` by hand, so `--text-micro` was declared and unread, which is exactly how a step drifts without anyone deciding to move it.)
 
 ### Named Rules
 
@@ -183,6 +183,8 @@ Eight steps, and no ninth. The first draft of this system used thirteen sizes be
 **The Fixed Scale Rule.** Every piece of type on every screen is one of the eight steps above. A size that is not on the list is not a smaller heading; it is an unfinished decision. If a case genuinely needs a ninth, add it here first.
 
 The steps are tokens, not numbers retyped at each call site: `text-display`, `text-headline-lg`, `text-headline`, `text-title`, `text-body`, `text-body-sm`, `text-label`, `text-micro`, declared once in `app/globals.css`. Each carries its own size, line height and letter spacing; weight stays an explicit `font-bold` so the two never fight over which declaration wins. A written-down scale cannot refuse an addition — that is how the ninth step arrived unnoticed — and a utility can.
+
+Until 2026-07-29 this described an intention rather than the build: 47 type sizes were still written as bare `px` at the call site, and the Label change had to be made twice — once in the token, once by hand in every place that had copied the number out of it. They are all tokens now, and `grep -rn "text-\[[0-9.]*px\]" app lib` returning nothing is the check that keeps it that way. Two conversions moved a rendered value rather than preserving one, and are noted as such: nine button and link labels were set at the browser's default line height, which is not a step, and are now `title`; the Gate Quiz station label is now `label`, the step this document already assigns to station meta.
 
 **The Reader's Size Rule.** The scale is declared in `rem`, against the reader's own browser default. At the default setting 1rem is 16px and every step renders at the pixel size listed above, so nothing moves for anyone who has not asked it to. A Learner who has raised their browser's default font size gets a page that answers. Accessibility is a Stage 3 Competency here; a scale nailed to px ignores the one accessibility preference a reader sets before they ever arrive. Fixed `px` in a type size is now a defect, not a shorthand.
 
@@ -340,7 +342,7 @@ The Learn badge carried a `6px` dot in its lower-right corner for this until 202
 The exception is narrow. It applies only to a list of peers, only to the identical action repeated, and never alongside a second differently-weighted button on the same screen. Everywhere else, one action per screen still holds. (Recorded 2026-07-28: the Layout section had described this per-row action since the Studio Board was built, while this section still said one action per screen. The build followed Layout; the rule had simply never been written down.)
 
 ### Chips
-- **Style:** White pill, `9px 17px`, pill lift, `12.5px/600` label with a `15px` khaki-stroked icon. Numerals inside a chip go bold and oxblood.
+- **Style:** White pill, `9px 17px`, pill lift, a `label`-step word with a `15px` khaki-stroked icon. (Corrected 2026-07-29: this line read `12.5px/600` and had never matched the build. 12.5px is not a step on the scale, and 600 is a weight the Two Weights Rule says does not exist here — the code has always shipped a label-step word at 700. Naming the step instead of a number is also what stops the two drifting again.) Numerals inside a chip go bold and oxblood.
 - **Use:** Read-only facts about the page — competency count, last activity, steps complete. Chips are never controls.
 
 ### Cards / Containers

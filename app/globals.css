@@ -52,7 +52,11 @@
      it is out of flow and the page has to reserve its height itself. One
      value, read by the bar and by the layout that clears it, because the two
      drifting apart means either a gap under the page or a mark no thumb can
-     reach. 8px padding + a 44px mark + 5px + two lines of 12px label + 8px. */
+     reach. 8px bar padding + 2px + a 44px mark + 5px + two lines of label
+     (38px, see nav-rail) + 2px = 99. The label term is derived from the label
+     step, so raising that step is what moves this number; when the step went
+     12px -> 13.5px on 2026-07-29 the two-line reservation went 34 -> 38 and
+     99 still held, with the mark's own 2px of bottom padding as the tail. */
   --bottom-bar: calc(99px + env(safe-area-inset-bottom));
 
   /* ── the item screen's floor ─────────────────────────── */
@@ -126,11 +130,11 @@
   --text-body-sm--line-height: 1.55;
   --text-body-sm--letter-spacing: -0.008em;
 
-  --text-label: 0.75rem; /* 12px */
+  --text-label: 0.84375rem; /* 13.5px — body-sm's size, bold and the tighter line box are the difference */
   --text-label--line-height: 1.4;
   --text-label--letter-spacing: 0;
 
-  --text-micro: 0.6875rem; /* 11px — uppercase kickers only */
+  --text-micro: 0.84375rem; /* 13.5px — uppercase kickers only; the tracking and the case, not the size, are what set it apart now */
   --text-micro--line-height: 1.4;
   --text-micro--letter-spacing: 0.2em;
 
