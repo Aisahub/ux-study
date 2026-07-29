@@ -10,13 +10,13 @@ import { schema, sessionCookieFor, testDb } from './db'
 import { visibleText } from './html'
 
 /**
- * The remaining Learner and Maintainer surfaces: My progress (#26), the
+ * The remaining Learner and Maintainer surfaces: My page (#26, #54), the
  * allowlist interface (#13), the Findings library (#25) and the two
  * dashboard halves (#27, #28). What is tested is above all who can see what
  * — every one of these tickets has a boundary criterion.
  */
 
-const { config, items, practicePage } = loadContent(join(__dirname, '..', 'content'))
+const { competencies, config, items, practicePage } = loadContent(join(__dirname, '..', 'content'))
 
 function freshLearner(): string {
   return `learner-${randomBytes(6).toString('hex')}@aisahub.com`
@@ -68,7 +68,7 @@ test('a signed-in Learner can reach the overview and their own progress from any
 test('a signed-in Learner can sign out from wherever they are, and only by asking for it', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 
-  // A page that is not My progress: the shell carries the control now, so
+  // A page that is not My page: the shell carries the control now, so
   // leaving no longer means finding your own record first.
   const html = await (await fetch(`${BASE_URL}/en/learn/visual-hierarchy`, { headers: { cookie } })).text()
   // Scripts dropped before matching: the streamed RSC payload repeats markup
@@ -138,34 +138,107 @@ test('the maintainer surfaces are offered to a Maintainer and to nobody else', a
   }
 })
 
-// ------------------------------------------------------------------ #26 /me
+// ------------------------------------------------------- #26 / #54 My page
 
-test('my progress shows attempts, report state and language preference, all derived', async () => {
-  const email = freshLearner()
-  await testDb.insert(schema.users).values({ email, language: 'ko' })
+/** One finished attempt against `readability`, scoring `score` of the draw. */
+async function finishedAttempt(email: string, score: number, submittedAt = new Date()) {
   await testDb.insert(schema.attempts).values({
     email,
     competency: 'readability',
     language: 'en',
     drawn: items['readability'].map((item) => item.slug).slice(0, config.drawSize),
     selections: [],
+    score,
+    passed: score >= config.passThreshold,
+    submittedAt,
+  })
+}
+
+test('my page states the account and names each finished attempt', async () => {
+  const email = freshLearner()
+  await testDb.insert(schema.users).values({ email, language: 'ko' })
+  await finishedAttempt(email, 2)
+  const cookie = await sessionCookieFor(email)
+
+  const text = visibleText(await (await fetch(`${BASE_URL}/en/me`, { headers: { cookie } })).text())
+
+  // The account. Since the phone top bar became the avatar alone (#53), this
+  // page is the only place the address and the role are written.
+  expect(text).toContain(email)
+  expect(text).toContain('Learner')
+  // The saved preference from the users row, not this device's path.
+  expect(text).toContain('Korean')
+  // The attempt itself: Learn counts these, this one names it.
+  expect(text).toContain(`2 / ${config.drawSize}`)
+  expect(text).toContain(new Date().toISOString().slice(0, 10))
+})
+
+test('my page does not restate the progress the Learn overview already carries', async () => {
+  const email = freshLearner()
+  await finishedAttempt(email, 2)
+  const cookie = await sessionCookieFor(email)
+
+  const text = visibleText(await (await fetch(`${BASE_URL}/en/me`, { headers: { cookie } })).text())
+
+  // The sharp edge of the duplication was the roll-call: the old page listed
+  // every Stage 1 Competency with a status, whether or not this Learner had
+  // touched it. Now a Competency appears only because there is an attempt to
+  // name — so the three untouched ones are absent, and asserting that is what
+  // stops the roll-call drifting back (#54).
+  const attempted = competencies.find((competency) => competency.slug === 'readability')!
+  expect(text).toContain(attempted.name.en)
+  for (const competency of competencies.filter((c) => c.slug !== 'readability')) {
+    expect(text).not.toContain(competency.name.en)
+  }
+
+  // The count and the Stage total are Learn's sentence to say, not this one's.
+  expect(text).not.toContain('1 attempt')
+  expect(text).not.toContain('Stage 1 progress')
+  // 'Not started' is deliberately not asserted against: it is the Self-Audit
+  // Report's own state here, which this page does carry.
+  expect(text).not.toContain('In progress')
+})
+
+test('my page never totals a Learner across Competencies', async () => {
+  const email = freshLearner()
+  await finishedAttempt(email, 4, new Date('2026-07-02'))
+  await finishedAttempt(email, 3, new Date('2026-07-01'))
+  const cookie = await sessionCookieFor(email)
+
+  const text = visibleText(await (await fetch(`${BASE_URL}/en/me`, { headers: { cookie } })).text())
+
+  // Both attempts are named, newest first.
+  expect(text).toContain(`4 / ${config.drawSize}`)
+  expect(text).toContain(`3 / ${config.drawSize}`)
+  expect(text.indexOf('2026-07-02')).toBeLessThan(text.indexOf('2026-07-01'))
+  // And their sum is nowhere: PRODUCT.md forbids a cumulative per-person
+  // score, and a page about one person is where one would otherwise appear.
+  expect(text).not.toContain(`7 / ${config.drawSize * 2}`)
+})
+
+test('my page never says which items an attempt missed', async () => {
+  const email = freshLearner()
+  const drawn = items['readability'].map((item) => item.slug).slice(0, config.drawSize)
+  await testDb.insert(schema.attempts).values({
+    email,
+    competency: 'readability',
+    language: 'en',
+    drawn,
+    selections: drawn.map((item, index) => ({ item, choice: 0, correct: index < 2 })),
     score: 2,
     passed: false,
     submittedAt: new Date(),
   })
   const cookie = await sessionCookieFor(email)
 
-  const text = visibleText(await (await fetch(`${BASE_URL}/en/me`, { headers: { cookie } })).text())
+  const html = await (await fetch(`${BASE_URL}/en/me`, { headers: { cookie } })).text()
 
-  expect(text).toContain(email)
-  expect(text).toContain('1 attempt')
-  expect(text).toContain('In progress')
-  // The saved preference from the users row, not this device's path.
-  expect(text).toContain('Korean')
-  // Signing out is no longer this page's job — it moved to the rail on
-  // 2026-07-29. The shell's control carries its name in `aria-label` and shows
-  // no word, so nothing here should be visible text either.
-  expect(text).not.toContain('Sign out')
+  // A retry draws from the same pool, so naming the missed items would hand
+  // over the key #22 keeps on the server. Raw HTML, not visible text: a slug
+  // reaching the payload at all is the leak, whether or not it is painted.
+  for (const slug of drawn) {
+    expect(html).not.toContain(slug)
+  }
 })
 
 test('nothing on /me compares the Learner against a colleague', async () => {
