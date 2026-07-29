@@ -95,10 +95,15 @@ export function NavRail({ items }: { items: RailItem[] }) {
                 marks and a Maintainer with six — a navigation that changed
                 height as you moved through it would be the Consistency defect
                 this platform's third Competency teaches. Labels are never
-                shortened for the bar (see platform-nav). */}
+                shortened for the bar (see platform-nav).
+                38px is two lines of the label step: it is derived from that
+                step's size and line height (13.5 × 1.4 × 2 = 37.8), not chosen,
+                so it moves when the step moves. It was 34px while the step was
+                12px, and the mismatch is invisible until a bar mixes one-line
+                and two-line labels — six marks at 320px does exactly that. */}
             <span
               aria-hidden
-              className={`line-clamp-2 min-h-[34px] w-full text-center text-label font-bold text-balance sm:hidden ${
+              className={`line-clamp-2 min-h-[38px] w-full text-center text-label font-bold text-balance sm:hidden ${
                 active ? 'text-oxblood' : 'text-ink-2'
               }`}
             >

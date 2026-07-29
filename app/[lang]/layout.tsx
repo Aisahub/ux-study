@@ -150,7 +150,14 @@ export default async function LanguageLayout({
                 </span>
               )}
 
-              <div className="ml-auto flex items-center gap-2.5">
+              {/* min-w-0 is what lets the account pill's `truncate` actually
+                  fire. A flex item defaults to min-width:auto, so this row
+                  refuses to shrink below its contents' own minimum and pushes
+                  the pill off the right edge instead of clipping the email
+                  inside it. It held until the label step went 12px -> 13.5px on
+                  2026-07-29, which is the point the two pills stopped fitting a
+                  320px row — the guard was always missing, not the width. */}
+              <div className="ml-auto flex min-w-0 items-center gap-2.5">
                 <LanguageSwitcher current={lang} />
                 {session && (
                   // Not a menu: a link to the page that already holds sign-out

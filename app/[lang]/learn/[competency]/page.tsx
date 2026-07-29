@@ -78,7 +78,7 @@ const COPY: Record<
  */
 function StatusChip({ status, label }: { status: QuizStatus; label: string }) {
   return (
-    <span className="flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill">
+    <span className="flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill">
       <i
         aria-hidden
         className={`size-[11px] rounded-full ${
@@ -127,7 +127,7 @@ function StepHead({
     <div className="grid grid-cols-[26px_minmax(0,1fr)] items-baseline gap-x-2.5 break-keep sm:grid-cols-[34px_minmax(0,1fr)] sm:gap-x-3.5">
       <span
         aria-hidden
-        className={`font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] ${
+        className={`font-serif text-headline font-bold ${
           mutedNumeral ? 'text-ink-2' : 'text-ink'
         }`}
       >
@@ -182,7 +182,7 @@ export default async function CompetencyPage({
       <nav className="px-1.5 pb-3.5">
         <Link
           href={`/${lang}/learn`}
-          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill"
+          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
         >
           <span aria-hidden>←</span>
           {copy.back}
@@ -191,25 +191,25 @@ export default async function CompetencyPage({
 
       <div className="flex flex-wrap items-center gap-4 px-1.5 pb-5">
         <div>
-          <h1 className="font-serif text-[44px] leading-[1.1] font-bold tracking-[-0.02em] text-ink">
+          <h1 className="font-serif text-display font-bold text-ink">
             {competency.name[lang]}
           </h1>
           {/* The English name under the Korean one — a Learner reading Korean
               still has to recognise the term in a pull request written by the
               Indonesia cohort. In English there is nothing to put underneath. */}
           {lang === 'ko' && (
-            <p className="mt-1.5 text-[11px] font-bold tracking-[0.2em] text-ink-2 uppercase">
+            <p className="mt-1.5 text-micro font-bold text-ink-2 uppercase">
               {competency.name.en}
             </p>
           )}
         </div>
         <div className="ml-auto flex flex-wrap gap-2.5">
-          <span className="rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill">
+          <span className="rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill">
             {copy.station(station)}
           </span>
           <StatusChip status={quiz.status} label={copy.status[quiz.status]} />
           {quiz.attempts > 0 && (
-            <span className="rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill">
+            <span className="rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill">
               {copy.attempts(quiz.attempts)}
             </span>
           )}
@@ -220,21 +220,21 @@ export default async function CompetencyPage({
         {/* ── 01 · what this station is for, and where to aim it ── */}
         <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
           <StepHead step="01">
-            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+            <h2 className="font-serif text-headline font-bold text-ink">
               {copy.objective}
             </h2>
           </StepHead>
-          <p className="mt-3.5 max-w-[56ch] text-[16px] leading-[1.55]">
+          <p className="mt-3.5 max-w-[56ch] text-body">
             {competency.objective[lang]}
           </p>
 
           {/* The same Competency pointed at this Learner's own work. It shares
               the card because it is not a second subject: it is the objective
               with an address on it — so it takes no number of its own. */}
-          <h3 className="mt-[26px] border-t border-khaki/40 pt-[22px] font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+          <h3 className="mt-[26px] border-t border-khaki/40 pt-[22px] font-serif text-headline font-bold text-ink">
             {copy.roleHint}
           </h3>
-          <p className="mt-3.5 max-w-[56ch] text-[16px] leading-[1.55]">
+          <p className="mt-3.5 max-w-[56ch] text-body">
             {competency.roleHint[lang]}
           </p>
         </section>
@@ -242,11 +242,11 @@ export default async function CompetencyPage({
         {/* ── 02 · the questions to carry into the reading ── */}
         <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
           <StepHead step="02">
-            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+            <h2 className="font-serif text-headline font-bold text-ink">
               {copy.questionsHeading}
             </h2>
           </StepHead>
-          <p className="mt-2.5 max-w-[56ch] text-[13.5px] leading-[1.55] text-ink-2">
+          <p className="mt-2.5 max-w-[56ch] text-body-sm text-ink-2">
             {copy.questionsExplanation}
           </p>
           {/* The question markers are sunk chips rather than a second run of
@@ -258,10 +258,10 @@ export default async function CompetencyPage({
                 key={question.en}
                 className="grid grid-cols-[34px_minmax(0,1fr)] items-start gap-3.5"
               >
-                <span className="grid size-[34px] place-items-center rounded-badge bg-sunk text-[12px] font-bold text-ink-2">
+                <span className="grid size-[34px] place-items-center rounded-badge bg-sunk text-label font-bold text-ink-2">
                   {index + 1}
                 </span>
-                <span className="max-w-[56ch] text-[16px] leading-[1.55]">{question[lang]}</span>
+                <span className="max-w-[56ch] text-body">{question[lang]}</span>
               </li>
             ))}
           </ol>
@@ -270,25 +270,25 @@ export default async function CompetencyPage({
         {/* ── 03 · what the questions are carried into ── */}
         <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
           <StepHead step="03">
-            <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+            <h2 className="font-serif text-headline font-bold text-ink">
               {copy.articleTitle}
             </h2>
           </StepHead>
-          <p className="mt-3.5 text-[13.5px] leading-[1.55] text-ink-2">
+          <p className="mt-3.5 text-body-sm text-ink-2">
             {competency.source.attribution}
           </p>
 
           {/* Korean-language Learners read the article in English with browser
               translation as an aid (ADR-0002) — never shown in English. */}
           {lang === 'ko' && competency.koTranslationNotice && (
-            <p className="mt-4.5 rounded-badge bg-sunk p-[17px] text-[13.5px] leading-[1.55]">
+            <p className="mt-4.5 rounded-badge bg-sunk p-[17px] text-body-sm">
               {competency.koTranslationNotice}
             </p>
           )}
 
           <a
             href={competency.source.url}
-            className="mt-5.5 inline-flex text-[16px] font-bold text-oxblood"
+            className="mt-5.5 inline-flex text-title font-bold text-oxblood"
             target="_blank"
             rel="noreferrer"
           >
@@ -303,14 +303,14 @@ export default async function CompetencyPage({
           // warm field — retrying is offered as a link, not as a second action.
           <section className="rounded-card bg-surface p-5 shadow-card sm:p-[26px]">
             <StepHead step="04">
-              <h2 className="font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+              <h2 className="font-serif text-headline font-bold text-ink">
                 {copy.quizPassed}
               </h2>
             </StepHead>
-            <p className="mt-3.5 max-w-[56ch] text-[16px] leading-[1.55]">{copy.passedBody}</p>
+            <p className="mt-3.5 max-w-[56ch] text-body">{copy.passedBody}</p>
             <Link
               href={`/${lang}/learn/${slug}/quiz`}
-              className="mt-5.5 inline-flex text-[16px] font-bold text-oxblood"
+              className="mt-5.5 inline-flex text-title font-bold text-oxblood"
             >
               {copy.quizStart(quiz.attempts)}
             </Link>
@@ -323,23 +323,26 @@ export default async function CompetencyPage({
           <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
             {/* Full ink, not the 72% fade: that value is measured against
                 white and is marginal on the sand field. */}
-            <span className="mb-2.5 block text-[11px] font-bold tracking-[0.2em] text-ink">
+            <span className="mb-2.5 block text-micro font-bold text-ink">
               {copy.nextKicker}
             </span>
             <StepHead step="04" mutedNumeral={false}>
-              <h2 className="font-serif text-[34px] leading-[1.15] font-bold tracking-[-0.02em] text-ink">
+              <h2 className="font-serif text-headline-lg font-bold text-ink">
                 {copy.quizTitle}
               </h2>
             </StepHead>
-            <p className="mt-4 max-w-[56ch] text-[16px] leading-[1.55]">
+            <p className="mt-4 max-w-[56ch] text-body">
               {copy.quizRules(drawSize, passThreshold)}
             </p>
             <Link
               href={`/${lang}/learn/${slug}/quiz`}
-              className="mt-5.5 flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
+              className="mt-5.5 flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
             >
               {copy.quizStart(quiz.attempts)}
-              <span className="text-[12px] font-normal opacity-70">{copy.items(drawSize)}</span>
+              {/* body-sm, not the label step: this detail is set regular, and
+                  label is a 700 step — pairing it with font-normal renders a
+                  size and weight the scale does not name. */}
+              <span className="text-body-sm font-normal opacity-70">{copy.items(drawSize)}</span>
             </Link>
           </section>
         )}

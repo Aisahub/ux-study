@@ -120,14 +120,14 @@ export default async function QuizStart({
       <nav className="px-1.5 pb-3.5">
         <Link
           href={`/${lang}/learn/${slug}`}
-          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-[12px] font-bold shadow-pill"
+          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
         >
           <span aria-hidden>←</span>
           {copy.back}
         </Link>
       </nav>
 
-      <h1 className="px-1.5 pb-5 font-serif text-[44px] leading-[1.1] font-bold tracking-[-0.02em] text-ink">
+      <h1 className="px-1.5 pb-5 font-serif text-display font-bold text-ink">
         {copy.heading(competency.name[lang])}
       </h1>
 
@@ -144,11 +144,11 @@ export default async function QuizStart({
           leaving it to be guessed.
         */}
         <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
-          <p className="max-w-[56ch] text-[16px] leading-[1.55]">{copy.rules(drawSize, passThreshold)}</p>
+          <p className="max-w-[56ch] text-body">{copy.rules(drawSize, passThreshold)}</p>
           <form action={start}>
             <button
               type="submit"
-              className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-[16px] font-bold text-white"
+              className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
             >
               {open ? copy.continueOpen : attempts.length > 0 ? copy.retry : copy.start}
             </button>
@@ -157,9 +157,9 @@ export default async function QuizStart({
             <>
               {/* Full ink, not the 72% fade: that value is measured against
                   white and drops below AA on the sand field. */}
-              <p className="mt-4.5 max-w-[56ch] text-[13.5px] leading-[1.55]">{copy.restartNote}</p>
+              <p className="mt-4.5 max-w-[56ch] text-body-sm">{copy.restartNote}</p>
               <form action={restart}>
-                <button type="submit" className="mt-2 text-[16px] font-bold text-oxblood">
+                <button type="submit" className="mt-2 text-title font-bold text-oxblood">
                   {copy.restart}
                 </button>
               </form>
@@ -169,7 +169,7 @@ export default async function QuizStart({
 
         {attempts.length > 0 && (
           <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-            <h2 className="mb-4.5 font-serif text-[25px] leading-[1.2] font-bold tracking-[-0.015em] text-ink">
+            <h2 className="mb-4.5 font-serif text-headline font-bold text-ink">
               {copy.history}
             </h2>
             <div className="flex flex-col">
@@ -178,7 +178,7 @@ export default async function QuizStart({
                 const row = (
                   <>
                     <AttemptMark state={state} />
-                    <span className="text-[16px] leading-[1.4] font-bold tracking-[-0.015em]">
+                    <span className="text-title font-bold">
                       {attempt.submittedAt
                         ? copy.submittedOn(
                             attempt.submittedAt.toISOString().slice(0, 10),
@@ -189,7 +189,7 @@ export default async function QuizStart({
                     </span>
                     {/* Narrow, the verdict drops under the date rather than
                         competing with it for a third column that is not there. */}
-                    <span className="col-start-2 mt-1 text-[12px] font-bold whitespace-nowrap text-ink-2 empty:mt-0 sm:col-start-auto sm:mt-0">
+                    <span className="col-start-2 mt-1 text-label font-bold whitespace-nowrap text-ink-2 empty:mt-0 sm:col-start-auto sm:mt-0">
                       {state === 'passed' ? copy.passed : state === 'failed' ? copy.failed : ''}
                     </span>
                   </>

@@ -171,7 +171,7 @@ export function ItemScreen({
           Competency teaches Learners to find, committed on the page teaching
           it — and it stops being worth saying the moment they have panned. */}
       {!panned && (
-        <p className="mt-2.5 text-[12px] font-bold text-ink-2 sm:hidden">{PAN_HINT[lang]}</p>
+        <p className="mt-2.5 text-label font-bold text-ink-2 sm:hidden">{PAN_HINT[lang]}</p>
       )}
     </div>
   )
