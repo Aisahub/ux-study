@@ -16,7 +16,7 @@ Constraints verified before deciding:
 
 - The reference corpus, <https://www.nngroup.com/articles/>, exposes **40+ topic categories** (Accessibility, Eyetracking, Research Methods, Managing UX Teams, …) across at least 10 pages of listings. The taxonomy is organised for UX researchers locating literature by discipline.
 - Article bodies are freely readable without login, but the site reserves reproduction rights (`Copyright © 1998-2026 Nielsen Norman Group, All Rights Reserved`), so the corpus can be cited and linked but not restructured wholesale into our own pages.
-- Assessment was already fixed: a Gate Quiz per Competency, plus four Self-Audit Reports (one per Stage, one final). A Self-Audit Report requires the Learner to scan a page from their own real client work and find defects unaided.
+- Assessment was already fixed: a Gate Quiz per Competency, plus four Self-Audit Reports (one per Stage, one final). ~~A Self-Audit Report requires the Learner to scan a page from their own real client work and find defects unaided.~~ **— superseded by [ADR-0007](0007-stage-1-assessed-against-an-authored-practice-page.md) for Stage 1 and by [ADR-0009](0009-every-stage-audits-an-authored-subject.md) for the rest**: every Stage's subject is authored by this project. Unaided detection is unchanged, and this ADR's decision rests only on that.
 
 ## Decision
 
