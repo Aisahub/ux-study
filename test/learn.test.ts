@@ -1,7 +1,9 @@
 import { randomBytes } from 'node:crypto'
+import { join } from 'node:path'
 
 import { expect, test } from 'vitest'
 
+import { competenciesOfStage, loadContent } from '../lib/content'
 import { BASE_URL } from './config'
 import { schema, sessionCookieFor, testDb } from './db'
 import { visibleText } from './html'
@@ -260,6 +262,33 @@ test('the browser-translation notice appears for Korean-language Learners and ne
   expect(en).not.toContain('번역')
 })
 
+test("every Stage 2 Competency has a page in both languages, carrying that language's own copy", async () => {
+  // Nothing links to these yet — the Learn overview opens Stage 1 only until
+  // #79. They are reachable because the route admits any declared Competency
+  // that has been authored, and a page nobody can reach yet is still a page a
+  // Learner will read, so it has to hold both languages before the item pools
+  // are written against it.
+  const cookie = await sessionCookieFor(freshLearner())
+  const { config, competencies } = loadContent(join(__dirname, '..', 'content'))
+  const stage2 = competenciesOfStage(config, 2)
+  expect(stage2).toHaveLength(4)
+
+  for (const slug of stage2) {
+    const competency = competencies.find((entry) => entry.slug === slug)!
+    for (const lang of ['en', 'ko'] as const) {
+      const response = await fetch(`${BASE_URL}/${lang}/learn/${slug}`, { headers: { cookie } })
+      expect(response.status, `${lang}/${slug}`).toBe(200)
+
+      const text = visibleText(await response.text())
+      // Its own language's name and objective, not the other language's. A
+      // page that renders in `ko` while showing English copy passes a status
+      // check and fails the Learner.
+      expect(text, `${lang}/${slug} name`).toContain(competency.name[lang])
+      expect(text, `${lang}/${slug} objective`).toContain(competency.objective[lang].slice(0, 24))
+    }
+  }
+})
+
 test('a Competency declared under no Stage is not a page', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 
@@ -269,14 +298,20 @@ test('a Competency declared under no Stage is not a page', async () => {
 })
 
 test('a declared Competency nobody has authored yet is not a page either', async () => {
-  // form-burden is declared under Stage 2 and has no definition file. This
-  // used to be the "outside Stage 1" case, and the route refused it for a
-  // reason that no longer exists — the slug is part of the curriculum now.
-  // Two tests because the two refusals have different causes, and a Stage 2
-  // definition landing must flip this one rather than pass it silently.
+  // The other refusal, with the other cause: declared in config.md, no
+  // definition file written. It has flipped once already — `form-burden` was
+  // this case until #65 authored it, and this test went red rather than
+  // staying green for a reason that had stopped existing. #72 will flip it
+  // again, which is what the assertion below is for: when every declared
+  // Competency is authored, this fails loudly instead of passing vacuously.
+  const { config, competencies } = loadContent(join(__dirname, '..', 'content'))
+  const authored = new Set(competencies.map((entry) => entry.slug))
+  const unauthored = competenciesOfStage(config, 3).filter((slug: string) => !authored.has(slug))
+  expect(unauthored.length).toBeGreaterThan(0)
+
   const cookie = await sessionCookieFor(freshLearner())
 
-  const response = await fetch(`${BASE_URL}/en/learn/form-burden`, { headers: { cookie } })
+  const response = await fetch(`${BASE_URL}/en/learn/${unauthored[0]}`, { headers: { cookie } })
 
   expect(response.status).toBe(404)
 })
