@@ -73,7 +73,7 @@ Four mechanisms distinguish this from a generic course platform, and each was de
 
 **Open, not undecided-by-omission:**
 
-- Stage 2 and Stage 3 content is not authored yet. Only Stage 1's four Competencies exist, and neither later Stage has an authored subject for its Self-Audit Report — Stage 2's must additionally support detection by interaction (ADR-0009).
+- Stage 2 and Stage 3 content is not authored yet. Only Stage 1's four Competencies exist, and neither later Stage has an authored subject for its Self-Audit Report — Stage 2's must additionally support detection by interaction (ADR-0009). Stage 2's subject now has a decided shape and no artefact: a three-step flow that may remember what a Learner entered but may never branch (ADR-0010). Stage 3's shape is still undecided.
 - Peer Review is specified for Stage 3 and not built.
 
 ## Brand Commitments
