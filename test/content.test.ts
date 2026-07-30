@@ -491,7 +491,7 @@ test('a repeated element identifier fails the build', () => {
   expectProblem(root, /element identifier "page-title" appears more than once/)
 })
 
-test('the repository content loads, with the eleven Glossary entries unchanged', () => {
+test('the repository content loads, with every authored Glossary entry accounted for', () => {
   const content = loadContent(join(__dirname, '..', 'content'))
 
   expect(content.config).toEqual({
@@ -509,16 +509,26 @@ test('the repository content loads, with the eleven Glossary entries unchanged',
     ],
   })
   expect(content.glossary.map((entry) => entry.slug)).toEqual([
+    'appropriate-feedback',
     'cognitive-load',
     'common-region',
     'consistency',
     'contrast',
+    'control-fit',
     'disabled-state',
+    'emergency-exit',
+    'error-recovery',
+    'inline-validation',
     'legibility',
+    'premature-error',
     'proximity',
     'readability',
     'scale',
+    'sense-of-place',
     'signifier',
+    'smart-defaults',
+    'system-status',
+    'undo',
     'visual-hierarchy',
   ])
   const contrast = content.glossary.find((entry) => entry.slug === 'contrast')
