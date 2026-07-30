@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { eq } from 'drizzle-orm'
 import { expect, test } from 'vitest'
 
-import { loadContent } from '../lib/content'
+import { loadContent, practicePageOf } from '../lib/content'
 import { BASE_URL } from './config'
 import { schema, sessionCookieFor, testDb } from './db'
 import { visibleText } from './html'
@@ -16,7 +16,9 @@ import { visibleText } from './html'
  * — every one of these tickets has a boundary criterion.
  */
 
-const { competencies, config, items, practicePage } = loadContent(join(__dirname, '..', 'content'))
+const content = loadContent(join(__dirname, '..', 'content'))
+const { competencies, config, items } = content
+const practicePage = practicePageOf(content, 1)!
 
 function freshLearner(): string {
   return `learner-${randomBytes(6).toString('hex')}@aisahub.com`
@@ -32,7 +34,7 @@ async function allow(email: string, isMaintainer = false) {
 }
 
 async function submittedReport(email: string, elements: string[]) {
-  const [report] = await testDb.insert(schema.reports).values({ email, submittedAt: new Date() }).returning()
+  const [report] = await testDb.insert(schema.reports).values({ email, stage: 1, submittedAt: new Date() }).returning()
   for (const element of elements) {
     await testDb.insert(schema.findings).values({
       reportId: report.id,
@@ -106,7 +108,7 @@ test('the Self-Audit Report has no navigation slot of its own', async () => {
   // Reachable from the bottom of the overview as its capstone (#20) — and
   // nowhere in the shell, on any page.
   const navSection = html.slice(0, html.indexOf('<main'))
-  expect(navSection).not.toContain('href="/en/audit"')
+  expect(navSection).not.toContain('href="/en/audit')
 })
 
 test('the Findings library is offered only after the reader has submitted', async () => {
@@ -316,6 +318,7 @@ test('a Learner who has not submitted cannot read Findings through any route', a
     const response = await fetch(`${BASE_URL}${path}`, { headers: { cookie }, redirect: 'manual' })
 
     expect(response.status).toBeGreaterThanOrEqual(300)
+    // The entry route, not a Stage: it names whichever Stage the reader is on.
     expect(response.headers.get('location')).toContain('/en/audit')
   }
 })
@@ -454,4 +457,103 @@ test('the content half shows per-item rates beside draw counts, and the location
   expect(text).toContain('Korea')
   expect(text).toContain('Indonesia')
   expect(text).toMatch(/missed by \d+ of \d+/)
+})
+
+// ------------------------------------------------- a report belongs to a Stage
+
+test('a Learner holds one report per Stage, and a second for the same Stage is refused', async () => {
+  const email = freshLearner()
+
+  // Two Stages, one Learner: the shape Stage 2 needs and the old unique
+  // constraint on the address alone made impossible (#61).
+  await testDb.insert(schema.reports).values({ email, stage: 1, submittedAt: new Date() })
+  await testDb.insert(schema.reports).values({ email, stage: 2 })
+
+  const held = await testDb.select().from(schema.reports).where(eq(schema.reports.email, email))
+  expect(held.map((report) => report.stage).sort()).toEqual([1, 2])
+
+  // Finality survives the split: submission is still once per Stage.
+  await expect(testDb.insert(schema.reports).values({ email, stage: 1 })).rejects.toThrow()
+})
+
+test("the Findings library shows the Stages a reader has submitted, and withholds the ones they have not", async () => {
+  const author = freshLearner()
+  const stage1 = await submittedReport(author, [practicePage.defects[0].element])
+  // A Stage 2 report by the same author. Its subject is unauthored, so the
+  // element is arranged directly — what is under test is the gate, not the
+  // page. This is exactly the record a Learner mid-way through Stage 2 must
+  // not be able to read.
+  const [stage2] = await testDb
+    .insert(schema.reports)
+    .values({ email: author, stage: 2, submittedAt: new Date() })
+    .returning()
+  const [laterFinding] = await testDb
+    .insert(schema.findings)
+    .values({
+      reportId: stage2.id,
+      element: 'a-stage-2-element',
+      principle: 'contrast',
+      description: 'Only a reader who has submitted Stage 2 may read this.',
+      fix: 'Not yet.',
+    })
+    .returning()
+
+  const [ownFinding] = await testDb.select().from(schema.findings).where(eq(schema.findings.reportId, stage1.id))
+
+  // A reader who has submitted Stage 1 and not Stage 2.
+  const reader = freshLearner()
+  await submittedReport(reader, [practicePage.defects[1].element])
+  const cookie = await sessionCookieFor(reader)
+
+  const library = visibleText(await (await fetch(`${BASE_URL}/en/findings`, { headers: { cookie } })).text())
+  expect(library).toContain(ownFinding.description)
+  expect(library).not.toContain(laterFinding.description)
+
+  // And not by its own address either — the shelf is a rendering, the gate is
+  // the thing being tested.
+  const direct = await fetch(`${BASE_URL}/en/findings/${laterFinding.id}`, { headers: { cookie }, redirect: 'manual' })
+  expect(direct.status).toBeGreaterThanOrEqual(300)
+  expect(direct.headers.get('location')).toContain('/en/audit')
+
+  // The Stage they did submit is readable by the same route.
+  const allowed = await fetch(`${BASE_URL}/en/findings/${ownFinding.id}`, { headers: { cookie } })
+  expect(allowed.status).toBe(200)
+})
+
+test('the audit entry names the Stage the Learner is on', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+
+  // Nothing submitted: the first Stage, which is where the work is.
+  const first = await fetch(`${BASE_URL}/en/audit`, { headers: { cookie }, redirect: 'manual' })
+  expect(first.headers.get('location')).toContain('/en/audit/1')
+
+  // Stage 1 submitted: no longer bounced to a Stage they have closed.
+  await testDb.insert(schema.reports).values({ email, stage: 1, submittedAt: new Date() })
+  const next = await fetch(`${BASE_URL}/en/audit`, { headers: { cookie }, redirect: 'manual' })
+  expect(next.headers.get('location')).toContain('/en/audit/2')
+})
+
+test('a declared Stage with no authored subject says so rather than rendering nothing', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+
+  const response = await fetch(`${BASE_URL}/en/audit/2`, { headers: { cookie } })
+  const text = visibleText(await response.text())
+
+  expect(response.status).toBe(200)
+  expect(text).toContain('This Stage has no page to audit yet')
+  // Which emptiness it is, not merely that it is empty.
+  expect(text).toContain('still being written')
+  // And not the locked message: the quizzes are not what is missing here.
+  expect(text).not.toContain('unlocks once every Gate Quiz')
+})
+
+test('a Stage the curriculum does not declare is not an audit surface', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  for (const path of ['/en/audit/9', '/en/audit/nonsense']) {
+    const response = await fetch(`${BASE_URL}${path}`, { headers: { cookie } })
+    expect(response.status).toBe(404)
+  }
 })

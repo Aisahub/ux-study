@@ -187,7 +187,7 @@ test('the labelled progress bar reaches 100% when Stage 1 is complete', async ()
   for (const slug of STAGE_ONE_COMPETENCIES) {
     await passQuiz(email, slug)
   }
-  await testDb.insert(schema.reports).values({ email, submittedAt: new Date() })
+  await testDb.insert(schema.reports).values({ email, stage: 1, submittedAt: new Date() })
 
   const cookie = await sessionCookieFor(email)
   const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
@@ -207,7 +207,7 @@ test('the report panel stays locked until every quiz passes and remains revisita
   for (const slug of STAGE_ONE_COMPETENCIES) {
     await passQuiz(email, slug)
   }
-  await testDb.insert(schema.reports).values({ email, submittedAt: new Date() })
+  await testDb.insert(schema.reports).values({ email, stage: 1, submittedAt: new Date() })
 
   const submittedCookie = await sessionCookieFor(email)
   const submitted = await (

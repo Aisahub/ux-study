@@ -7,6 +7,7 @@ import { and, eq, isNotNull, sql } from 'drizzle-orm'
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
+import { reportFor } from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
 export const dynamic = 'force-dynamic'
@@ -66,17 +67,19 @@ export default async function FindingPage({
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
-  // The submitted gate first: before their own submission this library is an
-  // answer key, whatever route it is reached by.
-  const [own] = await db.select().from(schema.reports).where(eq(schema.reports.email, session.email))
-  if (!own?.submittedAt) redirect(`/${lang}/audit`)
-
   const [row] = await db
-    .select({ finding: schema.findings, author: schema.reports.email })
+    .select({ finding: schema.findings, author: schema.reports.email, stage: schema.reports.stage })
     .from(schema.findings)
     .innerJoin(schema.reports, eq(schema.findings.reportId, schema.reports.id))
     .where(and(eq(schema.findings.id, id), isNotNull(schema.reports.submittedAt)))
   if (!row) notFound()
+
+  // The submitted gate, against *this Finding's* Stage rather than against
+  // having submitted anything at all (#61). Reaching a Stage 2 Finding by its
+  // address is the route a Learner mid-way through Stage 2 would take to read
+  // its answer key, and having finished Stage 1 does not buy it.
+  const own = await reportFor(session.email, row.stage)
+  if (!own?.submittedAt) redirect(`/${lang}/audit`)
 
   const [{ count }] = await db
     .select({ count: sql<number>`count(*)::int` })
@@ -93,14 +96,21 @@ export default async function FindingPage({
     'use server'
     const actor = await requireSession(lang as Language)
     const [target] = await db
-      .select({ author: schema.reports.email, submittedAt: schema.reports.submittedAt })
+      .select({
+        author: schema.reports.email,
+        stage: schema.reports.stage,
+        submittedAt: schema.reports.submittedAt,
+      })
       .from(schema.findings)
       .innerJoin(schema.reports, eq(schema.findings.reportId, schema.reports.id))
       .where(eq(schema.findings.id, id))
     // Own Findings cannot be agreed with, and neither can anything not yet
     // submitted; the unique index makes a second agreement a no-op.
     if (!target || target.author === actor.email || !target.submittedAt) return
-    const [actorReport] = await db.select().from(schema.reports).where(eq(schema.reports.email, actor.email))
+    // And the actor has to have submitted the Stage this Finding belongs to.
+    // Re-derived here rather than trusted from the page that rendered the
+    // button: a server action is an address, reachable without it.
+    const actorReport = await reportFor(actor.email, target.stage)
     if (!actorReport?.submittedAt) return
     await db.insert(schema.agreements).values({ findingId: id, email: actor.email }).onConflictDoNothing()
     revalidatePath(`/${lang}/findings/${id}`)

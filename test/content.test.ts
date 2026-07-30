@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path'
 
 import { afterEach, expect, test, vi } from 'vitest'
 
-import { competenciesOfStage, ContentError, loadContent } from '../lib/content'
+import { competenciesOfStage, ContentError, loadContent, practicePageOf } from '../lib/content'
 
 /**
  * Fixture-driven proof of every build-failing content check (#10). Each test
@@ -225,10 +225,10 @@ function scaffold(): string {
   write(root, 'items/visual-hierarchy/washed-out-confirm.md', ITEM_ONE)
   write(root, 'items/visual-hierarchy/refresh-time-size.md', ITEM_TWO)
   write(root, 'briefs/stage-1.md', BRIEF)
-  write(root, 'practice-page/en.html', PRACTICE_EN)
-  write(root, 'practice-page/ko.html', PRACTICE_KO)
-  write(root, 'practice-page/practice-page.css', 'main { padding: 1rem; }\n')
-  write(root, 'practice-page/manifest.md', MANIFEST)
+  write(root, 'practice-page/stage-1/en.html', PRACTICE_EN)
+  write(root, 'practice-page/stage-1/ko.html', PRACTICE_KO)
+  write(root, 'practice-page/stage-1/practice-page.css', 'main { padding: 1rem; }\n')
+  write(root, 'practice-page/stage-1/manifest.md', MANIFEST)
   return root
 }
 
@@ -260,8 +260,8 @@ test('the baseline fixture is valid, so each failing test below fails for its on
   expect(content.competencies.map((competency) => competency.slug)).toEqual(['visual-hierarchy'])
   expect(content.items['visual-hierarchy']).toHaveLength(2)
   expect(content.briefs.map((brief) => brief.slug)).toEqual(['stage-1'])
-  expect(content.practicePage.elements.sort()).toEqual(['confirm-selected-orders', 'page-title'])
-  expect(content.practicePage.defects).toHaveLength(1)
+  expect(practicePageOf(content, 1)!.elements.sort()).toEqual(['confirm-selected-orders', 'page-title'])
+  expect(practicePageOf(content, 1)!.defects).toHaveLength(1)
 })
 
 test('an item can draw a sequence of states instead of one screen', () => {
@@ -547,43 +547,84 @@ test('a brief citing a Principle absent from the Glossary fails the build', () =
 
 test('a Planted Defect citing a Principle absent from the Glossary fails the build', () => {
   const root = scaffold()
-  write(root, 'practice-page/manifest.md', edit(MANIFEST, 'principle: contrast', 'principle: affordance'))
+  write(root, 'practice-page/stage-1/manifest.md', edit(MANIFEST, 'principle: contrast', 'principle: affordance'))
   expectProblem(root, /cites UX Principle "affordance", absent from the Glossary/)
 })
 
 test('a Planted Defect naming an element that does not exist on the page fails the build', () => {
   const root = scaffold()
-  write(root, 'practice-page/manifest.md', edit(MANIFEST, 'element: confirm-selected-orders', 'element: upgrade-banner'))
+  write(root, 'practice-page/stage-1/manifest.md', edit(MANIFEST, 'element: confirm-selected-orders', 'element: upgrade-banner'))
   expectProblem(root, /names element "upgrade-banner", which does not exist on the Practice Page/)
 })
 
-test('a Planted Defect outside the four Stage 1 Competencies fails the build', () => {
+test('a Planted Defect citing a Competency nobody has been taught fails the build', () => {
   const root = scaffold()
-  write(root, 'practice-page/manifest.md', edit(MANIFEST, 'competency: visual-hierarchy', 'competency: form-burden'))
-  expectProblem(root, /cites Competency "form-burden", outside the Stage 1 Competencies/)
+  write(root, 'practice-page/stage-1/manifest.md', edit(MANIFEST, 'competency: visual-hierarchy', 'competency: form-burden'))
+  expectProblem(root, /cites Competency "form-burden", which no Learner reaching Stage 1 has been taught/)
 })
 
-test('a Planted Defect citing a declared Stage 2 Competency still fails the build', () => {
+test('a Planted Defect citing a declared but later Stage Competency still fails the build', () => {
   // Declared is not enough for this page. It is Stage 1's subject, so a defect
   // planted on it that only a Stage 2 Competency names is one the Learner
   // auditing it has not been taught to see.
   const root = scaffold()
   write(root, 'config.md', CONFIG_TWO_STAGES)
-  write(root, 'practice-page/manifest.md', edit(MANIFEST, 'competency: visual-hierarchy', 'competency: form-burden'))
-  expectProblem(root, /cites Competency "form-burden", outside the Stage 1 Competencies/)
+  write(root, 'practice-page/stage-1/manifest.md', edit(MANIFEST, 'competency: visual-hierarchy', 'competency: form-burden'))
+  expectProblem(root, /cites Competency "form-burden", which no Learner reaching Stage 1 has been taught/)
+})
+
+test("an audit subject may plant a defect from an earlier Stage's Competencies", () => {
+  // The reverse of the rule above, and it must stay allowed: a Stage 2 page
+  // whose layout is also badly ordered is what real work looks like, and the
+  // Learner reaching it was taught to see that in Stage 1.
+  const root = scaffold()
+  write(root, 'config.md', CONFIG_TWO_STAGES)
+  write(root, 'practice-page/stage-2/en.html', PRACTICE_EN)
+  write(root, 'practice-page/stage-2/ko.html', PRACTICE_KO)
+  write(root, 'practice-page/stage-2/practice-page.css', 'main { padding: 1rem; }\n')
+  write(root, 'practice-page/stage-2/manifest.md', MANIFEST)
+
+  const content = loadContent(root)
+  expect(practicePageOf(content, 2)?.defects[0].competency).toBe('visual-hierarchy')
+})
+
+test('a Stage that has begun a subject owes all three of its parts', () => {
+  const root = scaffold()
+  write(root, 'config.md', CONFIG_TWO_STAGES)
+  write(root, 'practice-page/stage-2/en.html', PRACTICE_EN)
+  expectProblem(root, /practice-page\/stage-2\/ko\.html is missing/)
+  expectProblem(root, /practice-page\/stage-2\/practice-page\.css is missing/)
+  expectProblem(root, /practice-page\/stage-2\/manifest\.md is missing/)
+})
+
+test('an audit subject for a Stage the curriculum does not declare fails the build', () => {
+  // Content nobody can ever reach. Silently ignoring it is how an authored
+  // page sits unnoticed for a release.
+  const root = scaffold()
+  write(root, 'practice-page/stage-3/en.html', PRACTICE_EN)
+  expectProblem(root, /Stage 3 is not declared in config\.md, so no Learner can reach this/)
+})
+
+test('a Stage with no subject directory is not a failure — it simply has none yet', () => {
+  const root = scaffold()
+  write(root, 'config.md', CONFIG_TWO_STAGES)
+
+  const content = loadContent(root)
+  expect(practicePageOf(content, 1)).not.toBeNull()
+  expect(practicePageOf(content, 2)).toBeNull()
 })
 
 test('language variants with different element identifiers fail the build', () => {
   const root = scaffold()
-  write(root, 'practice-page/en.html', PRACTICE_EN + '<div data-element="only-in-en"></div>\n')
+  write(root, 'practice-page/stage-1/en.html', PRACTICE_EN + '<div data-element="only-in-en"></div>\n')
   expectProblem(root, /do not expose an identical set of element identifiers — only in en: only-in-en/)
 })
 
 test('a repeated element identifier fails the build', () => {
   const root = scaffold()
   const repeated = '<p data-element="page-title">again</p>\n'
-  write(root, 'practice-page/en.html', PRACTICE_EN + repeated)
-  write(root, 'practice-page/ko.html', PRACTICE_KO + repeated)
+  write(root, 'practice-page/stage-1/en.html', PRACTICE_EN + repeated)
+  write(root, 'practice-page/stage-1/ko.html', PRACTICE_KO + repeated)
   expectProblem(root, /element identifier "page-title" appears more than once/)
 })
 
@@ -629,7 +670,7 @@ test('the repository content loads, with every authored Glossary entry accounted
   ])
   const contrast = content.glossary.find((entry) => entry.slug === 'contrast')
   expect(contrast?.name).toEqual({ en: 'Contrast', ko: '대비' })
-  expect(content.practicePage.defects).toHaveLength(6)
+  expect(practicePageOf(content, 1)!.defects).toHaveLength(6)
 })
 
 test('a content mistake fails the build: next.config refuses to load', async () => {

@@ -17,6 +17,7 @@ const COPY: Record<
     itemsHeading: string
     stage: (n: number) => string
     notAuthored: string
+    noSubject: string
     rate: (correct: number, drawn: number) => string
     neverDrawn: string
     defectsHeading: string
@@ -37,6 +38,7 @@ const COPY: Record<
     itemsHeading: 'Item pass rates',
     stage: (n) => `Stage ${n}`,
     notAuthored: 'No pool authored yet',
+    noSubject: 'no page authored to audit yet',
     rate: (correct, drawn) => `${correct} correct of ${drawn} drawn`,
     neverDrawn: 'never drawn',
     defectsHeading: 'Planted defects, most missed first',
@@ -57,6 +59,7 @@ const COPY: Record<
     itemsHeading: '문항별 정답률',
     stage: (n) => `${n}단계`,
     notAuthored: '아직 작성된 문항 풀이 없습니다',
+    noSubject: '아직 감사할 페이지가 작성되지 않았습니다',
     rate: (correct, drawn) => `${drawn}회 출제 중 ${correct}회 정답`,
     neverDrawn: '아직 출제되지 않음',
     defectsHeading: '심어 둔 결함, 많이 놓친 순',
@@ -103,23 +106,43 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
   const submittedFindings = findings.filter((finding) => submittedIds.has(finding.reportId))
   const isKorea = (email: string) => email.endsWith('@aisahub.com')
 
-  const defectStats = content.practicePage.defects
-    .map((defect) => {
-      const finders = reports.filter((report) =>
-        submittedFindings.some((finding) => finding.reportId === report.id && finding.element === defect.element),
-      )
-      return {
-        defect,
-        found: finders.length,
-        missed: reports.length - finders.length,
-        koreaFound: finders.filter((report) => isKorea(report.email)).length,
-        indonesiaFound: finders.filter((report) => !isKorea(report.email)).length,
-      }
-    })
-    .sort((a, b) => b.missed - a.missed)
+  // One shelf of statistics per authored subject (#61). A defect is only
+  // missed by someone who was looking at the page it is on, so every count
+  // here divides by that Stage's reports and not by all of them — pooling the
+  // Stages would report a Stage 2 defect as missed by every Stage 1 Learner
+  // who never saw it.
+  const subjects = content.practicePages.map((page) => {
+    const stageReports = reports.filter((report) => report.stage === page.stage)
+    const korea = stageReports.filter((report) => isKorea(report.email)).length
 
-  const koreaReports = reports.filter((report) => isKorea(report.email)).length
-  const indonesiaReports = reports.length - koreaReports
+    return {
+      stage: page.stage,
+      reports: stageReports.length,
+      koreaReports: korea,
+      indonesiaReports: stageReports.length - korea,
+      defects: page.defects
+        .map((defect) => {
+          const finders = stageReports.filter((report) =>
+            submittedFindings.some((finding) => finding.reportId === report.id && finding.element === defect.element),
+          )
+          return {
+            defect,
+            found: finders.length,
+            missed: stageReports.length - finders.length,
+            koreaFound: finders.filter((report) => isKorea(report.email)).length,
+            indonesiaFound: finders.filter((report) => !isKorea(report.email)).length,
+          }
+        })
+        .sort((a, b) => b.missed - a.missed),
+    }
+  })
+
+  // Stages the curriculum declares but nobody has authored a subject for.
+  // Named rather than left off: a Maintainer reading a list of two where the
+  // programme has three cannot tell a missing subject from a missing section.
+  const unauthored = content.config.stages
+    .map((entry) => entry.stage)
+    .filter((stage) => !subjects.some((subject) => subject.stage === stage))
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 p-8 font-sans">
@@ -170,38 +193,53 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
       <section>
         <h2 className="text-sm font-medium text-zinc-500">{copy.defectsHeading}</h2>
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{copy.defectsExplanation}</p>
-        {reports.length === 0 ? (
-          <p className="mt-2 text-sm text-zinc-500">{copy.noReports}</p>
-        ) : (
-          <ul className="mt-2 flex flex-col gap-1 text-sm">
-            {defectStats.map(({ defect, missed }) => (
-              <li key={defect.slug} className="flex justify-between gap-4">
-                <span className="font-mono text-xs">{defect.element}</span>
-                <span className="shrink-0 text-zinc-500">{copy.missedBy(missed, reports.length)}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        {subjects.map((subject) => (
+          <div key={subject.stage} className="mt-3">
+            <h3 className="text-xs font-medium text-zinc-500">{copy.stage(subject.stage)}</h3>
+            {subject.reports === 0 ? (
+              <p className="mt-1 text-sm text-zinc-500">{copy.noReports}</p>
+            ) : (
+              <ul className="mt-1 flex flex-col gap-1 text-sm">
+                {subject.defects.map(({ defect, missed }) => (
+                  <li key={defect.slug} className="flex justify-between gap-4">
+                    <span className="font-mono text-xs">{defect.element}</span>
+                    <span className="shrink-0 text-zinc-500">{copy.missedBy(missed, subject.reports)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+        {unauthored.map((stage) => (
+          <p key={stage} className="mt-3 text-sm text-zinc-500">
+            {copy.stage(stage)} — {copy.noSubject}
+          </p>
+        ))}
       </section>
 
       <section>
         <h2 className="text-sm font-medium text-zinc-500">{copy.locationsHeading}</h2>
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{copy.locationsExplanation}</p>
-        {reports.length === 0 ? (
-          <p className="mt-2 text-sm text-zinc-500">{copy.noReports}</p>
-        ) : (
-          <ul className="mt-2 flex flex-col gap-2 text-sm">
-            {defectStats.map(({ defect, koreaFound, indonesiaFound }) => (
-              <li key={defect.slug}>
-                <p className="font-mono text-xs">{defect.element}</p>
-                <p className="text-zinc-500">
-                  {copy.korea}: {copy.foundBy(koreaFound, koreaReports)} · {copy.indonesia}:{' '}
-                  {copy.foundBy(indonesiaFound, indonesiaReports)}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
+        {subjects.map((subject) => (
+          <div key={subject.stage} className="mt-3">
+            <h3 className="text-xs font-medium text-zinc-500">{copy.stage(subject.stage)}</h3>
+            {subject.reports === 0 ? (
+              <p className="mt-1 text-sm text-zinc-500">{copy.noReports}</p>
+            ) : (
+              <ul className="mt-1 flex flex-col gap-2 text-sm">
+                {subject.defects.map(({ defect, koreaFound, indonesiaFound }) => (
+                  <li key={defect.slug}>
+                    <p className="font-mono text-xs">{defect.element}</p>
+                    <p className="text-zinc-500">
+                      {copy.korea}: {copy.foundBy(koreaFound, subject.koreaReports)} · {copy.indonesia}:{' '}
+                      {copy.foundBy(indonesiaFound, subject.indonesiaReports)}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
       </section>
     </main>
   )

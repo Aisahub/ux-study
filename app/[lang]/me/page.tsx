@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm'
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
-import { attemptHistoryFor, reportFor } from '@/lib/progress'
+import { attemptHistoryFor, reportsFor } from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
 export const dynamic = 'force-dynamic'
@@ -109,8 +109,14 @@ export default async function Me({ params }: { params: Promise<{ lang: string }>
 
   const history = await attemptHistoryFor(session.email)
   // Shared with the navigation's own read, which asks the same question on
-  // every request; `reportFor` is cached so the table is read once.
-  const report = await reportFor(session.email)
+  // every request; `reportsFor` is cached so the table is read once.
+  //
+  // The furthest report a Learner has, which is the one they are living in:
+  // a Stage 2 draft is the answer for someone who submitted Stage 1 months
+  // ago. Deliberately one line and not a tally of all three — a per-person
+  // total across the programme is what PRODUCT.md rules out, and a column of
+  // Stages with ticks against them is that total wearing a list (#61).
+  const report = (await reportsFor(session.email)).at(-1) ?? null
   // The language preference as saved: the path cookie is this device's, the
   // users row is what a new device inherits at sign-in (#12).
   const [user] = await db.select().from(schema.users).where(eq(schema.users.email, session.email))

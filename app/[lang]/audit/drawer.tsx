@@ -57,7 +57,10 @@ const COPY: Record<
       'unknown-principle': 'Choose a Principle from the Glossary.',
       incomplete: 'Both written parts are required: the description and the fix.',
       submitted: 'This report is already submitted.',
-      locked: 'The audit unlocks when all four Gate Quizzes are passed.',
+      // Not "all four": the count is per Stage and lives in config.md, and a
+      // number copied into a sentence here is one nobody would think to change.
+      locked: 'The audit unlocks once every Gate Quiz in this Stage is passed.',
+      'no-subject': 'This Stage has no page to audit yet.',
       'too-few': 'Not enough Findings yet to submit.',
     },
   },
@@ -83,7 +86,8 @@ const COPY: Record<
       'unknown-principle': '용어집에서 원칙을 선택하세요.',
       incomplete: '설명과 고치는 방법, 두 서술이 모두 필요합니다.',
       submitted: '이미 제출된 보고서입니다.',
-      locked: '관문 퀴즈 네 개를 모두 통과하면 감사가 열립니다.',
+      locked: '이 단계의 관문 퀴즈를 모두 통과하면 감사가 열립니다.',
+      'no-subject': '이 단계에는 아직 감사할 페이지가 없습니다.',
       'too-few': '제출하기에는 Finding이 아직 부족합니다.',
     },
   },
@@ -96,11 +100,14 @@ const COPY: Record<
  */
 export function FindingsDrawer({
   lang,
+  stage,
   glossary,
   findings,
   minFindings,
 }: {
   lang: Language
+  /** Which Stage's report this drawer writes into — carried on every action (#61). */
+  stage: number
   glossary: { slug: string; name: string }[]
   findings: SavedFinding[]
   minFindings: number
@@ -143,7 +150,7 @@ export function FindingsDrawer({
 
   function saveCurrentFinding(onSaved?: () => void) {
     startTransition(async () => {
-      const result = await saveFinding(lang, { element, principle, description, fix })
+      const result = await saveFinding(lang, stage, { element, principle, description, fix })
       setError(result)
       if (result === null) {
         clearDraft()
@@ -216,7 +223,7 @@ export function FindingsDrawer({
             <p className="mt-1">{finding.description}</p>
             <button
               type="button"
-              onClick={() => startTransition(() => removeFinding(lang, finding.id))}
+              onClick={() => startTransition(() => removeFinding(lang, stage, finding.id))}
               className="mt-1 min-h-11 text-xs text-zinc-500 underline-offset-4 hover:underline"
             >
               {copy.remove}
@@ -240,7 +247,7 @@ export function FindingsDrawer({
         disabled={pending || missing > 0}
         onClick={() =>
           startTransition(async () => {
-            setError(await submitReport(lang))
+            setError(await submitReport(lang, stage))
           })
         }
         className="min-h-11 w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40 dark:bg-white dark:text-zinc-900"

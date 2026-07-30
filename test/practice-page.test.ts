@@ -2,7 +2,7 @@ import { join } from 'node:path'
 
 import { expect, test } from 'vitest'
 
-import { competenciesOfStage, loadContent } from '../lib/content'
+import { competenciesOfStage, loadContent, practicePageOf } from '../lib/content'
 
 /**
  * Stage 1 authoring rules for the Practice Page — what the spec demands of the
@@ -12,7 +12,17 @@ import { competenciesOfStage, loadContent } from '../lib/content'
  * build and are each proved by a failing fixture in content.test.ts.
  */
 
-const { config, practicePage } = loadContent(join(__dirname, '..', 'content'))
+const content = loadContent(join(__dirname, '..', 'content'))
+const { config } = content
+
+test('Stage 1 has an authored audit subject', () => {
+  // Named rather than inferred. A Stage owes a subject once its directory
+  // exists (#61), so deleting Stage 1's would take every assertion below with
+  // it and leave a green suite behind. This is the one that would go red.
+  expect(practicePageOf(content, 1)).not.toBeNull()
+})
+
+const practicePage = practicePageOf(content, 1)!
 const { defects, html } = practicePage
 
 test('six defects are planted, unevenly, with every Stage 1 Competency represented', () => {

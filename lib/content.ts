@@ -161,6 +161,8 @@ export interface PlantedDefect {
 }
 
 export interface PracticePage {
+  /** The Stage this page is the audit subject for. */
+  stage: number
   html: Bilingual
   css: string
   /** The `data-element` identifiers, identical across both language variants. */
@@ -177,7 +179,28 @@ export interface Content {
   /** The one stylesheet every item screen is drawn with, so pools cannot drift visually. */
   itemScreenCss: string
   briefs: Brief[]
-  practicePage: PracticePage
+  /**
+   * Audit subjects, keyed by Stage (#61). A Stage has one or none: a Learner
+   * audits a different page at each Stage, because auditing the Stage 1 page
+   * again would test recall of its manifest rather than the Competencies just
+   * learned.
+   *
+   * Sparse on purpose while the later subjects are unauthored. Ask through
+   * `practicePageOf`, which says "not authored" rather than handing back
+   * undefined for a caller to misread as "nothing wrong here".
+   */
+  practicePages: PracticePage[]
+}
+
+/**
+ * The audit subject a Stage owns, or null where nobody has authored one yet.
+ *
+ * Null is a real answer and every caller has to say something about it — the
+ * surface that would show it says so in words rather than rendering an empty
+ * frame, which is a state a reader cannot tell from a broken page.
+ */
+export function practicePageOf(content: Content, stage: number): PracticePage | null {
+  return content.practicePages.find((page) => page.stage === stage) ?? null
 }
 
 export class ContentError extends Error {
@@ -200,10 +223,10 @@ export function loadContent(root: string = join(process.cwd(), 'content')): Cont
   const items = loadItems(root, config, principles, problems)
   const itemScreenCss = loadItemScreenCss(root, items, problems)
   const briefs = loadBriefs(root, principles, problems)
-  const practicePage = loadPracticePage(root, config, principles, problems)
+  const practicePages = loadPracticePages(root, config, principles, problems)
 
   if (problems.length > 0) throw new ContentError(problems)
-  return { config, glossary, competencies, items, itemScreenCss, briefs, practicePage }
+  return { config, glossary, competencies, items, itemScreenCss, briefs, practicePages }
 }
 
 function loadConfig(root: string, problems: string[]): ContentConfig | null {
@@ -556,25 +579,73 @@ function loadBriefs(root: string, principles: Set<string>, problems: string[]): 
 
 const ELEMENT_ATTRIBUTE = /data-element="([^"]+)"/g
 
-function loadPracticePage(
+/**
+ * The audit subjects, one per Stage that has one (#61).
+ *
+ * A Stage owes a subject once `practice-page/stage-N/` exists — authoring one
+ * is what declares it, and from that moment the directory owes all three
+ * parts. A Stage with no directory owes nothing yet and is not a failure here;
+ * that a Stage the curriculum declares has no subject is said out loud on the
+ * Maintainer's content page and on the Learner's audit surface, not left to be
+ * inferred from a screen with nothing on it.
+ *
+ * A directory naming no declared Stage is a failure, because it is content
+ * nobody can ever reach.
+ */
+function loadPracticePages(
   root: string,
   config: ContentConfig,
   principles: Set<string>,
   problems: string[],
+): PracticePage[] {
+  const root_ = join(root, 'practice-page')
+  if (!existsSync(root_)) return []
+
+  const declared = new Set(config.stages.map((entry) => entry.stage))
+  const pages: PracticePage[] = []
+
+  for (const name of readdirSync(root_).sort()) {
+    const match = /^stage-(\d+)$/.exec(name)
+    if (!match) {
+      problems.push(
+        `practice-page/${name}: an audit subject lives in a directory named stage-N, naming the Stage it belongs to`,
+      )
+      continue
+    }
+    const stage = Number(match[1])
+    if (!declared.has(stage)) {
+      problems.push(`practice-page/${name}: Stage ${stage} is not declared in config.md, so no Learner can reach this`)
+      continue
+    }
+    pages.push(loadPracticePage(root_, name, stage, config, principles, problems))
+  }
+
+  return pages
+}
+
+function loadPracticePage(
+  parent: string,
+  name: string,
+  stage: number,
+  config: ContentConfig,
+  principles: Set<string>,
+  problems: string[],
 ): PracticePage {
-  const dir = join(root, 'practice-page')
+  const dir = join(parent, name)
 
   const html: Bilingual = { en: '', ko: '' }
   for (const lang of LANGS) {
     const path = join(dir, `${lang}.html`)
     if (existsSync(path)) html[lang] = readFileSync(path, 'utf8')
-    else problems.push(`practice-page/${lang}.html is missing`)
+    else problems.push(`practice-page/${name}/${lang}.html is missing`)
   }
 
   const cssPath = join(dir, 'practice-page.css')
   let css = ''
   if (existsSync(cssPath)) css = readFileSync(cssPath, 'utf8')
-  else problems.push('practice-page/practice-page.css is missing — most Planted Defects live in the styling')
+  else {
+    problems.push(`practice-page/${name}/practice-page.css is missing — most Planted Defects live in the styling`)
+  }
 
   const identifiers = {
     en: [...html.en.matchAll(ELEMENT_ATTRIBUTE)].map((match) => match[1]),
@@ -585,7 +656,9 @@ function loadPracticePage(
     for (const id of identifiers[lang]) {
       // A repeated identifier would make a Finding ambiguous about which
       // element it names.
-      if (seen.has(id)) problems.push(`practice-page/${lang}.html: element identifier "${id}" appears more than once`)
+      if (seen.has(id)) {
+        problems.push(`practice-page/${name}/${lang}.html: element identifier "${id}" appears more than once`)
+      }
       seen.add(id)
     }
   }
@@ -596,7 +669,7 @@ function loadPracticePage(
   const koOnly = [...koElements].filter((id) => !elements.has(id))
   if (enOnly.length > 0 || koOnly.length > 0) {
     problems.push(
-      'practice-page: the two language variants do not expose an identical set of element identifiers' +
+      `practice-page/${name}: the two language variants do not expose an identical set of element identifiers` +
         (enOnly.length > 0 ? ` — only in en: ${enOnly.join(', ')}` : '') +
         (koOnly.length > 0 ? ` — only in ko: ${koOnly.join(', ')}` : ''),
     )
@@ -605,9 +678,11 @@ function loadPracticePage(
   const defects: PlantedDefect[] = []
   const manifestPath = join(dir, 'manifest.md')
   if (!existsSync(manifestPath)) {
-    problems.push('practice-page/manifest.md is missing — the Planted Defects are the Stage 1 reference answer')
+    problems.push(
+      `practice-page/${name}/manifest.md is missing — the Planted Defects are this Stage's reference answer`,
+    )
   } else {
-    const rel = 'practice-page/manifest.md'
+    const rel = `practice-page/${name}/manifest.md`
     const { data } = readFrontmatter(manifestPath, rel, problems)
     checkLanguagePairs(data, rel, problems)
 
@@ -641,12 +716,19 @@ function loadPracticePage(
       if (defect.element !== '' && !elements.has(defect.element)) {
         problems.push(`${rel}: ${label} names element "${defect.element}", which does not exist on the Practice Page`)
       }
-      // Stage 1's, specifically, not merely a declared one: this page is Stage
-      // 1's audit subject, so a defect on it citing a Stage 2 Competency is a
-      // defect the Learner has not been taught to see. Later Stages get their
-      // own subject, and their own check with it (#61).
-      if (defect.competency !== '' && !competenciesOfStage(config, 1).includes(defect.competency)) {
-        problems.push(`${rel}: ${label} cites Competency "${defect.competency}", outside the Stage 1 Competencies`)
+      // This Stage's Competencies, not merely declared ones: a Learner reaching
+      // this subject has been taught the Stage it belongs to, so a defect on it
+      // citing a later Stage's Competency is one they have not been taught to
+      // see. Earlier Stages are allowed — those Competencies are behind them,
+      // and a Stage 2 page whose layout is also badly ordered is the honest
+      // shape of real work.
+      const teachable = config.stages
+        .filter((entry) => entry.stage <= stage)
+        .flatMap((entry) => entry.competencies)
+      if (defect.competency !== '' && !teachable.includes(defect.competency)) {
+        problems.push(
+          `${rel}: ${label} cites Competency "${defect.competency}", which no Learner reaching Stage ${stage} has been taught`,
+        )
       }
       if (defect.principle !== '' && !principles.has(defect.principle)) {
         problems.push(`${rel}: ${label} cites UX Principle "${defect.principle}", absent from the Glossary`)
@@ -655,7 +737,7 @@ function loadPracticePage(
     }
   }
 
-  return { html, css, elements: [...elements], defects }
+  return { stage, html, css, elements: [...elements], defects }
 }
 
 /**
