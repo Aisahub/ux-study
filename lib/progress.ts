@@ -48,18 +48,28 @@ export function stageProgress(progress: Progress, stage: number): StageProgress 
 }
 
 /**
- * This Learner's report row, or null.
+ * This Learner's report rows — at most one per Stage (#61), in Stage order.
  *
- * Wrapped in React's `cache` because two independent server components want it
- * on the same render: the page, to place the capstone, and the navigation, to
- * decide whether the Findings library is reachable yet. They cannot see each
+ * Wrapped in React's `cache` because two independent server components want
+ * them on the same render: the page, to place the capstone, and the navigation,
+ * to decide whether the Findings library is reachable yet. They cannot see each
  * other, and every Learner surface is `force-dynamic`, so without this the
  * table is read twice on every request for the length of the programme.
+ *
+ * All of a Learner's rows in one read rather than one query per Stage: there
+ * are three of them at most, and asking per Stage would put the round trips
+ * back that the cache exists to remove.
  */
-export const reportFor = cache(async (email: string) => {
-  const [report] = await db.select().from(schema.reports).where(eq(schema.reports.email, email))
-  return report ?? null
+export const reportsFor = cache(async (email: string) => {
+  const rows = await db.select().from(schema.reports).where(eq(schema.reports.email, email))
+  return rows.sort((a, b) => a.stage - b.stage)
 })
+
+/** This Learner's report for one Stage, or null before they have started it. */
+export async function reportFor(email: string, stage: number) {
+  const rows = await reportsFor(email)
+  return rows.find((row) => row.stage === stage) ?? null
+}
 
 /** One finished attempt, as My page lists it (#54). */
 export interface AttemptRecord {
@@ -116,7 +126,7 @@ export async function progressFor(email: string): Promise<Progress> {
     .select({ competency: schema.attempts.competency, passed: schema.attempts.passed })
     .from(schema.attempts)
     .where(eq(schema.attempts.email, email))
-  const report = await reportFor(email)
+  const reports = await reportsFor(email)
 
   const stages = content.config.stages.map(({ stage, competencies }): StageProgress => {
     const quizzes: StageProgress['quizzes'] = {}
@@ -129,11 +139,10 @@ export async function progressFor(email: string): Promise<Progress> {
       }
     }
 
-    // A Learner holds one report row — `reports.email` is unique — and that
-    // row is Stage 1's, the only Stage with an authored subject to audit. A
-    // later Stage therefore has nothing submitted and cannot have, until #61
-    // gives each Stage its own report.
-    const reportSubmitted = stage === 1 && report?.submittedAt != null
+    // This Stage's own report, submitted. Completion is submission and not
+    // approval: nobody grades a Self-Audit Report, and a Stage that waited on
+    // someone's verdict would stop being self-paced (ADR-0005).
+    const reportSubmitted = reports.some((row) => row.stage === stage && row.submittedAt != null)
     const stepsDone =
       Object.values(quizzes).filter((quiz) => quiz.status === 'passed').length + (reportSubmitted ? 1 : 0)
 

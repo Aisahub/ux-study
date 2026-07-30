@@ -2,12 +2,12 @@ import { notFound } from 'next/navigation'
 import type { NextRequest } from 'next/server'
 
 import { requireSession } from '@/lib/auth'
-import { content, practicePageCss } from '@/lib/server-content'
+import { practicePage, practicePageCss } from '@/lib/server-content'
 import { isLanguage } from '@/lib/language'
 
 /**
- * The Practice Page, served whole (#23). A route handler rather than a React
- * page, so the response is exactly the authored document: no navigation bar,
+ * A Stage's Practice Page, served whole (#23). A route handler rather than a
+ * React page, so the response is exactly the authored document: no navigation,
  * no logo, no sidebar can appear inside its bounds because nothing of the
  * platform is in the response at all. A Learner asked to find what is wrong
  * with this page must never be able to report our own chrome.
@@ -43,13 +43,20 @@ document.addEventListener('click', function (event) {
 [data-selected] { outline: 3px solid #2563eb; outline-offset: 2px; }
 </style>`
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ lang: string }> }) {
-  const { lang } = await params
+export async function GET(request: NextRequest, { params }: { params: Promise<{ lang: string; stage: string }> }) {
+  const { lang, stage } = await params
   if (!isLanguage(lang)) notFound()
   await requireSession(lang)
 
-  const document = content.practicePage.html[lang]
-    .replace('<link rel="stylesheet" href="./practice-page.css">', `<style>\n${practicePageCss}</style>`)
+  const number = Number(stage)
+  const subject = Number.isInteger(number) ? practicePage(number) : null
+  // A Stage with no authored subject has no document to serve. The surface
+  // around this frame is where that is said in words; a route that can only
+  // answer in HTML says not-found rather than returning a blank page.
+  if (!subject) notFound()
+
+  const document = subject.html[lang]
+    .replace('<link rel="stylesheet" href="./practice-page.css">', `<style>\n${practicePageCss(number)}</style>`)
     .replace('</body>', `${SELECTION_SCRIPT}\n</body>`)
 
   return new Response(document, { headers: { 'content-type': 'text/html; charset=utf-8' } })

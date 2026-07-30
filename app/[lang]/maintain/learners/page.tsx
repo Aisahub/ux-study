@@ -64,10 +64,11 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
   if (!isLanguage(lang)) notFound()
   await requireMaintainer(lang)
   const copy = COPY[lang]
-  // Stage 1's Competencies alone: they are the only ones a Learner can yet
-  // stand anywhere in, and a denominator of twelve would make this position
-  // a distance from Completion rather than a place inside a Stage. The later
-  // Stages join this view when they have a subject to be audited (#61).
+  // Stage 1's Competencies alone: a denominator of twelve would make this
+  // position a distance from Completion rather than a place inside a Stage.
+  // The later Stages join this view when there is a reason to widen it —
+  // #61 gave them their own reports, not a reason for one row to speak for
+  // three Stages at once.
   const slugs = competenciesOfStage(content.config, 1)
 
   const users = await db.select().from(schema.users).orderBy(asc(schema.users.email))
@@ -90,7 +91,8 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
         <ul className="flex flex-col gap-2">
           {users.map((user) => {
             const own = attempts.filter((attempt) => attempt.email === user.email)
-            const report = reports.find((entry) => entry.email === user.email)
+            // Stage 1's report, matching the Competencies counted beside it.
+            const report = reports.find((entry) => entry.email === user.email && entry.stage === 1)
             const passed = slugs.filter((slug) =>
               own.some((attempt) => attempt.competency === slug && attempt.passed === true),
             ).length

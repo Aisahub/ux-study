@@ -97,19 +97,34 @@ export const attempts = pgTable(
 )
 
 /**
- * The Self-Audit Report (#24) — at most one per Learner, because submission
- * is final: once the manifest is revealed, a second attempt measures nothing.
+ * The Self-Audit Report (#24) — at most one per Learner **per Stage** (#61),
+ * because submission is final: once that Stage's manifest is revealed, a
+ * second attempt at it measures nothing. Finality is per Stage and not per
+ * Learner; a Stage 1 report submitted last month must not stand in the way of
+ * Stage 2's.
+ *
  * The row exists from the first autosave; submittedAt is what separates a
  * draft from the submitted report.
  */
-export const reports = pgTable('reports', {
-  id: serial('id').primaryKey(),
-  email: text('email').notNull().unique(),
-  /** Optional link showing one Finding actually fixed; a screenshot URL is sufficient. Never affects Completion. */
-  issueUrl: text('issue_url'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  submittedAt: timestamp('submitted_at', { withTimezone: true }),
-})
+export const reports = pgTable(
+  'reports',
+  {
+    id: serial('id').primaryKey(),
+    email: text('email').notNull(),
+    /**
+     * The Stage this report audits, and therefore which subject it was written
+     * against. Carried with no default: a report that does not say which Stage
+     * it belongs to is a mistake in the caller, and a default would land it
+     * silently in Stage 1 rather than saying so.
+     */
+    stage: integer('stage').notNull(),
+    /** Optional link showing one Finding actually fixed; a screenshot URL is sufficient. Never affects Completion. */
+    issueUrl: text('issue_url'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    submittedAt: timestamp('submitted_at', { withTimezone: true }),
+  },
+  (table) => [uniqueIndex('reports_email_stage_idx').on(table.email, table.stage)],
+)
 
 /**
  * One Finding: two structured fields and two written ones (#24). The element
