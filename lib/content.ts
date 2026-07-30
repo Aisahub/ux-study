@@ -96,6 +96,20 @@ export interface QuizItemOption {
   correct: boolean
 }
 
+/**
+ * One state in a sequence — a still, and the words for when it is.
+ *
+ * The caption says *when*, never what changed. "Three seconds after tapping
+ * Save" is a caption; "no spinner appears" is the answer, and an item whose
+ * captions carry the answer can be scored without looking at the states, which
+ * is the definition question ADR-0006 rules out. See `content/items/AUTHORING.md`.
+ */
+export interface QuizItemStep {
+  caption: Bilingual
+  /** The state drawn, styled by `items/item-screen.css` exactly as a single screen is. */
+  screen: Bilingual
+}
+
 export interface QuizItem {
   slug: string
   competency: string
@@ -117,6 +131,13 @@ export interface QuizItem {
    * being the equivalent for anyone who cannot see it.
    */
   screen?: Bilingual
+  /**
+   * The artefact drawn as a sequence of states instead of one, for a defect
+   * that only exists across time — a wait, a state change, an error arriving.
+   * Mutually exclusive with `screen`: an item shows one artefact, and two
+   * would leave the Learner deciding which one the prompt is about.
+   */
+  sequence?: QuizItemStep[]
   /** The question asked about the artefact. */
   prompt: Bilingual
   options: { en: QuizItemOption[]; ko: QuizItemOption[] }
@@ -388,6 +409,16 @@ function loadItems(
         problems.push(`${rel}: prompt must carry en and ko variants`)
       }
 
+      // Each step's caption and screen are checked for both languages by
+      // `checkLanguagePairs` above, which walks the whole front matter — a
+      // half-authored pair is reported as `sequence[1].screen is missing its
+      // ko language variant` before anything here runs. What is left is the
+      // shape around them.
+      const sequence = readSequence(data.sequence, rel, problems)
+      if (sequence && data.screen !== undefined) {
+        problems.push(`${rel}: an item draws either one screen or a sequence, never both`)
+      }
+
       const options: QuizItem['options'] = { en: [], ko: [] }
       const rawOptions = isRecord(data.options) ? data.options : {}
       for (const lang of LANGS) {
@@ -445,6 +476,7 @@ function loadItems(
         principles: citedPrinciples(data.principles, rel, principles, problems),
         artefact: asBilingual(data.artefact),
         screen: isLanguagePair(data.screen) ? asBilingual(data.screen) : undefined,
+        sequence,
         prompt: asBilingual(data.prompt),
         options,
         frontmatter: data,
@@ -464,6 +496,34 @@ function loadItems(
 }
 
 /**
+ * A sequence out of front matter, or null when the item does not draw one.
+ *
+ * Two states is the floor. One state is a screen and already has a spelling;
+ * accepting it here would give the same artefact two ways to be authored, and
+ * the next author would have to guess which the pool used.
+ */
+function readSequence(value: unknown, rel: string, problems: string[]): QuizItemStep[] | undefined {
+  if (value === undefined) return undefined
+  if (!Array.isArray(value) || value.length < 2) {
+    problems.push(`${rel}: sequence must list at least two states — one state is a screen`)
+    return undefined
+  }
+
+  const steps: QuizItemStep[] = []
+  value.forEach((entry, index) => {
+    const step = isRecord(entry) ? entry : {}
+    if (!isLanguagePair(step.caption)) {
+      problems.push(`${rel}: sequence[${index}].caption must carry en and ko variants — it says when this state is`)
+    }
+    if (!isLanguagePair(step.screen)) {
+      problems.push(`${rel}: sequence[${index}].screen must carry en and ko variants`)
+    }
+    steps.push({ caption: asBilingual(step.caption), screen: asBilingual(step.screen) })
+  })
+  return steps
+}
+
+/**
  * The stylesheet item screens are drawn with. Required only once something
  * draws one — until then it would be a file the project asks for and nothing
  * reads. Missing it while items reference it is worth failing the build over:
@@ -471,7 +531,7 @@ function loadItems(
  * layout nobody authored.
  */
 function loadItemScreenCss(root: string, items: Record<string, QuizItem[]>, problems: string[]): string {
-  const drawn = Object.values(items).some((pool) => pool.some((item) => item.screen))
+  const drawn = Object.values(items).some((pool) => pool.some((item) => item.screen || item.sequence))
   const path = join(root, 'items', 'item-screen.css')
   if (existsSync(path)) return readFileSync(path, 'utf8')
   if (drawn) problems.push('items/item-screen.css is missing — items draw screens that nothing styles')
