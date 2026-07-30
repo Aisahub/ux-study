@@ -2,7 +2,7 @@ import { join } from 'node:path'
 
 import { expect, test } from 'vitest'
 
-import { loadContent } from '../lib/content'
+import { competenciesOfStage, loadContent } from '../lib/content'
 
 /**
  * Stage 1 authoring rules for the Practice Page — what the spec demands of the
@@ -18,8 +18,8 @@ const { defects, html } = practicePage
 test('six defects are planted, unevenly, with every Stage 1 Competency represented', () => {
   expect(defects).toHaveLength(6)
 
-  const perCompetency = config.stage1Competencies.map(
-    (competency) => defects.filter((defect) => defect.competency === competency).length,
+  const perCompetency = competenciesOfStage(config, 1).map(
+    (competency: string) => defects.filter((defect) => defect.competency === competency).length,
   )
   // One or more per Competency (ADR-0007), but not evenly spread — an even
   // split would let a Learner reason about the distribution instead of looking.

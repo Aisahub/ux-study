@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { requireSession } from '@/lib/auth'
+import { competenciesOfStage, stageOf } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
-import { progressFor, type QuizStatus } from '@/lib/progress'
+import { progressFor, stageProgress, type QuizStatus } from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
 export const dynamic = 'force-dynamic'
@@ -164,14 +165,18 @@ export default async function CompetencyPage({
   const { lang, competency: slug } = await params
   if (!isLanguage(lang)) notFound()
   const competency = content.competencies.find((entry) => entry.slug === slug)
-  if (!competency || !content.config.stage1Competencies.includes(slug)) notFound()
+  const stage = stageOf(content.config, slug)
+  if (!competency || stage === null) notFound()
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
-  const progress = await progressFor(session.email)
-  const quiz = progress.quizzes[slug]
+  const quiz = stageProgress(await progressFor(session.email), stage).quizzes[slug]
   const { drawSize, passThreshold } = content.config
-  const station = String(content.config.stage1Competencies.indexOf(slug) + 1).padStart(2, '0')
+  // Numbered within its own Stage, so Stage 1 still counts 01–04. The Stage a
+  // Learner is standing in is what the number is a position inside; counting
+  // 01–12 across the programme would make it a distance from Completion, which
+  // is the cumulative figure PRODUCT.md rules out.
+  const station = String(competenciesOfStage(content.config, stage).indexOf(slug) + 1).padStart(2, '0')
 
   return (
     // A column, the width the Gate Quiz doorstep next door uses. The

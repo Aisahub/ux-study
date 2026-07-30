@@ -2,7 +2,7 @@ import { join } from 'node:path'
 
 import { expect, test } from 'vitest'
 
-import { loadContent } from '../lib/content'
+import { competenciesOfStage, loadContent } from '../lib/content'
 
 /**
  * Stage 1 authoring rules for the Competency definitions (#14) — what the spec
@@ -15,9 +15,12 @@ import { loadContent } from '../lib/content'
 const { config, competencies } = loadContent(join(__dirname, '..', 'content'))
 
 test('all four Stage 1 Competencies are authored', () => {
-  expect(competencies.map((competency) => competency.slug).sort()).toEqual(
-    [...config.stage1Competencies].sort(),
-  )
+  // Stage 1's list against what is authored, not the whole curriculum against
+  // it: Stage 2 and Stage 3 are declared in config.md and unwritten, so an
+  // equality over every Stage would fail today and again on every Stage that
+  // lands one definition before the next.
+  const authored = new Set(competencies.map((competency) => competency.slug))
+  expect(competenciesOfStage(config, 1).filter((slug: string) => !authored.has(slug))).toEqual([])
 })
 
 test('each Competency carries two or three pre-reading questions', () => {

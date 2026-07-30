@@ -15,6 +15,8 @@ const COPY: Record<
     heading: string
     explanation: string
     itemsHeading: string
+    stage: (n: number) => string
+    notAuthored: string
     rate: (correct: number, drawn: number) => string
     neverDrawn: string
     defectsHeading: string
@@ -33,6 +35,8 @@ const COPY: Record<
     explanation:
       'An item everyone fails is far more likely a badly-worded item than four badly-prepared Learners. Every figure is a projection over attempts and reports — nothing is stored separately.',
     itemsHeading: 'Item pass rates',
+    stage: (n) => `Stage ${n}`,
+    notAuthored: 'No pool authored yet',
     rate: (correct, drawn) => `${correct} correct of ${drawn} drawn`,
     neverDrawn: 'never drawn',
     defectsHeading: 'Planted defects, most missed first',
@@ -51,6 +55,8 @@ const COPY: Record<
     explanation:
       '모두가 틀리는 문항은 준비가 부족한 학습자 넷보다, 잘못 쓰인 문항일 가능성이 훨씬 큽니다. 모든 수치는 시도와 보고서 기록에서 그때그때 계산됩니다 — 따로 저장되는 것은 없습니다.',
     itemsHeading: '문항별 정답률',
+    stage: (n) => `${n}단계`,
+    notAuthored: '아직 작성된 문항 풀이 없습니다',
     rate: (correct, drawn) => `${drawn}회 출제 중 ${correct}회 정답`,
     neverDrawn: '아직 출제되지 않음',
     defectsHeading: '심어 둔 결함, 많이 놓친 순',
@@ -124,24 +130,39 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
 
       <section>
         <h2 className="text-sm font-medium text-zinc-500">{copy.itemsHeading}</h2>
-        {content.config.stage1Competencies.map((slug) => (
-          <div key={slug} className="mt-3">
-            <h3 className="text-sm font-medium">
-              {content.competencies.find((competency) => competency.slug === slug)!.name[lang]}
-            </h3>
-            <ul className="mt-1 flex flex-col gap-1 text-sm">
-              {content.items[slug].map((item) => {
-                const stats = byItem.get(item.slug)
-                return (
-                  <li key={item.slug} className="flex justify-between gap-4">
-                    <span className="truncate font-mono text-xs">{item.slug}</span>
-                    <span className="shrink-0 text-zinc-500">
-                      {stats ? copy.rate(stats.correct, stats.drawn) : copy.neverDrawn}
-                    </span>
-                  </li>
-                )
-              })}
-            </ul>
+        {/* Grouped by Stage, and every declared Competency is listed whether or
+            not it has been authored yet. A Maintainer watching content health
+            needs to see the gaps: a Stage whose Competencies simply do not
+            appear looks identical to a Stage that is finished. */}
+        {content.config.stages.map(({ stage, competencies }) => (
+          <div key={stage} className="mt-4">
+            <h3 className="text-sm font-semibold">{copy.stage(stage)}</h3>
+            {competencies.map((slug) => {
+              const competency = content.competencies.find((entry) => entry.slug === slug)
+              const pool = content.items[slug]
+              return (
+                <div key={slug} className="mt-3 pl-3">
+                  <h4 className="text-sm font-medium">{competency?.name[lang] ?? slug}</h4>
+                  {!pool || pool.length === 0 ? (
+                    <p className="mt-1 text-sm text-zinc-500">{copy.notAuthored}</p>
+                  ) : (
+                    <ul className="mt-1 flex flex-col gap-1 text-sm">
+                      {pool.map((item) => {
+                        const stats = byItem.get(item.slug)
+                        return (
+                          <li key={item.slug} className="flex justify-between gap-4">
+                            <span className="truncate font-mono text-xs">{item.slug}</span>
+                            <span className="shrink-0 text-zinc-500">
+                              {stats ? copy.rate(stats.correct, stats.drawn) : copy.neverDrawn}
+                            </span>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  )}
+                </div>
+              )
+            })}
           </div>
         ))}
       </section>

@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { eq } from 'drizzle-orm'
 import { expect, test } from 'vitest'
 
-import { loadContent } from '../lib/content'
+import { competenciesOfStage, loadContent } from '../lib/content'
 import { BASE_URL } from './config'
 import { schema, sessionCookieFor, testDb } from './db'
 import { visibleText } from './html'
@@ -18,13 +18,16 @@ import { visibleText } from './html'
  */
 
 const { config, items, practicePage } = loadContent(join(__dirname, '..', 'content'))
+// Stage 1's, named as Stage 1's: the Practice Page is its subject, and a
+// Stage 2 Competency arriving later must not join the gates that open it.
+const stage1 = competenciesOfStage(config, 1)
 
 function freshLearner(): string {
   return `learner-${randomBytes(6).toString('hex')}@aisahub.com`
 }
 
 async function passAllQuizzes(email: string) {
-  for (const competency of config.stage1Competencies) {
+  for (const competency of stage1) {
     await testDb.insert(schema.attempts).values({
       email,
       competency,
@@ -139,7 +142,7 @@ test('the submitted report reveals every planted defect, marked found or missed,
 test('completion never arrives with a Competency outstanding', async () => {
   const email = freshLearner()
   // Three of four passed, report somehow submitted — completion must not show.
-  for (const competency of config.stage1Competencies.slice(0, 3)) {
+  for (const competency of stage1.slice(0, 3)) {
     await testDb.insert(schema.attempts).values({
       email,
       competency,
