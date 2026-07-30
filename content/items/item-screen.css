@@ -332,6 +332,30 @@ body {
   font-size: 14px;
 }
 
+/* The same message in the colour a product reaches for when the news it
+   carries is good, and in the colour it reaches for when the news is neither
+   good nor bad. Both must follow `.toast`, which sets the background they
+   replace. */
+.toast--green {
+  background: #16a34a;
+}
+
+.toast--plain {
+  background: #1f2937;
+}
+
+/* The ring a product turns while it is working, drawn at rest — an artefact
+   holds still, so what is left of it is the shape and not the turning. */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  vertical-align: -3px;
+}
+
 /* A box that holds a piece of advice. */
 .callout {
   border: 1px solid #93c5fd;
@@ -522,6 +546,40 @@ body {
 .required {
   color: #dc2626;
   font-size: 12px;
+}
+
+/* A line a field says about itself, sitting under the control rather than
+   beside it, in the column the control starts in — the label is 120px wide
+   with a 10px gap, and this clears both. */
+.field-msg {
+  margin: 4px 0 0 130px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+/* Said in red — a darker one than `.required`, because this is 13px of prose
+   on white rather than a single mark, and the lighter red does not clear AA
+   at that size. The sign is drawn here rather than typed into each item, so
+   that a red line always carries something besides its colour; an item that
+   means to say it in colour alone leaves this class off and reaches for the
+   inline escape hatch. */
+.field-msg--red {
+  color: #b91c1c;
+}
+
+.field-msg--red::before {
+  content: "⚠ ";
+}
+
+/* The line a multi-step flow uses to say where in itself the user is. It
+   states a position and nothing more; whether the position it states is worth
+   anything is the item's business. */
+.step-mark {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  letter-spacing: 0.02em;
+  margin: 0 0 8px;
 }
 
 .chip {
