@@ -45,3 +45,10 @@ next-env.d.ts
 
 # .env* above would swallow the committed template; keep it
 !.env.example
+
+# architect-advisor keeps two kinds of file side by side. The extracted patterns
+# are shared knowledge and are committed; the run state is not. Both files below
+# record the *worktree* name rather than the project, so committing them would
+# have every worktree overwrite the others.
+/architect-advisor/state/
+/architect-advisor/.active
