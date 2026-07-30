@@ -141,6 +141,46 @@ options:
 ---
 `
 
+/**
+ * ITEM_TWO's judgement drawn across time instead of described (#64).
+ *
+ * Built from a list of states rather than written out once and edited, so a
+ * test for a broken sequence breaks exactly the thing it is named after —
+ * string surgery on YAML fails silently the day the indentation moves.
+ */
+function itemWithSequence(...states: string[]): string {
+  return ITEM_TWO.replace('\n---\n', `\nsequence:\n${states.join('')}---\n`)
+}
+
+const STATE_ONE = `  - caption:
+      en: The moment Refresh is tapped
+      ko: 새로 고침을 누른 순간
+    screen:
+      en: |-
+        <div class="screen"><p>Revenue 41,900</p></div>
+      ko: |-
+        <div class="screen"><p>매출 41,900</p></div>
+`
+
+const STATE_TWO = `  - caption:
+      en: Three seconds later
+      ko: 3초 뒤
+    screen:
+      en: |-
+        <div class="screen"><p>Revenue 41,900</p></div>
+      ko: |-
+        <div class="screen"><p>매출 41,900</p></div>
+`
+
+const STATE_TWO_UNCAPTIONED = `  - screen:
+      en: |-
+        <div class="screen"><p>Revenue 41,900</p></div>
+      ko: |-
+        <div class="screen"><p>매출 41,900</p></div>
+`
+
+const ITEM_SEQUENCE = itemWithSequence(STATE_ONE, STATE_TWO)
+
 const BRIEF = `---
 stage: 1
 principles:
@@ -222,6 +262,62 @@ test('the baseline fixture is valid, so each failing test below fails for its on
   expect(content.briefs.map((brief) => brief.slug)).toEqual(['stage-1'])
   expect(content.practicePage.elements.sort()).toEqual(['confirm-selected-orders', 'page-title'])
   expect(content.practicePage.defects).toHaveLength(1)
+})
+
+test('an item can draw a sequence of states instead of one screen', () => {
+  const root = scaffold()
+  write(root, 'items/visual-hierarchy/refresh-time-size.md', ITEM_SEQUENCE)
+  write(root, 'items/item-screen.css', '.screen { padding: 12px; }\n')
+
+  const item = loadContent(root).items['visual-hierarchy'].find((entry) => entry.slug === 'refresh-time-size')!
+  expect(item.screen).toBeUndefined()
+  expect(item.sequence).toHaveLength(2)
+  expect(item.sequence![0].caption).toEqual({
+    en: 'The moment Refresh is tapped',
+    ko: '새로 고침을 누른 순간',
+  })
+  expect(item.sequence![1].screen.ko).toContain('매출')
+})
+
+test('a sequence state missing one language variant fails the build', () => {
+  // The case that would otherwise ship: it renders for one cohort and blank
+  // for the other, and a suite exercising one language cannot see it.
+  const root = scaffold()
+  const koLess = STATE_ONE.replace(/      ko: \|-\n        <div class="screen"><p>매출 41,900<\/p><\/div>\n/, '')
+  write(root, 'items/visual-hierarchy/refresh-time-size.md', itemWithSequence(koLess, STATE_TWO))
+  expectProblem(root, /sequence\[0\]\.screen is missing its ko language variant/)
+})
+
+test('a sequence state with no caption fails the build', () => {
+  const root = scaffold()
+  write(root, 'items/visual-hierarchy/refresh-time-size.md', itemWithSequence(STATE_ONE, STATE_TWO_UNCAPTIONED))
+  expectProblem(root, /sequence\[1\]\.caption must carry en and ko variants — it says when this state is/)
+})
+
+test('a sequence of one state fails the build, because one state is a screen', () => {
+  const root = scaffold()
+  write(root, 'items/visual-hierarchy/refresh-time-size.md', itemWithSequence(STATE_ONE))
+  expectProblem(root, /sequence must list at least two states — one state is a screen/)
+})
+
+test('an item carrying both a screen and a sequence fails the build', () => {
+  const root = scaffold()
+  write(root, 'items/visual-hierarchy/refresh-time-size.md', ITEM_SEQUENCE.replace('sequence:', `screen:
+  en: |-
+    <div class="screen"><p>Revenue</p></div>
+  ko: |-
+    <div class="screen"><p>매출</p></div>
+sequence:`))
+  expectProblem(root, /an item draws either one screen or a sequence, never both/)
+})
+
+test('a sequence makes the item-screen stylesheet required, as a drawn screen does', () => {
+  // The baseline fixture draws nothing, so it needs no stylesheet. Adding a
+  // sequence is what starts asking for one — the states would still render,
+  // unstyled, and the Learner would be judging a layout nobody authored.
+  const root = scaffold()
+  write(root, 'items/visual-hierarchy/refresh-time-size.md', ITEM_SEQUENCE)
+  expectProblem(root, /items\/item-screen\.css is missing — items draw screens that nothing styles/)
 })
 
 test('a Competency missing one of its two language variants fails the build', () => {

@@ -101,6 +101,10 @@ export default async function AttemptPage({
             slug: item.slug,
             artefact: item.artefact[lang],
             screen: item.screen?.[lang],
+            sequence: item.sequence?.map((step) => ({
+              caption: step.caption[lang],
+              html: step.screen[lang],
+            })),
             prompt: item.prompt[lang],
             // Original indices survive the shuffle so scoring is order-blind;
             // the keyed flag itself must never travel to the client (#22).

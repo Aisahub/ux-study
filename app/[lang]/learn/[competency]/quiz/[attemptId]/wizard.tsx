@@ -5,13 +5,15 @@ import { useState, useTransition } from 'react'
 import type { Language } from '@/lib/language'
 
 import { saveDraft, submitAttempt } from '../actions'
-import { ItemScreen } from './screen'
+import { ItemScreen, ItemSequence } from './screen'
 
 interface WizardItem {
   slug: string
   artefact: string
   /** The drawn screen, where the item has one; otherwise the artefact is read. */
   screen?: string
+  /** The drawn states, where the item's artefact only exists across time (#64). */
+  sequence?: { caption: string; html: string }[]
   prompt: string
   /** Shuffled for display; index is the option's authored position, which is what scoring understands. */
   options: { index: number; text: string; reason: string }[]
@@ -255,7 +257,15 @@ export function QuizWizard({
           question before the screen is looked at, and the Learner is back to
           reading a description of a defect instead of seeing one.
         */}
-        {item.screen ? (
+        {item.sequence ? (
+          <ItemSequence
+            slug={item.slug}
+            lang={lang}
+            steps={item.sequence}
+            css={screenCss}
+            description={item.artefact}
+          />
+        ) : item.screen ? (
           <ItemScreen slug={item.slug} lang={lang} html={item.screen} css={screenCss} description={item.artefact} />
         ) : (
           <div className="rounded-badge bg-sunk p-[17px] text-body whitespace-pre-line">
