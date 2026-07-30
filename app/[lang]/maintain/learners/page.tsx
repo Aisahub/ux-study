@@ -4,6 +4,7 @@ import { asc } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
 import { requireMaintainer } from '@/lib/auth'
+import { competenciesOfStage } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
@@ -63,7 +64,11 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
   if (!isLanguage(lang)) notFound()
   await requireMaintainer(lang)
   const copy = COPY[lang]
-  const slugs = content.config.stage1Competencies
+  // Stage 1's Competencies alone: they are the only ones a Learner can yet
+  // stand anywhere in, and a denominator of twelve would make this position
+  // a distance from Completion rather than a place inside a Stage. The later
+  // Stages join this view when they have a subject to be audited (#61).
+  const slugs = competenciesOfStage(content.config, 1)
 
   const users = await db.select().from(schema.users).orderBy(asc(schema.users.email))
   const attempts = await db.select().from(schema.attempts)

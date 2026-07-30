@@ -7,7 +7,7 @@ import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import type { Bilingual } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
-import { progressFor } from '@/lib/progress'
+import { progressFor, stageProgress } from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
 import { attachIssueUrl } from './actions'
@@ -87,9 +87,11 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
-  const progress = await progressFor(session.email)
+  // The Practice Page is Stage 1's subject, so Stage 1's gates are the ones
+  // that open it. #61 gives each Stage its own subject and its own report.
+  const stage1 = stageProgress(await progressFor(session.email), 1)
 
-  if (!progress.allPassed) {
+  if (!stage1.allPassed) {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
         <h1 className="text-2xl font-semibold tracking-tight">{briefField('title')[lang]}</h1>

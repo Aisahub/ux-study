@@ -16,6 +16,13 @@ const LANGS = ['en', 'ko'] as const
 
 export type Bilingual = { en: string; ko: string }
 
+export interface StageDeclaration {
+  /** The Stage's number, which is also its position in the programme. */
+  stage: number
+  /** The Competency slugs that make up this Stage, in display order. */
+  competencies: string[]
+}
+
 export interface ContentConfig {
   /** How many Quiz Items each Competency's pool is authored to hold. */
   poolSize: number
@@ -25,8 +32,22 @@ export interface ContentConfig {
   passThreshold: number
   /** The fewest Findings a Self-Audit Report may carry. */
   minFindings: number
-  /** The Competency slugs that make up Stage 1, in display order. */
-  stage1Competencies: string[]
+  /** Every Stage's Competencies (ADR-0001), in Stage order. */
+  stages: StageDeclaration[]
+}
+
+/** The Competency slugs of one Stage, in display order; empty if no such Stage is declared. */
+export function competenciesOfStage(config: ContentConfig, stage: number): string[] {
+  return config.stages.find((entry) => entry.stage === stage)?.competencies ?? []
+}
+
+/**
+ * Which Stage a Competency belongs to, or null if config.md declares it under
+ * none. Null is what every consumer refuses on: a slug nothing declares is not
+ * part of the curriculum, whether it arrived in a URL or in a content file.
+ */
+export function stageOf(config: ContentConfig, slug: string): number | null {
+  return config.stages.find((entry) => entry.competencies.includes(slug))?.stage ?? null
 }
 
 export interface GlossaryEntry {
@@ -179,10 +200,37 @@ function loadConfig(root: string, problems: string[]): ContentConfig | null {
       usable = false
     }
   }
-  const list = data.stage1Competencies
-  if (!Array.isArray(list) || list.length === 0 || list.some((slug) => typeof slug !== 'string')) {
-    problems.push('config.md: stage1Competencies must list the Stage 1 Competency slugs')
+  const declared = data.stages
+  const stages: StageDeclaration[] = []
+  if (!Array.isArray(declared) || declared.length === 0) {
+    problems.push('config.md: stages must declare each Stage and the Competency slugs it holds')
     usable = false
+  } else {
+    for (const entry of declared) {
+      const stage = isRecord(entry) ? entry.stage : undefined
+      const competencies = isRecord(entry) ? entry.competencies : undefined
+      if (!Number.isInteger(stage) || (stage as number) < 1) {
+        problems.push('config.md: every stage must carry a positive integer stage number')
+        usable = false
+        continue
+      }
+      if (
+        !Array.isArray(competencies) ||
+        competencies.length === 0 ||
+        competencies.some((slug) => typeof slug !== 'string')
+      ) {
+        problems.push(`config.md: stage ${stage} must list its Competency slugs`)
+        usable = false
+        continue
+      }
+      stages.push({ stage: stage as number, competencies: competencies as string[] })
+    }
+    // Stage order is the programme's order (ADR-0001: a Stage is a rung on a
+    // ladder of detection difficulty), so the file has to be written in it —
+    // a reader who has to sort the list before trusting it will not.
+    if (stages.some((entry, index) => index > 0 && entry.stage <= stages[index - 1].stage)) {
+      problems.push('config.md: stages must be declared in ascending Stage order, each Stage once')
+    }
   }
   if (!usable) return null
 
@@ -191,12 +239,16 @@ function loadConfig(root: string, problems: string[]): ContentConfig | null {
     drawSize: data.drawSize as number,
     passThreshold: data.passThreshold as number,
     minFindings: data.minFindings as number,
-    stage1Competencies: list as string[],
+    stages,
   }
   if (config.passThreshold > config.drawSize) problems.push('config.md: passThreshold cannot exceed drawSize')
   if (config.drawSize > config.poolSize) problems.push('config.md: drawSize cannot exceed poolSize')
-  if (new Set(config.stage1Competencies).size !== config.stage1Competencies.length) {
-    problems.push('config.md: stage1Competencies repeats a slug')
+  // Across the whole declaration, not within one Stage: a slug in two Stages
+  // would give the same Competency two positions in the programme, and every
+  // lookup here answers with whichever it met first.
+  const slugs = config.stages.flatMap((entry) => entry.competencies)
+  if (new Set(slugs).size !== slugs.length) {
+    problems.push('config.md: stages repeat a Competency slug')
   }
   return config
 }
@@ -245,8 +297,8 @@ function loadCompetencies(root: string, config: ContentConfig, problems: string[
     const { data, body } = readFrontmatter(join(root, 'competencies', file), rel, problems)
     checkLanguagePairs(data, rel, problems)
 
-    if (!config.stage1Competencies.includes(slug)) {
-      problems.push(`${rel}: "${slug}" is not a Competency declared in config.md`)
+    if (stageOf(config, slug) === null) {
+      problems.push(`${rel}: "${slug}" is not a Competency declared under any Stage in config.md`)
     }
     for (const field of ['name', 'objective', 'roleHint'] as const) {
       if (!isLanguagePair(data[field])) {
@@ -313,8 +365,8 @@ function loadItems(
     .sort()
 
   for (const competency of poolDirs) {
-    if (!config.stage1Competencies.includes(competency)) {
-      problems.push(`items/${competency}: item pool for a Competency not declared in config.md`)
+    if (stageOf(config, competency) === null) {
+      problems.push(`items/${competency}: item pool for a Competency declared under no Stage in config.md`)
     }
 
     const pool: QuizItem[] = []
@@ -529,7 +581,11 @@ function loadPracticePage(
       if (defect.element !== '' && !elements.has(defect.element)) {
         problems.push(`${rel}: ${label} names element "${defect.element}", which does not exist on the Practice Page`)
       }
-      if (defect.competency !== '' && !config.stage1Competencies.includes(defect.competency)) {
+      // Stage 1's, specifically, not merely a declared one: this page is Stage
+      // 1's audit subject, so a defect on it citing a Stage 2 Competency is a
+      // defect the Learner has not been taught to see. Later Stages get their
+      // own subject, and their own check with it (#61).
+      if (defect.competency !== '' && !competenciesOfStage(config, 1).includes(defect.competency)) {
         problems.push(`${rel}: ${label} cites Competency "${defect.competency}", outside the Stage 1 Competencies`)
       }
       if (defect.principle !== '' && !principles.has(defect.principle)) {

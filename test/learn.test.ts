@@ -260,7 +260,20 @@ test('the browser-translation notice appears for Korean-language Learners and ne
   expect(en).not.toContain('번역')
 })
 
-test('a Competency outside Stage 1 is not a page', async () => {
+test('a Competency declared under no Stage is not a page', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  const response = await fetch(`${BASE_URL}/en/learn/not-a-competency`, { headers: { cookie } })
+
+  expect(response.status).toBe(404)
+})
+
+test('a declared Competency nobody has authored yet is not a page either', async () => {
+  // form-burden is declared under Stage 2 and has no definition file. This
+  // used to be the "outside Stage 1" case, and the route refused it for a
+  // reason that no longer exists — the slug is part of the curriculum now.
+  // Two tests because the two refusals have different causes, and a Stage 2
+  // definition landing must flip this one rather than pass it silently.
   const cookie = await sessionCookieFor(freshLearner())
 
   const response = await fetch(`${BASE_URL}/en/learn/form-burden`, { headers: { cookie } })

@@ -441,6 +441,13 @@ test('the content half shows per-item rates beside draw counts, and the location
     await (await fetch(`${BASE_URL}/en/maintain/content`, { headers: { cookie } })).text(),
   )
 
+  // Grouped by Stage, and a Stage nobody has authored yet shows as a gap
+  // rather than as nothing. A page that simply omits Stage 2 reads exactly
+  // like a Stage 2 that is finished, and this view exists to be read.
+  expect(text).toContain('Stage 1')
+  expect(text).toContain('Stage 2')
+  expect(text).toContain('No pool authored yet')
+
   // A rate never appears without its draw count.
   expect(text).toMatch(/correct of \d+ drawn/)
   expect(text).toContain(slugsDrawn[0])

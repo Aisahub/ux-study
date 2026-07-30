@@ -5,6 +5,7 @@ import { and, desc, eq } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
+import { stageOf } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
@@ -97,7 +98,7 @@ export default async function QuizStart({
   const { lang, competency: slug } = await params
   if (!isLanguage(lang)) notFound()
   const competency = content.competencies.find((entry) => entry.slug === slug)
-  if (!competency || !content.config.stage1Competencies.includes(slug)) notFound()
+  if (!competency || stageOf(content.config, slug) === null) notFound()
   const session = await requireSession(lang)
   const copy = COPY[lang]
   const { drawSize, passThreshold } = content.config

@@ -12,15 +12,39 @@ import { content } from '@/lib/server-content'
 
 export type QuizStatus = 'unstarted' | 'in-progress' | 'passed'
 
-export interface Progress {
-  /** Keyed by Competency slug, in Stage 1 order. */
+/**
+ * Where a Learner stands **in one Stage**. Deliberately not summed across
+ * Stages: a single figure spanning the programme would be the cumulative
+ * per-person score PRODUCT.md rules out. Three Stages produce three statements
+ * of position, and a Learner is never told a number that ranks the whole of
+ * them.
+ */
+export interface StageProgress {
+  stage: number
+  /** Keyed by Competency slug, in this Stage's display order. */
   quizzes: Record<string, { status: QuizStatus; attempts: number }>
   reportSubmitted: boolean
-  /** All four Gate Quizzes passed — what unlocks the Self-Audit Report (#24). */
+  /** Every Gate Quiz in this Stage passed — what unlocks its Self-Audit Report (#24). */
   allPassed: boolean
-  /** Steps done of stepsTotal: the four quizzes and the capstone report, so remaining work needs no arithmetic. */
+  /** Steps done of stepsTotal: this Stage's quizzes and its capstone report, so remaining work needs no arithmetic. */
   stepsDone: number
   stepsTotal: number
+}
+
+export interface Progress {
+  /** One entry per Stage config.md declares, in Stage order. */
+  stages: StageProgress[]
+}
+
+/**
+ * One Stage's standing. Throws rather than returning undefined: the Stages are
+ * the ones config.md declares, so asking for one it does not declare is a
+ * mistake in the caller, not something a Learner can cause.
+ */
+export function stageProgress(progress: Progress, stage: number): StageProgress {
+  const found = progress.stages.find((entry) => entry.stage === stage)
+  if (!found) throw new Error(`no Stage ${stage} is declared in config.md`)
+  return found
 }
 
 /**
@@ -94,31 +118,39 @@ export async function progressFor(email: string): Promise<Progress> {
     .where(eq(schema.attempts.email, email))
   const report = await reportFor(email)
 
-  const quizzes: Progress['quizzes'] = {}
-  for (const slug of content.config.stage1Competencies) {
-    const own = rows.filter((row) => row.competency === slug)
-    const passed = own.some((row) => row.passed === true)
-    quizzes[slug] = {
-      status: passed ? 'passed' : own.length > 0 ? 'in-progress' : 'unstarted',
-      attempts: own.length,
+  const stages = content.config.stages.map(({ stage, competencies }): StageProgress => {
+    const quizzes: StageProgress['quizzes'] = {}
+    for (const slug of competencies) {
+      const own = rows.filter((row) => row.competency === slug)
+      const passed = own.some((row) => row.passed === true)
+      quizzes[slug] = {
+        status: passed ? 'passed' : own.length > 0 ? 'in-progress' : 'unstarted',
+        attempts: own.length,
+      }
     }
-  }
 
-  const allPassed = content.config.stage1Competencies.every((slug) => quizzes[slug].status === 'passed')
-  const reportSubmitted = report?.submittedAt != null
-  const stepsDone =
-    Object.values(quizzes).filter((quiz) => quiz.status === 'passed').length + (reportSubmitted ? 1 : 0)
+    // A Learner holds one report row — `reports.email` is unique — and that
+    // row is Stage 1's, the only Stage with an authored subject to audit. A
+    // later Stage therefore has nothing submitted and cannot have, until #61
+    // gives each Stage its own report.
+    const reportSubmitted = stage === 1 && report?.submittedAt != null
+    const stepsDone =
+      Object.values(quizzes).filter((quiz) => quiz.status === 'passed').length + (reportSubmitted ? 1 : 0)
 
-  return {
-    quizzes,
-    reportSubmitted,
-    allPassed,
-    stepsDone,
-    stepsTotal: content.config.stage1Competencies.length + 1,
-  }
+    return {
+      stage,
+      quizzes,
+      reportSubmitted,
+      allPassed: competencies.every((slug) => quizzes[slug].status === 'passed'),
+      stepsDone,
+      stepsTotal: competencies.length + 1,
+    }
+  })
+
+  return { stages }
 }
 
-/** True once this Learner has both passed every Gate Quiz and submitted the report — Stage 1 Completion (#24). */
-export function isComplete(progress: Progress): boolean {
-  return progress.allPassed && progress.reportSubmitted
+/** True once this Learner has both passed every Gate Quiz in a Stage and submitted its report — that Stage's Completion (#24). */
+export function isComplete(stage: StageProgress): boolean {
+  return stage.allPassed && stage.reportSubmitted
 }

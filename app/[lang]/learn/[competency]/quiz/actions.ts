@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
+import { stageOf } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
 import { drawItems, scoreDraw } from '@/lib/quiz'
 import { content } from '@/lib/server-content'
@@ -16,7 +17,7 @@ import { content } from '@/lib/server-content'
  */
 
 export async function startAttempt(lang: Language, competency: string): Promise<void> {
-  if (!isLanguage(lang) || !content.config.stage1Competencies.includes(competency)) return
+  if (!isLanguage(lang) || stageOf(content.config, competency) === null) return
   const session = await requireSession(lang)
 
   // An open attempt is resumed, not shadowed: its drawn set was persisted so
@@ -72,7 +73,7 @@ export async function startAttempt(lang: Language, competency: string): Promise<
  * #22.
  */
 export async function restartAttempt(lang: Language, competency: string): Promise<void> {
-  if (!isLanguage(lang) || !content.config.stage1Competencies.includes(competency)) return
+  if (!isLanguage(lang) || stageOf(content.config, competency) === null) return
   const session = await requireSession(lang)
 
   await db

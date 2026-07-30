@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { requireSession } from '@/lib/auth'
+import { competenciesOfStage } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
-import { progressFor, type QuizStatus } from '@/lib/progress'
+import { progressFor, stageProgress, type QuizStatus } from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
 export const dynamic = 'force-dynamic'
@@ -195,14 +196,16 @@ export default async function Learn({
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
-  const progress = await progressFor(session.email)
-  const competencies = content.config.stage1Competencies.map((slug) =>
+  // Stage 1's alone, which is all this overview opens today; #79 is where the
+  // later two arrive on it.
+  const stage1 = stageProgress(await progressFor(session.email), 1)
+  const competencies = competenciesOfStage(content.config, 1).map((slug) =>
     content.competencies.find((competency) => competency.slug === slug)!,
   )
   const completionPercent =
-    progress.stepsTotal === 0
+    stage1.stepsTotal === 0
       ? 0
-      : Math.min(100, Math.round((progress.stepsDone / progress.stepsTotal) * 100))
+      : Math.min(100, Math.round((stage1.stepsDone / stage1.stepsTotal) * 100))
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
@@ -214,19 +217,19 @@ export default async function Learn({
         <div>
           <div className="flex items-center justify-between gap-[14px] text-label font-bold">
             <span>{copy.stageProgress}</span>
-            <span>{copy.done(progress.stepsDone, progress.stepsTotal)}</span>
+            <span>{copy.done(stage1.stepsDone, stage1.stepsTotal)}</span>
           </div>
           <div
             className="mt-2 h-2 overflow-hidden rounded-full bg-blue-grey/35"
             role="progressbar"
             aria-label={copy.stageProgress}
             aria-valuemin={0}
-            aria-valuemax={progress.stepsTotal}
-            aria-valuenow={progress.stepsDone}
+            aria-valuemax={stage1.stepsTotal}
+            aria-valuenow={stage1.stepsDone}
             // Without this a screen reader announces a bare "20%", which counts
             // nothing a Learner can name. The visible line beside the bar
             // already says what is being counted; this makes them say it alike.
-            aria-valuetext={copy.done(progress.stepsDone, progress.stepsTotal)}
+            aria-valuetext={copy.done(stage1.stepsDone, stage1.stepsTotal)}
           >
             <span
               className="block h-full rounded-full bg-oxblood"
@@ -274,7 +277,7 @@ export default async function Learn({
 
         <div className="mt-[14px] grid gap-[14px]">
           {competencies.map((competency, index) => {
-            const quiz = progress.quizzes[competency.slug]
+            const quiz = stage1.quizzes[competency.slug]
 
             return (
               <article
@@ -339,16 +342,16 @@ export default async function Learn({
 
           <article
             data-report-status={
-              progress.reportSubmitted ? 'submitted' : progress.allPassed ? 'open' : 'locked'
+              stage1.reportSubmitted ? 'submitted' : stage1.allPassed ? 'open' : 'locked'
             }
             className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
           >
             <span
               aria-hidden
               className={`grid size-11 place-items-center rounded-badge ${
-                progress.reportSubmitted
+                stage1.reportSubmitted
                   ? 'bg-oxblood text-white'
-                  : progress.allPassed
+                  : stage1.allPassed
                     ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood),inset_0_-5px_0_0_var(--oxblood)]'
                     : 'text-ink shadow-[inset_0_0_0_2px_var(--blue-grey)]'
               }`}
@@ -364,19 +367,19 @@ export default async function Learn({
                 {copy.capstoneHeading}
               </h3>
               <p className="mt-1 max-w-[56ch] text-body-sm text-ink-2">
-                {progress.allPassed ? copy.capstoneExplanation : copy.capstoneLocked}
+                {stage1.allPassed ? copy.capstoneExplanation : copy.capstoneLocked}
               </p>
             </div>
 
             <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
               <p className="text-label font-bold text-ink sm:flex sm:min-h-11 sm:items-center">
-                {progress.reportSubmitted
+                {stage1.reportSubmitted
                   ? copy.capstoneSubmitted
-                  : progress.allPassed
+                  : stage1.allPassed
                     ? copy.open
                     : copy.locked}
               </p>
-              {(progress.allPassed || progress.reportSubmitted) && (
+              {(stage1.allPassed || stage1.reportSubmitted) && (
                 <Link
                   href={`/${lang}/audit`}
                   className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none"

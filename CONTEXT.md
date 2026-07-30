@@ -67,7 +67,7 @@ A defect deliberately introduced into the Practice Page. The list of them is the
 _Avoid_: bug, seeded error, answer key (reserve "answer key" for Gate Quiz scoring)
 
 **Peer Review** (동료 리뷰 / 同伴互评):
-One Learner assessing another Learner's Self-Audit Report. Used from Stage 3 onward, where it is not a staffing compromise but the Competency itself — the reviewer is the outside perspective the Stage is about acquiring.
+One Learner reading another Learner's submitted Self-Audit Report, and marking agreement with individual Findings. Available from Stage 3 onward, once the reader has submitted their own report. What it offers is exposure to how another head framed the same page — never a judgement about whether a Finding is real, which the Planted Defect manifest answers. It gates nothing: a Learner with nobody else at their Stage reaches Completion with nothing missing, because the outsider's work they are assessed on is an authored specimen report rather than a colleague's. Redefined by ADR-0011, which removed the claim that this is the Competency itself.
 _Avoid_: cross-check, buddy review, marking
 
 **Completion** (결업 / 结业):

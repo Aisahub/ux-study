@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path'
 
 import { afterEach, expect, test, vi } from 'vitest'
 
-import { ContentError, loadContent } from '../lib/content'
+import { competenciesOfStage, ContentError, loadContent } from '../lib/content'
 
 /**
  * Fixture-driven proof of every build-failing content check (#10). Each test
@@ -31,11 +31,21 @@ poolSize: 3
 drawSize: 2
 passThreshold: 2
 minFindings: 1
-stage1Competencies:
-  - visual-hierarchy
-  - readability
-  - consistency
-  - perceived-clickability
+stages:
+  - stage: 1
+    competencies:
+      - visual-hierarchy
+      - readability
+      - consistency
+      - perceived-clickability
+---
+`
+
+/** The same fixture with a second, wholly unauthored Stage declared. */
+const CONFIG_TWO_STAGES = `${CONFIG.trimEnd().slice(0, -'---'.length)}  - stage: 2
+    competencies:
+      - system-status
+      - form-burden
 ---
 `
 
@@ -387,13 +397,44 @@ test('an empty item pool directory fails the build like any undersized pool', ()
 test('an item pool for a Competency not declared in config fails the build', () => {
   const root = scaffold()
   write(root, 'items/form-burden/some-item.md', ITEM_TWO)
-  expectProblem(root, /items\/form-burden: item pool for a Competency not declared in config\.md/)
+  expectProblem(root, /items\/form-burden: item pool for a Competency declared under no Stage in config\.md/)
 })
 
 test('a Competency file not declared in config fails the build', () => {
   const root = scaffold()
   write(root, 'competencies/form-burden.md', COMPETENCY)
-  expectProblem(root, /competencies\/form-burden\.md: "form-burden" is not a Competency declared in config\.md/)
+  expectProblem(root, /competencies\/form-burden\.md: "form-burden" is not a Competency declared under any Stage in config\.md/)
+})
+
+test('a Stage declared but wholly unauthored loads: no definitions, no pools', () => {
+  // The state Stage 2 and Stage 3 are in the day this lands. Declaring a Stage
+  // has to be possible before writing it, or no later-Stage content can enter
+  // the repository even as a draft — the same tolerance an unauthored Stage 1
+  // pool already had.
+  const root = scaffold()
+  write(root, 'config.md', CONFIG_TWO_STAGES)
+  const content = loadContent(root)
+  expect(competenciesOfStage(content.config, 2)).toEqual(['system-status', 'form-burden'])
+  expect(content.competencies.map((competency) => competency.slug)).toEqual(['visual-hierarchy'])
+  expect(content.items['form-burden']).toBeUndefined()
+})
+
+test('a Stage declared out of order, or twice, fails the build', () => {
+  const root = scaffold()
+  write(root, 'config.md', edit(CONFIG_TWO_STAGES, '  - stage: 2', '  - stage: 1'))
+  expectProblem(root, /stages must be declared in ascending Stage order, each Stage once/)
+})
+
+test('one Competency declared under two Stages fails the build', () => {
+  const root = scaffold()
+  write(root, 'config.md', edit(CONFIG_TWO_STAGES, '      - system-status', '      - readability'))
+  expectProblem(root, /stages repeat a Competency slug/)
+})
+
+test('a config declaring no Stages at all fails the build', () => {
+  const root = scaffold()
+  write(root, 'config.md', edit(CONFIG, 'stages:', 'stagesTypo:'))
+  expectProblem(root, /stages must declare each Stage and the Competency slugs it holds/)
 })
 
 test('a quiz item citing a Principle absent from the Glossary fails the build', () => {
@@ -426,6 +467,16 @@ test('a Planted Defect outside the four Stage 1 Competencies fails the build', (
   expectProblem(root, /cites Competency "form-burden", outside the Stage 1 Competencies/)
 })
 
+test('a Planted Defect citing a declared Stage 2 Competency still fails the build', () => {
+  // Declared is not enough for this page. It is Stage 1's subject, so a defect
+  // planted on it that only a Stage 2 Competency names is one the Learner
+  // auditing it has not been taught to see.
+  const root = scaffold()
+  write(root, 'config.md', CONFIG_TWO_STAGES)
+  write(root, 'practice-page/manifest.md', edit(MANIFEST, 'competency: visual-hierarchy', 'competency: form-burden'))
+  expectProblem(root, /cites Competency "form-burden", outside the Stage 1 Competencies/)
+})
+
 test('language variants with different element identifiers fail the build', () => {
   const root = scaffold()
   write(root, 'practice-page/en.html', PRACTICE_EN + '<div data-element="only-in-en"></div>\n')
@@ -448,7 +499,14 @@ test('the repository content loads, with the eleven Glossary entries unchanged',
     drawSize: 5,
     passThreshold: 4,
     minFindings: 3,
-    stage1Competencies: ['visual-hierarchy', 'readability', 'consistency', 'perceived-clickability'],
+    stages: [
+      { stage: 1, competencies: ['visual-hierarchy', 'readability', 'consistency', 'perceived-clickability'] },
+      { stage: 2, competencies: ['system-status', 'error-handling', 'form-burden', 'way-back-and-control'] },
+      {
+        stage: 3,
+        competencies: ['jargon', 'mental-model-mismatch', 'heuristic-evaluation', 'testing-with-real-users'],
+      },
+    ],
   })
   expect(content.glossary.map((entry) => entry.slug)).toEqual([
     'cognitive-load',

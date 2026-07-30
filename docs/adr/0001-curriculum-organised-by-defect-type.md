@@ -73,7 +73,7 @@ Non-goals: the curriculum does not mirror the NN/g topic taxonomy, does not orga
 ## Consequences
 
 - Competency definitions must be written as observable actions tied to a defect type; a Competency that cannot be spotted on a real page does not belong in the curriculum.
-- Stage 3 Self-Audit Reports require a second person to exercise the interface, which is an operational cost the platform must account for (scheduling, or an explicit lightweight substitute).
+- ~~Stage 3 Self-Audit Reports require a second person to exercise the interface, which is an operational cost the platform must account for (scheduling, or an explicit lightweight substitute).~~ **Superseded 2026-07-30 by [ADR-0011](0011-stage-3-two-artefacts-and-peer-review-is-not-the-assessment.md)** — the cost was never payable on a self-paced programme split across two time zones. Stage 3 requires no second person at all.
 - NN/g articles are referenced per Competency as external citations rather than reproduced, so the platform must carry its own Korean-language explanation for every Competency. Content authoring is the dominant cost of this project, not engineering.
 - Some NN/g material (research methods, UX team management) falls outside every Stage and is deliberately unreachable through this curriculum.
 - Reversing this decision after content is authored means rewriting every Competency, since Competency boundaries are drawn along defect lines.
@@ -82,4 +82,4 @@ Non-goals: the curriculum does not mirror the NN/g topic taxonomy, does not orga
 
 - Enumerate the Competencies for each Stage and confirm every one is stated as an observable action; reject any that cannot be assessed on a real page.
 - For each Competency, identify the NN/g articles it cites and record their URLs, verifying each resolves and is readable without login.
-- Define the Stage 3 "second person" mechanism concretely, including what a Learner does when no second person is available.
+- ~~Define the Stage 3 "second person" mechanism concretely, including what a Learner does when no second person is available.~~ **Closed 2026-07-30 by [ADR-0011](0011-stage-3-two-artefacts-and-peer-review-is-not-the-assessment.md)** — there is no second-person mechanism. The outsider's work a Learner reviews is an authored specimen report, always present; reading a real colleague's report is optional and gates nothing, so a Learner with nobody at their Stage reaches Completion with nothing missing.

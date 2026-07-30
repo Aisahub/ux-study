@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
-import { progressFor } from '@/lib/progress'
+import { progressFor, stageProgress } from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
 /**
@@ -26,8 +26,10 @@ export interface FindingInput {
 export async function saveFinding(lang: Language, input: FindingInput): Promise<string | null> {
   if (!isLanguage(lang)) return null
   const session = await requireSession(lang)
-  const progress = await progressFor(session.email)
-  if (!progress.allPassed) return 'locked'
+  // The Practice Page is Stage 1's subject, so Stage 1's gates are the ones
+  // that open it. #61 gives each Stage its own subject and its own report.
+  const stage1 = stageProgress(await progressFor(session.email), 1)
+  if (!stage1.allPassed) return 'locked'
 
   const element = input.element.trim()
   const principle = input.principle.trim()
@@ -71,8 +73,10 @@ export async function removeFinding(lang: Language, findingId: number): Promise<
 export async function submitReport(lang: Language): Promise<string | null> {
   if (!isLanguage(lang)) return null
   const session = await requireSession(lang)
-  const progress = await progressFor(session.email)
-  if (!progress.allPassed) return 'locked'
+  // The Practice Page is Stage 1's subject, so Stage 1's gates are the ones
+  // that open it. #61 gives each Stage its own subject and its own report.
+  const stage1 = stageProgress(await progressFor(session.email), 1)
+  if (!stage1.allPassed) return 'locked'
 
   const [report] = await db.select().from(schema.reports).where(eq(schema.reports.email, session.email))
   if (!report) return 'too-few'
