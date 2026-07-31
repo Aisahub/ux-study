@@ -538,7 +538,9 @@ test('a declared Stage with no authored subject says so rather than rendering no
   const email = freshLearner()
   const cookie = await sessionCookieFor(email)
 
-  const response = await fetch(`${BASE_URL}/en/audit/2`, { headers: { cookie } })
+  // Stage 3, the one still unauthored: Stage 2 gained its subject in #70, and
+  // this state has to stay reachable while any Stage is still being written.
+  const response = await fetch(`${BASE_URL}/en/audit/3`, { headers: { cookie } })
   const text = visibleText(await response.text())
 
   expect(response.status).toBe(200)

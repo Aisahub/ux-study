@@ -2,29 +2,47 @@ import { notFound } from 'next/navigation'
 import type { NextRequest } from 'next/server'
 
 import { requireSession } from '@/lib/auth'
-import { practicePage, practicePageCss } from '@/lib/server-content'
+import { practicePage, practicePageCss, practicePageJs } from '@/lib/server-content'
 import { isLanguage } from '@/lib/language'
 
 /**
- * A Stage's Practice Page, served whole (#23). A route handler rather than a
+ * A Stage's audit subject, served whole (#23). A route handler rather than a
  * React page, so the response is exactly the authored document: no navigation,
  * no logo, no sidebar can appear inside its bounds because nothing of the
  * platform is in the response at all. A Learner asked to find what is wrong
  * with this page must never be able to report our own chrome.
  *
- * Two things are added at serve time, neither visible as content: the
- * stylesheet is inlined (the authored link's relative path would not survive
- * this route's URL shape), and a small script makes every identified element
- * selectable — a Finding names its element by pointing at it (ADR-0008), and
- * the selection is reported to the surrounding audit surface (#24) via
- * postMessage.
+ * Three things are added at serve time, none visible as content: the stylesheet
+ * and — where the subject walks — its behaviour are inlined (the authored
+ * relative paths would not survive this route's URL shape), and a small script
+ * makes every identified element selectable. A Finding names its element by
+ * pointing at it (ADR-0008), and the selection is reported to the surrounding
+ * audit surface (#24) via postMessage.
  */
 
+/**
+ * Clicking is two jobs on a walkable subject, and ADR-0010 splits them into
+ * two named modes the subject itself carries. This script is the Select half.
+ *
+ * A subject that declares a mode is operable, and a click only names an element
+ * while that subject says it is selecting; in Operate mode the click is left
+ * alone and the flow answers it. A subject that declares no mode is inert, as
+ * Stage 1's Practice Page has always been, and every click on it selects.
+ *
+ * Selecting stops the click rather than merely preventing its default, because
+ * on an operable subject preventing the default still leaves the flow's own
+ * listeners to run, and a Learner pointing at a control would silently operate
+ * it. The audit tools are excluded from both: they are never selectable and
+ * they always work, whichever mode is on.
+ */
 const SELECTION_SCRIPT = `<script>
 document.addEventListener('click', function (event) {
+  if (event.target.closest('[data-audit-chrome]')) return
+  var mode = document.body.getAttribute('data-audit-mode')
+  if (mode !== null && mode !== 'select') return
   var element = event.target.closest('[data-element]')
-  // The artefact is inert: nothing on it navigates or submits.
   event.preventDefault()
+  event.stopPropagation()
   if (!element) return
   var previous = document.querySelector('[data-selected]')
   if (previous && previous !== element) previous.removeAttribute('data-selected')
@@ -40,6 +58,7 @@ document.addEventListener('click', function (event) {
 </script>
 <style>
 [data-element] { cursor: pointer; }
+body[data-audit-mode='operate'] [data-element] { cursor: auto; }
 [data-selected] { outline: 3px solid #2563eb; outline-offset: 2px; }
 </style>`
 
@@ -57,6 +76,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
   const document = subject.html[lang]
     .replace('<link rel="stylesheet" href="./practice-page.css">', `<style>\n${practicePageCss(number)}</style>`)
+    .replace('<script src="./practice-page.js"></script>', `<script>\n${practicePageJs(number)}</script>`)
     .replace('</body>', `${SELECTION_SCRIPT}\n</body>`)
 
   return new Response(document, { headers: { 'content-type': 'text/html; charset=utf-8' } })

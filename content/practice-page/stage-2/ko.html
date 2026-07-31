@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>노스윈드 렌터카 — 승합차 예약</title>
+<link rel="stylesheet" href="./practice-page.css">
+</head>
+<body data-audit-mode="operate">
+
+<div class="audit-bar" data-audit-chrome>
+  <p class="audit-bar-title">감사 도구</p>
+  <div class="audit-modes" role="group" aria-label="클릭이 하는 일">
+    <button type="button" class="audit-mode" data-mode="operate" aria-pressed="true"
+            data-mode-state="조작 — 클릭이 인터페이스를 움직입니다.">조작</button>
+    <button type="button" class="audit-mode" data-mode="select" aria-pressed="false"
+            data-mode-state="선택 — 클릭이 Finding에 담을 요소를 가리킵니다.">선택</button>
+  </div>
+  <p class="audit-bar-state" id="audit-mode-state" role="status">조작 — 클릭이 인터페이스를 움직입니다.</p>
+  <button type="button" class="audit-restart" id="audit-restart">플로우 다시 시작</button>
+</div>
+
+<main class="flow">
+
+  <header class="flow-head">
+    <p class="brand">노스윈드 렌터카</p>
+    <h1 data-element="flow-title">승합차 예약</h1>
+    <p class="step-indicator" id="step-indicator" data-element="flow-step-indicator">3단계 중 1단계 · 대여와 반납</p>
+  </header>
+
+  <section class="step" data-step="1" data-step-label="3단계 중 1단계 · 대여와 반납">
+    <h2 class="step-heading" id="step1-heading" tabindex="-1" data-element="step1-heading">대여와 반납</h2>
+
+    <div class="field">
+      <label class="field-label" for="branch">대여 지점</label>
+      <select class="field-control" id="branch" data-element="step1-branch-select">
+        <option>서울 — 여의도</option>
+        <option>서울 — 강남</option>
+        <option>부천 — 상동</option>
+        <option>인천공항 제1터미널</option>
+        <option>대전역</option>
+        <option>대구 — 동대구</option>
+        <option>광주 — 송정</option>
+        <option>부산역</option>
+      </select>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label" for="pickup-date">대여일</label>
+        <input class="field-control" id="pickup-date" type="date" value="2026-08-14" data-element="step1-pickup-date">
+      </div>
+      <div class="field">
+        <label class="field-label" for="return-date">반납일</label>
+        <input class="field-control" id="return-date" type="date" value="2026-08-16" data-element="step1-return-date">
+      </div>
+    </div>
+
+    <p class="availability" id="availability-result" role="status" data-element="step1-availability-result" hidden>
+      <span data-answer="branch"></span> 지점, <span data-answer="pickup"></span> ~ <span data-answer="return"></span> 이용 가능한 차량 3대.
+    </p>
+
+    <div class="step-actions">
+      <button type="button" class="btn btn-quiet" id="check-availability" data-element="step1-check-availability">차량 확인</button>
+      <button type="button" class="btn btn-primary" data-next="2" data-element="step1-continue">계속</button>
+    </div>
+  </section>
+
+  <section class="step" data-step="2" data-step-label="3단계 중 2단계 · 운전자 정보" hidden>
+    <h2 class="step-heading" id="step2-heading" tabindex="-1" data-element="step2-heading">운전자 정보</h2>
+
+    <div class="field">
+      <label class="field-label" for="driver-name">운전자 이름</label>
+      <input class="field-control" id="driver-name" type="text" autocomplete="name" data-element="step2-name-field">
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="driver-email">이메일 주소</label>
+      <input class="field-control" id="driver-email" type="email" autocomplete="email"
+             aria-describedby="driver-email-error" data-element="step2-email-field">
+      <p class="field-error" id="driver-email-error" hidden>올바른 이메일 주소를 입력하세요.</p>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="driver-phone">휴대전화 번호</label>
+      <input class="field-control" id="driver-phone" type="tel" autocomplete="tel" data-element="step2-phone-field">
+    </div>
+
+    <fieldset class="field choices" data-element="step2-cover-choice">
+      <legend class="field-label">차량 손해 보장</legend>
+      <label class="choice">
+        <input type="radio" name="cover" value="기본" checked>
+        <span class="choice-name">기본 — 1일 0원</span>
+        <span class="choice-detail">자기부담금 90만원. 유리와 타이어는 보장되지 않습니다.</span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="cover" value="표준">
+        <span class="choice-name">표준 — 1일 9,000원</span>
+        <span class="choice-detail">자기부담금 30만원. 유리와 타이어 보장.</span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="cover" value="완전">
+        <span class="choice-name">완전 — 1일 17,000원</span>
+        <span class="choice-detail">자기부담금 없음. 유리·타이어·루프 보장.</span>
+      </label>
+    </fieldset>
+
+    <div class="step-actions">
+      <button type="button" class="btn btn-quiet" data-next="1" data-element="step2-back">뒤로</button>
+      <button type="button" class="btn btn-quiet" data-cancel="yes" data-element="step2-cancel">예약 취소</button>
+      <button type="button" class="btn btn-primary" data-next="3" data-element="step2-continue">계속</button>
+    </div>
+  </section>
+
+  <section class="step" data-step="3" data-step-label="3단계 중 3단계 · 확인하고 예약" hidden>
+    <h2 class="step-heading" id="step3-heading" tabindex="-1" data-element="step3-heading">확인하고 예약</h2>
+
+    <dl class="summary" data-element="step3-summary">
+      <div class="summary-row"><dt>대여 지점</dt><dd data-fill="branch"></dd></div>
+      <div class="summary-row"><dt>대여일</dt><dd data-fill="pickup"></dd></div>
+      <div class="summary-row"><dt>반납일</dt><dd data-fill="return"></dd></div>
+      <div class="summary-row"><dt>운전자</dt><dd data-fill="name"></dd></div>
+      <div class="summary-row"><dt>이메일 주소</dt><dd data-fill="email"></dd></div>
+      <div class="summary-row"><dt>차량 손해 보장</dt><dd data-fill="cover"></dd></div>
+    </dl>
+
+    <div class="field">
+      <label class="field-label" for="contact-phone">대여 당일 연락받을 번호</label>
+      <input class="field-control" id="contact-phone" type="tel" data-element="step3-phone-field">
+    </div>
+
+    <p class="form-error" id="confirm-error" role="alert" data-element="step3-error" hidden>예약 요청이 거부되었습니다 (code 422).</p>
+
+    <div class="step-actions">
+      <button type="button" class="btn btn-quiet" data-next="2" data-reset="2" data-element="step3-back">뒤로</button>
+      <button type="button" class="btn btn-quiet" data-cancel="yes" data-element="step3-cancel">예약 취소</button>
+      <button type="button" class="btn btn-primary" id="confirm-booking" data-element="step3-confirm">예약 확정</button>
+    </div>
+  </section>
+
+  <section class="panel" id="confirmation" data-step-label="예약 요청 접수됨"
+           data-element="flow-confirmation" hidden>
+    <h2 class="step-heading" id="confirmation-heading" tabindex="-1">예약 요청이 접수되었습니다</h2>
+    <p>예약 번호는 <strong>NW-2841</strong>입니다. 예약을 변경하거나 취소할 때 이 번호를 묻습니다.</p>
+    <p>한 시간 안에 <span data-fill="email"></span> 으로 차량 확정 메일을 보내 드립니다. 그 전까지는 아무것도 결제되지 않습니다.</p>
+    <button type="button" class="btn btn-quiet" id="new-booking">새 예약 시작</button>
+  </section>
+
+  <div class="cancel-confirm" id="cancel-confirm" data-element="flow-cancel-confirm" hidden>
+    <p class="cancel-confirm-text" id="cancel-confirm-text" tabindex="-1">이 예약을 취소할까요? 지금까지 입력한 내용은 저장되지 않습니다.</p>
+    <div class="cancel-confirm-actions">
+      <button type="button" class="btn btn-quiet" id="cancel-keep">예약 유지</button>
+      <button type="button" class="btn btn-danger" id="cancel-confirmed">네, 취소합니다</button>
+    </div>
+  </div>
+
+</main>
+
+<script src="./practice-page.js"></script>
+</body>
+</html>

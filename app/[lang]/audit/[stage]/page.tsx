@@ -31,6 +31,7 @@ const COPY: Record<
     issueSave: string
     issueSaved: string
     complete: (stage: number) => string
+    defectStep: (step: number, of: number) => string
     noSubject: string
     noSubjectWhy: string
   }
@@ -54,6 +55,11 @@ const COPY: Record<
     issueSave: 'Save link',
     issueSaved: 'Saved.',
     complete: (stage) => `Stage ${stage} complete — every Gate Quiz passed and the report submitted.`,
+    // Where the subject is walked, the element alone does not locate a defect:
+    // the same control is on screen at more than one moment, and the moment is
+    // the thing to go back to. Worded as the subject words it, so a Learner
+    // reads the same phrase here and on the screen they are being sent to.
+    defectStep: (step, of) => `Step ${step} of ${of}`,
     noSubject: 'This Stage has no page to audit yet.',
     noSubjectWhy:
       'The Gate Quizzes here are ready; the page to practise them on is still being written. Nothing is broken and nothing is lost — the Stage will finish once it arrives.',
@@ -74,6 +80,10 @@ const COPY: Record<
     issueSave: '링크 저장',
     issueSaved: '저장되었습니다.',
     complete: (stage) => `${stage}단계 수료 — 퀴즈 전부 통과, 보고서 제출 완료.`,
+    // 화면, not 단계: the subject calls these 단계, but on this page 단계 is
+    // already the Stage — `2단계 수료` sits a few lines below — and one word
+    // cannot mean both in one view.
+    defectStep: (step, of) => `${of}개 화면 중 ${step}번째`,
     noSubject: '이 단계에는 아직 감사할 페이지가 없습니다.',
     noSubjectWhy:
       '이 단계의 퀴즈는 준비되어 있고, 연습할 페이지는 아직 작성 중입니다. 잘못된 것도, 사라진 것도 없습니다 — 페이지가 준비되면 이 단계를 마칠 수 있습니다.',
@@ -169,6 +179,11 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
                 >
                   {foundElements.has(defect.element) ? copy.found : copy.missed}
                 </span>
+                {defect.step !== undefined && (
+                  <span className="ml-2 text-xs text-zinc-500">
+                    {copy.defectStep(defect.step, subject.steps.length)}
+                  </span>
+                )}
                 <span className="ml-2 font-mono text-xs text-zinc-500">{defect.element}</span>
               </p>
               <p className="mt-2 text-sm">{defect.explanation[lang]}</p>
