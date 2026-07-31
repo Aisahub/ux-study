@@ -12,7 +12,7 @@ const COPY: Record<
     me: 'My page',
     findings: 'Findings',
     learners: 'Learners',
-    content: 'Content',
+    content: 'Content health',
     allowlist: 'Allowlist',
   },
   ko: {
@@ -20,7 +20,7 @@ const COPY: Record<
     me: '마이페이지',
     findings: 'Finding',
     learners: '학습자',
-    content: '콘텐츠',
+    content: '콘텐츠 상태',
     allowlist: '허용 목록',
   },
 }

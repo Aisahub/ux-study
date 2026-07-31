@@ -14,38 +14,53 @@ const COPY: Record<
   {
     heading: string
     explanation: string
+    entriesHeading: string
+    addHeading: string
     pattern: string
     maintainer: string
     addedBy: string
     addedOn: string
     add: string
     remove: string
+    removeEntry: (pattern: string) => string
     addPlaceholder: string
+    nobodyYet: string
   }
 > = {
   en: {
     heading: 'Allowlist',
     explanation:
       'Who can sign in. A full address admits that person; the @aisahub.com wildcard admits every Workspace account. Removing an entry locks its person out immediately.',
+    entriesHeading: 'Current entries',
+    addHeading: 'Add an entry',
     pattern: 'Address or wildcard',
     maintainer: 'Maintainer',
     addedBy: 'added by',
     addedOn: 'on',
     add: 'Add',
     remove: 'Remove',
+    // The visible word is `Remove` on every row; the accessible name says
+    // which entry, because a screen reader reading the list out hears the
+    // same word a dozen times otherwise.
+    removeEntry: (pattern) => `Remove ${pattern}`,
     addPlaceholder: 'colleague@example.com',
+    nobodyYet: 'No entries yet. Nobody can sign in until one is added.',
   },
   ko: {
     heading: '허용 목록',
     explanation:
       '누가 로그인할 수 있는지의 목록입니다. 전체 주소는 그 사람을, @aisahub.com 와일드카드는 모든 Workspace 계정을 들여보냅니다. 항목을 삭제하면 그 즉시 접근이 막힙니다.',
+    entriesHeading: '현재 항목',
+    addHeading: '항목 추가',
     pattern: '주소 또는 와일드카드',
-    maintainer: '관리자',
+    maintainer: '운영자',
     addedBy: '추가한 사람',
     addedOn: '일시',
     add: '추가',
     remove: '삭제',
+    removeEntry: (pattern) => `${pattern} 삭제`,
     addPlaceholder: 'colleague@example.com',
+    nobodyYet: '아직 항목이 없습니다. 하나라도 추가되기 전에는 아무도 로그인할 수 없습니다.',
   },
 }
 
@@ -55,6 +70,11 @@ const COPY: Record<
  * identity, so a removal takes effect on the removed person's very next
  * request. Reachable only with the Maintainer flag; for anyone else the
  * route is a 404, indistinguishable from not existing.
+ *
+ * Two cards: what the list currently is, and the one way to add to it. The
+ * page carried neither until 2026-07-31, when it was still scaffold-era zinc
+ * with a border on every row — a stroke this design system does not have, on
+ * a platform whose own rule is that an unclear edge is answered with depth.
  */
 export default async function Allowlist({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
@@ -90,56 +110,106 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
-      <h1 className="text-2xl font-semibold tracking-tight">{copy.heading}</h1>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">{copy.explanation}</p>
+    <main className="mx-auto w-full max-w-4xl px-0.5">
+      <header className="px-1.5 pb-[26px]">
+        <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
+        <p className="mt-3 max-w-[58ch] text-body text-ink">{copy.explanation}</p>
+      </header>
 
-      <ul className="flex flex-col gap-2">
-        {entries.map((entry) => (
-          <li
-            key={entry.id}
-            className="flex items-baseline justify-between gap-4 rounded-md border border-zinc-200 p-3 text-sm dark:border-zinc-800"
-          >
-            <span>
-              <span className="font-mono">{entry.pattern}</span>
-              {entry.isMaintainer && (
-                <span className="ml-2 rounded bg-zinc-100 px-1.5 py-0.5 text-xs dark:bg-zinc-900">
-                  {copy.maintainer}
-                </span>
-              )}
-              <span className="ml-2 text-xs text-zinc-500">
-                {copy.addedBy} {entry.addedBy ?? '—'} {copy.addedOn} {entry.createdAt.toISOString().slice(0, 10)}
-              </span>
-            </span>
-            <form action={remove}>
-              <input type="hidden" name="id" value={entry.id} />
-              <button type="submit" className="text-xs text-zinc-500 underline-offset-4 hover:underline">
-                {copy.remove}
-              </button>
-            </form>
-          </li>
-        ))}
-      </ul>
+      <div className="flex flex-col gap-[14px]">
+        <section aria-labelledby="entries" className="rounded-card bg-surface p-[26px] shadow-card">
+          <h2 id="entries" className="font-serif text-headline font-bold text-ink">
+            {copy.entriesHeading}
+          </h2>
 
-      <form action={add} className="flex flex-wrap items-center gap-3 text-sm">
-        <input
-          type="text"
-          name="pattern"
-          required
-          placeholder={copy.addPlaceholder}
-          className="rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 dark:border-zinc-800"
-        />
-        <label className="flex items-center gap-1.5">
-          <input type="checkbox" name="maintainer" />
-          {copy.maintainer}
-        </label>
-        <button
-          type="submit"
-          className="rounded-md bg-zinc-900 px-3 py-1.5 font-medium text-white dark:bg-white dark:text-zinc-900"
-        >
-          {copy.add}
-        </button>
-      </form>
+          {entries.length === 0 ? (
+            <p className="mt-[14px] text-body-sm text-ink-2">{copy.nobodyYet}</p>
+          ) : (
+            <ul className="mt-[22px] flex flex-col gap-[22px]">
+              {entries.map((entry) => (
+                <li
+                  key={entry.id}
+                  className="grid gap-x-[14px] sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline"
+                >
+                  <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1">
+                    <span className="min-w-0 text-title font-bold text-ink [overflow-wrap:anywhere]">
+                      {entry.pattern}
+                    </span>
+                    {entry.isMaintainer && (
+                      // The one inset chip surface this system has, so the
+                      // badge reads as sunk into the card rather than as a
+                      // second card lying on it.
+                      <span className="rounded-full bg-sunk px-2.5 py-1 text-label font-bold text-ink">
+                        {copy.maintainer}
+                      </span>
+                    )}
+                  </span>
+
+                  {/* The 44px minimum goes on the control that answers the tap,
+                      not on the row around it — the Perceived clickability
+                      defect this platform's fourth Competency teaches. The
+                      negative inset keeps the target off the text without
+                      pushing the word out of the row's right edge. */}
+                  <form action={remove} className="-my-2.5 sm:-mr-2.5">
+                    <input type="hidden" name="id" value={entry.id} />
+                    <button
+                      type="submit"
+                      aria-label={copy.removeEntry(entry.pattern)}
+                      className="flex min-h-11 items-center rounded-full px-2.5 text-label font-bold text-oxblood"
+                    >
+                      {copy.remove}
+                    </button>
+                  </form>
+
+                  <p className="col-start-1 mt-1 text-body-sm text-ink-2">
+                    {copy.addedBy} {entry.addedBy ?? '—'} · {copy.addedOn}{' '}
+                    {entry.createdAt.toISOString().slice(0, 10)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section aria-labelledby="add" className="rounded-card bg-surface p-[26px] shadow-card">
+          <h2 id="add" className="font-serif text-headline font-bold text-ink">
+            {copy.addHeading}
+          </h2>
+
+          {/* A persistent label rather than a placeholder standing in for one:
+              the placeholder is an example of the format, and it disappears
+              exactly when someone is typing and might want the rule. */}
+          <form action={add} className="mt-[22px] flex flex-wrap items-end gap-x-[14px] gap-y-[14px]">
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <label htmlFor="pattern" className="text-label font-bold text-ink">
+                {copy.pattern}
+              </label>
+              <input
+                id="pattern"
+                type="text"
+                name="pattern"
+                required
+                autoComplete="off"
+                spellCheck={false}
+                placeholder={copy.addPlaceholder}
+                className="min-h-11 min-w-0 rounded-full bg-sunk px-[17px] text-body text-ink placeholder:text-ink-2"
+              />
+            </div>
+
+            <label className="flex min-h-11 items-center gap-2.5 text-body text-ink">
+              <input type="checkbox" name="maintainer" className="size-[18px] accent-oxblood" />
+              {copy.maintainer}
+            </label>
+
+            <button
+              type="submit"
+              className="min-h-11 rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white"
+            >
+              {copy.add}
+            </button>
+          </form>
+        </section>
+      </div>
     </main>
   )
 }
