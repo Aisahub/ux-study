@@ -48,7 +48,7 @@ const COPY: Record<
     back: 'Back to the Competency',
   },
   ko: {
-    heading: (name) => `관문 퀴즈 — ${name}`,
+    heading: (name) => `퀴즈 — ${name}`,
     rules: (draw, threshold) =>
       `이 역량의 문항 풀에서 ${draw}문항이 무작위로 나옵니다. ${threshold}문항을 맞히면 통과합니다. 제출하는 순간 결과가 바로 보이고, 필요한 만큼 곧바로 다시 도전할 수 있습니다.`,
     start: '시작',
