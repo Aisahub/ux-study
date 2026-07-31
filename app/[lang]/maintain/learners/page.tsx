@@ -58,6 +58,12 @@ const COPY: Record<
  * attempts per Competency — across everyone, ordered by address so the order
  * carries no judgement. Maintainer flag only, enforced before the first
  * query.
+ *
+ * One card holding every colleague, not one card each. A column of identical
+ * cards is a framework default rather than a grouping, and it would say these
+ * people are being compared side by side — which is the ranking this page is
+ * built to refuse. Inside, 22px separates people and 4px holds one person's
+ * three lines together.
  */
 export default async function Learners({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
@@ -78,59 +84,74 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
   const now = Date.now()
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 p-8 font-sans">
-      <h1 className="text-2xl font-semibold tracking-tight">{copy.heading}</h1>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">{copy.explanation}</p>
+    <main className="mx-auto w-full max-w-4xl px-0.5">
+      <header className="px-1.5 pb-[26px]">
+        <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
+        <p className="mt-3 max-w-[58ch] text-body text-ink">{copy.explanation}</p>
+      </header>
 
-      {users.length === 0 ? (
-        // A cohort that has not arrived yet looks exactly like a broken page
-        // unless the page says which it is. Reachable on a freshly deployed
-        // branch, before the first sign-in writes the first row.
-        <p className="text-sm text-zinc-500">{copy.nobodyYet}</p>
-      ) : (
-        <ul className="flex flex-col gap-2">
-          {users.map((user) => {
-            const own = attempts.filter((attempt) => attempt.email === user.email)
-            // Stage 1's report, matching the Competencies counted beside it.
-            const report = reports.find((entry) => entry.email === user.email && entry.stage === 1)
-            const passed = slugs.filter((slug) =>
-              own.some((attempt) => attempt.competency === slug && attempt.passed === true),
-            ).length
+      <section aria-labelledby="cohort" className="rounded-card bg-surface p-[26px] shadow-card">
+        <h2 id="cohort" className="sr-only">
+          {copy.heading}
+        </h2>
 
-            const timestamps = [
-              ...own.map((attempt) => attempt.submittedAt ?? attempt.createdAt),
-              ...(report ? [report.submittedAt ?? report.createdAt] : []),
-            ].map((date) => date.getTime())
-            const last = timestamps.length > 0 ? Math.max(...timestamps) : null
-            const days = last === null ? null : Math.floor((now - last) / (24 * 60 * 60 * 1000))
+        {users.length === 0 ? (
+          // A cohort that has not arrived yet looks exactly like a broken page
+          // unless the page says which it is. Reachable on a freshly deployed
+          // branch, before the first sign-in writes the first row.
+          <p className="text-body-sm text-ink-2">{copy.nobodyYet}</p>
+        ) : (
+          <ul className="flex flex-col gap-[22px]">
+            {users.map((user) => {
+              const own = attempts.filter((attempt) => attempt.email === user.email)
+              // Stage 1's report, matching the Competencies counted beside it.
+              const report = reports.find((entry) => entry.email === user.email && entry.stage === 1)
+              const passed = slugs.filter((slug) =>
+                own.some((attempt) => attempt.competency === slug && attempt.passed === true),
+              ).length
 
-            return (
-              <li key={user.email} className="rounded-md border border-zinc-200 p-3 text-sm dark:border-zinc-800">
-                <p className="flex flex-wrap items-baseline justify-between gap-2">
-                  <span className="font-medium">{user.email}</span>
-                  <span className="text-zinc-500">
+              const timestamps = [
+                ...own.map((attempt) => attempt.submittedAt ?? attempt.createdAt),
+                ...(report ? [report.submittedAt ?? report.createdAt] : []),
+              ].map((date) => date.getTime())
+              const last = timestamps.length > 0 ? Math.max(...timestamps) : null
+              const days = last === null ? null : Math.floor((now - last) / (24 * 60 * 60 * 1000))
+
+              return (
+                // The address wraps rather than truncating: it is the only
+                // thing on the row that names the person, and `review-e968@ai…`
+                // names nobody. `anywhere` because an email has no spaces to
+                // break at (the same reason My page gives).
+                <li
+                  key={user.email}
+                  className="grid gap-x-[14px] sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline"
+                >
+                  <span className="min-w-0 text-title font-bold text-ink [overflow-wrap:anywhere]">
+                    {user.email}
+                  </span>
+                  <span className="text-label font-bold text-ink-2">
                     {copy.lastActivity}:{' '}
                     {days === null ? copy.never : days === 0 ? copy.today : copy.daysAgo(days)}
                   </span>
-                </p>
-                <p className="mt-1 text-zinc-600 dark:text-zinc-400">
-                  {copy.position(passed, slugs.length)}
-                  {report?.submittedAt && <> · {copy.reportSubmitted}</>}
-                </p>
-                <p className="mt-1 text-xs text-zinc-500">
-                  {copy.attemptsLabel}:{' '}
-                  {slugs
-                    .map((slug) => {
-                      const n = own.filter((attempt) => attempt.competency === slug).length
-                      return `${content.competencies.find((c) => c.slug === slug)!.name[lang]} ${n}`
-                    })
-                    .join(' · ')}
-                </p>
-              </li>
-            )
-          })}
-        </ul>
-      )}
+                  <p className="col-start-1 mt-1 text-body-sm text-ink">
+                    {copy.position(passed, slugs.length)}
+                    {report?.submittedAt && <> · {copy.reportSubmitted}</>}
+                  </p>
+                  <p className="col-start-1 mt-1 text-body-sm text-ink-2">
+                    {copy.attemptsLabel}:{' '}
+                    {slugs
+                      .map((slug) => {
+                        const n = own.filter((attempt) => attempt.competency === slug).length
+                        return `${content.competencies.find((c) => c.slug === slug)!.name[lang]} ${n}`
+                      })
+                      .join(' · ')}
+                  </p>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </section>
     </main>
   )
 }

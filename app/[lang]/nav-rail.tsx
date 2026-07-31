@@ -118,7 +118,12 @@ export function NavRail({ items, lang }: { items: RailItem[]; lang: Language }) 
                 and two-line labels — six marks at 320px does exactly that. */}
             <span
               aria-hidden
-              className={`line-clamp-2 min-h-[38px] w-full text-center text-label font-bold text-balance sm:hidden ${
+              // `keep-all` so a two-word Korean label breaks at its space
+              // rather than mid-word — `콘텐츠 상태` was splitting as
+              // `콘텐 / 츠 상태`. `anywhere` is the fallback for a single
+              // long word with no space to break at (`마이페이지`), which
+              // keep-all alone would let overflow the mark's width.
+              className={`line-clamp-2 min-h-[38px] w-full text-center text-label font-bold break-keep text-balance [overflow-wrap:anywhere] sm:hidden ${
                 active ? 'text-oxblood' : 'text-ink-2'
               }`}
             >

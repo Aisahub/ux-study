@@ -28,14 +28,18 @@ const COPY: Record<
     korea: string
     indonesia: string
     foundBy: (found: number, of: number) => string
+    noReportsHere: string
     noReports: string
   }
 > = {
   en: {
     heading: 'Content health',
+    // The cohort size is deliberately not a number here. It said "four
+    // badly-prepared Learners" until 2026-07-31, which the Maintainer reading
+    // this page can falsify from the allowlist one mark away.
     explanation:
-      'An item everyone fails is far more likely a badly-worded item than four badly-prepared Learners. Every figure is a projection over attempts and reports — nothing is stored separately.',
-    itemsHeading: 'Item pass rates',
+      'An item everyone fails is far more likely a badly-worded item than a cohort who all prepared badly. Every figure is computed from attempts and reports as this page loads — nothing is stored separately.',
+    itemsHeading: 'Quiz Item pass rates',
     stage: (n) => `Stage ${n}`,
     notAuthored: 'No pool authored yet',
     noSubject: 'no page authored to audit yet',
@@ -50,12 +54,13 @@ const COPY: Record<
     korea: 'Korea',
     indonesia: 'Indonesia',
     foundBy: (found, of) => `${found} of ${of} found`,
+    noReportsHere: 'no reports yet',
     noReports: 'No submitted reports yet.',
   },
   ko: {
     heading: '콘텐츠 상태',
     explanation:
-      '모두가 틀리는 문항은 준비가 부족한 학습자 넷보다, 잘못 쓰인 문항일 가능성이 훨씬 큽니다. 모든 수치는 시도와 보고서 기록에서 그때그때 계산됩니다 — 따로 저장되는 것은 없습니다.',
+      '모두가 틀리는 문항은, 다 함께 준비가 부족했던 것보다 잘못 쓰인 문항일 가능성이 훨씬 큽니다. 모든 수치는 이 페이지를 열 때 시도와 보고서 기록에서 계산됩니다 — 따로 저장되는 것은 없습니다.',
     itemsHeading: '문항별 정답률',
     stage: (n) => `${n}단계`,
     notAuthored: '아직 작성된 문항 풀이 없습니다',
@@ -71,8 +76,53 @@ const COPY: Record<
     korea: '한국',
     indonesia: '인도네시아',
     foundBy: (found, of) => `${of}명 중 ${found}명 발견`,
+    noReportsHere: '아직 제출 없음',
     noReports: '제출된 보고서가 아직 없습니다.',
   },
+}
+
+/**
+ * One row of this page's two-part shape: what is being counted, and the count.
+ *
+ * The identifier takes the flexible column and wraps; the figure sits in a
+ * column that never shrinks. It was the other way round until 2026-07-31 —
+ * `truncate` on the identifier, `shrink-0` on the figure — which cut the only
+ * handle a Maintainer has for finding the item to fix and preserved the number
+ * they can always re-read. Below `sm` the two stack rather than sharing a
+ * 208px line.
+ *
+ * An absent figure is set apart by tone and weight as well as by its words:
+ * `never drawn` is not a rate of zero, and this platform teaches in its first
+ * Stage that one channel is not enough.
+ *
+ * The name column is capped rather than elastic. Pushed to the two ends of an
+ * 896px card the pair sat a measured 506px apart, and seventy rows of that is
+ * an invitation to read one item's name against the row below's figure. 22rem
+ * holds the longest authored name (305px) with room to spare and still lands
+ * every figure on one vertical line, so the column stays scannable downward:
+ * median gap 143px. A name longer than the cap wraps; nothing is cut.
+ */
+function Row({ name, value, absent }: { name: string; value: string; absent?: boolean }) {
+  return (
+    <li className="grid gap-x-[14px] sm:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] sm:items-baseline">
+      <span className="min-w-0 text-body-sm text-ink [overflow-wrap:anywhere]">{name}</span>
+      <span className={absent ? 'text-body-sm text-ink-2' : 'text-label font-bold text-ink'}>
+        {value}
+      </span>
+    </li>
+  )
+}
+
+/** One cohort's result for one defect, or the fact that it has no reports to speak for it. */
+function Cohort({ label, value, absent }: { label: string; value: string; absent: boolean }) {
+  return (
+    <div className="flex items-baseline gap-1.5">
+      <dt className="text-body-sm text-ink-2">{label}</dt>
+      <dd className={absent ? 'text-body-sm text-ink-2' : 'text-label font-bold text-ink'}>
+        {value}
+      </dd>
+    </div>
+  )
 }
 
 /**
@@ -80,6 +130,13 @@ const COPY: Record<
  * item, with the draw count beside every rate so three draws never look
  * settled (ADR-0006); the location panel is the controlled comparison the
  * shared Practice Page makes possible.
+ *
+ * Three shelves, three white cards on the frosted bed. Until 2026-07-31 this
+ * page carried none: it was scaffold-era zinc text sitting directly on the
+ * board, which put every figure on it at roughly 4.1:1 — under AA on the
+ * platform whose Stage 3 teaches accessibility — and gave a Maintainer in OS
+ * dark mode two explanatory paragraphs at 2.6:1, because `dark:` variants
+ * darkened the text on a page whose background stays light by decision.
  */
 export default async function ContentHealth({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
@@ -145,102 +202,147 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
     .filter((stage) => !subjects.some((subject) => subject.stage === stage))
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 p-8 font-sans">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight">{copy.heading}</h1>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{copy.explanation}</p>
+    <main className="mx-auto w-full max-w-4xl px-0.5">
+      <header className="px-1.5 pb-[26px]">
+        <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
+        {/* Full ink rather than ink-2: the board is not a white card, and
+            faded text is a white-card value here (DESIGN.md). */}
+        <p className="mt-3 max-w-[58ch] text-body text-ink">{copy.explanation}</p>
       </header>
 
-      <section>
-        <h2 className="text-sm font-medium text-zinc-500">{copy.itemsHeading}</h2>
-        {/* Grouped by Stage, and every declared Competency is listed whether or
-            not it has been authored yet. A Maintainer watching content health
-            needs to see the gaps: a Stage whose Competencies simply do not
-            appear looks identical to a Stage that is finished. */}
-        {content.config.stages.map(({ stage, competencies }) => (
-          <div key={stage} className="mt-4">
-            <h3 className="text-sm font-semibold">{copy.stage(stage)}</h3>
-            {competencies.map((slug) => {
-              const competency = content.competencies.find((entry) => entry.slug === slug)
-              const pool = content.items[slug]
-              return (
-                <div key={slug} className="mt-3 pl-3">
-                  <h4 className="text-sm font-medium">{competency?.name[lang] ?? slug}</h4>
-                  {!pool || pool.length === 0 ? (
-                    <p className="mt-1 text-sm text-zinc-500">{copy.notAuthored}</p>
-                  ) : (
-                    <ul className="mt-1 flex flex-col gap-1 text-sm">
-                      {pool.map((item) => {
-                        const stats = byItem.get(item.slug)
-                        return (
-                          <li key={item.slug} className="flex justify-between gap-4">
-                            <span className="truncate font-mono text-xs">{item.slug}</span>
-                            <span className="shrink-0 text-zinc-500">
-                              {stats ? copy.rate(stats.correct, stats.drawn) : copy.neverDrawn}
-                            </span>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        ))}
-      </section>
+      <div className="flex flex-col gap-[14px]">
+        <section aria-labelledby="items" className="rounded-card bg-surface p-[26px] shadow-card">
+          <h2 id="items" className="font-serif text-headline font-bold text-ink">
+            {copy.itemsHeading}
+          </h2>
+          {/* Grouped by Stage, and every declared Competency is listed whether or
+              not it has been authored yet. A Maintainer watching content health
+              needs to see the gaps: a Stage whose Competencies simply do not
+              appear looks identical to a Stage that is finished.
+              The rhythm is the grouping: 22px between Stages, 14px between
+              Competencies, 6px between the rows of one pool. One interval
+              repeated would give thirty-two items and three Stages the same
+              weight. */}
+          {content.config.stages.map(({ stage, competencies }) => (
+            <div key={stage} className="mt-[22px]">
+              <h3 className="text-title font-bold text-ink">{copy.stage(stage)}</h3>
+              {competencies.map((slug) => {
+                const competency = content.competencies.find((entry) => entry.slug === slug)
+                const pool = content.items[slug]
+                return (
+                  <div key={slug} className="mt-[14px]">
+                    <h4 className="text-label font-bold text-ink">{competency?.name[lang] ?? slug}</h4>
+                    {!pool || pool.length === 0 ? (
+                      <p className="mt-1.5 text-body-sm text-ink-2">{copy.notAuthored}</p>
+                    ) : (
+                      <ul className="mt-1.5 flex flex-col gap-1.5">
+                        {pool.map((item) => {
+                          const stats = byItem.get(item.slug)
+                          return (
+                            <Row
+                              key={item.slug}
+                              name={item.slug}
+                              value={stats ? copy.rate(stats.correct, stats.drawn) : copy.neverDrawn}
+                              absent={!stats}
+                            />
+                          )
+                        })}
+                      </ul>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          ))}
+        </section>
 
-      <section>
-        <h2 className="text-sm font-medium text-zinc-500">{copy.defectsHeading}</h2>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{copy.defectsExplanation}</p>
-        {subjects.map((subject) => (
-          <div key={subject.stage} className="mt-3">
-            <h3 className="text-xs font-medium text-zinc-500">{copy.stage(subject.stage)}</h3>
-            {subject.reports === 0 ? (
-              <p className="mt-1 text-sm text-zinc-500">{copy.noReports}</p>
-            ) : (
-              <ul className="mt-1 flex flex-col gap-1 text-sm">
-                {subject.defects.map(({ defect, missed }) => (
-                  <li key={defect.slug} className="flex justify-between gap-4">
-                    <span className="font-mono text-xs">{defect.element}</span>
-                    <span className="shrink-0 text-zinc-500">{copy.missedBy(missed, subject.reports)}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
-        {unauthored.map((stage) => (
-          <p key={stage} className="mt-3 text-sm text-zinc-500">
-            {copy.stage(stage)} — {copy.noSubject}
-          </p>
-        ))}
-      </section>
+        <section aria-labelledby="defects" className="rounded-card bg-surface p-[26px] shadow-card">
+          <h2 id="defects" className="font-serif text-headline font-bold text-ink">
+            {copy.defectsHeading}
+          </h2>
+          <p className="mt-2 max-w-[56ch] text-body-sm text-ink-2">{copy.defectsExplanation}</p>
+          {subjects.map((subject) => (
+            <div key={subject.stage} className="mt-[22px]">
+              <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>
+              {subject.reports === 0 ? (
+                <p className="mt-1.5 text-body-sm text-ink-2">{copy.noReports}</p>
+              ) : (
+                <ul className="mt-1.5 flex flex-col gap-1.5">
+                  {subject.defects.map(({ defect, missed }) => (
+                    <Row
+                      key={defect.slug}
+                      name={defect.element}
+                      value={copy.missedBy(missed, subject.reports)}
+                    />
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+          {/* The unauthored Stages are one group, not one paragraph each: 22px
+              separates them from the Stage above, 14px holds them together. */}
+          {unauthored.length > 0 && (
+            <div className="mt-[22px] flex flex-col gap-[14px]">
+              {unauthored.map((stage) => (
+                <p key={stage} className="text-body-sm text-ink-2">
+                  {copy.stage(stage)} — {copy.noSubject}
+                </p>
+              ))}
+            </div>
+          )}
+        </section>
 
-      <section>
-        <h2 className="text-sm font-medium text-zinc-500">{copy.locationsHeading}</h2>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{copy.locationsExplanation}</p>
-        {subjects.map((subject) => (
-          <div key={subject.stage} className="mt-3">
-            <h3 className="text-xs font-medium text-zinc-500">{copy.stage(subject.stage)}</h3>
-            {subject.reports === 0 ? (
-              <p className="mt-1 text-sm text-zinc-500">{copy.noReports}</p>
-            ) : (
-              <ul className="mt-1 flex flex-col gap-2 text-sm">
-                {subject.defects.map(({ defect, koreaFound, indonesiaFound }) => (
-                  <li key={defect.slug}>
-                    <p className="font-mono text-xs">{defect.element}</p>
-                    <p className="text-zinc-500">
-                      {copy.korea}: {copy.foundBy(koreaFound, subject.koreaReports)} · {copy.indonesia}:{' '}
-                      {copy.foundBy(indonesiaFound, subject.indonesiaReports)}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
-      </section>
+        <section aria-labelledby="locations" className="rounded-card bg-surface p-[26px] shadow-card">
+          <h2 id="locations" className="font-serif text-headline font-bold text-ink">
+            {copy.locationsHeading}
+          </h2>
+          <p className="mt-2 max-w-[56ch] text-body-sm text-ink-2">{copy.locationsExplanation}</p>
+          {subjects.map((subject) => (
+            <div key={subject.stage} className="mt-[22px]">
+              <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>
+              {/* 22px between defects, 4px between a defect and its two cohort
+                  lines: each entry here is three lines, so the interval that
+                  separates entries has to beat the one that binds them. */}
+              {subject.reports === 0 ? (
+                <p className="mt-1.5 text-body-sm text-ink-2">{copy.noReports}</p>
+              ) : (
+                <ul className="mt-1.5 flex flex-col gap-[22px]">
+                  {subject.defects.map(({ defect, koreaFound, indonesiaFound }) => (
+                    <li key={defect.slug}>
+                      <p className="text-body-sm text-ink [overflow-wrap:anywhere]">{defect.element}</p>
+                      {/* A cohort with no reports for this Stage says so
+                          instead of rendering `0 of 0 found`. A panel that
+                          calls itself a controlled comparison may not report
+                          an absent cohort as a finding of zero — the two
+                          readings ask a Maintainer for opposite actions. */}
+                      <dl className="mt-1 flex flex-wrap gap-x-[22px] gap-y-1">
+                        <Cohort
+                          label={copy.korea}
+                          absent={subject.koreaReports === 0}
+                          value={
+                            subject.koreaReports === 0
+                              ? copy.noReportsHere
+                              : copy.foundBy(koreaFound, subject.koreaReports)
+                          }
+                        />
+                        <Cohort
+                          label={copy.indonesia}
+                          absent={subject.indonesiaReports === 0}
+                          value={
+                            subject.indonesiaReports === 0
+                              ? copy.noReportsHere
+                              : copy.foundBy(indonesiaFound, subject.indonesiaReports)
+                          }
+                        />
+                      </dl>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </section>
+      </div>
     </main>
   )
 }
