@@ -1,8 +1,9 @@
+import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { expect, test } from 'vitest'
 
-import { competenciesOfStage, loadContent } from '../lib/content'
+import { loadContent } from '../lib/content'
 
 /**
  * Stage 1 authoring rules for the Competency definitions (#14) — what the spec
@@ -12,15 +13,26 @@ import { competenciesOfStage, loadContent } from '../lib/content'
  * anything a visitor can observe over HTTP yet.
  */
 
-const { config, competencies } = loadContent(join(__dirname, '..', 'content'))
+const { config, competencies, glossary } = loadContent(join(__dirname, '..', 'content'))
 
-test('all four Stage 1 Competencies are authored', () => {
-  // Stage 1's list against what is authored, not the whole curriculum against
-  // it: Stage 2 and Stage 3 are declared in config.md and unwritten, so an
-  // equality over every Stage would fail today and again on every Stage that
-  // lands one definition before the next.
+test('every Competency the curriculum declares is authored', () => {
+  // This was Stage 1's list alone while the later Stages were declared and
+  // unwritten. #72 authored the last of them, so the whole curriculum can be
+  // held to it — and a Competency added to config.md from now on fails here
+  // until somebody writes it, rather than being declared and forgotten.
   const authored = new Set(competencies.map((competency) => competency.slug))
-  expect(competenciesOfStage(config, 1).filter((slug: string) => !authored.has(slug))).toEqual([])
+  const declared = config.stages.flatMap((entry) => entry.competencies)
+  expect(declared.filter((slug: string) => !authored.has(slug))).toEqual([])
+})
+
+test('every Competency has at least one Principle a Finding could cite', () => {
+  // A Competency with no Glossary entry naming it is a Competency a Learner
+  // cannot write a Finding against: a Finding selects its Principle from the
+  // Glossary (CONTEXT.md), so an empty list leaves them nothing to select.
+  for (const competency of competencies) {
+    const cited = glossary.filter((entry) => entry.competencies.includes(competency.slug))
+    expect(cited.map((entry) => entry.slug), competency.slug).not.toEqual([])
+  }
 })
 
 test('each Competency carries two or three pre-reading questions', () => {
@@ -45,6 +57,78 @@ test('the browser-translation notice is Korean-only: present, and not an en/ko p
     // is never told to translate anything.
     const noticeKeys = Object.keys(competency.frontmatter).filter((key) => /notice/i.test(key))
     expect(noticeKeys, competency.slug).toEqual(['koTranslationNotice'])
+  }
+})
+
+/**
+ * The Avoid lists in CONTEXT.md are about what a word is used to *name*: "test"
+ * is wrong as a name for a Gate Quiz, and right inside "Usability (User)
+ * Testing 101", which is a cited article title and this project's name for
+ * nothing. So the words below are only the ones with no legitimate second
+ * referent anywhere in Learner-facing copy.
+ *
+ * `test`, `question`, `bug`, `admin` and `assessment` are deliberately absent:
+ * each has a lawful use here — the `testing-with-real-users` Competency names a
+ * UX research practice, pre-reading questions are questions — and banning the
+ * string would fail on correct copy while still not catching the mistake that
+ * matters, which is calling a *Gate Quiz* a test. That one is caught by review,
+ * not by this test, and pretending otherwise is what a green check nobody can
+ * fail looks like.
+ */
+const NAMES_NOTHING_HERE: Record<string, string[]> = {
+  student: ['학생'],
+  trainee: [],
+  grader: ['채점자'],
+  instructor: [],
+  homework: ['숙제'],
+}
+
+test('every word this file bans is one CONTEXT.md actually lists', () => {
+  // The list above is a hand-picked subset, which is the shape that goes stale
+  // silently: CONTEXT.md could drop a term tomorrow and this file would go on
+  // enforcing it with nobody told. Naming what survives rather than trusting
+  // the copy — the words are checked back against their source, and a subset
+  // that has drifted off it fails here instead of quietly outliving it.
+  const context = readFileSync(join(__dirname, '..', 'CONTEXT.md'), 'utf8')
+  const avoided = new Set(
+    [...context.matchAll(/^_Avoid_: (.+)$/gm)].flatMap((match) =>
+      match[1].split(',').map((word) => word.trim().replace(/ \(.*$/, '').toLowerCase()),
+    ),
+  )
+  expect(Object.keys(NAMES_NOTHING_HERE).filter((word) => !avoided.has(word))).toEqual([])
+})
+
+test('Learner-facing copy avoids the words CONTEXT.md rules out', () => {
+  const copy: [string, string][] = [
+    ...competencies.flatMap((competency): [string, string][] => [
+      [`${competency.slug} name`, `${competency.name.en} ${competency.name.ko}`],
+      [`${competency.slug} objective`, `${competency.objective.en} ${competency.objective.ko}`],
+      [`${competency.slug} roleHint`, `${competency.roleHint.en} ${competency.roleHint.ko}`],
+      ...competency.preReadingQuestions.map((question, index): [string, string] => [
+        `${competency.slug} preReadingQuestions[${index}]`,
+        `${question.en} ${question.ko}`,
+      ]),
+    ]),
+    // `source.attribution` is excluded on purpose: it reproduces an author and
+    // a title we do not get to reword.
+    ...glossary.flatMap((entry): [string, string][] => [
+      [`${entry.slug} name`, `${entry.name.en} ${entry.name.ko}`],
+      [`${entry.slug} definition`, `${entry.definition.en} ${entry.definition.ko}`],
+      [`${entry.slug} justification`, `${entry.justification.en} ${entry.justification.ko}`],
+    ]),
+  ]
+
+  for (const [where, text] of copy) {
+    const found = Object.entries(NAMES_NOTHING_HERE).flatMap(([word, korean]) => [
+      // Word-bounded for the English: unanchored, "grader" matches "upgrader"
+      // and the failure names a word that is not on the page. Hangul is not a
+      // regex word character, so `\b` around a Korean term matches nothing at
+      // all — those are looked for as plain substrings, which is what Korean
+      // needs anyway, since it does not space its particles off the noun.
+      ...(new RegExp(`\\b${word}\\b`, 'i').test(text) ? [word] : []),
+      ...korean.filter((term) => text.includes(term)),
+    ])
+    expect(found, where).toEqual([])
   }
 })
 

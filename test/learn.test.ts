@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 import { expect, test } from 'vitest'
 
-import { competenciesOfStage, loadContent } from '../lib/content'
+import { loadContent } from '../lib/content'
 import { BASE_URL } from './config'
 import { schema, sessionCookieFor, testDb } from './db'
 import { visibleText } from './html'
@@ -262,18 +262,24 @@ test('the browser-translation notice appears for Korean-language Learners and ne
   expect(en).not.toContain('번역')
 })
 
-test("every Stage 2 Competency has a page in both languages, carrying that language's own copy", async () => {
-  // Nothing links to these yet — the Learn overview opens Stage 1 only until
-  // #79. They are reachable because the route admits any declared Competency
-  // that has been authored, and a page nobody can reach yet is still a page a
-  // Learner will read, so it has to hold both languages before the item pools
-  // are written against it.
+test("every declared Competency has a page in both languages, carrying that language's own copy", async () => {
+  // Nothing links to the later Stages yet — the Learn overview opens Stage 1
+  // only until #79. They are reachable because the route admits any declared
+  // Competency that has been authored, and a page nobody can reach yet is
+  // still a page a Learner will read, so it has to hold both languages before
+  // the item pools are written against it.
   const cookie = await sessionCookieFor(freshLearner())
   const { config, competencies } = loadContent(join(__dirname, '..', 'content'))
-  const stage2 = competenciesOfStage(config, 2)
-  expect(stage2).toHaveLength(4)
+  const declared = config.stages.flatMap((entry) => entry.competencies)
+  // Non-empty rather than a count. Whether Stage 3 carries a fifth Competency
+  // is open — ADR-0011's follow-up leaves it for the maintainer and forbids
+  // this ticket from settling it — so asserting twelve here would answer it in
+  // a test file, and adding accessibility would turn an unmade decision into a
+  // broken suite. What this needs from the number is only that the loop below
+  // is not iterating nothing.
+  expect(declared.length).toBeGreaterThan(0)
 
-  for (const slug of stage2) {
+  for (const slug of declared) {
     const competency = competencies.find((entry) => entry.slug === slug)!
     for (const lang of ['en', 'ko'] as const) {
       const response = await fetch(`${BASE_URL}/${lang}/learn/${slug}`, { headers: { cookie } })
@@ -297,21 +303,14 @@ test('a Competency declared under no Stage is not a page', async () => {
   expect(response.status).toBe(404)
 })
 
-test('a declared Competency nobody has authored yet is not a page either', async () => {
-  // The other refusal, with the other cause: declared in config.md, no
-  // definition file written. It has flipped once already — `form-burden` was
-  // this case until #65 authored it, and this test went red rather than
-  // staying green for a reason that had stopped existing. #72 will flip it
-  // again, which is what the assertion below is for: when every declared
-  // Competency is authored, this fails loudly instead of passing vacuously.
-  const { config, competencies } = loadContent(join(__dirname, '..', 'content'))
-  const authored = new Set(competencies.map((entry) => entry.slug))
-  const unauthored = competenciesOfStage(config, 3).filter((slug: string) => !authored.has(slug))
-  expect(unauthored.length).toBeGreaterThan(0)
-
-  const cookie = await sessionCookieFor(freshLearner())
-
-  const response = await fetch(`${BASE_URL}/en/learn/${unauthored[0]}`, { headers: { cookie } })
-
-  expect(response.status).toBe(404)
-})
+// Removed here: 'a declared Competency nobody has authored yet is not a page
+// either'. The route refuses on `!competency || stage === null`, and that test
+// covered the first half by fetching a slug config.md declared and nobody had
+// written. It was built to fail loudly the moment that stopped being possible,
+// and #72 is that moment — every one of the twelve is now authored, so the
+// case can no longer be reached through the repository's own content and the
+// test could only have been kept alive by inventing a Competency to leave
+// unwritten. The half that is still reachable is covered above. The other half
+// is now covered by 'every Competency the curriculum declares is authored' in
+// competencies.test.ts, which fails at the source — a slug added to config.md
+// with no definition file — rather than at a 404 downstream of it.
