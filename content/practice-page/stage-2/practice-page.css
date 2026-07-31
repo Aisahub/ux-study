@@ -1,0 +1,418 @@
+/*
+ * Styles for both language variants of the Stage 2 subject. One file, linked by
+ * both, so the variants cannot drift visually.
+ *
+ * Stage 2's planted defects live in the behaviour rather than in these rules —
+ * a wait, a mistake, a step walked back. This stylesheet is therefore held to
+ * the same bar the flow is: legible text, contrast that passes, focus that is
+ * always visible, and a phone layout that does not need a horizontal scroll.
+ * Nothing here labels a planted defect.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  background: #f4f5f7;
+  color: #16202c;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+/*
+ * The audit tools (ADR-0010). Deliberately unlike the artefact below it — a
+ * dark bar, its own vocabulary, no card — so that a Learner told to find fault
+ * with the page can tell our chrome from the thing being audited. It sticks to
+ * the top so the mode control and Restart stay reachable without scrolling on
+ * a phone.
+ */
+.audit-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 10px 16px;
+  background: #111827;
+  color: #f9fafb;
+}
+
+.audit-bar :focus-visible {
+  outline-color: #fbbf24;
+}
+
+.audit-bar-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+}
+
+.audit-modes {
+  display: flex;
+  gap: 6px;
+}
+
+.audit-mode {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid #64748b;
+  background: transparent;
+  color: #f1f5f9;
+  cursor: pointer;
+}
+
+.audit-mode[aria-pressed='true'] {
+  background: #f9fafb;
+  border-color: #f9fafb;
+  color: #111827;
+}
+
+.audit-bar-state {
+  margin: 0;
+  margin-right: auto;
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.audit-restart {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid #64748b;
+  background: transparent;
+  color: #f1f5f9;
+  cursor: pointer;
+}
+
+/* The artefact. */
+
+.flow {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 24px 18px 56px;
+}
+
+.flow-head {
+  margin-bottom: 18px;
+}
+
+.brand {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #475569;
+}
+
+.flow-head h1 {
+  margin: 2px 0 6px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.step-indicator {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+}
+
+.step,
+.panel {
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px 20px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.step-heading {
+  margin: 0 0 18px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field-row {
+  display: flex;
+  gap: 14px;
+}
+
+.field-row .field {
+  flex: 1;
+}
+
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin: 0 0 6px;
+}
+
+.field-control {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #64748b;
+  border-radius: 8px;
+  background: #fff;
+  color: #16202c;
+  font: inherit;
+  font-size: 15px;
+}
+
+.field-control.is-invalid {
+  border-color: #b91c1c;
+  border-width: 2px;
+}
+
+.field-error {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #b91c1c;
+}
+
+/*
+ * Three options that differ on price, excess and what they cover, laid out so
+ * they can be compared by looking rather than by opening and remembering.
+ */
+.choices {
+  border: 0;
+  padding: 0;
+  margin: 0 0 16px;
+}
+
+.choices .field-label {
+  padding: 0;
+}
+
+.choice {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  align-items: baseline;
+  padding: 10px 12px;
+  border: 1px solid #64748b;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.choice:last-child {
+  margin-bottom: 0;
+}
+
+.choice input {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.choice-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.choice-detail {
+  grid-column: 2;
+  font-size: 14px;
+  color: #475569;
+}
+
+.availability {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #eef4ff;
+  color: #1e3a8a;
+  font-size: 14px;
+}
+
+.form-error {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.summary {
+  margin: 0 0 20px;
+  padding: 4px 0 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.summary-row {
+  display: flex;
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.summary dt {
+  flex: 0 0 42%;
+  font-size: 14px;
+  color: #475569;
+}
+
+.summary dd {
+  margin: 0;
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.step-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.btn {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 11px 18px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #1d4ed8;
+  color: #fff;
+  margin-left: auto;
+}
+
+.btn-quiet {
+  background: #fff;
+  border-color: #64748b;
+  color: #1d4ed8;
+}
+
+.btn-danger {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.panel p {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+.panel .btn {
+  margin-top: 8px;
+}
+
+.cancel-confirm {
+  margin-top: 14px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: #fff7ed;
+  border: 1px solid #c2732a;
+}
+
+.cancel-confirm-text {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #7c2d12;
+}
+
+.cancel-confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 560px) {
+  /*
+   * The audit tools stay pinned on a phone, where the subject owns the screen
+   * (DESIGN.md, #37), so they are also the most expensive thing on it: every
+   * row they take is a row the step below does not get. Compact enough that
+   * the first screen still carries the step's own actions.
+   */
+  .audit-bar {
+    gap: 6px 10px;
+    padding: 8px 12px;
+  }
+
+  .audit-bar-title {
+    font-size: 11px;
+  }
+
+  .audit-mode,
+  .audit-restart {
+    font-size: 13px;
+    padding: 6px 11px;
+  }
+
+  .audit-bar-state {
+    flex-basis: 100%;
+    margin-right: 0;
+    font-size: 13px;
+  }
+
+  .flow {
+    padding: 18px 14px 48px;
+  }
+
+  .field-row {
+    display: block;
+  }
+
+  .field-row .field {
+    margin-bottom: 16px;
+  }
+
+  .btn {
+    flex: 1 1 100%;
+  }
+
+  /*
+   * Stacked in the order they are written, not with the primary lifted to the
+   * top: on the first step the quiet action is the one that comes first in the
+   * task, and a layout that reversed them would say otherwise.
+   */
+  .btn-primary {
+    margin-left: 0;
+  }
+
+  .summary-row {
+    display: block;
+  }
+
+  .summary dt {
+    margin-bottom: 2px;
+  }
+}
