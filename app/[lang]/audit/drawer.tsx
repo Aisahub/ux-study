@@ -86,7 +86,7 @@ const COPY: Record<
       'unknown-principle': '용어집에서 원칙을 선택하세요.',
       incomplete: '설명과 고치는 방법, 두 서술이 모두 필요합니다.',
       submitted: '이미 제출된 보고서입니다.',
-      locked: '이 단계의 관문 퀴즈를 모두 통과하면 감사가 열립니다.',
+      locked: '이 단계의 퀴즈를 모두 통과하면 감사가 열립니다.',
       'no-subject': '이 단계에는 아직 감사할 페이지가 없습니다.',
       'too-few': '제출하기에는 Finding이 아직 부족합니다.',
     },

@@ -23,6 +23,18 @@ const COPY: Record<
     done: (done: number, total: number) => string
     status: Record<QuizStatus, string>
     attempts: (n: number) => string
+    /**
+     * The way into the Competency, worded for the state the row is already
+     * reporting beside it. "Start" on a row that says `Passed · 3 attempts`
+     * is the link disagreeing with the status two lines above it.
+     *
+     * This is not the Row Action Exception being broken: that rule is about
+     * the repeated *button*, which stays identical down all four rows. This
+     * column already varies per row — the status and the attempt count are
+     * the two things in it that do — and the link is describing the same one
+     * fact they are.
+     */
+    openCompetency: Record<QuizStatus, string>
     openQuiz: string
     capstoneHeading: string
     capstoneExplanation: string
@@ -51,6 +63,11 @@ const COPY: Record<
       passed: 'Passed',
     },
     attempts: (n) => (n === 1 ? '1 attempt' : `${n} attempts`),
+    openCompetency: {
+      unstarted: 'Start here',
+      'in-progress': 'Continue',
+      passed: 'Revisit',
+    },
     openQuiz: 'Open the Gate Quiz',
     capstoneHeading: 'Self-Audit Report',
     capstoneExplanation:
@@ -79,11 +96,16 @@ const COPY: Record<
     done: (done, total) => `${total}개 중 ${done}개 완료`,
     status: { unstarted: '시작 전', 'in-progress': '진행 중', passed: '통과' },
     attempts: (n) => `${n}회 시도`,
-    openQuiz: '관문 퀴즈 열기',
+    openCompetency: {
+      unstarted: '시작하기',
+      'in-progress': '이어서 하기',
+      passed: '복습하기',
+    },
+    openQuiz: '퀴즈 열기',
     capstoneHeading: '자가 점검 리포트',
     capstoneExplanation:
       '마무리 과제: 네 역량에서 배운 것으로, 도움 없이 실제 페이지를 감사합니다.',
-    capstoneLocked: '관문 퀴즈 네 개를 모두 통과하면 열립니다.',
+    capstoneLocked: '퀴즈 네 개를 모두 통과하면 열립니다.',
     locked: '잠김',
     capstoneOpen: '자가 점검 리포트 열기',
     capstoneSubmitted: '제출 완료',
@@ -284,7 +306,7 @@ export default async function Learn({
                 key={competency.slug}
                 data-competency={competency.slug}
                 data-quiz-status={quiz.status}
-                className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
+                className="@container grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
               >
                 <span
                   aria-hidden
@@ -329,12 +351,52 @@ export default async function Learn({
                       <span className="text-ink-2"> · {copy.attempts(quiz.attempts)}</span>
                     </span>
                   </p>
-                  <Link
-                    href={`/${lang}/learn/${competency.slug}/quiz`}
-                    className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none"
-                  >
-                    {copy.openQuiz}
-                  </Link>
+                  {/* The row's two ways in, in the order they are meant to be
+                      taken. The Competency was reachable only through its own
+                      name, which recovers its underline on hover — and a phone
+                      has no hover to recover it from, so on touch the only
+                      thing in the row that looked pressable was the quiz. A
+                      directory whose sole visible action skips the reading is
+                      not what the Studio Board Rule describes.
+
+                      A link and not a second pill: DESIGN.md's Row Action
+                      Exception permits the one repeated button per row and
+                      says never alongside a second differently-weighted one.
+                      Oxblood at the label step is what this system already
+                      makes links out of, and the arrow is what makes it read
+                      as a way in rather than as a word.
+
+                      Side by side only where the card can pay for it. The
+                      description beside this column is a `minmax(0,1fr)`,
+                      which will shrink to nothing rather than push the action
+                      column back: laid out as a row on a 560px card, the
+                      English objective measured 93px wide and ran to twelve
+                      lines of ribbon — on the row whose own Competency is
+                      Readability. Below the threshold the link stacks over the
+                      button and the column is the button's width again, which
+                      is what it was before this link existed.
+
+                      The card is asked and not the viewport: DESIGN.md allows
+                      three viewport bands and no fourth, and a component with
+                      a width of its own asks the container it stands in. 780px
+                      is where the description still has ~390px at the moment
+                      the row forms, measured on the English labels, which are
+                      the wider pair. */}
+                  <div className="flex flex-col gap-[14px] @min-[780px]:flex-row @min-[780px]:items-center">
+                    <Link
+                      href={`/${lang}/learn/${competency.slug}`}
+                      className="inline-flex min-h-11 items-center self-start text-label font-bold text-oxblood underline-offset-4 hover:underline sm:self-end @min-[780px]:self-auto"
+                    >
+                      {copy.openCompetency[quiz.status]}
+                      <span aria-hidden>&nbsp;→</span>
+                    </Link>
+                    <Link
+                      href={`/${lang}/learn/${competency.slug}/quiz`}
+                      className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none @min-[780px]:w-auto"
+                    >
+                      {copy.openQuiz}
+                    </Link>
+                  </div>
                 </div>
               </article>
             )
