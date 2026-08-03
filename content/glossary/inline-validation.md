@@ -18,9 +18,9 @@ justification:
     the user has to hunt for which field it meant. Validating it inline would
     put the answer where the work is.
   ko: >-
-    [필드]는 제출한 뒤에야 페이지 맨 위에서 문제를 알려 주기 때문에, 사용자는
-    그게 어느 필드 얘기인지 찾아다녀야 합니다. 인라인으로 검증하면 답이 작업하는
-    자리에 놓입니다.
+    [필드], 이건 제출한 뒤에야 페이지 맨 위에서 문제를 알려 주기
+    때문에, 사용자는 그게 어느 필드 얘기인지 찾아다녀야 합니다.
+    인라인으로 검증하면 답이 작업하는 자리에 놓입니다.
 competencies:
   - error-handling
 source: https://www.nngroup.com/articles/errors-forms-design-guidelines/

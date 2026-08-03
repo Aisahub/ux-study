@@ -501,6 +501,76 @@ test('an artefact written in one language only fails the build', () => {
   expectProblem(root, /washed-out-confirm\.md: artefact is missing its ko language variant/)
 })
 
+/**
+ * The mistake is made the way it happens for real: the Korean is wrapped
+ * between a word and the particle that belongs to it. In a folded scalar the
+ * break becomes a space, so the source looks like ordinary wrapping and the
+ * rendered sentence carries a typo. Only Korean can catch this — the English
+ * sibling wraps in the same place and is fine.
+ */
+test('Korean wrapped between a word and its particle fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'items/visual-hierarchy/washed-out-confirm.md',
+    edit(
+      ITEM_ONE,
+      '  ko: 확정 버튼은 흐릿하고 업그레이드 배너는 선명한 주문 페이지.',
+      '  ko: >-\n    확정 버튼은 흐릿하고 업그레이드 배너는 선명한 주문 페이지\n    입니다.',
+    ),
+  )
+  expectProblem(root, /washed-out-confirm\.md: artefact\.ko splits a particle from its word — "지 입니다"/)
+})
+
+/**
+ * The justification is said out loud, so a slot cannot be followed by a
+ * particle that agrees with the word filling it. The English template above
+ * the Korean one has the same slot and no such problem.
+ */
+test('a Glossary slot followed by a particle that agrees with its filler fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'glossary/contrast.md',
+    edit(
+      GLOSSARY_CONTRAST,
+      '  ko: 주요 동작이 주요 동작으로 읽히지 않습니다.',
+      "  ko: '[요소]는 주요 동작으로 읽히지 않습니다.'",
+    ),
+  )
+  expectProblem(root, /contrast\.md: justification\.ko puts "는" straight after \[요소\]/)
+})
+
+/** A slot that ends in a fixed noun settles the agreement itself, and loads. */
+test('a Glossary slot ending in a fixed noun may carry a particle', () => {
+  const root = scaffold()
+  write(
+    root,
+    'glossary/contrast.md',
+    edit(
+      GLOSSARY_CONTRAST,
+      '  ko: 주요 동작이 주요 동작으로 읽히지 않습니다.',
+      "  ko: '[읽는 사람]이 먼저 보는 자리가 주요 동작으로 읽히지 않습니다.'",
+    ),
+  )
+  expect(() => loadContent(root)).not.toThrow()
+})
+
+/** The bound nouns Korean does space are not particles, and must still load. */
+test('Korean spacing a bound noun such as 뿐 or 만큼 loads', () => {
+  const root = scaffold()
+  write(
+    root,
+    'items/visual-hierarchy/washed-out-confirm.md',
+    edit(
+      ITEM_ONE,
+      '  ko: 확정 버튼은 흐릿하고 업그레이드 배너는 선명한 주문 페이지.',
+      '  ko: 선명한 것은 배너뿐이고, 확정 버튼은 알아볼 수 없을 만큼 흐립니다.',
+    ),
+  )
+  expect(() => loadContent(root)).not.toThrow()
+})
+
 test('a quiz item that asks nothing fails the build', () => {
   const root = scaffold()
   write(

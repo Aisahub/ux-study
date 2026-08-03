@@ -18,8 +18,9 @@ justification:
     can be operated. Adding [an underline / a border] would make it findable
     without changing the layout.
   ko: >-
-    [요소]는 클릭이 되지만 시그니파이어가 없습니다. 조작할 수 있다는 신호가
-    전혀 없습니다. [밑줄/테두리]를 주면 레이아웃을 바꾸지 않고도 눈에 띄게 됩니다.
+    [요소], 이건 클릭이 되지만 시그니파이어가 없습니다 — 조작할 수
+    있다는 신호가 전혀 없습니다. [밑줄 / 테두리] 가운데 하나를
+    더하면 레이아웃을 바꾸지 않고도 눈에 띄게 됩니다.
 competencies:
   - perceived-clickability
 source: https://www.nngroup.com/articles/button-states-communicate-interaction/

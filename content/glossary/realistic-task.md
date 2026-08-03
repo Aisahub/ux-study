@@ -18,9 +18,10 @@ justification:
     whether they can follow an instruction. Asking them to [goal] instead would
     tell us whether they can find it.
   ko: >-
-    이 과제는 참가자에게 [조작 장치]를 누르라고 알려 주므로, 알아낼 수 있는 것은
-    지시를 따를 수 있는지뿐입니다. 대신 [목표]를 이루어 달라고 하면, 그것을
-    스스로 찾아낼 수 있는지를 알 수 있습니다.
+    이 과제는 참가자에게 [조작 장치] 하나를 누르라고 일러 주므로,
+    알아낼 수 있는 것은 지시를 따를 수 있는지뿐입니다. 대신 [목표]
+    하나를 이루어 달라고 하면, 거기까지 가는 길을 스스로 찾아낼 수
+    있는지를 알 수 있습니다.
 competencies:
   - testing-with-real-users
 source: https://www.nngroup.com/articles/usability-testing-101/

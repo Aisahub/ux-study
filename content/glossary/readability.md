@@ -18,8 +18,9 @@ justification:
     the lines are long and set tightly. Widening the line spacing would fix it
     without changing the typeface.
   ko: >-
-    [요소]는 글자 하나하나는 읽히지만 덩어리로 읽기에는 피로합니다.
-    줄이 길고 행간이 좁습니다. 서체를 바꾸지 않고 행간만 넓혀도 나아집니다.
+    [요소], 이건 글자 하나하나는 읽히지만 덩어리로 읽으면 금세
+    지칩니다. 줄이 길고 행간이 좁습니다. 서체를 바꾸지 않고 행간만
+    넓혀도 나아집니다.
 competencies:
   - readability
 source: https://www.nngroup.com/articles/legibility-readability-comprehension/

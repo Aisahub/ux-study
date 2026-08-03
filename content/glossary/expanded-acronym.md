@@ -18,9 +18,9 @@ justification:
     open this page from the top has no way to learn what it stands for. Writing
     "[full phrase] ([acronym])" at this point costs one line.
   ko: >-
-    [약어]가 풀이 없이 나옵니다. 이 페이지를 맨 위부터 열지 않은 독자는 그것이
-    무엇의 줄임말인지 알 길이 없습니다. 이 자리에 "[온전한 말]([약어])"로 적으면
-    한 줄이면 됩니다.
+    [약어], 이건 풀어 쓴 말 없이 나옵니다. 이 페이지를 맨 위부터
+    열지 않은 독자는 무엇의 줄임말인지 알 길이 없습니다. 이 자리에
+    "[온전한 말]([약어])" 형태로 적는 데는 한 줄이면 충분합니다.
 competencies:
   - jargon
 source: https://www.nngroup.com/articles/technical-jargon/

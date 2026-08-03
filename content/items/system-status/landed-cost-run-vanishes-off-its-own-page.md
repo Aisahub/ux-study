@@ -15,7 +15,7 @@ artefact:
     recalculation anywhere on it. In the third, nine minutes in and back on
     Costs, the ring and the line are there again, now reading "980 of 1,240".
   ko: >-
-    왼쪽에 메뉴 — 원가, 주문, 공급사 — 가 있는 원가 도구를, 15분쯤 걸리는 재계산
+    왼쪽에 원가, 주문, 공급사 메뉴가 있는 원가 도구를, 15분쯤 걸리는 재계산
     한 번 동안 세 시점에 걸쳐 보여 줍니다. 첫 시점은 시작하고 1분 뒤로, 원가
     페이지가 열려 있고 제목 아래 줄에 작은 고리와 함께 "육상원가 재계산 중 ·
     1,240건 중 340건"이 적혀 있습니다. 두 번째 시점은 3분 뒤로, 주문 페이지가
@@ -206,7 +206,7 @@ options:
         The person is told the moment it is done, whatever they happen to be
         doing.
   ko:
-    - text: 모든 페이지가 함께 지고 다니는 테두리에 실행 상태 줄을 둡니다. 무슨 작업인지와 어디까지 갔는지를 적습니다
+    - text: 모든 페이지에 공통으로 붙는 상단 영역에 실행 상태 줄을 둡니다. 무슨 작업인지와 어디까지 갔는지를 적습니다
       reason: >-
         시작한 페이지보다 오래 가는 작업이라면, 지금 보고 있는 페이지가
         어디든 그곳에서 읽혀야 합니다.

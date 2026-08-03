@@ -326,6 +326,10 @@ function loadGlossary(root: string, problems: string[]): GlossaryEntry[] {
     for (const field of ['name', 'definition', 'justification'] as const) {
       if (!isLanguagePair(data[field])) problems.push(`${rel}: ${field} must carry en and ko variants`)
     }
+    const justification = data.justification
+    if (isRecord(justification) && typeof justification.ko === 'string') {
+      checkKoreanSlotParticles(justification.ko, rel, problems)
+    }
     // The Competency references are not checked against config.md: a Glossary
     // entry may cite a later-Stage Competency (cognitive-load already cites
     // form-burden, which is Stage 2).
@@ -823,9 +827,90 @@ function checkLanguagePairs(node: unknown, rel: string, problems: string[], path
       const empty = value === undefined || value === null || (typeof value === 'string' && value.trim() === '')
       if (empty) problems.push(`${rel}: ${path || 'content'} is missing its ${lang} language variant`)
     }
+    checkKoreanParticleSpacing(node.ko, rel, `${path || 'content'}.ko`, problems)
   }
   for (const [key, value] of Object.entries(node)) {
     checkLanguagePairs(value, rel, problems, path === '' ? key : `${path}.${key}`)
+  }
+}
+
+/**
+ * Korean particles attach to the word in front of them. A space before one is
+ * always wrong — `"보관함" 입니다` is a typo a Korean reader stops at, the way
+ * `the boo k` is in English.
+ *
+ * This is a mistake English cannot make, and the reason it reaches Korean is
+ * the file format rather than the writing. Prose here is authored as a folded
+ * scalar (`>-`), where YAML turns every line break into a space, so a line
+ * wrapped between a word and its particle renders as two. Nothing about the
+ * source looks wrong: the particle sits at the start of the next line, which
+ * is exactly where a wrapped English word would sit. The English variant of
+ * the same field is unaffected, because English already had a space there.
+ *
+ * Only particles that can never legitimately follow a space are listed. The
+ * bound nouns a Korean writer *does* space — `뿐`, `만큼`, `수` — are left out,
+ * as is `보다`, which is also the verb "to see". A check that cries wolf gets
+ * turned off.
+ *
+ * Screens are skipped. They are authored as literal blocks (`|-`), which keep
+ * their line breaks and so cannot acquire this defect, and their copy is
+ * deliberately bad — a Planted Defect is not a typo to be corrected.
+ */
+const KOREAN_BOUND_PARTICLES =
+  /[가-힣0-9"”』」\)] (입니다|입니까|이다|이고|이며|이라고|이라는|이라서|라고|라는|까지|부터|처럼|마다|집니다|졌습니다)/g
+
+/**
+ * A justification is a fill-in-the-blank sentence a Learner says out loud, so
+ * every `[slot]` is replaced by a word nobody knows in advance. Korean picks
+ * the form of a particle from whether the word before it ends in a consonant —
+ * 을/를, 은/는, 이/가, 와/과, 으로/로 — so a particle written directly after a
+ * slot is right for half the words that can land there and wrong for the rest.
+ *
+ * English has no such agreement, which is why the English template is fine and
+ * its Korean sibling is not. The written dodge, "을(를)", is unavailable here:
+ * this sentence is meant to be spoken in a standup, and nobody says a bracket.
+ * The fix is to move the slot — put a fixed noun after it (`[무엇] 하나를`), or
+ * let it land where a copula ends the clause (`[무엇]입니다`).
+ *
+ * A slot whose own text ends in a fixed noun (`[읽는 사람]`, `[몇 명]`) settles
+ * the question itself: the Learner replaces the qualifier, not that noun.
+ */
+const VARYING_PARTICLES = /\[[^\]]*\]\s*(은|는|이|가|을|를|와|과|으로|로|이라면|라면|이라고|라고|이나|이며|이라는|라는)(?![가-힣])/g
+const SELF_TERMINATING_SLOT = /(사람|명)\]$/
+
+function checkKoreanSlotParticles(korean: string, rel: string, problems: string[]): void {
+  for (const found of korean.matchAll(VARYING_PARTICLES)) {
+    const slot = found[0].slice(0, found[0].indexOf(']') + 1)
+    if (SELF_TERMINATING_SLOT.test(slot)) continue
+    problems.push(
+      `${rel}: justification.ko puts "${found[1]}" straight after ${slot}, and that particle changes ` +
+        `with whatever fills the slot. Move the slot, or put a fixed noun between them.`,
+    )
+  }
+}
+
+/**
+ * The Korean side of a pair is not always one string: an option list is
+ * `options.ko[]`, each option carrying its own `text` and `reason`. Those
+ * are the sentences a Learner reads after answering, so they are walked too.
+ */
+function checkKoreanParticleSpacing(korean: unknown, rel: string, path: string, problems: string[]): void {
+  if (Array.isArray(korean)) {
+    korean.forEach((child, index) => checkKoreanParticleSpacing(child, rel, `${path}[${index}]`, problems))
+    return
+  }
+  if (isRecord(korean)) {
+    for (const [key, value] of Object.entries(korean)) {
+      checkKoreanParticleSpacing(value, rel, `${path}.${key}`, problems)
+    }
+    return
+  }
+  if (typeof korean !== 'string' || /<[a-zA-Z]/.test(korean)) return
+  for (const found of korean.matchAll(KOREAN_BOUND_PARTICLES)) {
+    problems.push(
+      `${rel}: ${path || 'content'} splits a particle from its word — "${found[0]}". ` +
+        `Korean particles carry no space before them; move the line break so "${found[1]}" stays joined.`,
+    )
   }
 }
 
