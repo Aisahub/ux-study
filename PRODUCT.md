@@ -75,7 +75,6 @@ Four mechanisms distinguish this from a generic course platform, and each was de
 
 - Stage 2 and Stage 3 content is not authored yet. Only Stage 1's four Competencies exist, and neither later Stage has an authored subject for its Self-Audit Report — Stage 2's must additionally support detection by interaction (ADR-0009). Stage 2's subject now has a decided shape and no artefact: a three-step flow that may remember what a Learner entered but may never branch (ADR-0010). Stage 3's subject likewise has a decided shape and no artefact: a page carrying a stated user, plus a specimen Self-Audit Report about the Stage 1 Practice Page (ADR-0011).
 - Peer Review is no longer an assessment (ADR-0011). It is optional exposure to a colleague's submitted report, it gates nothing, and it is not built.
-- Whether **accessibility** is a Stage 3 Competency is unsettled. ADR-0001's Decision section says it is, its own later amendment enumerates four Competencies without it, and this document and `DESIGN.md` both still assert it. Either two documents are wrong or the curriculum is short one Competency; nobody has decided which.
 
 ## Brand Commitments
 
@@ -109,7 +108,7 @@ Real, authored, in-repo:
 
 ## Accessibility & Inclusion
 
-**WCAG 2.2 AA is a requirement, confirmed 2026-07-23** — colour contrast, complete keyboard operation, visible focus, and correct screen-reader semantics. The standard is not aspirational here: accessibility is itself a Stage 3 Competency, so the platform failing it would be teaching material contradicted by the page it is printed on. Treat AA as a hard acceptance line on every surface, not a late audit.
+**WCAG 2.2 AA is a requirement, confirmed 2026-07-23** — colour contrast, complete keyboard operation, visible focus, and correct screen-reader semantics. The standard is not aspirational here. Accessibility is **not** one of the twelve Competencies — ADR-0001's amendment settles Stage 3 as two defect types plus the two routes out of the author's own head, and a fifth entry would break that structure (settled 2026-08-03, ADR-0011's follow-up). It is a hard line on the platform itself, which is the stronger claim of the two: Product Principle 1 applies in full, so a barrier shipped here is disproof of what this platform teaches rather than an oversight in it. Treat AA as a hard acceptance line on every surface, not a late audit.
 
 Additionally:
 
