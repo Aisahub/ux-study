@@ -13,9 +13,9 @@ artefact:
     sits beside the box, and "Register" is unchanged.
   ko: >-
     장비 등록 폼을 두 시점에서 보여 줍니다. 첫 번째에서는 "종류"에 "노트북"이
-    들어 있고, 커서는 "MBP-2024-7741"이 적힌 "일련번호" 칸에 있으며, "사용자
-    지정"에는 안내 문구만 보입니다. 맨 아래에는 "취소"와 "등록"이 있습니다.
-    두 번째 시점에서는 커서가 "사용자 지정"으로 옮겨 갔고, 일련번호 칸은 값도
+    들어 있고, 커서는 "MBP-2024-7741"이 적힌 "일련번호" 칸에 있으며,
+    "사용 담당자"에는 안내 문구만 보입니다. 맨 아래에는 "취소"와 "등록"이 있습니다.
+    두 번째 시점에서는 커서가 "사용 담당자"로 옮겨 갔고, 일련번호 칸은 값도
     크기도 자리도 그대로인 채 테두리만 빨갛게 바뀌었습니다. 어디에도 글자는
     나타나지 않았고, 칸 옆에 붙은 표시도 없으며, "등록"도 그대로입니다.
 sequence:
@@ -39,7 +39,7 @@ sequence:
           <div class="stack">
             <div class="field"><span class="field-label">종류</span><span class="control">노트북</span></div>
             <div class="field"><span class="field-label">일련번호</span><input class="control" style="width:240px;border-color:#2563eb" value="MBP-2024-7741"></div>
-            <div class="field"><span class="field-label">사용자 지정</span><input class="control control--empty" style="width:240px" value="선택 안 함"></div>
+            <div class="field"><span class="field-label">사용 담당자</span><input class="control control--empty" style="width:240px" value="선택 안 함"></div>
             <div class="actions actions--end"><span class="btn btn--outline">취소</span><button class="btn btn--blue">등록</button></div>
           </div>
         </div>
@@ -63,7 +63,7 @@ sequence:
           <div class="stack">
             <div class="field"><span class="field-label">종류</span><span class="control">노트북</span></div>
             <div class="field"><span class="field-label">일련번호</span><input class="control" style="width:240px;border-color:#dc2626" value="MBP-2024-7741"></div>
-            <div class="field"><span class="field-label">사용자 지정</span><input class="control control--empty" style="width:240px;border-color:#2563eb" value="선택 안 함"></div>
+            <div class="field"><span class="field-label">사용 담당자</span><input class="control control--empty" style="width:240px;border-color:#2563eb" value="선택 안 함"></div>
             <div class="actions actions--end"><span class="btn btn--outline">취소</span><button class="btn btn--blue">등록</button></div>
           </div>
         </div>

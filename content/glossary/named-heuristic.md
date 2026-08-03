@@ -18,9 +18,10 @@ justification:
     nobody else can check it. Anchoring it to [heuristic] turns it from an
     opinion into something [the builder] can agree or disagree with on evidence.
   ko: >-
-    이 발견은 [무엇]이 잘못됐다고 말할 뿐 어떤 휴리스틱을 어겼는지는 짚지 않아서,
-    다른 사람이 확인할 수가 없습니다. [휴리스틱]에 기대어 다시 쓰면, 의견이
-    아니라 [만든 사람]이 근거를 놓고 동의하거나 반박할 수 있는 것이 됩니다.
+    이 발견이 지적하는 것은 [무엇] 하나뿐이고, 어떤 휴리스틱을
+    어겼는지는 짚지 않아서 다른 사람이 확인할 수가 없습니다.
+    [휴리스틱]에 기대어 다시 쓰면, 의견이 아니라 [만든 사람]이
+    근거를 놓고 동의하거나 반박할 수 있는 것이 됩니다.
 competencies:
   - heuristic-evaluation
 source: https://www.nngroup.com/articles/how-to-conduct-a-heuristic-evaluation/

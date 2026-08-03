@@ -18,8 +18,9 @@ justification:
     background is no stronger than the elements around it, so it doesn't read as
     primary. Widening the difference in lightness or saturation would fix it.
   ko: >-
-    [요소]는 주요 동작이어야 하는데, 배경과의 대비가 주변 요소들과 다르지 않아서
-    주요 동작으로 읽히지 않습니다. 명도나 채도 차이를 키우면 해결됩니다.
+    [요소], 이건 주요 동작이어야 하는데 배경과의 대비가 주변
+    요소들보다 강하지 않아서 주요 동작으로 읽히지 않습니다. 명도나 채도
+    차이를 키우면 해결됩니다.
 competencies:
   - visual-hierarchy
 source: https://www.nngroup.com/articles/visual-hierarchy-ux-definition/

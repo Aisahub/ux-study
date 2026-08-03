@@ -17,8 +17,8 @@ justification:
     it's ambiguous which one it labels. Tightening the space to its own content
     would settle it.
   ko: >-
-    [제목]이 위아래 블록과 같은 간격으로 떨어져 있어서 어느 쪽 제목인지 모호합니다.
-    자기 내용 쪽 간격을 좁히면 정리됩니다.
+    [제목], 이건 위아래 블록과 같은 간격으로 떨어져 있어서 어느 쪽
+    제목인지 모호합니다. 자기 내용 쪽 간격을 좁히면 정리됩니다.
 competencies:
   - visual-hierarchy
 source: https://www.nngroup.com/articles/visual-hierarchy-ux-definition/
