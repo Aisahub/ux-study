@@ -152,3 +152,65 @@ test('the audit tools are not part of the artefact a Learner reports on', () => 
     expect(chrome).not.toContain('data-element')
   }
 })
+
+/**
+ * Stage 3's subject is read rather than walked (ADR-0011, #77). Its defects are
+ * all in the words, and none of them is visible, so what the loader cannot say
+ * is authored here: that the subject stayed a page, that the spread is wide
+ * enough to withhold a hint, and that the one thing Stage 3 adds — a brief
+ * describing the person the page is written for — cannot be mistaken for the
+ * page it describes.
+ */
+
+test('Stage 3 has an authored audit subject, and it does not walk', () => {
+  expect(practicePageOf(content, 3)).not.toBeNull()
+  // A page, not a flow (ADR-0011). Stage 3's difficulty is the perspective it
+  // demands, not the interaction, so it does not inherit Stage 2's three steps
+  // — and with no steps there is no behaviour for a shared file to hold.
+  expect(practicePageOf(content, 3)!.steps).toEqual([])
+  expect(practicePageOf(content, 3)!.js).toBe('')
+})
+
+const subject = practicePageOf(content, 3)!
+
+test('eight defects are planted, unevenly, with every Stage 3 Competency represented', () => {
+  expect(subject.defects).toHaveLength(8)
+
+  const perCompetency = competenciesOfStage(config, 3).map(
+    (competency: string) => subject.defects.filter((defect) => defect.competency === competency).length,
+  )
+  expect(Math.min(...perCompetency)).toBeGreaterThanOrEqual(1)
+  // The same spread-of-two bar Stage 2 sets, for the same reason: the current
+  // 4-2-1-1 clears it, and a Learner who counts to eight learns nothing about
+  // which Competency to look under.
+  expect(Math.max(...perCompetency) - Math.min(...perCompetency)).toBeGreaterThanOrEqual(2)
+})
+
+test('nothing in the Stage 3 page markup marks an element as defective', () => {
+  // The stylesheet is not read here, exactly as it is not for Stage 1: its
+  // header comment says outright that the defects are not in it, which is a
+  // note for whoever maintains the file and a hint for a Learner. The serving
+  // strips comments, so what reaches the browser carries no marker either way.
+  for (const page of [subject.html.en, subject.html.ko]) {
+    expect(page).not.toMatch(/defect|planted|결함/i)
+    for (const defect of subject.defects) {
+      expect(page).not.toContain(defect.slug)
+    }
+  }
+})
+
+test('the stated user is part of the brief, not part of the page it describes', () => {
+  // ADR-0011 adds a block describing who is reading the page, and it is the one
+  // thing on screen that is ours rather than the subject's. A Learner who could
+  // file a Finding against it would be reporting our brief as a defect in the
+  // artefact — so, as with Stage 2's chrome, it carries no data-element and
+  // contains none. The slice starts at the opening angle bracket so the hook's
+  // own tag is covered too, not just what sits inside it.
+  for (const page of [subject.html.en, subject.html.ko]) {
+    const start = page.lastIndexOf('<', page.indexOf('data-audit-chrome'))
+    const tag = page.slice(start + 1).match(/^[a-z]+/)![0]
+    const chrome = page.slice(start, page.indexOf(`</${tag}>`, start))
+    expect(chrome).toContain('data-audit-chrome')
+    expect(chrome).not.toContain('data-element')
+  }
+})
