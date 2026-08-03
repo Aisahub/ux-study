@@ -19,9 +19,10 @@ justification:
     for it — the user is left [interrupted / unsure]. Matching the feedback to
     the length of the action would settle that.
   ko: >-
-    [동작]은 [얼마]가 걸리는데 [무엇]으로 답하고 있어서, 그 동작에 견주면 크기가
-    맞지 않습니다. 사용자는 [흐름이 끊기거나 / 확신하지 못한 채] 남습니다.
-    피드백을 동작의 길이에 맞추면 해결됩니다.
+    [동작], 이건 걸리는 시간이 [얼마]인데 답하는 것은
+    [무엇]뿐이라, 그 동작에 견주면 크기가 맞지 않습니다. 사용자는
+    [흐름이 끊긴 / 확신하지 못한] 채로 남습니다. 피드백을 동작의
+    길이에 맞추면 해결됩니다.
 competencies:
   - system-status
 source: https://www.nngroup.com/articles/visibility-system-status/

@@ -19,9 +19,9 @@ justification:
     half-finished entry a mistake. Waiting until they leave the field would keep
     the check and drop the accusation.
   ko: >-
-    [필드]는 사용자가 아직 입력하는 중에 빨갛게 바뀌어서, 절반쯤 쓴 값을 틀렸다고
-    부릅니다. 필드에서 손을 뗄 때까지 기다리면 검사는 그대로 두고 나무라는
-    부분만 없앨 수 있습니다.
+    [필드], 이건 사용자가 아직 입력하는 중에 빨갛게 바뀌어서, 절반쯤
+    쓴 값을 벌써 틀린 값으로 취급합니다. 필드에서 손을 뗄 때까지
+    기다리면 검사는 그대로 두고 나무라는 부분만 없앨 수 있습니다.
 competencies:
   - error-handling
 source: https://www.nngroup.com/articles/hostile-error-messages/

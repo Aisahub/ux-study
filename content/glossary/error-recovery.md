@@ -18,9 +18,10 @@ justification:
     guess at [what]. Naming the fix in the message itself would get them moving
     again without leaving the page.
   ko: >-
-    [메시지]는 무엇이 잘못됐는지는 말하지만 다음에 무엇을 하라는 말이 없어서,
-    사용자는 [무엇]을 짐작하는 수밖에 없습니다. 메시지 안에서 해결 방법까지
-    알려 주면 페이지를 떠나지 않고도 다시 나아갈 수 있습니다.
+    [메시지], 이건 무엇이 잘못됐는지는 말하지만 다음에 무엇을 하라는
+    말이 없어서, 사용자가 짐작해야 하는 것은 [무엇]입니다. 메시지
+    안에서 해결 방법까지 알려 주면 페이지를 떠나지 않고도 다시 나아갈
+    수 있습니다.
 competencies:
   - error-handling
 source: https://www.nngroup.com/articles/error-message-guidelines/

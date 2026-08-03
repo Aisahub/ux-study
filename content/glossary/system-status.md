@@ -18,9 +18,10 @@ justification:
     tell whether it worked. Showing [what] while it runs would make the wait
     readable instead of leaving them to guess.
   ko: >-
-    [동작] 이후 [얼마 동안] 화면에 아무 변화가 없어서, 사용자는 이게 된 건지
-    안 된 건지 알 수 없습니다. 진행되는 동안 [무엇]을 보여 주면, 사용자가
-    짐작하는 대신 기다림을 읽을 수 있게 됩니다.
+    [동작] 이후 [얼마 동안] 화면에 아무 변화가 없어서, 사용자는
+    이게 된 건지 안 된 건지 알 수 없습니다. 진행되는 동안 [무엇]
+    하나를 보여 주면, 사용자가 짐작하는 대신 기다리는 동안 무슨 일이
+    벌어지는지 알 수 있게 됩니다.
 competencies:
   - system-status
 source: https://www.nngroup.com/articles/visibility-system-status/

@@ -19,9 +19,10 @@ justification:
     user types in something it could have filled. Defaulting it would remove the
     step without removing the choice.
   ko: >-
-    제품이 이미 [무엇]을 알고 있는데도 [필드]는 빈 채로 시작해서, 채워 둘 수
-    있었던 값을 사용자마다 매번 입력하고 있습니다. 기본값을 넣어 두면 선택권은
-    그대로 두고 단계만 없앨 수 있습니다.
+    제품이 이미 알고 있는 값이 [무엇]인데도 [필드] 쪽은 빈 채로
+    시작해서, 채워 둘 수 있었던 값을 사용자마다 매번 입력하고
+    있습니다. 기본값을 넣어 두면 선택권은 그대로 두고 단계만 없앨 수
+    있습니다.
 competencies:
   - form-burden
 source: https://www.nngroup.com/articles/4-principles-reduce-cognitive-load/
