@@ -280,13 +280,13 @@ export function QuizWizard({
             from: the column stops being centred in the card and lines up with
             the left edge of the screen — beside it in the two-column row, above
             it when the card is stacked. */}
-        <div className="mx-auto w-full max-w-[56ch] wide:mx-0 wide:max-w-none">
+        <div className="mx-auto w-full max-w-measure wide:mx-0 wide:max-w-none">
           {/* The measure is held by this wrapper rather than by the heading
               itself: `ch` is a property of the font it is set in, and 56ch of
               the 25px serif is over 1000px — a heading given its own 56ch
               would not be held at all. Set here, in the body face, it is the
               same 56ch every other card on the platform is measured by. */}
-          <div className="max-w-[56ch]">
+          <div className="max-w-measure">
             <h1 className="font-serif text-headline font-bold text-ink">
               {item.prompt}
             </h1>
