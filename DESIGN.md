@@ -171,7 +171,7 @@ Eight steps, and no ninth. The first draft of this system used thirteen sizes be
 - **Headline-lg** (serif, 700, 34px, 1.15, -0.02em): The next-action card's subject. One per screen at most.
 - **Headline** (serif, 700, 25px, 1.2, -0.015em): Card titles.
 - **Title** (sans, 700, 16px, 1.4, -0.015em): Row names — a competency inside a list. Same size as body; the weight is the difference.
-- **Body** (sans, 400, 16px, 1.55, -0.008em): Prose. Objectives wrap at roughly 56ch.
+- **Body** (sans, 400, 16px, 1.55, -0.008em): Prose. Objectives wrap at the reading measure (see The One Measure Rule).
 - **Body-sm** (sans, 400, 13.5px, 1.55): Supporting lines — a row's one-line objective, a station's label, breadcrumbs, the standing visibility notice.
 - **Label** (sans, 700, 13.5px, 1.4): Status words, counts, chips, station meta. Body-sm's size; the weight and the tighter line box are the difference. (Raised from 12px on 2026-07-29, because 12px was the hardest thing on the platform to read at arm's length and it carried every status word, count and chip — which a platform teaching Readability cannot ship. Raising the step rather than exempting a call site is what kept it one decision: the scale is still eight named steps, now over **five** distinct sizes — 44, 34, 25, 16, 13.5 — and Label pairs with Body-sm exactly as Title pairs with Body. Micro was raised to 13.5 in the same decision, so Body-sm, Label and Micro now share a size and are separated by weight, tracking and case alone.)
 - **Micro** (sans, 700, 13.5px, 0.2em, usually uppercase): Kickers above a card title, English competency names under their Korean name. (Raised from 11px on 2026-07-29, in the same decision as Label. 11px was the platform's actual type floor — smaller than the step raised above it — so leaving it would have moved the complaint rather than answered it. The tracking and the case, not the size, are what set a kicker apart now. This step also had no token users at all until this change: all three call sites wrote `text-[11px]` by hand, so `--text-micro` was declared and unread, which is exactly how a step drifts without anyone deciding to move it.)
@@ -181,6 +181,8 @@ Eight steps, and no ninth. The first draft of this system used thirteen sizes be
 **The Two Weights Rule.** The body face ships Regular (400) and Bold (700) and nothing between. A Korean weight costs ~262KB, so a third was not bought; anything else the code asks for is synthesised by the browser into a stretched fake bold, which Hangul shows badly. Weights 500, 600 and 800 do not exist in this system.
 
 **The Fixed Scale Rule.** Every piece of type on every screen is one of the eight steps above. A size that is not on the list is not a smaller heading; it is an unfinished decision. If a case genuinely needs a ninth, add it here first.
+
+**The One Measure Rule.** Prose is held to one reading measure, written once as `--measure` and reached through `max-w-measure` — never as a number at the call site. It carries two values because a measure is a count of characters and the two languages spend width differently: English `56ch`, Korean `40em`. `ch` measures a `0`, which in Pretendard is about half an em while Hangul is full-width, so the English value renders as ~30 Korean characters — half the line it was chosen to give. `em` is the honest unit for Korean, where one em is one character. The swap is a `:root:lang(ko)` rule, so it follows the `lang` attribute the shell already sets and no component decides it. Both values are relative to the text's own size, so a step down the scale narrows the column with it. Amended 2026-08-03; before it, `56ch` was retyped at 18 call sites and a `58ch` that this document never named had drifted into four more.
 
 The steps are tokens, not numbers retyped at each call site: `text-display`, `text-headline-lg`, `text-headline`, `text-title`, `text-body`, `text-body-sm`, `text-label`, `text-micro`, declared once in `app/globals.css`. Each carries its own size, line height and letter spacing; weight stays an explicit `font-bold` so the two never fight over which declaration wins. A written-down scale cannot refuse an addition — that is how the ninth step arrived unnoticed — and a utility can.
 
@@ -211,7 +213,7 @@ column of four numbered steps, in the order the work is done: what the Learner
 will be able to do, the questions to carry into the reading, the source article,
 then the Gate Quiz. It takes the doorstep's width rather than the board's
 because it is the same thread of reading, continued — and because its prose is
-held at `56ch` either way, so a wider card would only add blank space beside a
+held at the reading measure either way, so a wider card would only add blank space beside a
 fixed measure. The Gate Quiz doorstep and verdict are single columns of `720px`
 too. A quiz is one thread with one thing to decide at a time.
 
@@ -226,7 +228,7 @@ item card lays the screen and the question in one row as soon as the card is
 options can be read in, and the card's own padding. The threshold is asked of
 the card, not the viewport, so the row appears when the room is really there.
 Below it the card stacks, and its four options pair into two columns wherever
-the card is at least `880px`. Prose is held to the `56ch` reading measure in
+the card is at least `880px`. Prose is held to the reading measure in
 every one of those arrangements; it is the edge that moves, from centred in a
 stacked card to flush with the screen's own left edge.
 

@@ -145,7 +145,7 @@ export default async function QuizStart({
           leaving it to be guessed.
         */}
         <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
-          <p className="max-w-[56ch] text-body">{copy.rules(drawSize, passThreshold)}</p>
+          <p className="max-w-measure text-body">{copy.rules(drawSize, passThreshold)}</p>
           <form action={start}>
             <button
               type="submit"
@@ -158,7 +158,7 @@ export default async function QuizStart({
             <>
               {/* Full ink, not the 72% fade: that value is measured against
                   white and drops below AA on the sand field. */}
-              <p className="mt-4.5 max-w-[56ch] text-body-sm">{copy.restartNote}</p>
+              <p className="mt-4.5 max-w-measure text-body-sm">{copy.restartNote}</p>
               <form action={restart}>
                 <button type="submit" className="mt-2 text-title font-bold text-oxblood">
                   {copy.restart}

@@ -87,7 +87,7 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
     <main className="mx-auto w-full max-w-4xl px-0.5">
       <header className="px-1.5 pb-[26px]">
         <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
-        <p className="mt-3 max-w-[58ch] text-body text-ink">{copy.explanation}</p>
+        <p className="mt-3 max-w-measure text-body text-ink">{copy.explanation}</p>
       </header>
 
       <section aria-labelledby="cohort" className="rounded-card bg-surface p-[26px] shadow-card">

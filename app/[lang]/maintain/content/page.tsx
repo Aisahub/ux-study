@@ -207,7 +207,7 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
         <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
         {/* Full ink rather than ink-2: the board is not a white card, and
             faded text is a white-card value here (DESIGN.md). */}
-        <p className="mt-3 max-w-[58ch] text-body text-ink">{copy.explanation}</p>
+        <p className="mt-3 max-w-measure text-body text-ink">{copy.explanation}</p>
       </header>
 
       <div className="flex flex-col gap-[14px]">
@@ -260,7 +260,7 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
           <h2 id="defects" className="font-serif text-headline font-bold text-ink">
             {copy.defectsHeading}
           </h2>
-          <p className="mt-2 max-w-[56ch] text-body-sm text-ink-2">{copy.defectsExplanation}</p>
+          <p className="mt-2 max-w-measure text-body-sm text-ink-2">{copy.defectsExplanation}</p>
           {subjects.map((subject) => (
             <div key={subject.stage} className="mt-[22px]">
               <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>
@@ -296,7 +296,7 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
           <h2 id="locations" className="font-serif text-headline font-bold text-ink">
             {copy.locationsHeading}
           </h2>
-          <p className="mt-2 max-w-[56ch] text-body-sm text-ink-2">{copy.locationsExplanation}</p>
+          <p className="mt-2 max-w-measure text-body-sm text-ink-2">{copy.locationsExplanation}</p>
           {subjects.map((subject) => (
             <div key={subject.stage} className="mt-[22px]">
               <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>

@@ -238,7 +238,7 @@ export default async function CompetencyPage({
               {copy.objective}
             </h2>
           </StepHead>
-          <p className="mt-3.5 max-w-[56ch] text-body">
+          <p className="mt-3.5 max-w-measure text-body">
             {competency.objective[lang]}
           </p>
 
@@ -260,7 +260,7 @@ export default async function CompetencyPage({
                 <span className="inline-flex rounded-full bg-sunk px-2.5 py-1 text-label font-bold text-ink-2">
                   {copy.roles[role]}
                 </span>
-                <p className="mt-2.5 max-w-[56ch] text-body">
+                <p className="mt-2.5 max-w-measure text-body">
                   {competency.roleHint[role][lang]}
                 </p>
               </div>
@@ -275,7 +275,7 @@ export default async function CompetencyPage({
               {copy.questionsHeading}
             </h2>
           </StepHead>
-          <p className="mt-2.5 max-w-[56ch] text-body-sm text-ink-2">
+          <p className="mt-2.5 max-w-measure text-body-sm text-ink-2">
             {copy.questionsExplanation}
           </p>
           {/* The question markers are sunk chips rather than a second run of
@@ -290,7 +290,7 @@ export default async function CompetencyPage({
                 <span className="grid size-[34px] place-items-center rounded-badge bg-sunk text-label font-bold text-ink-2">
                   {index + 1}
                 </span>
-                <span className="max-w-[56ch] text-body">{question[lang]}</span>
+                <span className="max-w-measure text-body">{question[lang]}</span>
               </li>
             ))}
           </ol>
@@ -336,7 +336,7 @@ export default async function CompetencyPage({
                 {copy.quizPassed}
               </h2>
             </StepHead>
-            <p className="mt-3.5 max-w-[56ch] text-body">{copy.passedBody}</p>
+            <p className="mt-3.5 max-w-measure text-body">{copy.passedBody}</p>
             <Link
               href={`/${lang}/learn/${slug}/quiz`}
               className="mt-5.5 inline-flex text-title font-bold text-oxblood"
@@ -360,7 +360,7 @@ export default async function CompetencyPage({
                 {copy.quizTitle}
               </h2>
             </StepHead>
-            <p className="mt-4 max-w-[56ch] text-body">
+            <p className="mt-4 max-w-measure text-body">
               {copy.quizRules(drawSize, passThreshold)}
             </p>
             <Link

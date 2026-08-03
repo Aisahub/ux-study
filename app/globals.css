@@ -66,6 +66,24 @@
      so a Learner on a phone judges the screen the author drew. Wide enough for
      a three-pane split to still be legible; see screen.tsx. */
   --item-screen-floor: 720px;
+
+  /* ── the reading measure ─────────────────────────────── */
+  /* How wide a paragraph of body copy may run before the eye starts losing
+     its place on the return sweep. Relative to the text's own size, never a
+     px value, so a step down the type scale narrows the column with it.
+     English: 56ch, i.e. 56 times the width of a `0` — the middle of the
+     45-75 character band. */
+  --measure: 56ch;
+}
+
+/* Korean sets the same rule in a different unit. `ch` measures a `0`, which in
+   Pretendard is about half an em, while Hangul is full-width — so 56ch holds
+   ~30 Korean characters, half the line the English value was chosen to give,
+   and the notice on /learn was wrapping with the board still empty to its
+   right. `em` is the honest unit here: one em is one Hangul character, so 40em
+   is 40 characters, the top of the 35-40 band Korean body copy reads at. */
+:root:lang(ko) {
+  --measure: 40em;
 }
 
 @theme inline {
@@ -137,6 +155,10 @@
   --text-micro: 0.84375rem; /* 13.5px — uppercase kickers only; the tracking and the case, not the size, are what set it apart now */
   --text-micro--line-height: 1.4;
   --text-micro--letter-spacing: 0.2em;
+
+  /* `max-w-measure`. Declared `inline`, so the utility emits var(--measure)
+     rather than baking in a value — which is what lets :lang() reset it. */
+  --container-measure: var(--measure);
 
   --radius-card: 22px;
   --radius-badge: 14px;

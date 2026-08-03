@@ -234,7 +234,7 @@ export default async function Learn({
       <header className="grid gap-[22px] px-1.5 pb-[26px] sm:grid-cols-[minmax(0,1fr)_240px] sm:items-end">
         <div>
           <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
-          <p className="mt-3 max-w-[58ch] text-body text-ink">{copy.intro}</p>
+          <p className="mt-3 max-w-measure text-body text-ink">{copy.intro}</p>
         </div>
         <div>
           <div className="flex items-center justify-between gap-[14px] text-label font-bold">
@@ -334,7 +334,7 @@ export default async function Learn({
                       {competency.name[lang]}
                     </Link>
                   </h3>
-                  <p className="mt-1 max-w-[56ch] text-body-sm text-ink-2">
+                  <p className="mt-1 max-w-measure text-body-sm text-ink-2">
                     {competency.objective[lang]}
                   </p>
                 </div>
@@ -428,7 +428,7 @@ export default async function Learn({
               <h3 className="flex min-h-11 items-center text-title font-bold">
                 {copy.capstoneHeading}
               </h3>
-              <p className="mt-1 max-w-[56ch] text-body-sm text-ink-2">
+              <p className="mt-1 max-w-measure text-body-sm text-ink-2">
                 {stage1.allPassed ? copy.capstoneExplanation : copy.capstoneLocked}
               </p>
             </div>
@@ -464,7 +464,7 @@ export default async function Learn({
           A notice about who can see you may not be the fine print. Full ink,
           not faded: this sits on the bed rather than on a white card, and the
           fade is allowed only on white. */}
-      <p className="mt-3.5 max-w-[56ch] px-1.5 text-body-sm">{copy.visibility}</p>
+      <p className="mt-3.5 max-w-measure px-1.5 text-body-sm">{copy.visibility}</p>
     </main>
   )
 }

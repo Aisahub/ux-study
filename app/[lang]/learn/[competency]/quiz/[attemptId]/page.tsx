@@ -148,7 +148,7 @@ export default async function AttemptPage({
         {attempt.passed ? (
           // Nothing is outstanding, so nothing here wears the warm field.
           <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-            <p className="max-w-[56ch] text-body">
+            <p className="max-w-measure text-body">
               {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.passedExplanation}
             </p>
           </section>
@@ -157,7 +157,7 @@ export default async function AttemptPage({
           // The prose points down at the list below before the button is
           // pressed — the retry is offered, not urged.
           <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
-            <p className="max-w-[56ch] text-body">
+            <p className="max-w-measure text-body">
               {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.failedExplanation}
             </p>
             <Link
@@ -180,7 +180,7 @@ export default async function AttemptPage({
             <h2 className="font-serif text-headline font-bold text-ink">
               {copy.summaryHeading}
             </h2>
-            <p className="mt-3.5 max-w-[56ch] text-body whitespace-pre-line">
+            <p className="mt-3.5 max-w-measure text-body whitespace-pre-line">
               {competency.explanation[lang]}
             </p>
           </section>
@@ -207,7 +207,7 @@ export default async function AttemptPage({
                       className="mt-[7px] size-[14px] rounded-full shadow-[inset_0_0_0_2.5px_var(--blue-grey)]"
                     />
                     <span>
-                      <span className="block max-w-[56ch] text-title font-bold">
+                      <span className="block max-w-measure text-title font-bold">
                         {item.prompt[lang]}
                       </span>
                       <span className="mt-1 block text-body-sm text-ink-2">
