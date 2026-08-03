@@ -17,7 +17,7 @@ const COPY: Record<Language, { heading: string; body: (email: string | null) => 
       email
         ? `Google이 ${email} 계정을 확인했지만, 이 주소는 학습 프로그램 명단에 없습니다.`
         : 'Google 인증은 되었지만, 이 주소는 학습 프로그램 명단에 없습니다.',
-    hint: '접근 권한이 있어야 한다면 프로그램 관리자에게 주소 등록을 요청하거나, 등록된 계정으로 다시 로그인하세요.',
+    hint: '접근 권한이 있어야 한다면 운영자에게 주소 등록을 요청하거나, 등록된 계정으로 다시 로그인하세요.',
   },
 }
 

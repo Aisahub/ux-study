@@ -57,10 +57,10 @@ options:
       reason: >-
         It would say that every row can be removed from its right-hand end.
   ko:
-    - text: 평문에는 없는 시그니파이어를 "삭제"에 줍니다
+    - text: 글자만 있는 상태에는 없는 시그니파이어를 "삭제"에 줍니다
       reason: >-
         밑줄 있는 링크 스타일이나, "다운로드"가 이미 갖춘 것과 같은 테두리
-        버튼 차림으로요.
+        버튼 차림을 입힙니다.
       correct: true
     - text: 바꿀 것이 없습니다
       reason: >-

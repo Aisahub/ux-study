@@ -151,7 +151,7 @@ test('being watched is stated before any first attempt, in both languages (#30)'
   expect(en).toContain('maintainer can see your progress')
   expect(en).toContain('how long since your last activity')
   expect(en).toContain('how many attempts')
-  expect(ko).toContain('관리자는 여러분의 진행 상황을 볼 수 있습니다')
+  expect(ko).toContain('운영자는 학습자의 진행 상황을 볼 수 있습니다')
 })
 
 test('both languages present the same Competency set', async () => {

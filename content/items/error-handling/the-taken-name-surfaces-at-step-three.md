@@ -16,7 +16,7 @@ artefact:
     already used by another price list. Pick a different one.", and the foot
     once again offers "Cancel" and "Next".
   ko: >-
-    가격표를 만드는 3단계 마법사를 세 시점에서 보여 줍니다. 첫 번째는 1/3단계
+    가격표를 만드는 3단계 마법사를 세 시점에 걸쳐 보여 줍니다. 첫 번째는 1/3단계
     "기본 정보"로, "이름"에 "3분기 강남 소매"가, "통화"에 KRW가 들어 있고 맨
     아래에 "취소"와 "다음"이 있습니다. 이 단계에서 이름에 대해 언급하는 것은
     아무것도 없습니다. 두 번째는 3/3단계 "검토"로, 테두리가 둘린 요약 안에

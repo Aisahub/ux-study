@@ -12,8 +12,8 @@ artefact:
     message has appeared at the foot reading "Invalid quantity entered." No
     number, limit or next step appears anywhere on the screen.
   ko: >-
-    창고 도구의 재고 발주 화면을 두 시점에서 보여 줍니다. 첫 번째에서는 품목이
-    "감열 라벨 롤 80mm"이고, 현재 재고가 42라고 적혀 있으며, 커서는 500이 들어
+    창고 도구의 재고 발주 화면을 두 시점에 걸쳐 보여 줍니다. 첫 번째에서는 품목이
+    "감열 이름표 롤 80mm"이고, 현재 재고가 42라고 적혀 있으며, 커서는 500이 들어
     있는 "수량" 칸에 있습니다. 화면 어디에도 그 숫자에 대한 언급은 없습니다.
     맨 아래에는 "취소"와 "발주"가 있습니다. 두 번째 시점에서는 커서가 칸을
     떠났고 칸에는 여전히 500이 들어 있으며, 맨 아래에 "잘못된 수량을

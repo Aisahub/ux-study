@@ -11,7 +11,7 @@
 # counting toward a number.
 title:
   en: Audit the practice page
-  ko: 연습 페이지 감사하기
+  ko: 연습 페이지 점검하기
 intro:
   en: >-
     You are looking at a page the way a colleague will one day look at yours:
@@ -32,12 +32,12 @@ whatCounts:
     and a proposed fix. All four parts are required for every Finding, and no
     two Findings may point at the same element.
   ko: >-
-    제출이 완결로 인정되려면 Finding이 세 개 이상 있어야 합니다. Finding
+    제출이 완결로 인정되려면 발견이 세 개 이상 있어야 합니다. 발견
     하나는 네 부분으로 이루어집니다. 문제의 요소 — 말로 설명하는 것이 아니라
     페이지에서 직접 가리켜 선택합니다; 그 요소가 어기고 있는 UX 원칙 —
     용어집에서 선택합니다; 페이지를 쓰는 사람에게 무엇이 문제인지에 대한
-    설명; 그리고 고치는 방법 제안. 네 부분 모두 모든 Finding에 필수이며, 두
-    Finding이 같은 요소를 가리킬 수 없습니다.
+    설명; 그리고 고치는 방법 제안. 네 부분 모두 모든 발견에 필수이며, 두
+    발견이 같은 요소를 가리킬 수 없습니다.
 advice:
   en: >-
     Write the description for the person using the page, not for us: what goes
@@ -61,7 +61,7 @@ optionalFix:
     entirely sufficient — this step is about seeing your fix exist, not about
     tooling. It does not affect completion either way.
   ko: >-
-    제출 후 선택 사항: 작성한 Finding 중 하나를 골라 실제로 고쳐 보고, 그
+    제출 후 선택 사항: 작성한 발견 중 하나를 골라 실제로 고쳐 보고, 그
     변경을 보여 주는 링크를 첨부하세요. 코드를 쓴다면 pull request나 commit이면
     되고, 그렇지 않다면 고쳐진 페이지의 스크린샷으로 충분합니다 — 이 단계의
     목적은 자신의 수정이 실재하는 걸 보는 것이지, 도구를 다루는 것이

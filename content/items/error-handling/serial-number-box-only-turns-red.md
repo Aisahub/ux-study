@@ -12,7 +12,7 @@ artefact:
     position — now has a red border. No text has appeared anywhere, no mark
     sits beside the box, and "Register" is unchanged.
   ko: >-
-    장비 등록 폼을 두 시점에서 보여 줍니다. 첫 번째에서는 "종류"에 "노트북"이
+    장비 등록 폼을 두 시점에 걸쳐 보여 줍니다. 첫 번째에서는 "종류"에 "노트북"이
     들어 있고, 커서는 "MBP-2024-7741"이 적힌 "일련번호" 칸에 있으며,
     "사용 담당자"에는 안내 문구만 보입니다. 맨 아래에는 "취소"와 "등록"이 있습니다.
     두 번째 시점에서는 커서가 "사용 담당자"로 옮겨 갔고, 일련번호 칸은 값도

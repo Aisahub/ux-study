@@ -9,7 +9,7 @@ definition:
     name, rather than to the evaluator's own taste. The name is what lets a
     third person check the finding instead of taking it on trust.
   ko: >-
-    평가하는 사람의 취향이 아니라, 닐슨의 열 가지 휴리스틱 가운데 하나에 그
+    평가자의 취향이 아니라, 닐슨의 열 가지 휴리스틱 가운데 하나에 그
     이름을 대어 기대는 판단. 그 이름이 있어야 제3자가 그 발견을 믿고 받아들이는
     대신 직접 확인해 볼 수 있다.
 justification:
