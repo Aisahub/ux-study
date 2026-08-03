@@ -17,9 +17,11 @@ minFindings: 3
 # pool already had. Each Stage's list is in display order.
 #
 # Stage 3 carries the four Competencies ADR-0001's amendment enumerates.
-# Whether accessibility is a fifth is unsettled — PRODUCT.md and DESIGN.md
-# assert it is and the enumeration does not list it (ADR-0011's follow-up,
-# issue #72). Adding it is one line here; this file does not decide it.
+# Accessibility is not a fifth (settled 2026-08-03). The amendment reworked the
+# Decision section's three-item sketch and gave Stage 3 a structure a fifth
+# entry would break: two defect types invisible from inside the author's own
+# head, plus the two routes out of it. WCAG 2.2 AA remains a hard line on the
+# platform itself (PRODUCT.md), which is a different thing from a Competency.
 stages:
   - stage: 1
     competencies:

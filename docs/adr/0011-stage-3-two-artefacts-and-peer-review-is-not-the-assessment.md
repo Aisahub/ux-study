@@ -234,12 +234,21 @@ position relative to anyone else.
 - Author artefact A, its stated user, and its manifest (issue #77), and author
   artefact B (currently inside issue #75's scope — split it out if the specimen
   turns out to be larger than an Item Pool ticket).
-- **Settle whether accessibility is a Stage 3 Competency.** ADR-0001's Decision
-  section says it is, its own amendment drops it, and `PRODUCT.md` and `DESIGN.md`
-  both still assert it. Four Competencies are already enumerated and slugged, so
-  this is either a documentation correction in two files or a curriculum change in
-  ADR-0001, and the two answers are very different in cost. This ADR does not
-  resolve it and issue #72 must not silently pick a side.
+- ~~**Settle whether accessibility is a Stage 3 Competency.**~~ **Settled
+  2026-08-03: it is not.** The two records are not equal in standing. ADR-0001's
+  Decision section named accessibility in a three-item sketch; the amendment
+  that followed reworked that sketch into the enumerated curriculum and replaced
+  two of its three items — "information architecture and naming" became jargon,
+  and accessibility was dropped — so its absence is a rework, not an omission.
+  The amendment also gave Stage 3 a stated structure that a fifth entry would
+  break: two defect types that are structurally invisible from inside the
+  author's own head (jargon, mental-model mismatch), plus the two routes out of
+  it (heuristic evaluation, testing with real users). The amendment supersedes
+  the sketch. This was therefore the documentation correction rather than the
+  curriculum change: `PRODUCT.md` and `DESIGN.md` asserted the sketch and were
+  corrected, `content/config.md`'s four slugs were already right, and WCAG 2.2
+  AA remains a hard acceptance line on the platform itself — a stronger
+  obligation than a Competency, and a different one.
 - Amend `CONTEXT.md`'s Peer Review entry and ADR-0001's Consequences line in the
   same change as this ADR.
 - Confirm artefact A's Planted Defects are undetectable without the stated user —
