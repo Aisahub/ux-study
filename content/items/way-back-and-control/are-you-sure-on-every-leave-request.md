@@ -14,7 +14,7 @@ artefact:
     "This request will be declined.", a plain "Cancel" and a red "Decline". It
     never names the person, the dates or the row it belongs to.
   ko: >-
-    인사 도구에서 관리자가 보는 휴가 신청 목록의 세 상태입니다. 세 상태 모두 같은
+    인사 도구에서 결재자가 보는 휴가 신청 목록의 세 상태입니다. 세 상태 모두 같은
     세 줄짜리 표를 보여 줍니다 — 정유나 8월 4–6일, 강태오 8월 11일, 오세린 8월
     18–22일 — 그리고 그 아래에 대화상자가 있습니다. 첫 번째 상태에서는 세 행 모두
     밑줄 친 "반려"를 달고 있습니다. 두 번째에서는 첫 행이 "반려됨"으로 바뀌어
@@ -141,7 +141,7 @@ prompt:
   en: >-
     A manager works down this queue in one sitting. Which change should it get?
   ko: >-
-    관리자는 이 목록을 한자리에서 위에서 아래로 처리합니다. 무엇을 바꿔야 할까요?
+    결재자는 이 목록을 한자리에서 위에서 아래로 처리합니다. 무엇을 바꿔야 할까요?
 options:
   en:
     - text: Decline without the dialog, and let a decline be taken back from the row afterwards

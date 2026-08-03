@@ -83,3 +83,51 @@ _Avoid_: goal, outcome, aim
 **Learning Purpose** (학습 목적 / 学习目的):
 The organisational pain the programme exists to relieve. Stated once, and the anchor every Learning Objective is checked against.
 _Avoid_: mission, rationale, why
+
+## Learner-facing Korean
+
+The entries above name concepts this project talks about. This section settles
+the ordinary words the Korean surfaces use for the same thing — the drift that
+does not show up as a wrong term, only as two names for one idea.
+
+The rule that produced this list: an entry above wins where it speaks;
+otherwise the spelling the repository already used most, counted over
+Korean-bearing lines. Two departures from the count are marked, both because
+the majority word means something else to a Korean reader before it means what
+we intended.
+
+**점검**, never 감사, for what a Learner does to a page. `감사` is 監査, the
+accounting sense, and is a homophone of 感謝 — on a card headed
+`자가 점검 리포트` it made one action read as two.
+
+**발견**, never the English `Finding`, in Korean copy. The Competency articles
+already taught 발견 while the drawer a Learner writes into said `Finding`.
+`Finding` stays the record's name in code, issues and English copy.
+
+**컨트롤** for a control (over 조작 장치, 조작부). **칸** for an input
+(over 입력란). **폼** for a form (over 양식). **맨 아래** for the foot of a
+screen — `바닥` is a floor. **이름표** for a label (over 라벨, 레이블).
+**결재자** for whoever approves a request; `관리자` is the system
+administrator, and a Korean approval flow does not use it for a person.
+**px**, not 픽셀, matching what the screens' own CSS says.
+**플로우** for a flow, where the word means the sequence of steps.
+**A안 / B안** for `Version A/B`, **시안 A / 시안 B** for `Draft A/B` —
+English draws that line and Korean had drawn it three ways.
+
+Departing from the count:
+
+- **글자만 있는**, not 평문, for unstyled text. 평문 is cryptographic
+  plaintext to a Korean reader, and the alternative was already in use.
+- **점검** above, which 감사 outnumbered.
+
+Two differences that look like drift and are not: `전체 역량 보기` and
+`학습 개요로` render two different English labels (`All Competencies`,
+`Back to the overview`), and `사용성 조사` renders `a usability study`, which
+is not the Competency's name. Both were left alone.
+
+### Writing Korean that a slot can fill
+
+A Principle's justification sentence is said out loud with a `[slot]` filled in,
+so no slot may be followed by a particle that agrees with the word filling it
+(을/를, 은/는, 이/가, 와/과, 으로/로). Put a fixed noun after the slot, or let
+the clause end on a copula. The content build refuses the rest. See ERR-214.

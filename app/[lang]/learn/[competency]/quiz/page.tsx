@@ -56,7 +56,7 @@ const COPY: Record<
     retry: '다시 도전',
     restart: '새 문항으로 다시 시작',
     restartNote: '진행 중인 시도는 아직 채점되지 않았으므로, 다시 시작해도 잃는 것은 없습니다.',
-    history: '나의 시도',
+    history: '시도 기록',
     submittedOn: (date, score, draw) => `${date} — ${draw}문항 중 ${score}문항`,
     passed: '통과',
     failed: '미통과',

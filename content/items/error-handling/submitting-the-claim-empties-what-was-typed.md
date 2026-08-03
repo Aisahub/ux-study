@@ -14,7 +14,7 @@ artefact:
     placeholder: the date, the category, the amount and the description are all
     gone along with the approver that was never chosen.
   ko: >-
-    지출 결의 폼을 두 시점에서 보여 줍니다. 첫 번째에서는 날짜, 분류, 금액,
+    지출 결의 폼을 두 시점에 걸쳐 보여 줍니다. 첫 번째에서는 날짜, 분류, 금액,
     그리고 공장까지 택시를 세 번 탔다는 내용까지 네 칸이 채워져 있고, 다섯 번째
     "결재자" 칸만 아직 안내 문구 상태입니다. 맨 아래에는 "임시 저장"과
     "제출"이 있습니다. 두 번째 시점에서는 맨 위에 "500,000원이 넘는 지출은

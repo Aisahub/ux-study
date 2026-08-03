@@ -9,7 +9,7 @@ definition:
     underline, a border, a shadow, a rounded rectangle. An element can be
     clickable and carry no signifier at all, and then users will not find it.
   ko: >-
-    어떤 요소를 조작할 수 있다고 알려주는 시각적 단서 — 밑줄, 테두리, 그림자,
+    어떤 요소를 조작할 수 있다고 알려 주는 시각적 단서 — 밑줄, 테두리, 그림자,
     둥근 사각형 같은 것. 클릭이 되는데도 시그니파이어가 없으면 사용자는
     그 요소를 찾아내지 못한다.
 justification:
