@@ -13,20 +13,32 @@ export function practicePage(stage: number): PracticePage | null {
 }
 
 /**
- * A Practice Page's stylesheet as served (#23): authoring comments stripped.
- * The authored file's header comment says where the planted defects live —
- * documentation for a maintainer, a hint for a Learner. Nothing authored may
- * reach the Learner's view-source that the audit is meant to withhold.
+ * An authored file as served (#23, #70): authoring comments stripped.
+ *
+ * The stylesheet's header comment says where the planted defects live, and the
+ * behaviour's explains which moments were built to go quiet — documentation
+ * for a maintainer, a hint for a Learner. Nothing authored may reach the
+ * Learner's view-source that the audit is meant to withhold. Both files are
+ * written with block comments only, so one pattern removes all of them.
  *
  * Stripped once per Stage at module scope rather than per request, as it was
  * when there was one page to strip.
  */
-const strippedCss = new Map(
-  content.practicePages.map((page) => [page.stage, page.css.replace(/\/\*[\s\S]*?\*\//g, '').trimStart()]),
-)
+function strippedPerStage(part: (page: PracticePage) => string): Map<number, string> {
+  return new Map(content.practicePages.map((page) => [page.stage, part(page).replace(COMMENT, '').trimStart()]))
+}
+
+const COMMENT = /\/\*[\s\S]*?\*\//g
+
+const strippedCss = strippedPerStage((page) => page.css)
+const strippedJs = strippedPerStage((page) => page.js)
 
 export function practicePageCss(stage: number): string {
   return strippedCss.get(stage) ?? ''
+}
+
+export function practicePageJs(stage: number): string {
+  return strippedJs.get(stage) ?? ''
 }
 
 /**

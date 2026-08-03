@@ -160,6 +160,12 @@ export interface Brief {
 export interface PlantedDefect {
   slug: string
   element: string
+  /**
+   * The step of a walkable subject this defect occurs in (ADR-0010), or
+   * undefined on a subject that is one page. A Stage 2 defect is often a
+   * moment rather than a thing, and the step is where that moment happened.
+   */
+  step?: number
   competency: string
   principle: string
   explanation: Bilingual
@@ -170,8 +176,12 @@ export interface PracticePage {
   stage: number
   html: Bilingual
   css: string
+  /** The behaviour both variants share, or empty where the subject is inert. */
+  js: string
   /** The `data-element` identifiers, identical across both language variants. */
   elements: string[]
+  /** The steps a walkable subject declares, ascending; empty where it is one page. */
+  steps: number[]
   defects: PlantedDefect[]
 }
 
@@ -593,6 +603,7 @@ function loadBriefs(root: string, principles: Set<string>, problems: string[]): 
 }
 
 const ELEMENT_ATTRIBUTE = /data-element="([^"]+)"/g
+const STEP_ATTRIBUTE = /data-step="(\d+)"/g
 
 /**
  * The audit subjects, one per Stage that has one (#61).
@@ -662,6 +673,29 @@ function loadPracticePage(
     problems.push(`practice-page/${name}/practice-page.css is missing — most Planted Defects live in the styling`)
   }
 
+  // A subject that declares steps is walked rather than read (ADR-0010), and
+  // the walking is behaviour. Like the stylesheet it is one file loaded by both
+  // variants, because a flow that behaved differently in Korean would not be
+  // the same flow.
+  const steps = {
+    en: [...new Set([...html.en.matchAll(STEP_ATTRIBUTE)].map((match) => Number(match[1])))].sort((a, b) => a - b),
+    ko: [...new Set([...html.ko.matchAll(STEP_ATTRIBUTE)].map((match) => Number(match[1])))].sort((a, b) => a - b),
+  }
+  if (steps.en.join() !== steps.ko.join()) {
+    problems.push(
+      `practice-page/${name}: the two language variants walk different steps — en: ${steps.en.join(', ') || 'none'}, ko: ${steps.ko.join(', ') || 'none'}`,
+    )
+  }
+
+  const jsPath = join(dir, 'practice-page.js')
+  let js = ''
+  if (existsSync(jsPath)) js = readFileSync(jsPath, 'utf8')
+  else if (steps.en.length > 0) {
+    problems.push(
+      `practice-page/${name}/practice-page.js is missing — a subject that walks needs the behaviour both variants share`,
+    )
+  }
+
   const identifiers = {
     en: [...html.en.matchAll(ELEMENT_ATTRIBUTE)].map((match) => match[1]),
     ko: [...html.ko.matchAll(ELEMENT_ATTRIBUTE)].map((match) => match[1]),
@@ -719,9 +753,23 @@ function loadPracticePage(
         problems.push(`${rel}: ${label} must carry an en/ko explanation`)
       }
 
+      // On a walkable subject the step is not decoration: it is what the
+      // reveal tells a Learner in order to send them back to the moment. A
+      // defect with no step, or one naming a step the flow does not have,
+      // points at nothing walkable.
+      const step = typeof record.step === 'number' && steps.en.includes(record.step) ? record.step : undefined
+      if (steps.en.length === 0) {
+        if (record.step !== undefined) {
+          problems.push(`${rel}: ${label} names a step, but this subject is one page and walks nowhere`)
+        }
+      } else if (step === undefined) {
+        problems.push(`${rel}: ${label} must name the step it occurs in, one of ${steps.en.join(', ')}`)
+      }
+
       const defect: PlantedDefect = {
         slug,
         element: stringOrEmpty(record.element),
+        ...(step === undefined ? {} : { step }),
         competency: stringOrEmpty(record.competency),
         principle: stringOrEmpty(record.principle),
         explanation: asBilingual(record.explanation),
@@ -752,7 +800,7 @@ function loadPracticePage(
     }
   }
 
-  return { stage, html, css, elements: [...elements], defects }
+  return { stage, html, css, js, elements: [...elements], steps: steps.en, defects }
 }
 
 /**

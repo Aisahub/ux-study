@@ -220,6 +220,46 @@ defects:
 ---
 `
 
+/**
+ * The same subject, walked instead of read (ADR-0010): identical elements,
+ * arranged as steps a Learner moves between, with the behaviour in one file
+ * both variants load.
+ */
+const WALKABLE_EN = `<main>
+<section data-step="1" data-step-label="Step 1 of 2">
+<h1 data-element="page-title">Orders</h1>
+</section>
+<section data-step="2" data-step-label="Step 2 of 2" hidden>
+<button data-element="confirm-selected-orders">Confirm selected orders</button>
+</section>
+</main>
+<script src="./practice-page.js"></script>
+`
+
+const WALKABLE_KO = `<main>
+<section data-step="1" data-step-label="2단계 중 1단계">
+<h1 data-element="page-title">주문</h1>
+</section>
+<section data-step="2" data-step-label="2단계 중 2단계" hidden>
+<button data-element="confirm-selected-orders">선택한 주문 확정</button>
+</section>
+</main>
+<script src="./practice-page.js"></script>
+`
+
+const MANIFEST_WALKABLE = MANIFEST.replace(
+  '  - slug: primary-action-washed-out\n',
+  '  - slug: primary-action-washed-out\n    step: 2\n',
+)
+
+/** Turn the scaffold's Stage 1 subject into a walkable one. */
+function walkable(root: string) {
+  write(root, 'practice-page/stage-1/en.html', WALKABLE_EN)
+  write(root, 'practice-page/stage-1/ko.html', WALKABLE_KO)
+  write(root, 'practice-page/stage-1/practice-page.js', 'void 0\n')
+  write(root, 'practice-page/stage-1/manifest.md', MANIFEST_WALKABLE)
+}
+
 function scaffold(): string {
   const root = mkdtempSync(join(tmpdir(), 'ux-study-content-'))
   roots.push(root)
@@ -630,6 +670,54 @@ test('a repeated element identifier fails the build', () => {
   write(root, 'practice-page/stage-1/en.html', PRACTICE_EN + repeated)
   write(root, 'practice-page/stage-1/ko.html', PRACTICE_KO + repeated)
   expectProblem(root, /element identifier "page-title" appears more than once/)
+})
+
+test('a walkable subject loads, carrying its steps and the behaviour both variants share', () => {
+  const root = scaffold()
+  walkable(root)
+
+  const page = practicePageOf(loadContent(root), 1)!
+  expect(page.steps).toEqual([1, 2])
+  expect(page.js).toBe('void 0\n')
+  expect(page.defects[0].step).toBe(2)
+})
+
+test('a subject that walks but has no behaviour fails the build', () => {
+  const root = scaffold()
+  walkable(root)
+  rmSync(join(root, 'practice-page/stage-1/practice-page.js'))
+  expectProblem(root, /practice-page\.js is missing — a subject that walks needs the behaviour both variants share/)
+})
+
+test('language variants that walk different steps fail the build', () => {
+  // The identifier check cannot see this: both variants can expose the same
+  // elements while one of them reaches an element a step later.
+  const root = scaffold()
+  walkable(root)
+  write(root, 'practice-page/stage-1/ko.html', edit(WALKABLE_KO, 'data-step="2"', 'data-step="3"'))
+  expectProblem(root, /walk different steps — en: 1, 2, ko: 1, 3/)
+})
+
+test('a Planted Defect on a walkable subject that names no step fails the build', () => {
+  const root = scaffold()
+  walkable(root)
+  write(root, 'practice-page/stage-1/manifest.md', edit(MANIFEST_WALKABLE, '    step: 2\n', ''))
+  expectProblem(root, /must name the step it occurs in, one of 1, 2/)
+})
+
+test('a Planted Defect naming a step the subject does not walk fails the build', () => {
+  const root = scaffold()
+  walkable(root)
+  write(root, 'practice-page/stage-1/manifest.md', edit(MANIFEST_WALKABLE, 'step: 2', 'step: 9'))
+  expectProblem(root, /must name the step it occurs in, one of 1, 2/)
+})
+
+test('a Planted Defect on a subject that walks nowhere may not name a step', () => {
+  // The reverse drift: a step recorded against a single page would send a
+  // Learner back to a moment the subject does not have.
+  const root = scaffold()
+  write(root, 'practice-page/stage-1/manifest.md', MANIFEST_WALKABLE)
+  expectProblem(root, /names a step, but this subject is one page and walks nowhere/)
 })
 
 test('the repository content loads, with every authored Glossary entry accounted for', () => {

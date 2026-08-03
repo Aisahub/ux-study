@@ -30,9 +30,11 @@ _Avoid_: dictionary, term table, vocabulary list (reserve "glossary" for this sp
 A group of Competencies sharing one level of detection difficulty. There are three — visible at a glance, visible by walking the flow, visible only to someone else — and each ends with a Self-Audit Report. See ADR-0001.
 _Avoid_: phase, level, unit
 
-**Gate Quiz** (관문 테스트 / 关卡测验):
+**Gate Quiz** (퀴즈 / 关卡测验):
 The assessment attached to a single Competency, testing whether the Learner *understands* it. Objective items scored against a stored answer key; the problem is already framed for them. A Gate Quiz is not a fixed set of questions — each attempt draws its items from the Competency's Item Pool. See ADR-0006.
-_Avoid_: test, exam, assessment (too broad — those cover both instruments)
+_Avoid_: test, exam, assessment (too broad — those cover both instruments), 관문 테스트, 관문 퀴즈
+
+The Korean is the bare noun on purpose (2026-07-31). This entry had read `관문 테스트` while the build shipped `관문 퀴즈`, and the gloss used the very word the line above it rules out. `관문` is a heavier register than `퀴즈` and the pair read as two words pulling against each other; the gating it was carrying is said by the status beside every quiz and by the Competency page's `마지막 관문` kicker, neither of which needs the name to repeat it. English keeps **Gate Quiz** — it is the term this repo's docs, ADRs and tests are written in, and the register clash is Korean's alone.
 
 **Quiz Item** (문항 / 测验题):
 One question inside a Gate Quiz. Presents a concrete artefact — a screenshot, a described page, a pair of alternatives — and asks for a judgement about it. An item that can be answered without examining the artefact is not a Quiz Item; it is a definition question, and does not belong. Every item names the section of the source article it derives from, which is what a Learner who gets it wrong is given in place of the answer.
