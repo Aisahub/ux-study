@@ -12,16 +12,21 @@ objective:
     곳, 취소할 수 없는 곳, 해 놓은 것을 잃지 않고서는 되돌릴 수 없는 곳, 지금
     플로우의 어디에 있는지 알 수 없는 곳을 찾아낼 수 있다.
 roleHint:
-  en: >-
-    Developers: in a flow you built, press the browser's back button in the
-    middle of it — does the application agree with the browser about what just
-    happened? PMs: in a flow you signed off, get three steps in and then decide
-    you have changed your mind; count how much of your work leaving costs you.
-  ko: >-
-    개발자라면: 직접 만든 플로우 한가운데서 브라우저의 뒤로 가기를 눌러 보세요 —
-    방금 무슨 일이 있었는지에 대해 애플리케이션과 브라우저의 생각이 같나요?
-    PM이라면: 승인한 플로우를 세 단계쯤 진행한 뒤 마음을 바꿨다고 해 보세요.
-    빠져나오는 데 여태 한 일 중 얼마를 내놓아야 하는지 세어 보세요.
+  developer:
+    en: >-
+      In a flow you built, press the browser's back button in the middle of
+      it — does the application agree with the browser about what just
+      happened?
+    ko: >-
+      직접 만든 플로우 한가운데서 브라우저의 뒤로 가기를 눌러 보세요 — 방금 무슨
+      일이 있었는지에 대해 애플리케이션과 브라우저의 생각이 같나요?
+  pm:
+    en: >-
+      In a flow you signed off, get three steps in and then decide you have
+      changed your mind; count how much of your work leaving costs you.
+    ko: >-
+      승인한 플로우를 세 단계쯤 진행한 뒤 마음을 바꿨다고 해 보세요. 빠져나오는
+      데 여태 한 일 중 얼마를 내놓아야 하는지 세어 보세요.
 preReadingQuestions:
   - en: >-
       The article separates going back from getting out entirely. What does it

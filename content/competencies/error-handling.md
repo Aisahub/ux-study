@@ -16,18 +16,23 @@ objective:
     잘못됐을 때의 답변을 다룬다. 아무것도 잘못되지 않은 길에서 치르는 비용은
     폼 부담의 몫이다.
 roleHint:
-  en: >-
-    Developers: in a form you built, submit it empty, then submit it with one
-    field wrong — read the two answers as a first-time user would, not as the
-    person who wrote the validator. PMs: in a flow you signed off, do the
-    likeliest wrong thing a real customer would do, and ask whether the message
-    that comes back is enough to get them moving again.
-  ko: >-
-    개발자라면: 직접 만든 폼을 비운 채로 한 번, 한 필드만 틀리게 채워서 한 번
-    제출해 보세요 — 검증 코드를 쓴 사람이 아니라 처음 온 사용자의 눈으로 두
-    답변을 읽어 보세요. PM이라면: 승인한 플로우에서 실제 고객이 가장 저지르기
-    쉬운 실수를 그대로 해 보고, 돌아온 메시지만으로 다시 앞으로 나아갈 수 있을지
-    따져 보세요.
+  developer:
+    en: >-
+      In a form you built, submit it empty, then submit it with one field
+      wrong — read the two answers as a first-time user would, not as the
+      person who wrote the validator.
+    ko: >-
+      직접 만든 폼을 비운 채로 한 번, 한 필드만 틀리게 채워서 한 번 제출해
+      보세요 — 검증 코드를 쓴 사람이 아니라 처음 온 사용자의 눈으로 두 답변을
+      읽어 보세요.
+  pm:
+    en: >-
+      In a flow you signed off, do the likeliest wrong thing a real customer
+      would do, and ask whether the message that comes back is enough to get
+      them moving again.
+    ko: >-
+      승인한 플로우에서 실제 고객이 가장 저지르기 쉬운 실수를 그대로 해 보고,
+      돌아온 메시지만으로 다시 앞으로 나아갈 수 있을지 따져 보세요.
 preReadingQuestions:
   - en: >-
       The guidelines separate whether a message is noticed from what it says.

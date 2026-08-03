@@ -17,19 +17,24 @@ objective:
     아닌지는 그 말 자체가 아니라 읽는 사람에 달린 문제이므로, 판단의 기준은
     명시된 독자이지 내 귀가 아니다.
 roleHint:
-  en: >-
-    Developers: take a screen you built and list every noun on it that arrived
-    from a table name, an API field, or a ticket title. Would the person who
-    uses this screen have said that word before they met your product? PMs: hand
-    a page you wrote the copy for to somebody in another team, explain nothing,
-    and mark every word they stop at — the stops are the findings, not the
-    questions they ask you afterwards.
-  ko: >-
-    개발자라면: 직접 만든 화면에서 테이블 이름, API 필드, 티켓 제목에서 그대로
-    건너온 명사를 모두 적어 보세요. 이 화면을 쓰는 사람이 우리 제품을 만나기
-    전에도 그 말을 써 본 적이 있을까요? PM이라면: 직접 문구를 쓴 페이지를 다른
-    팀 사람에게 아무 설명 없이 건네고, 그 사람이 멈칫하는 단어마다 표시해 보세요
-    — 발견은 그 사람이 나중에 던지는 물음이 아니라 멈칫한 지점 자체입니다.
+  developer:
+    en: >-
+      Take a screen you built and list every noun on it that arrived from a
+      table name, an API field, or a ticket title. Would the person who uses
+      this screen have said that word before they met your product?
+    ko: >-
+      직접 만든 화면에서 테이블 이름, API 필드, 티켓 제목에서 그대로 건너온
+      명사를 모두 적어 보세요. 이 화면을 쓰는 사람이 우리 제품을 만나기 전에도
+      그 말을 써 본 적이 있을까요?
+  pm:
+    en: >-
+      Hand a page you wrote the copy for to somebody in another team, explain
+      nothing, and mark every word they stop at — the stops are the findings,
+      not the questions they ask you afterwards.
+    ko: >-
+      직접 문구를 쓴 페이지를 다른 팀 사람에게 아무 설명 없이 건네고, 그 사람이
+      멈칫하는 단어마다 표시해 보세요 — 발견은 그 사람이 나중에 던지는 물음이
+      아니라 멈칫한 지점 자체입니다.
 preReadingQuestions:
   - en: >-
       The article says whether a word counts as jargon is not a property of the

@@ -64,8 +64,13 @@ export interface Competency {
   name: Bilingual
   /** What the Learner can be seen to do afterwards — an observable action, never knowledge held. */
   objective: Bilingual
-  /** What to audit given the Learner's role: developers the interface they built, PMs the flow they signed off. */
-  roleHint: Bilingual
+  /**
+   * What to audit given the Learner's role, one hint each: developers the
+   * interface they built, PMs the flow they signed off. Held apart rather than
+   * written as one paragraph naming both roles, because a Learner reads only
+   * the half addressed to them and the second half was hiding behind the first.
+   */
+  roleHint: { developer: Bilingual; pm: Bilingual }
   /** Two or three questions to carry into the source article — a hypothesis instead of a skim. */
   preReadingQuestions: Bilingual[]
   /** The source article this Competency scaffolds around (ADR-0002). */
@@ -344,9 +349,19 @@ function loadCompetencies(root: string, config: ContentConfig, problems: string[
     if (stageOf(config, slug) === null) {
       problems.push(`${rel}: "${slug}" is not a Competency declared under any Stage in config.md`)
     }
-    for (const field of ['name', 'objective', 'roleHint'] as const) {
+    for (const field of ['name', 'objective'] as const) {
       if (!isLanguagePair(data[field])) {
         problems.push(`${rel}: ${field} must carry en and ko variants`)
+      }
+    }
+
+    // Both roles are required, not one-or-the-other: a Competency that hints
+    // only at what a developer should audit leaves half the cohort without an
+    // address for it, and the page has a heading standing ready for each.
+    const roleHint = isRecord(data.roleHint) ? data.roleHint : {}
+    for (const role of ['developer', 'pm'] as const) {
+      if (!isLanguagePair(roleHint[role])) {
+        problems.push(`${rel}: roleHint.${role} must carry en and ko variants`)
       }
     }
 
@@ -381,7 +396,7 @@ function loadCompetencies(root: string, config: ContentConfig, problems: string[
       slug,
       name: asBilingual(data.name),
       objective: asBilingual(data.objective),
-      roleHint: asBilingual(data.roleHint),
+      roleHint: { developer: asBilingual(roleHint.developer), pm: asBilingual(roleHint.pm) },
       preReadingQuestions: (questions ?? []).filter(isLanguagePair).map(asBilingual),
       source: { url: stringOrEmpty(source.url), attribution: stringOrEmpty(source.attribution) },
       koTranslationNotice: typeof data.koTranslationNotice === 'string' ? data.koTranslationNotice : undefined,

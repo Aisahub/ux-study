@@ -103,7 +103,10 @@ test('Learner-facing copy avoids the words CONTEXT.md rules out', () => {
     ...competencies.flatMap((competency): [string, string][] => [
       [`${competency.slug} name`, `${competency.name.en} ${competency.name.ko}`],
       [`${competency.slug} objective`, `${competency.objective.en} ${competency.objective.ko}`],
-      [`${competency.slug} roleHint`, `${competency.roleHint.en} ${competency.roleHint.ko}`],
+      ...(['developer', 'pm'] as const).map((role): [string, string] => [
+        `${competency.slug} roleHint.${role}`,
+        `${competency.roleHint[role].en} ${competency.roleHint[role].ko}`,
+      ]),
       ...competency.preReadingQuestions.map((question, index): [string, string] => [
         `${competency.slug} preReadingQuestions[${index}]`,
         `${question.en} ${question.ko}`,

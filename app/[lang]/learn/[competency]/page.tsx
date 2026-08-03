@@ -14,6 +14,7 @@ const COPY: Record<
   {
     objective: string
     roleHint: string
+    roles: { developer: string; pm: string }
     questionsHeading: string
     questionsExplanation: string
     articleTitle: string
@@ -34,6 +35,7 @@ const COPY: Record<
   en: {
     objective: 'Afterwards, you can',
     roleHint: 'Where to point it',
+    roles: { developer: 'Developers', pm: 'PMs' },
     questionsHeading: 'Carry these questions into the article',
     questionsExplanation: 'Read with a hypothesis rather than skimming — decide what you expect before the article answers.',
     articleTitle: 'The source article',
@@ -41,7 +43,7 @@ const COPY: Record<
     quizPassed: 'Gate Quiz passed',
     quizStart: (attempts) => (attempts > 0 ? 'Retry the Gate Quiz' : 'Take the Gate Quiz'),
     back: 'All Competencies',
-    station: (number) => `Stop ${number}`,
+    station: (number) => `Lesson ${number}`,
     status: { unstarted: 'Not started', 'in-progress': 'In progress', passed: 'Passed' },
     attempts: (n) => (n === 1 ? '1 attempt' : `${n} attempts`),
     nextKicker: 'The final gate',
@@ -54,6 +56,7 @@ const COPY: Record<
   ko: {
     objective: '마치고 나면 할 수 있는 것',
     roleHint: '어디에 적용해 볼까',
+    roles: { developer: '개발자라면', pm: 'PM이라면' },
     questionsHeading: '이 질문들을 들고 기사를 읽으세요',
     questionsExplanation: '훑어보는 대신 가설을 세우고 읽습니다 — 기사가 답하기 전에 스스로 예상해 보세요.',
     articleTitle: '원문 기사',
@@ -61,7 +64,7 @@ const COPY: Record<
     quizPassed: '관문 퀴즈 통과',
     quizStart: (attempts) => (attempts > 0 ? '관문 퀴즈 다시 도전' : '관문 퀴즈 시작'),
     back: '전체 역량 보기',
-    station: (number) => `${number}번 역`,
+    station: (number) => `레슨 ${number}`,
     status: { unstarted: '시작 전', 'in-progress': '진행 중', passed: '통과' },
     attempts: (n) => `${n}회 시도`,
     nextKicker: '마지막 관문',
@@ -172,10 +175,16 @@ export default async function CompetencyPage({
 
   const quiz = stageProgress(await progressFor(session.email), stage).quizzes[slug]
   const { drawSize, passThreshold } = content.config
-  // Numbered within its own Stage, so Stage 1 still counts 01–04. The Stage a
+  // Numbered within its own Stage, so Stage 1 still counts 1–4. The Stage a
   // Learner is standing in is what the number is a position inside; counting
-  // 01–12 across the programme would make it a distance from Completion, which
+  // 1–12 across the programme would make it a distance from Completion, which
   // is the cumulative figure PRODUCT.md rules out.
+  //
+  // Padded to two digits, because /learn's list badges this same position as
+  // 01–04 and a Learner arriving from that list must be able to see they are
+  // standing on the row they clicked. The padding was the wrong call only while
+  // a counter followed it: `01번` counts nothing in Korean. With the counter
+  // gone the numeral is a label, and it matches the label the list already uses.
   const station = String(competenciesOfStage(content.config, stage).indexOf(slug) + 1).padStart(2, '0')
 
   return (
@@ -239,9 +248,24 @@ export default async function CompetencyPage({
           <h3 className="mt-[26px] border-t border-khaki/40 pt-[22px] font-serif text-headline font-bold text-ink">
             {copy.roleHint}
           </h3>
-          <p className="mt-3.5 max-w-[56ch] text-body">
-            {competency.roleHint[lang]}
-          </p>
+          {/* One block per role, each under the role's own name. Both hints ran
+              as a single paragraph until 2026-08-03, and a developer had to
+              read the PM's half before finding out it was not addressed to
+              them — the two are alternatives, and a paragraph is the one shape
+              that cannot say so. The role word is a sunk chip rather than a
+              heading: it addresses a reader, it does not open a section. */}
+          <div className="mt-4.5 flex flex-col gap-5">
+            {(['developer', 'pm'] as const).map((role) => (
+              <div key={role}>
+                <span className="inline-flex rounded-full bg-sunk px-2.5 py-1 text-label font-bold text-ink-2">
+                  {copy.roles[role]}
+                </span>
+                <p className="mt-2.5 max-w-[56ch] text-body">
+                  {competency.roleHint[role][lang]}
+                </p>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* ── 02 · the questions to carry into the reading ── */}

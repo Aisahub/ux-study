@@ -11,15 +11,20 @@ objective:
     어떤 페이지를 놓고도, 처음 방문한 사용자의 시선이 어디에 먼저 닿는지 말하고,
     시각적 비중이 실제 중요도와 어긋나는 요소를 하나 이상 짚어낼 수 있다.
 roleHint:
-  en: >-
-    Developers: put a screen you built on your monitor and notice where your own
-    eye lands first — is that where you meant it to go? PMs: walk a flow you
-    signed off and check, screen by screen, whether the most important action is
-    also the most prominent one.
-  ko: >-
-    개발자라면: 직접 만든 화면을 띄워 놓고 자신의 시선이 어디에 먼저 가는지
-    보세요 — 의도한 자리인가요? PM이라면: 승인한 플로우를 화면 단위로 짚으며
-    가장 중요한 동작이 실제로 가장 눈에 띄는지 확인해 보세요.
+  developer:
+    en: >-
+      Put a screen you built on your monitor and notice where your own eye
+      lands first — is that where you meant it to go?
+    ko: >-
+      직접 만든 화면을 띄워 놓고 자신의 시선이 어디에 먼저 가는지 보세요 —
+      의도한 자리인가요?
+  pm:
+    en: >-
+      Walk a flow you signed off and check, screen by screen, whether the most
+      important action is also the most prominent one.
+    ko: >-
+      승인한 플로우를 화면 단위로 짚으며 가장 중요한 동작이 실제로 가장 눈에
+      띄는지 확인해 보세요.
 preReadingQuestions:
   - en: >-
       What tools does the article give a designer for making one element draw
