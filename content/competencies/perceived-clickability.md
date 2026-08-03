@@ -12,16 +12,20 @@ objective:
     있어 보이지만 실제로는 아닌 요소를, 마우스를 올리거나 누르기 전의 정지된
     모습만으로 찾아낼 수 있다.
 roleHint:
-  en: >-
-    Developers: look at a component you restyled — when you stripped the
-    browser's default look, did the "you can click this" look survive? PMs: on
-    a screen you signed off, could a first-time user point out every clickable
-    thing without moving the mouse?
-  ko: >-
-    개발자라면: 직접 스타일을 다시 입힌 컴포넌트를 보세요 — 브라우저 기본
-    모양을 걷어낼 때 "누를 수 있다"는 신호까지 걷어내지는 않았나요? PM이라면:
-    승인한 화면에서 처음 온 사용자가 마우스를 움직이지 않고도 누를 수 있는 것을
-    전부 짚어낼 수 있을지 생각해 보세요.
+  developer:
+    en: >-
+      Look at a component you restyled — when you stripped the browser's
+      default look, did the "you can click this" look survive?
+    ko: >-
+      직접 스타일을 다시 입힌 컴포넌트를 보세요 — 브라우저 기본 모양을 걷어낼
+      때 "누를 수 있다"는 신호까지 걷어내지는 않았나요?
+  pm:
+    en: >-
+      On a screen you signed off, could a first-time user point out every
+      clickable thing without moving the mouse?
+    ko: >-
+      승인한 화면에서 처음 온 사용자가 마우스를 움직이지 않고도 누를 수 있는
+      것을 전부 짚어낼 수 있을지 생각해 보세요.
 preReadingQuestions:
   - en: >-
       Before anyone touches a button, what does the article say its resting

@@ -16,18 +16,23 @@ objective:
     이것은 아무것도 잘못되지 않은 길에서 치르는 비용이다. 무언가 잘못됐을 때
     인터페이스가 하는 말은 오류 처리의 몫이다.
 roleHint:
-  en: >-
-    Developers: fill in a form you built without using anything you know as its
-    author — no remembered format, no test data on the clipboard — and count
-    what you had to leave the page to find out. PMs: hand a flow you signed off
-    to someone who has never seen it and watch where they stop moving; the pause
-    before typing is the burden, not the typing.
-  ko: >-
-    개발자라면: 직접 만든 폼을 만든 사람의 지식 없이 채워 보세요 — 외우고 있는
-    입력 형식도, 클립보드에 담아 둔 테스트 데이터도 쓰지 말고요. 그러고서 답을
-    찾으러 화면 밖으로 나가야 했던 횟수를 세어 보세요. PM이라면: 승인한 플로우를
-    처음 보는 사람에게 건네고 어디서 손이 멈추는지 지켜보세요. 부담은 타이핑이
-    아니라 타이핑 직전의 그 멈춤입니다.
+  developer:
+    en: >-
+      Fill in a form you built without using anything you know as its author —
+      no remembered format, no test data on the clipboard — and count what you
+      had to leave the page to find out.
+    ko: >-
+      직접 만든 폼을 만든 사람의 지식 없이 채워 보세요 — 외우고 있는 입력
+      형식도, 클립보드에 담아 둔 테스트 데이터도 쓰지 말고요. 그러고서 답을
+      찾으러 화면 밖으로 나가야 했던 횟수를 세어 보세요.
+  pm:
+    en: >-
+      Hand a flow you signed off to someone who has never seen it and watch
+      where they stop moving; the pause before typing is the burden, not the
+      typing.
+    ko: >-
+      승인한 플로우를 처음 보는 사람에게 건네고 어디서 손이 멈추는지
+      지켜보세요. 부담은 타이핑이 아니라 타이핑 직전의 그 멈춤입니다.
 preReadingQuestions:
   - en: >-
       The article groups the work a form imposes into four kinds. Which of them

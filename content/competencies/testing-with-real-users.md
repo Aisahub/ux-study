@@ -17,20 +17,25 @@ objective:
     있다: 누를 조작 장치를 이름으로 알려 주는 과제, 참가자에게 무엇을 생각해야
     하는지 일러 주는 물음, 이미 작동 방식을 아는 사람들로 채워진 명단.
 roleHint:
-  en: >-
-    Developers: take the last feature you shipped and write the one task you
-    would ask a stranger to carry out with it. Read it back — does it say what
-    to achieve, or where to click? PMs: take a question you have put to a client
-    about a design ("is this clear?") and rewrite it as something to do rather
-    than something to rate. What somebody does is evidence; what they say about
-    a screen you showed them is usually a courtesy.
-  ko: >-
-    개발자라면: 가장 최근에 내보낸 기능을 두고, 모르는 사람에게 부탁할 과제
-    한 문장을 써 보세요. 다시 읽어 보세요 — 무엇을 이루라고 말하고 있나요,
-    아니면 어디를 누르라고 말하고 있나요? PM이라면: 디자인을 두고 고객에게 던진
-    물음("이거 명확한가요?")을 평가할 거리가 아니라 해 볼 거리로 바꿔 써 보세요.
-    사람이 무엇을 하는지는 증거이고, 보여 준 화면을 두고 무어라 말해 주는지는
-    대개 예의입니다.
+  developer:
+    en: >-
+      Take the last feature you shipped and write the one task you would ask a
+      stranger to carry out with it. Read it back — does it say what to
+      achieve, or where to click?
+    ko: >-
+      가장 최근에 내보낸 기능을 두고, 모르는 사람에게 부탁할 과제 한 문장을 써
+      보세요. 다시 읽어 보세요 — 무엇을 이루라고 말하고 있나요, 아니면 어디를
+      누르라고 말하고 있나요?
+  pm:
+    en: >-
+      Take a question you have put to a client about a design ("is this
+      clear?") and rewrite it as something to do rather than something to rate.
+      What somebody does is evidence; what they say about a screen you showed
+      them is usually a courtesy.
+    ko: >-
+      디자인을 두고 고객에게 던진 물음("이거 명확한가요?")을 평가할 거리가
+      아니라 해 볼 거리로 바꿔 써 보세요. 사람이 무엇을 하는지는 증거이고, 보여
+      준 화면을 두고 무어라 말해 주는지는 대개 예의입니다.
 preReadingQuestions:
   - en: >-
       Three elements are named as what a usability study is made of. What are

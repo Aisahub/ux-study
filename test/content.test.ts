@@ -74,8 +74,12 @@ objective:
   en: Say where a first-time visitor's eye lands first.
   ko: 처음 방문한 사용자의 시선이 어디에 먼저 닿는지 말할 수 있다.
 roleHint:
-  en: Developers look at the screen they built.
-  ko: 개발자는 직접 만든 화면을 봅니다.
+  developer:
+    en: Look at the screen you built.
+    ko: 직접 만든 화면을 보세요.
+  pm:
+    en: Walk the flow you signed off.
+    ko: 승인한 플로우를 따라가 보세요.
 preReadingQuestions:
   - en: What pulls the eye first?
     ko: 무엇이 시선을 먼저 끄는가?

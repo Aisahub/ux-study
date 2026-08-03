@@ -19,21 +19,25 @@ objective:
     어긋남은 두 모델 사이에 있으므로 "이 화면이 명확한가"를 물어서는 드러나지
     않는다. 명시된 사용자의 눈으로 읽어야만 드러난다.
 roleHint:
-  en: >-
-    Developers: take a flow you built and write, in one sentence, what the user
-    thinks is happening when they press the main control; then write what
-    actually happens. The gap between those two sentences is where the findings
-    are. PMs: show a screen to somebody who has never seen the product and ask
-    them to say what will happen before they act. Every place their prediction
-    and the result differ is a finding, including the ones where they were
-    pleasantly surprised.
-  ko: >-
-    개발자라면: 직접 만든 플로우에서 사용자가 주요 조작 장치를 누를 때 무슨 일이
-    벌어진다고 생각하는지를 한 문장으로 적고, 이어서 실제로 무슨 일이 벌어지는지를
-    적어 보세요. 두 문장 사이의 간격이 곧 발견이 있는 자리입니다. PM이라면:
-    제품을 한 번도 본 적 없는 사람에게 화면을 보여 주고, 누르기 전에 무슨 일이
-    일어날지 먼저 말해 달라고 해 보세요. 예상과 결과가 어긋나는 자리는 모두
-    발견입니다 — 기분 좋게 어긋난 자리도 마찬가지입니다.
+  developer:
+    en: >-
+      Take a flow you built and write, in one sentence, what the user thinks is
+      happening when they press the main control; then write what actually
+      happens. The gap between those two sentences is where the findings are.
+    ko: >-
+      직접 만든 플로우에서 사용자가 주요 조작 장치를 누를 때 무슨 일이
+      벌어진다고 생각하는지를 한 문장으로 적고, 이어서 실제로 무슨 일이
+      벌어지는지를 적어 보세요. 두 문장 사이의 간격이 곧 발견이 있는 자리입니다.
+  pm:
+    en: >-
+      Show a screen to somebody who has never seen the product and ask them to
+      say what will happen before they act. Every place their prediction and
+      the result differ is a finding, including the ones where they were
+      pleasantly surprised.
+    ko: >-
+      제품을 한 번도 본 적 없는 사람에게 화면을 보여 주고, 누르기 전에 무슨 일이
+      일어날지 먼저 말해 달라고 해 보세요. 예상과 결과가 어긋나는 자리는 모두
+      발견입니다 — 기분 좋게 어긋난 자리도 마찬가지입니다.
 preReadingQuestions:
   - en: >-
       A mental model is described as what the user knows, or thinks they know.

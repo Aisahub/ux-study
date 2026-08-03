@@ -15,8 +15,8 @@ The member of staff who keeps the programme running: the access allowlist, the P
 _Avoid_: reviewer, admin, grader, instructor, teacher
 
 **Competency** (능력점 / 能力点):
-One UX ability a Learner is expected to acquire, small enough to be assessed on its own. Stated as an observable action ("can find and fix X"), never as knowledge held.
-_Avoid_: knowledge point, lesson, chapter, module, topic
+One UX ability a Learner is expected to acquire, small enough to be assessed on its own. Stated as an observable action ("can find and fix X"), never as knowledge held. Learner-facing copy names a Competency's position in its Stage **Lesson N (레슨 N)** — amended 2026-08-03, when the Korean word that stood there, "역", turned out to read as an abbreviation of 역량 on a screen that also says 전체 역량 보기. "Lesson" stays out of this document's own vocabulary and out of every other surface: it names a place in the route, not the ability.
+_Avoid_: knowledge point, chapter, module, topic
 
 **UX Principle** (UX 원칙 / UX 原则):
 A single teachable rule sourced from the UX literature, which a Learner cites by name when justifying a finding. Content, not structure — many Principles feed one Competency. Every Principle carries one canonical name per Learner-facing language, so that a finding written in Seoul and a finding written in Jakarta name the same thing.

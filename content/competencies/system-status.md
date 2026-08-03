@@ -15,18 +15,21 @@ objective:
     말없이 바뀌어 버린 상태. 실패하고도 아무 말이 없는 동작은 여기에 속하고,
     실패했다고 말은 하되 잘못 말하는 동작은 오류 처리의 몫이다.
 roleHint:
-  en: >-
-    Developers: take the slowest thing on a screen you built and do it on a
-    throttled connection — between the click and the result, what is on screen?
-    PMs: in a flow you signed off, start something that takes more than a
-    moment, look away for ten seconds, and look back — can you tell whether it
-    worked, is still working, or failed?
-  ko: >-
-    개발자라면: 직접 만든 화면에서 가장 느린 동작을 네트워크 속도를 낮춘 상태로
-    실행해 보세요 — 클릭한 순간부터 결과가 나올 때까지 화면에는 무엇이 있나요?
-    PM이라면: 승인한 플로우에서 시간이 조금 걸리는 작업을 시작한 뒤 10초쯤 눈을
-    떼었다가 다시 보세요 — 성공한 건지, 아직 진행 중인지, 실패한 건지 구분이
-    되나요?
+  developer:
+    en: >-
+      Take the slowest thing on a screen you built and do it on a throttled
+      connection — between the click and the result, what is on screen?
+    ko: >-
+      직접 만든 화면에서 가장 느린 동작을 네트워크 속도를 낮춘 상태로 실행해
+      보세요 — 클릭한 순간부터 결과가 나올 때까지 화면에는 무엇이 있나요?
+  pm:
+    en: >-
+      In a flow you signed off, start something that takes more than a moment,
+      look away for ten seconds, and look back — can you tell whether it
+      worked, is still working, or failed?
+    ko: >-
+      승인한 플로우에서 시간이 조금 걸리는 작업을 시작한 뒤 10초쯤 눈을 떼었다가
+      다시 보세요 — 성공한 건지, 아직 진행 중인지, 실패한 건지 구분이 되나요?
 preReadingQuestions:
   - en: >-
       The article ties this heuristic to trust rather than to convenience. What

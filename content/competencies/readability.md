@@ -11,14 +11,20 @@ objective:
     대비, 크기, 줄 길이, 밀도 때문에 편하게 읽히지 않는 텍스트를 찾아내고,
     그것을 고칠 구체적인 변경 사항을 말할 수 있다.
 roleHint:
-  en: >-
-    Developers: look at the small print in screens you built — error messages,
-    table captions, form help text. PMs: reread the longest paragraph you
-    approved and ask what a reader in a hurry actually takes away from it.
-  ko: >-
-    개발자라면: 직접 만든 화면의 작은 글씨 — 오류 메시지, 표 설명, 입력 도움말
-    — 을 살펴보세요. PM이라면: 승인한 문안 중 가장 긴 문단을 다시 읽고, 바쁜
-    독자가 실제로 무엇을 건져 가는지 자문해 보세요.
+  developer:
+    en: >-
+      Look at the small print in screens you built — error messages, table
+      captions, form help text.
+    ko: >-
+      직접 만든 화면의 작은 글씨 — 오류 메시지, 표 설명, 입력 도움말 — 을
+      살펴보세요.
+  pm:
+    en: >-
+      Reread the longest paragraph you approved and ask what a reader in a
+      hurry actually takes away from it.
+    ko: >-
+      승인한 문안 중 가장 긴 문단을 다시 읽고, 바쁜 독자가 실제로 무엇을 건져
+      가는지 자문해 보세요.
 preReadingQuestions:
   - en: >-
       The article separates legibility, readability, and comprehension. Where

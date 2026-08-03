@@ -10,14 +10,20 @@ objective:
     한 제품 안에서 같은 일을 서로 다른 방식으로 처리하는 두 곳을 찾아내고, 둘 중
     어느 쪽으로 통일해야 하는지 말할 수 있다.
 roleHint:
-  en: >-
-    Developers: open two screens you built months apart and compare — does the
-    same action carry the same name and the same style in both? PMs: across the
-    features you signed off, check whether one concept has kept one name.
-  ko: >-
-    개발자라면: 몇 달 간격으로 만든 두 화면을 열어 비교해 보세요 — 같은 동작이
-    두 곳에서 같은 이름, 같은 모양인가요? PM이라면: 승인한 기능들 전반에서
-    하나의 개념이 하나의 이름을 지켜 왔는지 확인해 보세요.
+  developer:
+    en: >-
+      Open two screens you built months apart and compare — does the same
+      action carry the same name and the same style in both?
+    ko: >-
+      몇 달 간격으로 만든 두 화면을 열어 비교해 보세요 — 같은 동작이 두 곳에서
+      같은 이름, 같은 모양인가요?
+  pm:
+    en: >-
+      Across the features you signed off, check whether one concept has kept
+      one name.
+    ko: >-
+      승인한 기능들 전반에서 하나의 개념이 하나의 이름을 지켜 왔는지 확인해
+      보세요.
 preReadingQuestions:
   - en: >-
       Heuristic 4 covers consistency inside your own product and consistency

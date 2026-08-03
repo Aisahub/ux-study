@@ -18,20 +18,24 @@ objective:
     여기서 살펴보는 대상은 적혀 있는 발견 그 자체다 — 그 뒤에 있는 느낌도,
     그 발견이 가리키는 인터페이스도 아니다.
 roleHint:
-  en: >-
-    Developers: take the last review comment you left on somebody else's
-    interface and ask whether a stranger could act on it with you out of the
-    room. PMs: take a piece of feedback you gave on a design and rewrite it
-    naming the element and the heuristic. If no heuristic fits, what you gave
-    was a preference — which is worth knowing before it reaches the person who
-    has to act on it.
-  ko: >-
-    개발자라면: 다른 사람의 인터페이스에 마지막으로 남긴 리뷰 코멘트를 꺼내,
-    내가 그 자리에 없어도 모르는 사람이 그 코멘트대로 움직일 수 있을지 따져
-    보세요. PM이라면: 어떤 디자인에 남긴 피드백을, 어떤 요소가 어떤 휴리스틱을
-    어겼는지 짚는 문장으로 다시 써 보세요. 들어맞는 휴리스틱이 없다면 그것은
-    취향이었다는 뜻입니다 — 그 피드백을 받아 움직여야 하는 사람에게 닿기 전에
-    알아 두면 좋은 사실입니다.
+  developer:
+    en: >-
+      Take the last review comment you left on somebody else's interface and
+      ask whether a stranger could act on it with you out of the room.
+    ko: >-
+      다른 사람의 인터페이스에 마지막으로 남긴 리뷰 코멘트를 꺼내, 내가 그
+      자리에 없어도 모르는 사람이 그 코멘트대로 움직일 수 있을지 따져 보세요.
+  pm:
+    en: >-
+      Take a piece of feedback you gave on a design and rewrite it naming the
+      element and the heuristic. If no heuristic fits, what you gave was a
+      preference — which is worth knowing before it reaches the person who has
+      to act on it.
+    ko: >-
+      어떤 디자인에 남긴 피드백을, 어떤 요소가 어떤 휴리스틱을 어겼는지 짚는
+      문장으로 다시 써 보세요. 들어맞는 휴리스틱이 없다면 그것은 취향이었다는
+      뜻입니다 — 그 피드백을 받아 움직여야 하는 사람에게 닿기 전에 알아 두면
+      좋은 사실입니다.
 preReadingQuestions:
   - en: >-
       Evaluators are told to work alone, and not to see each other's results
