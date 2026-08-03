@@ -1,2 +1,3 @@
 export const PORT = 3100
-export const BASE_URL = `http://127.0.0.1:${PORT}`
+export const baseUrlFor = (port: number) => `http://127.0.0.1:${port}`
+export const BASE_URL = baseUrlFor(PORT)
