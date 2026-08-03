@@ -2,7 +2,7 @@
 slug: facilitator-neutrality
 name:
   en: Facilitator neutrality
-  ko: 진행자 중립
+  ko: 진행자 중립성
 definition:
   en: >-
     The person running the session withholding everything that would tell the

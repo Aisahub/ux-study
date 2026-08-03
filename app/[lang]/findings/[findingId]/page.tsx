@@ -43,10 +43,10 @@ const COPY: Record<
     description: '무엇이 잘못되는지',
     fix: '고치는 방법 제안',
     agreementCount: (n) => `동료 ${n}명이 동의했습니다`,
-    agree: '이 Finding에 동의합니다',
+    agree: '이 발견에 동의합니다',
     agreed: '동의했습니다',
-    ownFinding: '내가 쓴 Finding입니다 — 동의는 동료의 몫입니다.',
-    back: '전체 Finding',
+    ownFinding: '내가 쓴 발견입니다 — 동의는 동료의 몫입니다.',
+    back: '전체 발견',
   },
 }
 

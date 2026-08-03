@@ -18,8 +18,9 @@ justification:
     / nothing at all] instead. Making it undoable would let people try it
     without having to be sure first.
   ko: >-
-    [동작]은 되돌릴 수 없어서 대신 [확인 대화상자 / 아무것도]로 막아 두었습니다.
-    되돌릴 수 있게 만들면, 미리 확신하지 않고도 일단 해 볼 수 있게 됩니다.
+    [동작], 이건 되돌릴 수 없습니다. 지금 이를 막아 주는 것은
+    [확인 대화상자뿐입니다 / 아무것도 없습니다]. 되돌릴 수 있게
+    만들면, 미리 확신하지 않고도 일단 해 볼 수 있게 됩니다.
 competencies:
   - way-back-and-control
 source: https://www.nngroup.com/articles/user-control-and-freedom/

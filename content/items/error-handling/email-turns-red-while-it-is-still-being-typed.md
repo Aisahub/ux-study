@@ -15,7 +15,7 @@ artefact:
     has moved to the "Phone" box below. "Cancel" and "Save contact" sit at the
     foot throughout.
   ko: >-
-    공급처에 담당자를 추가하는 폼을 세 시점에서 보여 줍니다. 첫 번째에서는
+    공급처에 담당자를 추가하는 폼을 세 시점에 걸쳐 보여 줍니다. 첫 번째에서는
     공급처가 "누산타라 부품"이고, 커서는 "담당자 이메일" 칸에 있으며, 그 칸에는
     "ana" 세 글자만 들어 있고, 칸 아래에는 "name@company.com 형식의 이메일
     주소를 입력하세요"라는 빨간 줄이 있습니다. 두 번째에서는 같은 칸에

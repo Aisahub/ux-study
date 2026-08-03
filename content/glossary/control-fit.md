@@ -18,9 +18,10 @@ justification:
     one choice into [how many] steps. Showing them all at once would let the
     choice be made by looking rather than by opening.
   ko: >-
-    [컨트롤]은 사용자가 서로 견주어 봐야 하는 선택지 [몇 개]를 감추고 있어서,
-    한 번의 선택이 [몇] 단계가 됩니다. 전부 펼쳐 보여 주면 열어 보는 대신
-    눈으로 보고 고를 수 있습니다.
+    [컨트롤], 이건 사용자가 서로 견주어 봐야 하는 선택지를 감추고
+    있습니다. 감춰 둔 선택지는 [몇 개]이고, 그래서 한 번의 선택이
+    [몇] 단계가 됩니다. 전부 펼쳐 보여 주면 열어 보는 대신 눈으로
+    보고 고를 수 있습니다.
 competencies:
   - form-burden
 source: https://www.nngroup.com/articles/dropdown-list/

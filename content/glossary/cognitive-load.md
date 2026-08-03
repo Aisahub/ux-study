@@ -17,8 +17,9 @@ justification:
     Removing [what] would lower the cognitive load without taking away anything
     they actually need.
   ko: >-
-    [화면]은 행동하기 전에 한꺼번에 너무 많은 것을 붙들고 있으라고 요구합니다.
-    [무엇]을 덜어내면 필요한 정보는 그대로 두고 인지 부하만 낮출 수 있습니다.
+    [화면], 이건 읽는 사람에게 행동하기 전에 한꺼번에 너무 많은 것을
+    붙들고 있으라고 요구합니다. 여기서 덜어낼 것은 [무엇]입니다.
+    그러면 필요한 정보는 그대로 두고 인지 부하만 낮출 수 있습니다.
 competencies:
   - readability
   - form-burden
