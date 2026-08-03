@@ -53,7 +53,7 @@ const COPY: Record<
     role: { learner: '학습자', maintainer: '운영자' },
     languagePreference: '사용 언어',
     languageName: { en: '영어', ko: '한국어' },
-    report: '셀프 감사 보고서',
+    report: '자가 점검 리포트',
     reportSubmitted: (date) => `${date} 제출`,
     reportDraft: '작성 중',
     reportNone: '시작 전',

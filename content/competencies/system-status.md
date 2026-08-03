@@ -35,7 +35,7 @@ preReadingQuestions:
       The article ties this heuristic to trust rather than to convenience. What
       does it say a user concludes about a system that goes quiet?
     ko: >-
-      이 글은 이 원칙을 편의가 아니라 신뢰의 문제로 다룬다. 조용해진 시스템을
+      이 글은 이 휴리스틱을 편의가 아니라 신뢰의 문제로 다룬다. 조용해진 시스템을
       두고 사용자가 어떤 결론을 내린다고 말하는가?
   - en: >-
       Feedback is described as needing to be appropriate, not merely present.

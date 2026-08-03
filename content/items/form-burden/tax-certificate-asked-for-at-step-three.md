@@ -16,7 +16,7 @@ artefact:
     original, and a "Choose file" button. "Submit invoice" sits below it in the
     grey this tool gives a control that cannot yet be used.
   ko: >-
-    사내 외주 대금 지급 도구의 청구 제출 흐름을 세 시점으로 보여 줍니다. 첫째,
+    사내 외주 대금 지급 도구의 청구 제출 플로우를 세 시점으로 보여 줍니다. 첫째,
     화면이 열린 모습입니다 — "청구서 제출"이라는 제목, "1/3단계 — 청구 내역"이라는
     작은 줄, 그리고 청구 번호·기간·금액을 받는 칸 셋과 "다음" 버튼이 있습니다. 이
     화면에는 제출에 무엇이 필요한지 적혀 있지 않습니다. 둘째, 그다음 단계입니다 —
@@ -101,7 +101,7 @@ prompt:
     Contractors give up on this flow at the last step more often than anywhere
     else in the tool. Which change fixes that?
   ko: >-
-    이 도구에서 외주 인력이 가장 자주 손을 놓는 지점은 이 흐름의 마지막 단계입니다.
+    이 도구에서 외주 인력이 가장 자주 손을 놓는 지점은 이 플로우의 마지막 단계입니다.
     무엇을 바꿔야 그것이 없어질까요?
 options:
   en:

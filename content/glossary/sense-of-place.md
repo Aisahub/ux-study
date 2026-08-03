@@ -18,9 +18,9 @@ justification:
     whether they are nearly done or barely started. Stating the position would
     let them decide whether to carry on.
   ko: >-
-    [단계]는 전체 몇 단계 중 몇 번째인지 말해 주지 않아서, 사용자는 거의 끝난
-    건지 이제 시작인지 알 수 없습니다. 위치를 밝혀 주면 계속할지 말지 스스로
-    정할 수 있습니다.
+    [단계], 이건 전체 몇 단계 중 몇 번째인지 말해 주지 않아서,
+    사용자는 거의 끝난 건지 이제 시작인지 알 수 없습니다. 위치를 밝혀
+    주면 계속할지 말지 스스로 정할 수 있습니다.
 competencies:
   - way-back-and-control
 source: https://www.nngroup.com/articles/breadcrumbs/

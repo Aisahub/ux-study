@@ -65,18 +65,18 @@ const COPY: Record<
       'The Gate Quizzes here are ready; the page to practise them on is still being written. Nothing is broken and nothing is lost — the Stage will finish once it arrives.',
   },
   ko: {
-    locked: '이 단계의 퀴즈를 모두 통과하면 감사가 열립니다.',
+    locked: '이 단계의 퀴즈를 모두 통과하면 자가 점검이 열립니다.',
     lockedBack: '학습 개요로',
     revealHeading: '심어 둔 것들',
     revealIntro:
-      '심어 둔 결함 전부와, 여러분의 Finding이 그중 무엇을 가리켰는지입니다. 몇 개를 놓치는 건 정상입니다 — 중요한 건 들여다보는 일이었습니다.',
+      '심어둔 결함 전부와, 내 발견이 그중 무엇을 가리켰는지입니다. 몇 개를 놓치는 건 정상입니다 — 중요한 건 들여다보는 일이었습니다.',
     found: '발견',
     missed: '놓침',
-    yourFindings: '나의 Finding',
+    yourFindings: '나의 발견',
     source: '페이지 소스 보기',
     issueHeading: '선택: 고친 것을 보여 주기',
     issueExplanation:
-      'Finding 하나를 골라 실제로 고치고, 그 변경을 보여 주는 링크를 붙여 넣으세요 — 코드를 쓴다면 pull request, 아니라면 고쳐진 페이지의 스크린샷이면 충분합니다. 수료에는 어떤 영향도 없습니다.',
+      '발견 하나를 골라 실제로 고치고, 그 변경을 보여 주는 링크를 붙여 넣으세요 — 코드를 쓴다면 pull request, 아니라면 고쳐진 페이지의 스크린샷이면 충분합니다. 수료에는 어떤 영향도 없습니다.',
     issueSave: '링크 저장',
     issueSaved: '저장되었습니다.',
     complete: (stage) => `${stage}단계 수료 — 퀴즈 전부 통과, 보고서 제출 완료.`,
@@ -84,7 +84,7 @@ const COPY: Record<
     // already the Stage — `2단계 수료` sits a few lines below — and one word
     // cannot mean both in one view.
     defectStep: (step, of) => `${of}개 화면 중 ${step}번째`,
-    noSubject: '이 단계에는 아직 감사할 페이지가 없습니다.',
+    noSubject: '이 단계에는 아직 점검할 페이지가 없습니다.',
     noSubjectWhy:
       '이 단계의 퀴즈는 준비되어 있고, 연습할 페이지는 아직 작성 중입니다. 잘못된 것도, 사라진 것도 없습니다 — 페이지가 준비되면 이 단계를 마칠 수 있습니다.',
   },

@@ -13,7 +13,7 @@ import { loadContent } from '../lib/content'
  * anything a visitor can observe over HTTP yet.
  */
 
-const { config, competencies, glossary } = loadContent(join(__dirname, '..', 'content'))
+const { config, competencies, glossary, briefs, items } = loadContent(join(__dirname, '..', 'content'))
 
 test('every Competency the curriculum declares is authored', () => {
   // This was Stage 1's list alone while the later Stages were declared and
@@ -119,6 +119,26 @@ test('Learner-facing copy avoids the words CONTEXT.md rules out', () => {
       [`${entry.slug} definition`, `${entry.definition.en} ${entry.definition.ko}`],
       [`${entry.slug} justification`, `${entry.justification.en} ${entry.justification.ko}`],
     ]),
+    // The briefs and the item pools were outside this scan until ERR-214,
+    // which is how "설명은 채점자가 아니라…" reached the Self-Audit brief — a
+    // grader, in a programme whose Maintainer judges nothing. The check was
+    // right and pointed at two of the four surfaces a Learner reads.
+    ...briefs.map((brief): [string, string] => [`brief ${brief.slug}`, JSON.stringify(brief.frontmatter)]),
+    // Screens are excluded, as everywhere else: their copy is the defective
+    // specimen a Learner judges, and a fictional product may lawfully call
+    // somebody a 학생 on a screen about a school.
+    ...Object.values(items)
+      .flat()
+      .flatMap((item): [string, string][] => [
+        [`${item.slug} artefact`, `${item.artefact.en} ${item.artefact.ko}`],
+        [`${item.slug} prompt`, `${item.prompt.en} ${item.prompt.ko}`],
+        ...(['en', 'ko'] as const).flatMap((lang) =>
+          item.options[lang].map((option, index): [string, string] => [
+            `${item.slug} options.${lang}[${index}]`,
+            `${option.text} ${option.reason}`,
+          ]),
+        ),
+      ]),
   ]
 
   for (const [where, text] of copy) {

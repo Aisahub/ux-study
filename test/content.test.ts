@@ -501,6 +501,76 @@ test('an artefact written in one language only fails the build', () => {
   expectProblem(root, /washed-out-confirm\.md: artefact is missing its ko language variant/)
 })
 
+/**
+ * The mistake is made the way it happens for real: the Korean is wrapped
+ * between a word and the particle that belongs to it. In a folded scalar the
+ * break becomes a space, so the source looks like ordinary wrapping and the
+ * rendered sentence carries a typo. Only Korean can catch this — the English
+ * sibling wraps in the same place and is fine.
+ */
+test('Korean wrapped between a word and its particle fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'items/visual-hierarchy/washed-out-confirm.md',
+    edit(
+      ITEM_ONE,
+      '  ko: 확정 버튼은 흐릿하고 업그레이드 배너는 선명한 주문 페이지.',
+      '  ko: >-\n    확정 버튼은 흐릿하고 업그레이드 배너는 선명한 주문 페이지\n    입니다.',
+    ),
+  )
+  expectProblem(root, /washed-out-confirm\.md: artefact\.ko splits a particle from its word — "지 입니다"/)
+})
+
+/**
+ * The justification is said out loud, so a slot cannot be followed by a
+ * particle that agrees with the word filling it. The English template above
+ * the Korean one has the same slot and no such problem.
+ */
+test('a Glossary slot followed by a particle that agrees with its filler fails the build', () => {
+  const root = scaffold()
+  write(
+    root,
+    'glossary/contrast.md',
+    edit(
+      GLOSSARY_CONTRAST,
+      '  ko: 주요 동작이 주요 동작으로 읽히지 않습니다.',
+      "  ko: '[요소]는 주요 동작으로 읽히지 않습니다.'",
+    ),
+  )
+  expectProblem(root, /contrast\.md: justification\.ko puts "는" straight after \[요소\]/)
+})
+
+/** A slot that ends in a fixed noun settles the agreement itself, and loads. */
+test('a Glossary slot ending in a fixed noun may carry a particle', () => {
+  const root = scaffold()
+  write(
+    root,
+    'glossary/contrast.md',
+    edit(
+      GLOSSARY_CONTRAST,
+      '  ko: 주요 동작이 주요 동작으로 읽히지 않습니다.',
+      "  ko: '[읽는 사람]이 먼저 보는 자리가 주요 동작으로 읽히지 않습니다.'",
+    ),
+  )
+  expect(() => loadContent(root)).not.toThrow()
+})
+
+/** The bound nouns Korean does space are not particles, and must still load. */
+test('Korean spacing a bound noun such as 뿐 or 만큼 loads', () => {
+  const root = scaffold()
+  write(
+    root,
+    'items/visual-hierarchy/washed-out-confirm.md',
+    edit(
+      ITEM_ONE,
+      '  ko: 확정 버튼은 흐릿하고 업그레이드 배너는 선명한 주문 페이지.',
+      '  ko: 선명한 것은 배너뿐이고, 확정 버튼은 알아볼 수 없을 만큼 흐립니다.',
+    ),
+  )
+  expect(() => loadContent(root)).not.toThrow()
+})
+
 test('a quiz item that asks nothing fails the build', () => {
   const root = scaffold()
   write(
@@ -557,6 +627,30 @@ test('a Stage declared but wholly unauthored loads: no definitions, no pools', (
   expect(competenciesOfStage(content.config, 2)).toEqual(['system-status', 'form-burden'])
   expect(content.competencies.map((competency) => competency.slug)).toEqual(['visual-hierarchy'])
   expect(content.items['form-burden']).toBeUndefined()
+})
+
+test('a Stage declared but unauthored has no subject — the state both audit surfaces are built to say out loud', () => {
+  // #61 requires that a Stage the curriculum declares but nobody has authored
+  // a subject for is said in words — on the Learner's audit surface and in the
+  // Maintainer's content page — rather than left as a screen with nothing on
+  // it. That rule was tested over HTTP in surfaces.test.ts, against Stage 3,
+  // for as long as Stage 3 was the unauthored one.
+  //
+  // It moved here when Stage 3 gained its subject (#77). config.md declares
+  // three Stages and all three now have one, so no request can produce the
+  // state and an HTTP test for it could only ever be green for the wrong
+  // reason. A fixture root is the one place it can still be built, and this is
+  // what both surfaces branch on: `null`, rather than a throw, an empty page,
+  // or a subject with no defects — each of those sends a surface down a
+  // different path than the one that speaks.
+  const root = scaffold()
+  write(root, 'config.md', CONFIG_TWO_STAGES)
+  const content = loadContent(root)
+
+  expect(practicePageOf(content, 2)).toBeNull()
+  // Against an authored Stage in the same root, so that null means "nobody has
+  // written this yet" and not "this loader answers null".
+  expect(practicePageOf(content, 1)).not.toBeNull()
 })
 
 test('a Stage declared out of order, or twice, fails the build', () => {

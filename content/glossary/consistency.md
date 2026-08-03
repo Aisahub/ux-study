@@ -16,8 +16,9 @@ justification:
     differently. One of them should win, and [which] is the one that matches the
     rest of the product.
   ko: >-
-    [요소 A]와 [요소 B]는 같은 일을 하는데 이름이나 모양이 다릅니다.
-    둘 중 하나로 통일해야 하며, 제품의 나머지 부분과 맞는 쪽은 [어느 쪽]입니다.
+    [요소 A], 그리고 [요소 B]. 이 둘은 같은 일을 하는데
+    이름이나 모양이 다릅니다. 둘 중 하나로 통일해야 하며, 제품의
+    나머지 부분과 맞는 쪽은 [어느 쪽]입니다.
 competencies:
   - consistency
 source: https://www.nngroup.com/articles/ten-usability-heuristics/

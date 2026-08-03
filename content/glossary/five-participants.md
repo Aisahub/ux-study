@@ -11,9 +11,9 @@ definition:
     after the first round's findings are fixed.
   ko: >-
     한 사용자 집단을 대상으로 한 정성 조사에서 흔한 문제 대부분을 드러내는 데
-    필요한 인원. 조사를 아예 할지 말지를 정하는 바닥선이지, 알아낼 수 있는 것의
-    천장이 아니다 — 예산은 첫 조사에서 나온 것을 고친 뒤 두 번째를 도는 데 쓰는
-    편이 더 멀리 간다.
+    필요한 인원. 조사를 아예 할지 말지를 정하는 하한선이지, 알아낼 수 있는 것의
+    상한선이 아니다 — 같은 예산이라면 첫 조사에서 나온 것을 고친 뒤 두 번째
+    조사를 하는 편이 더 남는다.
 justification:
   en: >-
     We have been holding this until we can line up [how many] people. Five from

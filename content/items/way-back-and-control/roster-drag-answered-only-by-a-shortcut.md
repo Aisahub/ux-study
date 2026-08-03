@@ -14,17 +14,17 @@ artefact:
     instead, the strip of controls is unchanged, and a dark message under the
     table reads "Roster updated" with nothing in it to press.
   ko: >-
-    근무 편성 도구의 시프트 표 두 상태입니다. 둘 다 제목은 "시프트 편성 — 32주차"
-    이고, 컨트롤 줄도 같습니다 — "인쇄", "내보내기", 그리고 오른쪽 끝으로 밀려 있는
+    근무 편성 도구의 근무표 두 상태입니다. 둘 다 제목은
+    "시프트 편성 — 32주차"이고, 컨트롤 줄도 같습니다 — "인쇄", "내보내기", 그리고 오른쪽 끝으로 밀려 있는
     파란 "게시". 그 아래 표는 직원, 월, 화, 수, 목 순서입니다. 첫 번째 상태에서
     정유나는 화요일에 09:00–17:00 하나뿐이고, 강태오는 월요일에 13:00–21:00,
-    목요일에 09:00–17:00이 있습니다. 두 번째 상태에서는 정유나의 시프트가 수요일로
+    목요일에 09:00–17:00이 있습니다. 두 번째 상태에서는 정유나의 근무가 수요일로
     옮겨져 있고, 컨트롤 줄은 그대로이며, 표 아래 짙은 색 메시지에 "편성이
     갱신되었습니다"라고만 적혀 있을 뿐 누를 것은 없습니다.
 sequence:
   - caption:
       en: The roster before Jung's Tuesday shift is dragged onto Wednesday
-      ko: 정유나의 화요일 시프트를 수요일로 끌어다 놓기 전
+      ko: 정유나의 화요일 근무를 수요일로 끌어다 놓기 전
     screen:
       en: |-
         <div class="screen">
@@ -93,7 +93,7 @@ prompt:
     A dragged shift can be put back with Ctrl+Z, and always could. Which change
     should this roster get?
   ko: >-
-    끌어다 놓은 시프트는 Ctrl+Z로 되돌릴 수 있고, 처음부터 그랬습니다. 이 편성
+    끌어다 놓은 근무는 Ctrl+Z로 되돌릴 수 있고, 처음부터 그랬습니다. 이 편성
     화면에 어떤 변화가 필요할까요?
 options:
   en:
@@ -128,5 +128,5 @@ options:
       correct: true
     - text: 끌어다 놓을 때마다 확인을 받고 나서 반영합니다
       reason: >-
-        애초에 시프트가 엉뚱한 요일에 떨어지는 일 자체가 없어집니다.
+        애초에 근무가 엉뚱한 요일에 떨어지는 일 자체가 없어집니다.
 ---

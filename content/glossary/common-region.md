@@ -16,8 +16,9 @@ justification:
     [Elements] belong together but nothing groups them. Putting them inside one
     bordered region would make the relationship visible without moving anything.
   ko: >-
-    [요소들]은 한 묶음인데 이를 묶어주는 게 아무것도 없습니다.
-    하나의 테두리 영역 안에 넣으면 위치를 옮기지 않고도 관계가 드러납니다.
+    [요소들], 이건 한 묶음인데 이 묶음을 묶어 주는 것이 아무것도
+    없습니다. 하나의 테두리 영역 안에 넣으면 위치를 옮기지 않고도
+    관계가 드러납니다.
 competencies:
   - visual-hierarchy
 source: https://www.nngroup.com/articles/visual-hierarchy-ux-definition/

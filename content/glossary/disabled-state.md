@@ -18,9 +18,9 @@ justification:
     conclude the product is broken. Dimming it and stating the condition that
     enables it would fix both problems.
   ko: >-
-    [요소]는 비활성 상태인데 그렇게 보이지 않아서, 사용자는 눌러본 뒤
-    제품이 고장 났다고 판단하게 됩니다. 흐리게 처리하고 언제 활성화되는지
-    함께 알려주면 두 문제가 같이 해결됩니다.
+    [요소], 이건 비활성 상태인데 그렇게 보이지 않아서, 사용자는
+    눌러본 뒤 제품이 고장 났다고 판단하게 됩니다. 흐리게 처리하고
+    무엇을 채워야 켜지는지 함께 알려 주면 두 문제가 같이 해결됩니다.
 competencies:
   - perceived-clickability
 source: https://www.nngroup.com/articles/button-states-communicate-interaction/

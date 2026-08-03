@@ -1,0 +1,251 @@
+/*
+ * Styles for both language variants of the Stage 3 subject. One file, linked by
+ * both, so the variants cannot drift visually.
+ *
+ * Stage 3's planted defects are all in the words — which term was chosen, what
+ * a control's name promises, what a task sentence asks for. None of them is in
+ * this file, and none of them is visual. That is the Stage: a defect you can
+ * see is a defect an earlier Stage already taught.
+ *
+ * So this stylesheet is held to the bar the subject has to clear on every axis
+ * the manifest does not claim: text contrast at or above 4.5:1 and controls at
+ * or above 3:1, a visible focus ring on everything focusable, targets no
+ * smaller than 44px, and one column that reflows on a phone with no sideways
+ * scroll. An accidental accessibility failure here would be indistinguishable
+ * from a planted one, which would make the reference answer wrong rather than
+ * merely incomplete (ADR-0011).
+ *
+ * Nothing here labels anything.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f4f5f7;
+  color: #16202c;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+/*
+ * The stated user (ADR-0011). It is part of the brief and not part of the
+ * artefact, so it is drawn the way Stage 2 draws its audit tools — a dark band
+ * in its own vocabulary, unlike anything below it — and carries no
+ * `data-element`, which is what makes it unselectable and therefore impossible
+ * to file a Finding against.
+ *
+ * Unlike Stage 2's bar it does not stick. It holds prose rather than controls,
+ * and a paragraph pinned to the top of a phone would spend the screen the page
+ * itself needs. It is read once, then scrolls away.
+ */
+.reader-note {
+  background: #111827;
+  color: #f9fafb;
+  padding: 16px 0 18px;
+}
+
+/*
+ * The band is full-bleed and its text is not: each line inside it sits in the
+ * same 620px box the artefact below uses, so on a wide screen the two columns
+ * start at the same place. A brief indented differently from the page it is
+ * about reads as a fault in the page, which on this Stage is the one reading
+ * we cannot afford.
+ */
+.reader-note > * {
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 18px;
+}
+
+.reader-note-kicker {
+  margin-top: 0;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+}
+
+.reader-note-body {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.reader-note-foot {
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+/* The artefact. */
+
+.page {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 24px 18px 56px;
+}
+
+.page-head {
+  margin-bottom: 18px;
+}
+
+.brand {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #4b5563;
+}
+
+.page-head h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.lede {
+  margin: 0;
+  font-size: 17px;
+  color: #29323d;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #dfe3e8;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.card p {
+  margin: 0 0 12px;
+}
+
+.card p:last-child {
+  margin-bottom: 0;
+}
+
+.card-heading {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.steps li {
+  margin-bottom: 8px;
+}
+
+.steps li:last-child {
+  margin-bottom: 0;
+}
+
+.card--action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.btn {
+  font: inherit;
+  font-weight: 700;
+  min-height: 44px;
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.under-button {
+  margin: 0;
+  font-size: 15px;
+  color: #3d4753;
+}
+
+.quote {
+  margin: 0 0 12px;
+  padding: 14px 16px;
+  background: #f4f6f9;
+  border-left: 4px solid #7b8794;
+  border-radius: 0 8px 8px 0;
+}
+
+.quote p {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.quote footer {
+  font-size: 14px;
+  color: #3d4753;
+}
+
+.contact {
+  max-width: 620px;
+  margin: 18px 0 0;
+  font-size: 15px;
+  color: #3d4753;
+}
+
+.contact a {
+  color: #1a4bc4;
+}
+
+/*
+ * A phone is the situation the stated user is in, so it is the width this page
+ * is authored for rather than the one it degrades to. Nothing rearranges here;
+ * the page is one column at every width and only the padding and the two
+ * largest steps come down.
+ */
+@media (max-width: 420px) {
+  .page {
+    padding: 20px 14px 48px;
+  }
+
+  /* Kept equal to .page's, so the brief and the page start on the same line. */
+  .reader-note > * {
+    padding: 0 14px;
+  }
+
+  .page-head h1 {
+    font-size: 23px;
+  }
+
+  .lede {
+    font-size: 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  /* Full width so the target is the whole line a thumb aims at. */
+  .btn {
+    width: 100%;
+  }
+}
