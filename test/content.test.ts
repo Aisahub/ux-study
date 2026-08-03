@@ -629,6 +629,30 @@ test('a Stage declared but wholly unauthored loads: no definitions, no pools', (
   expect(content.items['form-burden']).toBeUndefined()
 })
 
+test('a Stage declared but unauthored has no subject — the state both audit surfaces are built to say out loud', () => {
+  // #61 requires that a Stage the curriculum declares but nobody has authored
+  // a subject for is said in words — on the Learner's audit surface and in the
+  // Maintainer's content page — rather than left as a screen with nothing on
+  // it. That rule was tested over HTTP in surfaces.test.ts, against Stage 3,
+  // for as long as Stage 3 was the unauthored one.
+  //
+  // It moved here when Stage 3 gained its subject (#77). config.md declares
+  // three Stages and all three now have one, so no request can produce the
+  // state and an HTTP test for it could only ever be green for the wrong
+  // reason. A fixture root is the one place it can still be built, and this is
+  // what both surfaces branch on: `null`, rather than a throw, an empty page,
+  // or a subject with no defects — each of those sends a surface down a
+  // different path than the one that speaks.
+  const root = scaffold()
+  write(root, 'config.md', CONFIG_TWO_STAGES)
+  const content = loadContent(root)
+
+  expect(practicePageOf(content, 2)).toBeNull()
+  // Against an authored Stage in the same root, so that null means "nobody has
+  // written this yet" and not "this loader answers null".
+  expect(practicePageOf(content, 1)).not.toBeNull()
+})
+
 test('a Stage declared out of order, or twice, fails the build', () => {
   const root = scaffold()
   write(root, 'config.md', edit(CONFIG_TWO_STAGES, '  - stage: 2', '  - stage: 1'))

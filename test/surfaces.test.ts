@@ -534,21 +534,43 @@ test('the audit entry names the Stage the Learner is on', async () => {
   expect(next.headers.get('location')).toContain('/en/audit/2')
 })
 
-test('a declared Stage with no authored subject says so rather than rendering nothing', async () => {
-  const email = freshLearner()
-  const cookie = await sessionCookieFor(email)
+/**
+ * This replaces an HTTP test that fetched `/en/audit/3` and asserted the "no
+ * page to audit yet" copy, using Stage 3 because Stage 3 was the unauthored
+ * one. Stage 3 gained its subject in #77 and config.md declares three Stages,
+ * so that state now has no HTTP surface: the assertion could only have been
+ * kept green by weakening it, which is the shape of a test that has stopped
+ * containing its hazard.
+ *
+ * The behaviour it guarded is not gone and was not deleted. `page.tsx` still
+ * answers a missing subject in words before it checks the Gate Quizzes (#61),
+ * the Maintainer's content page still lists the Stages nobody has authored,
+ * and content.test.ts now pins the `null` both of them branch on — at the one
+ * layer where a declared-but-unauthored Stage can still be constructed.
+ *
+ * What is left for this file is the fact that killed the old test, which
+ * nothing else watches: every declared Stage has a subject. Declare a fourth
+ * Stage, or add a Stage with no `practice-page/stage-N/`, and this goes red
+ * the same day — and the HTTP assertion above is the one to bring back, aimed
+ * at that Stage.
+ */
+test('every declared Stage has an authored subject, so no Learner meets the empty audit surface', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
 
-  // Stage 3, the one still unauthored: Stage 2 gained its subject in #70, and
-  // this state has to stay reachable while any Stage is still being written.
-  const response = await fetch(`${BASE_URL}/en/audit/3`, { headers: { cookie } })
-  const text = visibleText(await response.text())
+  for (const { stage } of config.stages) {
+    expect(practicePageOf(content, stage)).not.toBeNull()
 
-  expect(response.status).toBe(200)
-  expect(text).toContain('This Stage has no page to audit yet')
-  // Which emptiness it is, not merely that it is empty.
-  expect(text).toContain('still being written')
-  // And not the locked message: the quizzes are not what is missing here.
-  expect(text).not.toContain('unlocks once every Gate Quiz')
+    // The server's own copy of the content agrees, and each Stage answers with
+    // the state a Learner who has passed nothing is owed — the locked message,
+    // which is a different sentence from the empty one and is what proves the
+    // surface got a subject rather than nothing.
+    const response = await fetch(`${BASE_URL}/en/audit/${stage}`, { headers: { cookie } })
+    const text = visibleText(await response.text())
+
+    expect(response.status).toBe(200)
+    expect(text).toContain('The audit unlocks once every Gate Quiz in this Stage is passed')
+    expect(text).not.toContain('This Stage has no page to audit yet')
+  }
 })
 
 test('a Stage the curriculum does not declare is not an audit surface', async () => {
