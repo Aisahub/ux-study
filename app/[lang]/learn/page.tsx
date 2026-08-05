@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { LinkPending } from '@/app/[lang]/pending'
 import { requireSession } from '@/lib/auth'
 import { competenciesOfStage } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
@@ -392,9 +393,10 @@ export default async function Learn({
                     </Link>
                     <Link
                       href={`/${lang}/learn/${competency.slug}/quiz`}
-                      className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none @min-[780px]:w-auto"
+                      className="press relative inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill @min-[780px]:w-auto"
                     >
                       {copy.openQuiz}
+                      <LinkPending />
                     </Link>
                   </div>
                 </div>
@@ -444,9 +446,10 @@ export default async function Learn({
               {(stage1.allPassed || stage1.reportSubmitted) && (
                 <Link
                   href={`/${lang}/audit`}
-                  className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill transition-[filter] hover:brightness-90 motion-reduce:transition-none"
+                  className="press relative inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill"
                 >
                   {copy.capstoneOpen}
+                  <LinkPending />
                 </Link>
               )}
             </div>

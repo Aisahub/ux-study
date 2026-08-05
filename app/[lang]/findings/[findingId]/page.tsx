@@ -4,6 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 
 import { and, eq, isNotNull, sql } from 'drizzle-orm'
 
+import { SubmitButton } from '@/app/[lang]/pending'
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
@@ -21,6 +22,7 @@ const COPY: Record<
     fix: string
     agreementCount: (n: number) => string
     agree: string
+    agreeing: string
     agreed: string
     ownFinding: string
     back: string
@@ -33,6 +35,7 @@ const COPY: Record<
     fix: 'Proposed fix',
     agreementCount: (n) => (n === 1 ? '1 colleague agreed' : `${n} colleagues agreed`),
     agree: 'I agree with this Finding',
+    agreeing: 'Recording…',
     agreed: 'You agreed',
     ownFinding: 'Your own Finding — agreement is for colleagues.',
     back: 'All Findings',
@@ -44,6 +47,7 @@ const COPY: Record<
     fix: '고치는 방법 제안',
     agreementCount: (n) => `동료 ${n}명이 동의했습니다`,
     agree: '이 발견에 동의합니다',
+    agreeing: '기록하는 중…',
     agreed: '동의했습니다',
     ownFinding: '내가 쓴 발견입니다 — 동의는 동료의 몫입니다.',
     back: '전체 발견',
@@ -152,9 +156,9 @@ export default async function FindingPage({
           <span className="font-medium text-green-700 dark:text-green-400">{copy.agreed}</span>
         ) : (
           <form action={agree}>
-            <button type="submit" className="font-medium underline underline-offset-4">
+            <SubmitButton pendingLabel={copy.agreeing} className="font-medium underline underline-offset-4">
               {copy.agree}
-            </button>
+            </SubmitButton>
           </form>
         )}
       </section>

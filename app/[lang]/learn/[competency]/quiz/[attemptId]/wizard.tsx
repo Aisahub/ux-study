@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 
+import { Spinner } from '@/app/[lang]/pending'
 import type { Language } from '@/lib/language'
 
 import { saveDraft, submitAttempt } from '../actions'
@@ -355,13 +356,29 @@ export function QuizWizard({
                 {copy.forward}
               </button>
             ) : (
+              // Two reasons this button refuses a press, and they may not look
+              // alike. Held back for unanswered items it is faded, because it
+              // is genuinely not available yet. Scoring, it is at full
+              // strength with a turning ring: the work is under way, and a
+              // control that fades the instant it is pressed is read as having
+              // died rather than as having started.
               <button
                 type="button"
                 disabled={pending || unanswered > 0}
+                aria-busy={pending}
                 onClick={() => startTransition(() => submitAttempt(attemptId, lang, choices))}
-                className="rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white disabled:opacity-40"
+                className={`rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white ${
+                  pending ? '' : 'disabled:opacity-40'
+                }`}
               >
-                {pending ? copy.submitting : copy.submit}
+                {pending ? (
+                  <span className="inline-flex items-center gap-2.5">
+                    <Spinner />
+                    {copy.submitting}
+                  </span>
+                ) : (
+                  copy.submit
+                )}
               </button>
             )}
             {last && unanswered > 0 && (

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { LinkPending } from '@/app/[lang]/pending'
 import { requireSession } from '@/lib/auth'
 import { competenciesOfStage, stageOf } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
@@ -196,7 +197,7 @@ export default async function CompetencyPage({
       <nav className="px-1.5 pb-3.5">
         <Link
           href={`/${lang}/learn`}
-          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+          className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
         >
           <span aria-hidden>←</span>
           {copy.back}
@@ -365,13 +366,14 @@ export default async function CompetencyPage({
             </p>
             <Link
               href={`/${lang}/learn/${slug}/quiz`}
-              className="mt-5.5 flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+              className="press relative mt-5.5 flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
             >
               {copy.quizStart(quiz.attempts)}
               {/* body-sm, not the label step: this detail is set regular, and
                   label is a 700 step — pairing it with font-normal renders a
                   size and weight the scale does not name. */}
               <span className="text-body-sm font-normal opacity-70">{copy.items(drawSize)}</span>
+              <LinkPending />
             </Link>
           </section>
         )}

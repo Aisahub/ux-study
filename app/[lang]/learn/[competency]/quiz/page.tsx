@@ -9,6 +9,7 @@ import { stageOf } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
+import { SubmitButton } from '@/app/[lang]/pending'
 import { restartAttempt, startAttempt } from './actions'
 
 export const dynamic = 'force-dynamic'
@@ -21,6 +22,8 @@ const COPY: Record<
     start: string
     continueOpen: string
     retry: string
+    /** What the gate's one button says while the draw is being made and written. */
+    drawing: string
     history: string
     submittedOn: (date: string, score: number, draw: number) => string
     passed: string
@@ -38,6 +41,7 @@ const COPY: Record<
     start: 'Start',
     continueOpen: 'Continue the open attempt',
     retry: 'Try again',
+    drawing: 'Drawing…',
     restart: 'Start over with new items',
     restartNote: 'Your open attempt has not been scored, so nothing is lost by starting again.',
     history: 'Your attempts',
@@ -54,6 +58,7 @@ const COPY: Record<
     start: '시작',
     continueOpen: '진행 중인 시도 이어서 하기',
     retry: '다시 도전',
+    drawing: '문항 뽑는 중…',
     restart: '새 문항으로 다시 시작',
     restartNote: '진행 중인 시도는 아직 채점되지 않았으므로, 다시 시작해도 잃는 것은 없습니다.',
     history: '시도 기록',
@@ -121,7 +126,7 @@ export default async function QuizStart({
       <nav className="px-1.5 pb-3.5">
         <Link
           href={`/${lang}/learn/${slug}`}
-          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+          className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
         >
           <span aria-hidden>←</span>
           {copy.back}
@@ -146,13 +151,18 @@ export default async function QuizStart({
         */}
         <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
           <p className="max-w-measure text-body">{copy.rules(drawSize, passThreshold)}</p>
+          {/* Both buttons report their own flight. This one spends a draw, an
+              insert and a redirect before its next screen exists, and until
+              2026-08-05 it spent all of that looking untouched — which is the
+              defect this platform's fourth Competency teaches, on the screen
+              that gates it. */}
           <form action={start}>
-            <button
-              type="submit"
+            <SubmitButton
+              pendingLabel={copy.drawing}
               className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
             >
               {open ? copy.continueOpen : attempts.length > 0 ? copy.retry : copy.start}
-            </button>
+            </SubmitButton>
           </form>
           {open && (
             <>
@@ -160,9 +170,9 @@ export default async function QuizStart({
                   white and drops below AA on the sand field. */}
               <p className="mt-4.5 max-w-measure text-body-sm">{copy.restartNote}</p>
               <form action={restart}>
-                <button type="submit" className="mt-2 text-title font-bold text-oxblood">
+                <SubmitButton pendingLabel={copy.drawing} className="mt-2 text-title font-bold text-oxblood">
                   {copy.restart}
-                </button>
+                </SubmitButton>
               </form>
             </>
           )}

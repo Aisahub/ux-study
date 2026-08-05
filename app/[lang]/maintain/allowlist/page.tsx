@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { asc, eq } from 'drizzle-orm'
 
+import { SubmitButton } from '@/app/[lang]/pending'
 import { db, schema } from '@/db'
 import { requireMaintainer } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
@@ -21,7 +22,9 @@ const COPY: Record<
     addedBy: string
     addedOn: string
     add: string
+    adding: string
     remove: string
+    removing: string
     removeEntry: (pattern: string) => string
     addPlaceholder: string
     nobodyYet: string
@@ -38,7 +41,9 @@ const COPY: Record<
     addedBy: 'added by',
     addedOn: 'on',
     add: 'Add',
+    adding: 'Adding…',
     remove: 'Remove',
+    removing: 'Removing…',
     // The visible word is `Remove` on every row; the accessible name says
     // which entry, because a screen reader reading the list out hears the
     // same word a dozen times otherwise.
@@ -57,7 +62,9 @@ const COPY: Record<
     addedBy: '추가한 사람',
     addedOn: '일시',
     add: '추가',
+    adding: '추가하는 중…',
     remove: '삭제',
+    removing: '삭제하는 중…',
     removeEntry: (pattern) => `${pattern} 삭제`,
     addPlaceholder: 'colleague@example.com',
     nobodyYet: '아직 항목이 없습니다. 하나라도 추가되기 전에는 아무도 로그인할 수 없습니다.',
@@ -152,13 +159,13 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
                       pushing the word out of the row's right edge. */}
                   <form action={remove} className="-my-2.5 sm:-mr-2.5">
                     <input type="hidden" name="id" value={entry.id} />
-                    <button
-                      type="submit"
+                    <SubmitButton
                       aria-label={copy.removeEntry(entry.pattern)}
+                      pendingLabel={copy.removing}
                       className="flex min-h-11 items-center rounded-full px-2.5 text-label font-bold text-oxblood"
                     >
                       {copy.remove}
-                    </button>
+                    </SubmitButton>
                   </form>
 
                   <p className="col-start-1 mt-1 text-body-sm text-ink-2">
@@ -201,12 +208,12 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
               {copy.maintainer}
             </label>
 
-            <button
-              type="submit"
+            <SubmitButton
+              pendingLabel={copy.adding}
               className="min-h-11 rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white"
             >
               {copy.add}
-            </button>
+            </SubmitButton>
           </form>
         </section>
       </div>
