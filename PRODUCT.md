@@ -73,7 +73,8 @@ Four mechanisms distinguish this from a generic course platform, and each was de
 
 **Open, not undecided-by-omission:**
 
-- Stage 2 and Stage 3 content is not authored yet. Only Stage 1's four Competencies exist, and neither later Stage has an authored subject for its Self-Audit Report — Stage 2's must additionally support detection by interaction (ADR-0009). Stage 2's subject now has a decided shape and no artefact: a three-step flow that may remember what a Learner entered but may never branch (ADR-0010). Stage 3's subject likewise has a decided shape and no artefact: a page carrying a stated user, plus a specimen Self-Audit Report about the Stage 1 Practice Page (ADR-0011).
+- All twelve Competencies and all three Self-Audit subjects are now authored (as of 2026-08-05); the sentence that stood here, that Stage 2 and Stage 3 content did not exist, was true when written and stopped being true on 2026-08-03. Stage 2's subject is the three-step flow ADR-0010 decided — it may remember what a Learner entered and may never branch — and every one of its Planted Defects needs the flow operated to be seen, which is what ADR-0009 required of it. Stage 3's is the page carrying a stated user that ADR-0011 decided.
+- What is still unauthored: **Stage 3's four Item Pools**, and the **briefs for Stages 2 and 3** — the briefs being also what keeps the audit surface from serving those two Stages' reports. The **specimen Self-Audit Report** that ADR-0011 pairs with Stage 3's page is likewise decided and unwritten.
 - Peer Review is no longer an assessment (ADR-0011). It is optional exposure to a colleague's submitted report, it gates nothing, and it is not built.
 
 ## Brand Commitments
@@ -88,13 +89,13 @@ The one identity constraint that *is* real is behavioural rather than visual: th
 
 Real, authored, in-repo:
 
-- **32 Quiz Items** — 8 per Stage 1 Competency, under `content/items/`, each rendering a real screen rather than describing one (`content/items/item-screen.css`).
-- **4 Competency definitions** — `content/competencies/`.
-- **11 Principle Glossary entries** — `content/glossary/`.
-- **The Practice Page** — `content/practice-page/{en,ko}.html` plus its `manifest.md` of Planted Defects and `practice-page.css`. Stage 1 plants **six** defects across four Competencies, so the count carries no hint about their distribution.
-- **The Self-Audit Report brief** — `content/briefs/`.
-- **Fixed quantities** — `content/config.md` (pool 8, draw 5, pass 4, minimum 3 Findings). These are content configuration; changing one is an edit there, not a code change.
-- **Product truth** — `CONTEXT.md` (the domain glossary) and `docs/adr/0001`–`0008`, which record not only what was decided but what was reversed and why.
+- **64 Quiz Items** — 8 per Competency for Stages 1 and 2, under `content/items/`, each rendering a real screen rather than describing one (`content/items/item-screen.css`); where the judgement is about an interaction, the item draws it as stacked, captioned stills (ADR-0012). Stage 3's four pools are not authored.
+- **12 Competency definitions** — `content/competencies/`, four per Stage.
+- **31 Principle Glossary entries** — `content/glossary/`.
+- **Three authored audit subjects** — `content/practice-page/stage-{1,2,3}/`, each `{en,ko}.html` plus its `manifest.md` of Planted Defects and `practice-page.css`. Stage 1 plants **six** defects across its four Competencies, Stage 2 **seven** (none findable in a still of any one step; its `practice-page.js` is what makes the flow operable), and Stage 3 **eight**, spread 4-2-1-1. No count carries a hint about its distribution.
+- **The Stage 1 Self-Audit Report brief** — `content/briefs/`. Stages 2 and 3 have none.
+- **Fixed quantities** — `content/config.md` (pool 8, draw 5, pass 4, minimum 3 Findings), which also declares which Stage each of the twelve Competencies belongs to. These are content configuration; changing one is an edit there, not a code change.
+- **Product truth** — `CONTEXT.md` (the domain glossary) and `docs/adr/0001`–`0012`, which record not only what was decided but what was reversed and why.
 
 **Absences that must never be fabricated:** no customers, testimonials, case studies, press, or logos. No usage metrics, completion rates, cohort statistics, or before/after results — the programme has not run. No launch date. No client complaint or rejected delivery (see Product Purpose). No pricing, licensing, or public availability: this is internal and not a product anyone buys.
 
