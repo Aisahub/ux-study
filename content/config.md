@@ -11,10 +11,12 @@ minFindings: 3
 # content/competencies/ and item pools under content/items/ must belong to a
 # slug declared here, and every Planted Defect must cite one.
 #
-# Declaring a Stage is not authoring it. A slug listed here with no definition
-# file and no item pool is a Stage that has not been written yet, which is the
-# state Stage 2 and Stage 3 are in — the same tolerance an unauthored Stage 1
-# pool already had. Each Stage's list is in display order.
+# Declaring a Stage is not authoring it. A slug listed here may have no
+# definition file and no item pool yet, and both are tolerated — the same
+# tolerance an unauthored Stage 1 pool already had. As of 2026-08-05 all twelve
+# are defined and Stage 3's four are the ones still without an item pool; the
+# sentence that stood here named Stage 2 as unwritten, which it stopped being
+# on 2026-08-03. Each Stage's list is in display order.
 #
 # Stage 3 carries the four Competencies ADR-0001's amendment enumerates.
 # Accessibility is not a fifth (settled 2026-08-03). The amendment reworked the
