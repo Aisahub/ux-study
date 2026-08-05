@@ -5,7 +5,7 @@ import { asc, eq } from 'drizzle-orm'
 
 import { SubmitButton } from '@/app/[lang]/pending'
 import { db, schema } from '@/db'
-import { requireMaintainer } from '@/lib/auth'
+import { requireMaintainer, resolveEntry } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
 
 export const dynamic = 'force-dynamic'
@@ -26,6 +26,7 @@ const COPY: Record<
     remove: string
     removing: string
     removeEntry: (pattern: string) => string
+    admitsYou: string
     addPlaceholder: string
     nobodyYet: string
   }
@@ -48,6 +49,7 @@ const COPY: Record<
     // which entry, because a screen reader reading the list out hears the
     // same word a dozen times otherwise.
     removeEntry: (pattern) => `Remove ${pattern}`,
+    admitsYou: 'Admits you — removing it would lock you out',
     addPlaceholder: 'colleague@example.com',
     nobodyYet: 'No entries yet. Nobody can sign in until one is added.',
   },
@@ -66,6 +68,7 @@ const COPY: Record<
     remove: '삭제',
     removing: '삭제하는 중…',
     removeEntry: (pattern) => `${pattern} 삭제`,
+    admitsYou: '본인을 들여보내는 항목 — 삭제하면 다시 들어올 수 없습니다',
     addPlaceholder: 'colleague@example.com',
     nobodyYet: '아직 항목이 없습니다. 하나라도 추가되기 전에는 아무도 로그인할 수 없습니다.',
   },
@@ -86,10 +89,14 @@ const COPY: Record<
 export default async function Allowlist({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   if (!isLanguage(lang)) notFound()
-  await requireMaintainer(lang)
+  const acting = await requireMaintainer(lang)
   const copy = COPY[lang]
 
   const entries = await db.select().from(schema.allowlist).orderBy(asc(schema.allowlist.id))
+  // Which row admits the person reading this, not which row spells their
+  // address: a Maintainer held by the wildcard is undone by deleting the
+  // wildcard, and a Maintainer with a row of their own is not.
+  const own = await resolveEntry(acting.email)
 
   async function add(data: FormData) {
     'use server'
@@ -107,11 +114,21 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
     revalidatePath(`/${lang}/maintain/allowlist`)
   }
 
+  /**
+   * Removing your own entry is a one-click trapdoor with no way back through
+   * the interface: capability is resolved from the allowlist on every request,
+   * so the next one arrives as a Learner, and a Learner gets a 404 from this
+   * page. It happened on production on 2026-08-05 and took hand-written SQL to
+   * undo, so the guard is here and not only in the rendering above — the
+   * refusal has to hold for a request that never came from this page.
+   */
   async function remove(data: FormData) {
     'use server'
-    await requireMaintainer(lang as Language)
+    const acting = await requireMaintainer(lang as Language)
     const id = Number.parseInt(String(data.get('id') ?? ''), 10)
     if (!Number.isInteger(id)) return
+    const admitting = await resolveEntry(acting.email)
+    if (admitting?.id === id) return
     await db.delete(schema.allowlist).where(eq(schema.allowlist.id, id))
     revalidatePath(`/${lang}/maintain/allowlist`)
   }
@@ -152,21 +169,33 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
                     )}
                   </span>
 
-                  {/* The 44px minimum goes on the control that answers the tap,
-                      not on the row around it — the Perceived clickability
-                      defect this platform's fourth Competency teaches. The
-                      negative inset keeps the target off the text without
-                      pushing the word out of the row's right edge. */}
-                  <form action={remove} className="-my-2.5 sm:-mr-2.5">
-                    <input type="hidden" name="id" value={entry.id} />
-                    <SubmitButton
-                      aria-label={copy.removeEntry(entry.pattern)}
-                      pendingLabel={copy.removing}
-                      className="flex min-h-11 items-center rounded-full px-2.5 text-label font-bold text-oxblood"
-                    >
-                      {copy.remove}
-                    </SubmitButton>
-                  </form>
+                  {entry.id === own?.id ? (
+                    // Stated in words where the control would have been, not
+                    // drawn as a faded button: this system says what is
+                    // unavailable rather than simulating an impairment, and a
+                    // control that looks live and then refuses is the
+                    // Perceived clickability defect the fourth Competency
+                    // teaches. #99 has just given every control an in-flight
+                    // answer for the same reason; a control that answers a
+                    // press and then does nothing is what that fixed.
+                    <p className="text-body-sm text-ink-2">{copy.admitsYou}</p>
+                  ) : (
+                    /* The 44px minimum goes on the control that answers the tap,
+                       not on the row around it — the Perceived clickability
+                       defect this platform's fourth Competency teaches. The
+                       negative inset keeps the target off the text without
+                       pushing the word out of the row's right edge. */
+                    <form action={remove} className="-my-2.5 sm:-mr-2.5">
+                      <input type="hidden" name="id" value={entry.id} />
+                      <SubmitButton
+                        aria-label={copy.removeEntry(entry.pattern)}
+                        pendingLabel={copy.removing}
+                        className="flex min-h-11 items-center rounded-full px-2.5 text-label font-bold text-oxblood"
+                      >
+                        {copy.remove}
+                      </SubmitButton>
+                    </form>
+                  )}
 
                   <p className="col-start-1 mt-1 text-body-sm text-ink-2">
                     {copy.addedBy} {entry.addedBy ?? '—'} · {copy.addedOn}{' '}

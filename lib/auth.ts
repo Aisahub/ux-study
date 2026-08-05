@@ -31,13 +31,20 @@ export interface Session {
   isMaintainer: boolean
 }
 
+export type AllowlistEntry = typeof schema.allowlist.$inferSelect
+
 /**
- * What the allowlist says about an address. A row is either the full address
- * or a domain wildcard, and the specific row wins: an individually-listed
- * @aisahub.com address carrying the Maintainer flag is a Maintainer even
- * though the wildcard would already have admitted them as a Learner.
+ * The one allowlist row an address is admitted by, or null if none is. A row
+ * is either the full address or a domain wildcard, and the specific row wins:
+ * an individually-listed @aisahub.com address carrying the Maintainer flag is
+ * a Maintainer even though the wildcard would already have admitted them as a
+ * Learner.
+ *
+ * Which row it is, and not merely that there is one, is what the allowlist
+ * interface needs to know before it offers to delete a row (#98): the row that
+ * admits the person holding the page is the row that would lock them out.
  */
-export async function resolveAccess(email: string): Promise<Access> {
+export async function resolveEntry(email: string): Promise<AllowlistEntry | null> {
   const address = email.toLowerCase()
   const domain = address.slice(address.indexOf('@'))
   const rows = await db
@@ -45,11 +52,14 @@ export async function resolveAccess(email: string): Promise<Access> {
     .from(schema.allowlist)
     .where(inArray(schema.allowlist.pattern, [address, domain]))
 
-  const specific = rows.find((row) => row.pattern === address)
-  if (specific) return { allowed: true, isMaintainer: specific.isMaintainer }
-  const wildcard = rows.find((row) => row.pattern === domain)
-  if (wildcard) return { allowed: true, isMaintainer: wildcard.isMaintainer }
-  return { allowed: false, isMaintainer: false }
+  return rows.find((row) => row.pattern === address) ?? rows.find((row) => row.pattern === domain) ?? null
+}
+
+/** What the allowlist says about an address, which is what its admitting row says. */
+export async function resolveAccess(email: string): Promise<Access> {
+  const entry = await resolveEntry(email)
+  if (!entry) return { allowed: false, isMaintainer: false }
+  return { allowed: true, isMaintainer: entry.isMaintainer }
 }
 
 /** Opens a session for an address that has already been verified by Google and admitted by the allowlist. */

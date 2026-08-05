@@ -306,6 +306,123 @@ test('removing an entry locks its person out on their very next request', async 
   expect(lockedOut.headers.get('location')).toContain('/en/signin')
 })
 
+/**
+ * Submits the allowlist page's own Remove form the way a browser with no
+ * JavaScript does — the fields Next.js renders for progressive enhancement,
+ * carried back verbatim — but aimed at whichever row the caller names.
+ *
+ * Written out rather than clicked because the rendering is not the boundary:
+ * the guard has to hold for a request that never came from a screen where the
+ * control was on offer.
+ */
+async function postRemove(cookie: string, id: number) {
+  const html = await (await fetch(`${BASE_URL}/en/maintain/allowlist`, { headers: { cookie } })).text()
+  const form = [...html.matchAll(/<form[^>]*>([\s\S]*?)<\/form>/g)]
+    .map((match) => match[1])
+    .find((body) => body.includes('name="id"'))
+  if (!form) throw new Error('the allowlist page offered no Remove form to replay')
+
+  const body = new FormData()
+  for (const [tag, name] of form.matchAll(/<input[^>]*name="(\$ACTION[^"]*)"[^>]*>/g)) {
+    // The action reference is carried by a field that has no value at all, so
+    // an absent `value` is a field to send empty rather than a field to skip.
+    const value = tag.match(/value="([^"]*)"/)?.[1] ?? ''
+    body.set(name, value.replaceAll('&quot;', '"').replaceAll('&amp;', '&'))
+  }
+  body.set('id', String(id))
+
+  return fetch(`${BASE_URL}/en/maintain/allowlist`, { method: 'POST', headers: { cookie }, body })
+}
+
+const rowsFor = (pattern: string) =>
+  testDb.select().from(schema.allowlist).where(eq(schema.allowlist.pattern, pattern))
+
+/**
+ * The trapdoor that shut on production on 2026-08-05: Chloe deleted her own
+ * seeded row while adding two colleagues, and because capability is resolved
+ * from the allowlist on every request, her next one arrived as a Learner — for
+ * whom this page is a 404. There was no way back through the interface, and
+ * the row came back by hand-written SQL against the production branch.
+ */
+test('the entry that admits the acting Maintainer cannot be removed, however the request is made', async () => {
+  const maintainer = freshLearner()
+  await allow(maintainer, true)
+  const cookie = await sessionCookieFor(maintainer)
+  const [own] = await rowsFor(maintainer)
+
+  // A decoy first. Without it a request that never reached the action at all
+  // would look exactly like a refusal, and this test would pass on a typo.
+  const decoy = freshLearner()
+  await allow(decoy)
+  const [decoyRow] = await rowsFor(decoy)
+  await postRemove(cookie, decoyRow.id)
+  expect(await rowsFor(decoy)).toHaveLength(0)
+
+  await postRemove(cookie, own.id)
+  expect(await rowsFor(maintainer)).toHaveLength(1)
+
+  // The point of the row surviving: the page is still theirs on the next
+  // request. The wildcard would still admit this address as a Learner, so a
+  // 200 here is the Maintainer flag surviving and not merely the sign-in.
+  expect((await fetch(`${BASE_URL}/en/maintain/allowlist`, { headers: { cookie } })).status).toBe(200)
+})
+
+test('the Remove control is not offered on the row that would refuse it, and the row says why', async () => {
+  const maintainer = freshLearner()
+  await allow(maintainer, true)
+  const cookie = await sessionCookieFor(maintainer)
+
+  const html = await (await fetch(`${BASE_URL}/en/maintain/allowlist`, { headers: { cookie } })).text()
+
+  // A control that looks live and then refuses is the Perceived clickability
+  // defect this platform's fourth Competency teaches, so the absence is the
+  // fix and the words in its place are the other half of it.
+  expect(html).not.toContain(`aria-label="Remove ${maintainer}"`)
+  expect(visibleText(html)).toContain('Admits you — removing it would lock you out')
+  // Every other row is still removable — offboarding is what the page is for.
+  expect(html).toContain('aria-label="Remove @aisahub.com"')
+
+  const ko = await (await fetch(`${BASE_URL}/ko/maintain/allowlist`, { headers: { cookie } })).text()
+  expect(visibleText(ko)).toContain('본인을 들여보내는 항목 — 삭제하면 다시 들어올 수 없습니다')
+})
+
+test('the guard keys on the entry that admits, not on the address it spells', async () => {
+  // A domain of its own, so the seeded @aisahub.com wildcard — which the rest
+  // of the suite and every future run depend on — is never the row under test.
+  const domain = `@wildcard-${randomBytes(4).toString('hex')}.example`
+  await testDb.insert(schema.allowlist).values({ pattern: domain, isMaintainer: true })
+
+  // Held up by the wildcard alone: deleting it demotes them, though it does
+  // not spell their address anywhere.
+  const heldByWildcard = `held${domain}`
+  const wildcardCookie = await sessionCookieFor(heldByWildcard)
+  const wildcardHtml = await (
+    await fetch(`${BASE_URL}/en/maintain/allowlist`, { headers: { cookie: wildcardCookie } })
+  ).text()
+  expect(wildcardHtml).not.toContain(`aria-label="Remove ${domain}"`)
+  expect(visibleText(wildcardHtml)).toContain('Admits you')
+
+  // The same wildcard, read by a Maintainer who has a row of their own: an
+  // ordinary entry, because the specific row is what admits them. A plain
+  // string match on the address would have got this direction wrong too —
+  // offering to delete the row that does hold someone up, and refusing to
+  // delete a wildcard that holds up nobody present.
+  const heldByOwnRow = `own${domain}`
+  await allow(heldByOwnRow, true)
+  const ownCookie = await sessionCookieFor(heldByOwnRow)
+  const ownHtml = await (
+    await fetch(`${BASE_URL}/en/maintain/allowlist`, { headers: { cookie: ownCookie } })
+  ).text()
+  expect(ownHtml).toContain(`aria-label="Remove ${domain}"`)
+  expect(ownHtml).not.toContain(`aria-label="Remove ${heldByOwnRow}"`)
+
+  const [wildcardRow] = await rowsFor(domain)
+  await postRemove(wildcardCookie, wildcardRow.id)
+  expect(await rowsFor(domain)).toHaveLength(1)
+  await postRemove(ownCookie, wildcardRow.id)
+  expect(await rowsFor(domain)).toHaveLength(0)
+})
+
 // --------------------------------------------------- #25 findings library
 
 test('a Learner who has not submitted cannot read Findings through any route', async () => {
