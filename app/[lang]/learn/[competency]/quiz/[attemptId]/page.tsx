@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 
 import { eq } from 'drizzle-orm'
 
+import { LinkPending } from '@/app/[lang]/pending'
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
@@ -133,7 +134,7 @@ export default async function AttemptPage({
       <nav className="px-1.5 pb-3.5">
         <Link
           href={`/${lang}/learn`}
-          className="inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+          className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
         >
           <span aria-hidden>←</span>
           {copy.backToLearn}
@@ -162,9 +163,10 @@ export default async function AttemptPage({
             </p>
             <Link
               href={`/${lang}/learn/${slug}/quiz`}
-              className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+              className="press relative mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
             >
               {copy.retry}
+              <LinkPending />
             </Link>
           </section>
         )}

@@ -171,7 +171,7 @@ export default async function LanguageLayout({
                     // under the 44px this platform teaches. The target is the
                     // link, so the minimum goes on the link and is measured on
                     // the rendered box (ERR-206).
-                    className="flex min-h-11 min-w-11 items-center justify-center gap-2.5 rounded-full bg-surface p-[5px] shadow-pill sm:min-h-0 sm:min-w-0 sm:justify-start sm:py-[5px] sm:pr-[15px] sm:pl-[5px]"
+                    className="press flex min-h-11 min-w-11 items-center justify-center gap-2.5 rounded-full bg-surface p-[5px] shadow-pill sm:min-h-0 sm:min-w-0 sm:justify-start sm:py-[5px] sm:pr-[15px] sm:pl-[5px]"
                   >
                     <span
                       aria-hidden

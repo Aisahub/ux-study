@@ -90,7 +90,7 @@ export function NavRail({ items, lang }: { items: RailItem[]; lang: Language }) 
             title={item.label}
             aria-label={item.label}
             aria-current={active ? 'page' : undefined}
-            className="flex min-w-0 flex-1 flex-col items-center gap-[5px] rounded-[14px] py-0.5 sm:flex-none sm:gap-0 sm:py-0"
+            className="press flex min-w-0 flex-1 flex-col items-center gap-[5px] rounded-[14px] py-0.5 sm:flex-none sm:gap-0 sm:py-0"
           >
             <span
               className={`grid size-11 shrink-0 place-items-center rounded-full ${

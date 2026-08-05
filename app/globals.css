@@ -193,3 +193,55 @@ body {
   outline: 3px solid var(--oxblood);
   outline-offset: 3px;
 }
+
+/* ── how a control answers a press ─────────────────────────
+   A control says two things before it says anything else: that the pointer is
+   on it, and that the press landed. Both are here, on the element, for the
+   same reason the focus ring above is global — a control that has to remember
+   to answer a press will eventually forget, and a button that swallows a click
+   in silence is not read as slow, it is read as broken. That is the report
+   this rule exists to answer: the Gate Quiz doorstep spends a database round
+   trip and a redirect before its next screen arrives, and until 2026-08-05 it
+   spent all of it looking exactly like a button nobody had touched.
+
+   DESIGN.md has promised "oxblood deepens" since the system was written; two
+   of some thirty controls had ever implemented it. Deepening as `filter`
+   rather than a second background colour is what makes one rule enough: the
+   oxblood primary, the white pill, the sunk chip and the rail's marks all
+   deepen by the same proportion without any of them declaring a hover.
+
+   `button` covers every control this app draws as a button. `.press` is for
+   the ones drawn as links — a `<Link>` styled into a pill is a button to
+   everyone except the parser, and it may not answer differently. Inline text
+   links are deliberately out: they carry their own hover, and a word in a
+   sentence that shrinks when pressed is a tic, not feedback. */
+:where(button, .press):not(:disabled, [aria-disabled='true']) {
+  transition:
+    filter 120ms ease-out,
+    transform 120ms ease-out;
+}
+
+:where(button, .press):not(:disabled, [aria-disabled='true']):hover {
+  filter: brightness(0.93);
+}
+
+/* The press: deeper again, and 2% smaller, so the control moves under the
+   finger. Scale rather than a shadow swap, because it reads identically on
+   the flat sunk chips and on the lifted pills, and because it costs no
+   layout — nothing beside a pressed button moves. */
+:where(button, .press):not(:disabled, [aria-disabled='true']):active {
+  filter: brightness(0.86);
+  transform: scale(0.98);
+}
+
+/* A press still has to be answered when motion is turned down — the answer
+   just stops moving. The deepening stays; it is a colour change, not motion. */
+@media (prefers-reduced-motion: reduce) {
+  :where(button, .press):not(:disabled, [aria-disabled='true']) {
+    transition: none;
+  }
+
+  :where(button, .press):not(:disabled, [aria-disabled='true']):active {
+    transform: none;
+  }
+}

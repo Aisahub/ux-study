@@ -58,7 +58,7 @@ export function LanguageSwitcher({ current }: { current: Language }) {
       <Link
         href={counterpartPath(pathname, target)}
         lang={target}
-        className="flex min-h-[34px] items-center rounded-full px-3 text-label font-bold whitespace-nowrap text-ink-2"
+        className="press flex min-h-[34px] items-center rounded-full px-3 text-label font-bold whitespace-nowrap text-ink-2"
       >
         {LABEL[target]}
       </Link>
