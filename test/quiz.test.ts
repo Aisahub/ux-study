@@ -480,18 +480,54 @@ test('a folded item answers a press, and its source link says it leaves the page
     await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz/${attempt.id}`, { headers: { cookie } })
   ).text()
 
-  // `press` is how a control answers being touched on this platform, and these
-  // rows are pressable. Without it they are the only pressable thing in the
-  // app that stays silent under a finger — on the screen a Learner reaches by
-  // passing the Competency that teaches Perceived clickability.
-  expect(html.match(/<summary[^>]*class="[^"]*\bpress\b/g) ?? []).toHaveLength(config.drawSize)
+  // The rows are pressable, so they answer a press — and they do it by being
+  // a `<summary>`, not by carrying a class somebody remembered to add. The
+  // served stylesheet is what is asserted rather than the markup: a test that
+  // checks for a class on the element would pass just as happily on the
+  // enumeration that produced ERR-218.
+  expect(html.match(/<summary/g) ?? []).toHaveLength(config.drawSize)
   // The turn is dropped for a Learner who asked for less motion; the turned
   // state is not.
   expect(html).toContain('motion-reduce:transition-none')
   // The arrow says "new tab" to everyone who can see it, and the words say it
   // to everyone else.
   expect(visibleText(html)).toContain('(opens in a new tab)')
+
+  // And the press answer itself, read out of the stylesheet the browser was
+  // actually served. `<summary>` is the control that exposed the gap; the
+  // other two are the ones that would expose it next.
+  // Quotes are stripped first: whether the build emits `[role='button']` or
+  // `[role=button]` is a minifier's business, not this test's.
+  const css = (await servedStylesheet(html)).replace(/["']/g, '')
+  for (const control of ['summary', '[role=button]', '[type=submit]']) {
+    expect(pressSelectors(css).some((selector) => selector.includes(control))).toBe(true)
+  }
+
+  // Both halves, or the preference is ignored by whatever the first half
+  // reached and the second did not — which is the second half of ERR-218.
+  const reducedMotion = /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{((?:[^{}]|\{[^{}]*\})*)\}/.exec(css)?.[1]
+  expect(reducedMotion).toBeTruthy()
+  expect(reducedMotion).toContain('summary')
 })
+
+/**
+ * The rules that draw a press, taken from the built CSS rather than from
+ * `globals.css`, so this holds against whatever the build actually emits — the
+ * source nests one selector and Lightning CSS flattens it into several.
+ */
+function pressSelectors(css: string): string[] {
+  return [...css.matchAll(/([^{}]+)\{[^{}]*brightness\([^)]*\)[^{}]*\}/g)].map((match) => match[1])
+}
+
+/** Every stylesheet a page links, concatenated. */
+async function servedStylesheet(html: string): Promise<string> {
+  const hrefs = [...html.matchAll(/<link[^>]*href="([^"]+\.css[^"]*)"/g)].map((m) => m[1])
+  expect(hrefs.length).toBeGreaterThan(0)
+  const sheets = await Promise.all(
+    hrefs.map(async (href) => (await fetch(new URL(href, BASE_URL))).text()),
+  )
+  return sheets.join('\n')
+}
 
 test('the Korean review card says its source sections are in English', async () => {
   const email = freshLearner()

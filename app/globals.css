@@ -210,38 +210,79 @@ body {
    oxblood primary, the white pill, the sunk chip and the rail's marks all
    deepen by the same proportion without any of them declaring a hover.
 
-   `button` covers every control this app draws as a button. `.press` is for
-   the ones drawn as links — a `<Link>` styled into a pill is a button to
-   everyone except the parser, and it may not answer differently. Inline text
-   links are deliberately out: they carry their own hover, and a word in a
-   sentence that shrinks when pressed is a tic, not feedback. */
-:where(button, .press):not(:disabled, [aria-disabled='true']) {
+   ── who this reaches, and why it is a shape rather than a list ──
+
+   This said `:where(button, .press)` until 2026-08-06, while the paragraph
+   above it claimed to be global. It was not: it was every `<button>`, plus
+   every element somebody had remembered to label. The difference is invisible
+   for exactly as long as nobody adds a control that is neither — and eleven
+   hours after the rule shipped, five pressable `<summary>` rows arrived on the
+   Gate Quiz verdict and answered a press with nothing, which is the defect
+   this rule exists to remove (ERR-216, ERR-218). A second `<summary>` on the
+   audit surface had been silent the whole time and nobody had looked.
+
+   So the set is now written by what an element *is*:
+
+   - `button` and the `<input>` button spellings — a button however it is
+     written. This app uses none of the `<input>` forms today, and "does not
+     use it today" is the exact reasoning that produced the bug above.
+   - `summary` — the native disclosure control. It is a control that toggles
+     something; it was simply not a `<button>`.
+   - `[role='button']` — an element whose author has declared it a button. If
+     the declaration is good enough for assistive technology it is good enough
+     for this rule.
+   - `.press` — the opt-in, and it stays opt-in for one reason: an `<a>` may be
+     a pill or may be three words inside a sentence, and nothing in the markup
+     tells them apart. A `<Link>` styled into a pill is a button to everyone
+     except the parser and may not answer differently, so it says so here.
+
+   Two exclusions, both deliberate. **Inline text links** carry their own hover,
+   and a word in a sentence that shrinks when pressed is a tic, not feedback.
+   **`<label>`** stays out even though the Gate Quiz's four options are labels:
+   a label is also the word above a text field, and darkening those on hover
+   would be noise. The options already answer a selection with their oxblood
+   ring; if they are ever to answer the press itself, they take `.press` and
+   say so, one control at a time.
+
+   The set is written once and everything else nests inside it. The hover, the
+   press and the reduced-motion answer used to repeat the selector four times,
+   and two of those copies were the whole of ERR-218's second half: a control
+   the hover reached and the reduced-motion block did not is a control that
+   ignores the preference, which is how one caret became the only motion in the
+   application that did not answer it. Copies drift; there is now one copy to
+   widen the next time this list is wrong. */
+:where(
+  button,
+  summary,
+  [role='button'],
+  input:is([type='button'], [type='submit'], [type='reset']),
+  .press
+):not(:disabled, [aria-disabled='true']) {
   transition:
     filter 120ms ease-out,
     transform 120ms ease-out;
-}
 
-:where(button, .press):not(:disabled, [aria-disabled='true']):hover {
-  filter: brightness(0.93);
-}
-
-/* The press: deeper again, and 2% smaller, so the control moves under the
-   finger. Scale rather than a shadow swap, because it reads identically on
-   the flat sunk chips and on the lifted pills, and because it costs no
-   layout — nothing beside a pressed button moves. */
-:where(button, .press):not(:disabled, [aria-disabled='true']):active {
-  filter: brightness(0.86);
-  transform: scale(0.98);
-}
-
-/* A press still has to be answered when motion is turned down — the answer
-   just stops moving. The deepening stays; it is a colour change, not motion. */
-@media (prefers-reduced-motion: reduce) {
-  :where(button, .press):not(:disabled, [aria-disabled='true']) {
-    transition: none;
+  &:hover {
+    filter: brightness(0.93);
   }
 
-  :where(button, .press):not(:disabled, [aria-disabled='true']):active {
-    transform: none;
+  /* The press: deeper again, and 2% smaller, so the control moves under the
+     finger. Scale rather than a shadow swap, because it reads identically on
+     the flat sunk chips and on the lifted pills, and because it costs no
+     layout — nothing beside a pressed button moves. */
+  &:active {
+    filter: brightness(0.86);
+    transform: scale(0.98);
+  }
+
+  /* A press still has to be answered when motion is turned down — the answer
+     just stops moving. The deepening stays; it is a colour change, not
+     motion. */
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &:active {
+      transform: none;
+    }
   }
 }
