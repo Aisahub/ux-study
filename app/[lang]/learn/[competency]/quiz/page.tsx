@@ -11,6 +11,7 @@ import { content } from '@/lib/server-content'
 
 import { SubmitButton } from '@/app/[lang]/pending'
 import { restartAttempt, startAttempt } from './actions'
+import { AttemptMark } from './attempt-mark'
 
 export const dynamic = 'force-dynamic'
 
@@ -68,26 +69,6 @@ const COPY: Record<
     open: '진행 중',
     back: '역량 페이지로',
   },
-}
-
-/**
- * How one earlier attempt came out, told the three ways every status on this
- * platform is told: colour, shape, and the word beside it. Same marks the
- * route line uses, so an attempt reads as a stop that has been made.
- */
-function AttemptMark({ state }: { state: 'passed' | 'failed' | 'open' }) {
-  return (
-    <i
-      aria-hidden
-      className={`size-[14px] rounded-full ${
-        state === 'passed'
-          ? 'bg-oxblood'
-          : state === 'open'
-            ? 'bg-linear-[90deg,var(--oxblood)_0_50%,#fff_50%_100%] shadow-[inset_0_0_0_2.5px_var(--oxblood)]'
-            : 'bg-white shadow-[inset_0_0_0_2.5px_var(--blue-grey)]'
-      }`}
-    />
-  )
 }
 
 /**

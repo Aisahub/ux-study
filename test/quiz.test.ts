@@ -413,6 +413,125 @@ test('a passed attempt names the item that went wrong, what was chosen, and the 
   expect(html.match(/<iframe/g) ?? []).toHaveLength(framesExpected)
 })
 
+test('the verdict screen says how the attempt came out in more than one channel', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  const drawn = slugs.slice(0, config.drawSize)
+  const attempts = []
+  for (const passed of [true, false]) {
+    const [attempt] = await testDb
+      .insert(schema.attempts)
+      .values({
+        email,
+        competency: 'visual-hierarchy',
+        language: 'en',
+        drawn,
+        selections: drawn.map((slug, index) => ({ item: slug, choice: 0, correct: passed || index > 0 })),
+        score: passed ? config.drawSize : 1,
+        passed,
+        submittedAt: new Date(),
+      })
+      .returning()
+    attempts.push({ passed, id: attempt.id })
+  }
+
+  for (const { passed, id } of attempts) {
+    const html = await (
+      await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz/${id}`, { headers: { cookie } })
+    ).text()
+    const heading = /<h1[^>]*>([\s\S]*?)<\/h1>/.exec(html)?.[1] ?? ''
+
+    // The word, and beside it the mark that draws the same state. `통과` and
+    // `미통과` differ by one syllable and the two screens are otherwise the
+    // same shape, so the word cannot be the only channel (DESIGN.md: every
+    // status is told three ways at once).
+    expect(visibleText(heading)).toContain(passed ? 'Passed' : 'Not passed')
+    expect(heading).toContain(passed ? 'bg-oxblood' : 'var(--blue-grey)')
+
+    // And a way onward from the foot of it, not only the pill above the title:
+    // a Learner who has just passed finishes the reading several screens below
+    // where they came in.
+    const text = visibleText(html)
+    expect(text).toContain('Where to next')
+    expect(html).toContain(`href="/en/learn/visual-hierarchy"`)
+    expect(html).toContain(`href="/en/learn"`)
+  }
+})
+
+test('a folded item answers a press, and its source link says it leaves the page', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  const drawn = slugs.slice(0, config.drawSize)
+  const [attempt] = await testDb
+    .insert(schema.attempts)
+    .values({
+      email,
+      competency: 'visual-hierarchy',
+      language: 'en',
+      drawn,
+      selections: drawn.map((slug) => ({ item: slug, choice: 0, correct: true })),
+      score: config.drawSize,
+      passed: true,
+      submittedAt: new Date(),
+    })
+    .returning()
+
+  const html = await (
+    await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz/${attempt.id}`, { headers: { cookie } })
+  ).text()
+
+  // `press` is how a control answers being touched on this platform, and these
+  // rows are pressable. Without it they are the only pressable thing in the
+  // app that stays silent under a finger — on the screen a Learner reaches by
+  // passing the Competency that teaches Perceived clickability.
+  expect(html.match(/<summary[^>]*class="[^"]*\bpress\b/g) ?? []).toHaveLength(config.drawSize)
+  // The turn is dropped for a Learner who asked for less motion; the turned
+  // state is not.
+  expect(html).toContain('motion-reduce:transition-none')
+  // The arrow says "new tab" to everyone who can see it, and the words say it
+  // to everyone else.
+  expect(visibleText(html)).toContain('(opens in a new tab)')
+})
+
+test('the Korean review card says its source sections are in English', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  const drawn = slugs.slice(0, config.drawSize)
+  const notice = competencies.find((entry) => entry.slug === 'visual-hierarchy')!.koTranslationNotice
+  const [attempt] = await testDb
+    .insert(schema.attempts)
+    .values({
+      email,
+      competency: 'visual-hierarchy',
+      language: 'ko',
+      drawn,
+      selections: drawn.map((slug) => ({ item: slug, choice: 0, correct: true })),
+      score: config.drawSize,
+      passed: true,
+      submittedAt: new Date(),
+    })
+    .returning()
+
+  const ko = visibleText(
+    await (
+      await fetch(`${BASE_URL}/ko/learn/visual-hierarchy/quiz/${attempt.id}`, { headers: { cookie } })
+    ).text(),
+  )
+  const en = visibleText(
+    await (
+      await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz/${attempt.id}`, { headers: { cookie } })
+    ).text(),
+  )
+
+  // Every section name on this card is English prose, and the Korean Learner
+  // meets that fact here. The Competency page has said so since it was built;
+  // this screen said nothing, so the language change arrived unannounced.
+  expect(notice).toBeTruthy()
+  expect(ko).toContain(notice!)
+  // Korean-only by design: the English cohort is reading an English article.
+  expect(en).not.toContain(notice!)
+})
+
 test('a perfect pass is explained item by item as well', async () => {
   const email = freshLearner()
   const cookie = await sessionCookieFor(email)
