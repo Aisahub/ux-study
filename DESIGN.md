@@ -217,6 +217,30 @@ held at the reading measure either way, so a wider card would only add blank spa
 fixed measure. The Gate Quiz doorstep and verdict are single columns of `720px`
 too. A quiz is one thread with one thing to decide at a time.
 
+**A verdict that draws screens takes `880px`** (amended 2026-08-05). The rule
+above still holds for every verdict that is only read: a failed attempt names
+its missed items and their article sections, so it stays the `720px` reading
+column. A passed one now explains each drawn item beside the artefact the item
+was about, and the artefacts are authored to a `720px` floor — inside a `720px`
+column's card that leaves `664px`, so every screen was panned, on a desktop,
+with the pan hint suppressed above `sm`. On the item that sets a sharp pane
+against a blurred one, the pane being asked about was the half cut off.
+
+`880px` is the wizard's own below-`wide` width and is here for the wizard's
+reason: it is what this platform spends on a quiz surface carrying a drawn
+screen. It stops there rather than continuing to the `1240px` content column,
+because the wizard earns that width by seating the screen *beside* its options
+and this card cannot — `720` of screen, a `26` gap and the `400` a column of
+words needs exceed what the card holds even at `1240`. The step would buy
+nothing but blank space beside two columns of prose, which is the objection
+this section already raises against widening the Competency page.
+
+The screen is capped at its floor as well as floored at it. `Frame` is
+`w-full min-w-(--item-screen-floor)`, so in a wider box it stretches, and a
+screen given more room than it was drawn for is no longer the arrangement the
+item asked about — which on these items is the question. It sits at exactly
+`720px` here, for the same reason it does in the wizard's two-column row.
+
 The wizard is the one surface that outgrew that (amended 2026-07-28). It ran at
 `880px` on the reasoning that a drawn screen is examined rather than read and
 wants more room than prose; the omission was that the screen and the question
