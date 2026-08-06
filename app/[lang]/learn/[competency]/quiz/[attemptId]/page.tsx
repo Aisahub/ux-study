@@ -326,21 +326,17 @@ export default async function AttemptPage({
                     className="group border-b border-khaki/40 last:border-b-0"
                   >
                     <summary
-                      // `press` is the whole of how a control answers being
-                      // touched here: `globals.css` scopes hover and press to
-                      // `:where(button, .press)`, and a `<summary>` is neither.
-                      // Without it these five rows were the only pressable
-                      // thing in the app that stayed silent under a finger —
-                      // the exact defect the commit before this feature landed
-                      // ("make every control answer a press before it answers
-                      // the request") was written to remove, reintroduced on
-                      // the screen a Learner reaches by passing the Competency
-                      // that teaches Perceived clickability.
+                      // No `press` class: `globals.css` reaches a `<summary>`
+                      // by what it is. It carried the class from 2026-08-06
+                      // until the rule was widened later the same day, which
+                      // is the shape of the bug ERR-218 recorded — the rule
+                      // claimed to be global and was an enumeration, so each
+                      // new control had to remember to enrol itself.
                       //
                       // The native triangle is dropped for the caret below,
                       // which is the one that can sit where this layout needs
                       // it and turn when the item opens.
-                      className="press grid cursor-pointer list-none grid-cols-[14px_minmax(0,1fr)] items-start gap-3.5 py-[15px] [&::-webkit-details-marker]:hidden"
+                      className="grid cursor-pointer list-none grid-cols-[14px_minmax(0,1fr)] items-start gap-3.5 py-[15px] [&::-webkit-details-marker]:hidden"
                     >
                       {/* Filled for an item that was answered, hollow for one
                           that went the other way — the same two marks the

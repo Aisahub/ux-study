@@ -87,6 +87,32 @@ globality in a comment above an enumeration. Recorded here rather than done
 here: changing that selector touches every control in the application and wants
 its own change with its own verification, not a rider on a verdict screen.
 
+> **Done 2026-08-06**, in the separate change this paragraph asked for. The set
+> is now `button`, `summary`, `[role='button']`, the `<input>` button spellings,
+> and `.press` — written by what an element *is*, so a control enrols itself by
+> being one. The verdict rows dropped the class they had just been given. An
+> inventory of every interactive element in the app found one control the old
+> selector had been missing all along and nobody had noticed: the `<summary>`
+> on the audit surface's brief.
+>
+> `.press` survives for `<a>` alone, and that is not an oversight: an anchor is
+> a pill or three words in a sentence and the markup does not say which. Two
+> exclusions are deliberate — inline text links, which carry their own hover,
+> and `<label>`, because the Gate Quiz's four options are labels and so is the
+> word above a text field. The options answer a selection with their oxblood
+> ring today; if they are to answer the press itself they take `.press`, one
+> control at a time.
+>
+> The four repeated copies of the selector became one nested rule. That was the
+> other half of this document: the hover and the reduced-motion block each held
+> their own copy, and a control reached by one and not the other is a control
+> that ignores the preference. There is now a single copy to widen the next
+> time this list is wrong.
+>
+> Held by a test that reads the **served stylesheet** rather than the markup:
+> asserting a class on an element would have passed just as happily on the
+> enumeration that caused this.
+
 Read together with `ERR-216`, whose fix this document is the sequel to: the
 lesson is not "remember the `press` class". It is that a rule enforced by
 enumeration silently exempts everything written after it, and that the interval

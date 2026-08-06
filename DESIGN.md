@@ -361,6 +361,10 @@ The Learn badge carried a `6px` dot in its lower-right corner for this until 202
 - **Shape:** Fully round (`999px`).
 - **Primary:** Oxblood ground, white label, `15px 26px`, full width inside its card. A trailing `small` carries a quiet detail ("5문항") at 72% opacity.
 - **Hover / Focus:** Oxblood deepens; focus shows a visible ring — never removed, this platform teaches keyboard operability.
+
+**The Answering Control Rule** (decided 2026-08-05, widened 2026-08-06). Every control deepens on hover and deepens again while pressed, and it gets that by *being* a control rather than by declaring itself one. The rule in `globals.css` reaches `button`, `summary`, `[role='button']` and the `<input>` button spellings; `.press` remains the opt-in for an `<a>` drawn as a pill, because nothing in the markup separates that from three words in a sentence. Inline text links and `<label>` are deliberately outside it.
+
+The widening is the rule's own history and worth keeping: it shipped as `button` plus an opt-in class while its comment claimed to be global, and eleven hours later five pressable rows arrived that were neither and answered a press with silence (ERR-216, ERR-218). A rule enforced by enumeration exempts everything written after it. If a new kind of control cannot be added to the shape list, that is the signal it needs the class — not that the rule may be skipped.
 - There is no secondary button. A screen has one action; anything else is a link.
 
 **The Row Action Exception.** A directory is the one place the rule above does not hold: where a screen lists peers that may be entered in any order, each row carries the same primary button, and the repetition is the point. The Learn overview ships four (five once the report opens). This is not four competing actions — it is one action offered four times, once per independent entry point, and picking one of them out with a heavier treatment would invent the sequence the No False Current Rule exists to refuse.
