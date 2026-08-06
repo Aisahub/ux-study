@@ -10,6 +10,7 @@ import { isLanguage, type Language } from '@/lib/language'
 import { shuffledOrder } from '@/lib/quiz'
 import { content, itemScreenCss } from '@/lib/server-content'
 
+import { AttemptMark } from '../attempt-mark'
 import { ItemScreen, ItemSequence } from './screen'
 import { QuizWizard } from './wizard'
 
@@ -35,8 +36,13 @@ const COPY: Record<
     noChoice: string
     keyedAnswer: string
     coveredIn: string
+    /** Said out loud for a Learner who cannot see the arrow that says it. */
+    opensNewTab: string
     retry: string
     backToLearn: string
+    backToCompetency: string
+    /** The heading over the way out, so the exit is not an unlabelled pair of pills. */
+    whatNow: string
     article: string
   }
 > = {
@@ -45,10 +51,16 @@ const COPY: Record<
     verdictFailed: 'Not passed',
     score: (score, of) => `${score} of ${of} correct.`,
     passedExplanation: 'This Competency is cleared.',
+    // Said as plainly as the Korean says it. This read "one item went the
+    // other way… the keyed answer" until 2026-08-06: a euphemism the Korean
+    // did not soften, and a piece of this project's own scoring vocabulary
+    // (CONTEXT.md reserves "answer key" for exactly that) offered to a Learner
+    // who is not assumed to have any. Parity is equal difficulty, not
+    // translation coverage (PRODUCT.md, Product Principle 2).
     reviewNote: (missed, of) =>
       missed === 0
-        ? `All ${of} are below, with the keyed answer and the grounds for it.`
-        : `${missed === 1 ? 'One item went' : `${missed} items went`} the other way — all ${of} are below, with the keyed answer and the grounds for it.`,
+        ? `All ${of} items are below, with the answer and the grounds for it.`
+        : `You got ${missed === 1 ? '1 item' : `${missed} items`} wrong — all ${of} items are below, with the answer and the grounds for it.`,
     summaryHeading: 'The key points',
     failedExplanation:
       'Below are the items you missed and where the article covers each one. The answers stay hidden — reread, then draw a fresh set.',
@@ -60,8 +72,11 @@ const COPY: Record<
     noChoice: 'You left this one unanswered.',
     keyedAnswer: 'The answer',
     coveredIn: 'Covered in',
+    opensNewTab: 'opens in a new tab',
     retry: 'Try again now',
     backToLearn: 'Back to the overview',
+    backToCompetency: 'Back to this Competency',
+    whatNow: 'Where to next',
     article: 'the article',
   },
   ko: {
@@ -84,8 +99,11 @@ const COPY: Record<
     noChoice: '이 문항에는 답하지 않았습니다.',
     keyedAnswer: '정답',
     coveredIn: '다루는 절',
+    opensNewTab: '새 탭에서 열림',
     retry: '지금 다시 도전',
     backToLearn: '학습 개요로',
+    backToCompetency: '이 역량 페이지로',
+    whatNow: '다음으로',
     article: '기사',
   },
 }
@@ -203,7 +221,17 @@ export default async function AttemptPage({
         </Link>
       </nav>
 
-      <h1 className="px-1.5 pb-5 font-serif text-display font-bold text-ink">
+      {/* The verdict, told the three ways this platform tells every status
+          (DESIGN.md's first Do): the word, and beside it the mark's colour and
+          its fill. It was the word alone until 2026-08-06 — on the one screen
+          whose entire purpose is to say how the attempt came out, and where
+          `통과` and `미통과` differ by a syllable while the two screens share a
+          silhouette. Every other status on the platform obeyed the rule,
+          including each item inside this page's own card.
+
+          The mark, not a coloured heading: The Headings Are Ink Rule. */}
+      <h1 className="flex items-center gap-3.5 px-1.5 pb-5 font-serif text-display font-bold text-ink">
+        <AttemptMark state={attempt.passed ? 'passed' : 'failed'} size={24} />
         {attempt.passed ? copy.verdictPassed : copy.verdictFailed}
       </h1>
 
@@ -249,10 +277,20 @@ export default async function AttemptPage({
             convert. */}
         {attempt.passed && (attempt.selections ?? []).length > 0 && (
           <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
-            <h2 className="mb-4.5 font-serif text-headline font-bold text-ink">
+            <h2 className="font-serif text-headline font-bold text-ink">
               {copy.reviewHeading}
             </h2>
-            <div className="flex flex-col">
+            {/* Every `다루는 절` below leads to an English article, and this
+                card is where a Korean Learner meets that fact — the Competency
+                page says it in the same words and this screen said nothing,
+                so the language change arrived unannounced. Said once for the
+                card rather than on each of five links. */}
+            {lang === 'ko' && competency.koTranslationNotice && (
+              <p className="mt-3.5 rounded-badge bg-sunk p-[17px] text-body-sm">
+                {competency.koTranslationNotice}
+              </p>
+            )}
+            <div className="mt-4.5 flex flex-col">
               {/* In the order they were drawn, which is the order they were
                   answered in: a Learner rereads by walking back through the
                   attempt they remember, not through a list sorted by verdict. */}
@@ -288,10 +326,21 @@ export default async function AttemptPage({
                     className="group border-b border-khaki/40 last:border-b-0"
                   >
                     <summary
+                      // `press` is the whole of how a control answers being
+                      // touched here: `globals.css` scopes hover and press to
+                      // `:where(button, .press)`, and a `<summary>` is neither.
+                      // Without it these five rows were the only pressable
+                      // thing in the app that stayed silent under a finger —
+                      // the exact defect the commit before this feature landed
+                      // ("make every control answer a press before it answers
+                      // the request") was written to remove, reintroduced on
+                      // the screen a Learner reaches by passing the Competency
+                      // that teaches Perceived clickability.
+                      //
                       // The native triangle is dropped for the caret below,
                       // which is the one that can sit where this layout needs
                       // it and turn when the item opens.
-                      className="grid cursor-pointer list-none grid-cols-[14px_minmax(0,1fr)] items-start gap-3.5 py-[15px] [&::-webkit-details-marker]:hidden"
+                      className="press grid cursor-pointer list-none grid-cols-[14px_minmax(0,1fr)] items-start gap-3.5 py-[15px] [&::-webkit-details-marker]:hidden"
                     >
                       {/* Filled for an item that was answered, hollow for one
                           that went the other way — the same two marks the
@@ -323,9 +372,19 @@ export default async function AttemptPage({
                               eye has to go find is one it does not find. The
                               caret turns rather than swapping glyph, so one
                               object reports both states. */}
+                          {/* `motion-reduce:transition-none` drops the turn,
+                              never the turned state: the caret still points
+                              the other way when the item is open, it just
+                              stops travelling there. A Learner who asked for
+                              less motion asked for less movement, not less
+                              information. Every other piece of motion in this
+                              app already declares this — the pending spinner
+                              carries `motion-reduce:animate-none`, and the
+                              global press rule has its own reduced-motion
+                              block — and this caret was the one exception. */}
                           <span
                             aria-hidden
-                            className="inline-block transition-transform group-open:rotate-180"
+                            className="inline-block transition-transform group-open:rotate-180 motion-reduce:transition-none"
                           >
                             ▾
                           </span>
@@ -419,6 +478,14 @@ export default async function AttemptPage({
                               {chosen ? `${copy.yourChoice}: ${chosen.text}` : copy.noChoice}
                             </p>
                           )}
+                          {/* Absent only if the item has been reworded since
+                              this attempt was scored so that no option carries
+                              the key any more — the same stale-data case the
+                              chosen line above answers by omitting rather than
+                              guessing. The verdict itself was frozen at
+                              submission and stays right either way; what is
+                              lost is the reprint, and the article section
+                              below still says where to read. */}
                           {keyed && (
                             <p className="mt-1 max-w-measure text-body-sm">
                               <span className="font-bold">
@@ -442,6 +509,13 @@ export default async function AttemptPage({
                             >
                               {item.sourceSection}
                               <span aria-hidden> ↗</span>
+                              {/* The arrow says "new tab" to everyone who can
+                                  see it and to nobody who cannot, so the words
+                                  are here too. Being moved to a new context
+                                  without being told is disorienting for a
+                                  screen-reader Learner in a way it is not for
+                                  anyone else. */}
+                              <span className="sr-only"> ({copy.opensNewTab})</span>
                             </a>
                           </p>
                       </div>
@@ -504,6 +578,7 @@ export default async function AttemptPage({
                         >
                           {item.sourceSection}
                           <span aria-hidden> ↗</span>
+                          <span className="sr-only"> ({copy.opensNewTab})</span>
                         </a>
                       </span>
                     </span>
@@ -513,6 +588,47 @@ export default async function AttemptPage({
             </div>
           </section>
         )}
+
+        {/*
+          The way out, at the end of the reading rather than only at the top.
+
+          A passed attempt had no forward action anywhere on it: the only
+          navigation was the back pill above the title, and on a phone the
+          Learner finishes the recap some 2,700px below it. This is the most
+          motivated moment in the programme — they have just cleared a
+          Competency — and the screen went quiet at exactly that point.
+          PRODUCT.md names drop-out the primary failure mode and says an
+          unclear "what now" is how it starts.
+
+          Links in pills, not a sand card. Passing leaves nothing outstanding,
+          so there is no single next action for a warm field to carry (The One
+          Warm Field Rule), and on the failed attempt the warm field is already
+          spent on the retry. And no `next` Competency is named: Stage 1 may be
+          taken in any order, and naming one would invent the sequence The No
+          False Current Rule exists to refuse. Two ways back, no ranking of
+          them.
+        */}
+        <nav aria-labelledby="what-now" className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+          <h2 id="what-now" className="font-serif text-headline font-bold text-ink">
+            {copy.whatNow}
+          </h2>
+          <div className="mt-4.5 flex flex-wrap gap-2.5">
+            <Link
+              href={`/${lang}/learn/${slug}`}
+              className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+            >
+              <span aria-hidden>←</span>
+              {copy.backToCompetency}
+            </Link>
+            <Link
+              href={`/${lang}/learn`}
+              className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+            >
+              <span aria-hidden>←</span>
+              {copy.backToLearn}
+            </Link>
+          </div>
+        </nav>
       </div>
     </main>
   )
