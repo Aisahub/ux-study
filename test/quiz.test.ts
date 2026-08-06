@@ -341,6 +341,115 @@ test('a failed attempt names the missed items and their article sections, never 
   expect(text).toContain('Try again now')
 })
 
+test('a passed attempt names the item that went wrong, what was chosen, and the keyed answer', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  const drawn = slugs.slice(0, config.drawSize)
+  const missed = pool.find((candidate) => candidate.slug === drawn[0])!
+  const keyed = missed.options.en.find((option) => option.correct)!
+  // Anything but the keyed one, which is what makes this the missed item.
+  const chosenIndex = missed.options.en.findIndex((option) => !option.correct)
+  const [attempt] = await testDb
+    .insert(schema.attempts)
+    .values({
+      email,
+      competency: 'visual-hierarchy',
+      language: 'en',
+      drawn,
+      selections: drawn.map((slug, index) => ({
+        item: slug,
+        choice: index === 0 ? chosenIndex : 0,
+        correct: index > 0,
+      })),
+      score: config.drawSize - 1,
+      passed: true,
+      submittedAt: new Date(),
+    })
+    .returning()
+
+  const html = await (
+    await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz/${attempt.id}`, { headers: { cookie } })
+  ).text()
+  const text = visibleText(html)
+
+  expect(text).toContain('Passed')
+  expect(text).toContain(missed.prompt.en)
+  // What they picked, the answer, and the grounds for it — the whole point of
+  // the screen. Withholding these is the failed attempt's rule, not this one's.
+  expect(text).toContain(`You chose: ${missed.options.en[chosenIndex].text}`)
+  expect(text).toContain(`The answer: ${keyed.text}`)
+  expect(text).toContain(keyed.reason)
+  expect(text).toContain(missed.sourceSection)
+
+  // And the four that were answered correctly are explained too: a tick says
+  // nothing about why, and elimination looks exactly like understanding here.
+  for (const slug of drawn.slice(1)) {
+    const item = pool.find((candidate) => candidate.slug === slug)!
+    const key = item.options.en.find((option) => option.correct)!
+    expect(text).toContain(`The answer: ${key.text}`)
+    expect(text).toContain(key.reason)
+  }
+  // The reprint of what was chosen belongs to the items that went the other
+  // way. On a correct one it would be the answer said twice, and the second
+  // saying would read as a correction.
+  expect(text.match(/You chose:/g)).toHaveLength(1)
+
+  // Every item folds, and exactly the one that went the other way starts
+  // open: it is what the Learner came to this screen for, and an answer they
+  // have to go looking for behind a press is one they will not find.
+  expect(html.match(/<details/g)).toHaveLength(config.drawSize)
+  expect(html.match(/<details open/g)).toHaveLength(1)
+
+  // And each item is explained beside the thing it is about. Without the
+  // artefact every line here addresses a screen that is not on the page —
+  // the prompts point at it ("this blurred view") and the answers name parts
+  // of it ("Option B"), so the card records the attempt without explaining
+  // any of it. An Attempt is permanent and the doorstep links back to it, so
+  // "the Learner still remembers the screen" expires within the week.
+  const framesExpected = drawn
+    .map((slug) => pool.find((candidate) => candidate.slug === slug)!)
+    .reduce((total, item) => total + (item.sequence?.length ?? (item.screen ? 1 : 0)), 0)
+  expect(framesExpected).toBeGreaterThan(0)
+  expect(html.match(/<iframe/g) ?? []).toHaveLength(framesExpected)
+})
+
+test('a perfect pass is explained item by item as well', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  const drawn = slugs.slice(0, config.drawSize)
+  const [attempt] = await testDb
+    .insert(schema.attempts)
+    .values({
+      email,
+      competency: 'visual-hierarchy',
+      language: 'en',
+      drawn,
+      selections: drawn.map((slug) => ({ item: slug, choice: 0, correct: true })),
+      score: config.drawSize,
+      passed: true,
+      submittedAt: new Date(),
+    })
+    .returning()
+
+  const html = await (
+    await fetch(`${BASE_URL}/en/learn/visual-hierarchy/quiz/${attempt.id}`, { headers: { cookie } })
+  ).text()
+  const text = visibleText(html)
+
+  expect(text).toContain('Passed')
+  for (const slug of drawn) {
+    const item = pool.find((candidate) => candidate.slug === slug)!
+    expect(text).toContain(`The answer: ${item.options.en.find((option) => option.correct)!.text}`)
+  }
+  // Nothing went the other way, so nothing is reprinted as a wrong pick, and
+  // nothing is forced open — a perfect pass has no outstanding item to lead
+  // with, so all five are offered folded.
+  expect(text).not.toContain('You chose:')
+  expect(text).not.toContain('went the other way')
+  expect(html.match(/<details/g)).toHaveLength(config.drawSize)
+  expect(html).not.toContain('<details open')
+})
+
 test('a passed attempt advances exactly that one Competency on the overview', async () => {
   const email = freshLearner()
   const cookie = await sessionCookieFor(email)

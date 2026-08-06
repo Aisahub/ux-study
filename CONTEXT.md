@@ -37,7 +37,7 @@ _Avoid_: test, exam, assessment (too broad — those cover both instruments), �
 The Korean is the bare noun on purpose (2026-07-31). This entry had read `관문 테스트` while the build shipped `관문 퀴즈`, and the gloss used the very word the line above it rules out. `관문` is a heavier register than `퀴즈` and the pair read as two words pulling against each other; the gating it was carrying is said by the status beside every quiz and by the Competency page's `마지막 관문` kicker, neither of which needs the name to repeat it. English keeps **Gate Quiz** — it is the term this repo's docs, ADRs and tests are written in, and the register clash is Korean's alone.
 
 **Quiz Item** (문항 / 测验题):
-One question inside a Gate Quiz. Presents a concrete artefact — a screenshot, a described page, a pair of alternatives — and asks for a judgement about it. An item that can be answered without examining the artefact is not a Quiz Item; it is a definition question, and does not belong. Every item names the section of the source article it derives from, which is what a Learner who gets it wrong is given in place of the answer.
+One question inside a Gate Quiz. Presents a concrete artefact — a screenshot, a described page, a pair of alternatives — and asks for a judgement about it. An item that can be answered without examining the artefact is not a Quiz Item; it is a definition question, and does not belong. Every item names the section of the source article it derives from, which is what a Learner who gets it wrong is given in place of the answer on a failed attempt. On a passed one every drawn item is given both, since there is no retry left for the answer to convert (ADR-0006, amended 2026-08-05).
 _Avoid_: question, MCQ, problem
 
 **Item Pool** (문항 풀 / 题池):

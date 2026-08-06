@@ -10,6 +10,7 @@ import { isLanguage, type Language } from '@/lib/language'
 import { shuffledOrder } from '@/lib/quiz'
 import { content, itemScreenCss } from '@/lib/server-content'
 
+import { ItemScreen, ItemSequence } from './screen'
 import { QuizWizard } from './wizard'
 
 export const dynamic = 'force-dynamic'
@@ -21,9 +22,18 @@ const COPY: Record<
     verdictFailed: string
     score: (score: number, of: number) => string
     passedExplanation: string
+    /** Points down at the review, saying first how many went the other way. */
+    reviewNote: (missed: number, of: number) => string
     failedExplanation: string
     summaryHeading: string
+    reviewHeading: string
     wrongHeading: string
+    /** The verdict on one item, said in a word beside the mark that draws it. */
+    itemCorrect: string
+    itemMissed: string
+    yourChoice: string
+    noChoice: string
+    keyedAnswer: string
     coveredIn: string
     retry: string
     backToLearn: string
@@ -35,10 +45,20 @@ const COPY: Record<
     verdictFailed: 'Not passed',
     score: (score, of) => `${score} of ${of} correct.`,
     passedExplanation: 'This Competency is cleared.',
+    reviewNote: (missed, of) =>
+      missed === 0
+        ? `All ${of} are below, with the keyed answer and the grounds for it.`
+        : `${missed === 1 ? 'One item went' : `${missed} items went`} the other way — all ${of} are below, with the keyed answer and the grounds for it.`,
     summaryHeading: 'The key points',
     failedExplanation:
       'Below are the items you missed and where the article covers each one. The answers stay hidden — reread, then draw a fresh set.',
+    reviewHeading: 'The answers',
     wrongHeading: 'Worth another look',
+    itemCorrect: 'Correct',
+    itemMissed: 'Missed',
+    yourChoice: 'You chose',
+    noChoice: 'You left this one unanswered.',
+    keyedAnswer: 'The answer',
     coveredIn: 'Covered in',
     retry: 'Try again now',
     backToLearn: 'Back to the overview',
@@ -49,10 +69,20 @@ const COPY: Record<
     verdictFailed: '미통과',
     score: (score, of) => `${of}문항 중 ${score}문항 정답.`,
     passedExplanation: '이 역량을 통과했습니다.',
+    reviewNote: (missed, of) =>
+      missed === 0
+        ? `${of}문항 모두 아래에 정답과 그 근거가 있습니다.`
+        : `${missed}문항은 틀렸습니다 — ${of}문항 모두 아래에 정답과 그 근거가 있습니다.`,
     summaryHeading: '핵심 요약',
     failedExplanation:
       '아래는 틀린 문항과, 기사에서 그 내용을 다루는 위치입니다. 정답은 공개하지 않습니다 — 다시 읽고, 새로 뽑힌 문항으로 도전하세요.',
+    reviewHeading: '문항별 정답과 해설',
     wrongHeading: '다시 볼 문항',
+    itemCorrect: '맞힘',
+    itemMissed: '틀림',
+    yourChoice: '고른 답',
+    noChoice: '이 문항에는 답하지 않았습니다.',
+    keyedAnswer: '정답',
     coveredIn: '다루는 절',
     retry: '지금 다시 도전',
     backToLearn: '학습 개요로',
@@ -63,9 +93,19 @@ const COPY: Record<
 /**
  * One attempt (#21): the wizard while it is open, the verdict once submitted.
  * Both render in the language of the URL — the attempt no longer owns it
- * (ADR-0008 amendment, 2026-07-23). Failure feedback names the missed items
- * and their article sections and nothing else (#22): no response anywhere
- * carries the answer key.
+ * (ADR-0008 amendment, 2026-07-23).
+ *
+ * What a missed item is told depends on the verdict, and the two are not the
+ * same page in disguise. **Failure** names the missed items and their article
+ * sections and nothing else (#22): a Learner who is about to retry and has been
+ * shown the answer no longer needs the article, which is what ADR-0006's retry
+ * amendment closes. **A pass** names them and gives the keyed answer with the
+ * grounds for it (2026-08-05): the gate is behind them, so there is no retry
+ * for the answer to convert, and a Learner who passed 4 of 5 was otherwise left
+ * knowing only that one of the five had gone wrong somewhere. It gives them for
+ * every drawn item rather than only the missed ones: on four options, a Learner
+ * who eliminated their way to the answer and one who saw it look the same from
+ * here, and only one of them has learnt anything.
  */
 export default async function AttemptPage({
   params,
@@ -125,12 +165,34 @@ export default async function AttemptPage({
   const copy = COPY[lang]
   const competency = content.competencies.find((entry) => entry.slug === slug)!
   const wrong = (attempt.selections ?? []).filter((selection) => !selection.correct)
+  /**
+   * Whether this verdict draws the artefacts, which decides how wide it is.
+   *
+   * Only a passed attempt explains its items, so only a passed attempt puts
+   * drawn screens on the page — and a screen is examined rather than read, so
+   * it does not fit the column prose is measured in. A `720px` column leaves
+   * `664px` inside its card, and the screens are authored to a `720px` floor:
+   * every one of them was panned, on a desktop, with the pan hint suppressed
+   * above `sm`. On the item where two panes are compared, the pane being
+   * asked about was the half cut off.
+   *
+   * `880` is the wizard's own below-`wide` width, and it is here for the same
+   * reason it is there — it is what this platform already spends on a quiz
+   * surface that carries a drawn screen. It stops there rather than going on
+   * to the `1240` content column: the wizard earns that width by seating the
+   * screen beside its options, and at `1240` this card still cannot (720 of
+   * screen, a 26 gap and 400 of words exceed what the card holds), so the
+   * step would buy nothing but blank space beside two columns of prose.
+   *
+   * A failed verdict draws nothing and stays the 720 reading column.
+   */
+  const explainsItems = attempt.passed && (attempt.selections ?? []).length > 0
 
   return (
     // A column like the doorstep and the wizard: the attempt is one thread,
     // and it ends the way it began rather than spreading back onto the grid
     // the map pages use.
-    <main className="mx-auto w-full max-w-[720px] px-0.5">
+    <main className={`mx-auto w-full px-0.5 ${explainsItems ? 'max-w-[880px]' : 'max-w-[720px]'}`}>
       <nav className="px-1.5 pb-3.5">
         <Link
           href={`/${lang}/learn`}
@@ -150,7 +212,8 @@ export default async function AttemptPage({
           // Nothing is outstanding, so nothing here wears the warm field.
           <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
             <p className="max-w-measure text-body">
-              {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.passedExplanation}
+              {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.passedExplanation}{' '}
+              {copy.reviewNote(wrong.length, attempt.drawn.length)}
             </p>
           </section>
         ) : (
@@ -168,6 +231,225 @@ export default async function AttemptPage({
               {copy.retry}
               <LinkPending />
             </Link>
+          </section>
+        )}
+
+        {/* The whole draw on a passed attempt, answered. It sits above the
+            recap because it is this Learner's own five items, and the recap is
+            the general one everyone who passes reads; a summary first would be
+            read instead of the items it is meant to follow.
+
+            Every item, not only the missed ones (2026-08-05). A tick against an
+            item says nothing about why it was right, and on four options a
+            Learner who eliminated their way to the answer looks identical to
+            one who saw it — those are exactly the passes worth explaining. The
+            cost is that a draw of 5 puts most of an 8-item pool's answers on
+            one page, and it is a cost rather than a leak: the gate is already
+            behind this Learner, so there is no attempt left for the answers to
+            convert. */}
+        {attempt.passed && (attempt.selections ?? []).length > 0 && (
+          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+            <h2 className="mb-4.5 font-serif text-headline font-bold text-ink">
+              {copy.reviewHeading}
+            </h2>
+            <div className="flex flex-col">
+              {/* In the order they were drawn, which is the order they were
+                  answered in: a Learner rereads by walking back through the
+                  attempt they remember, not through a list sorted by verdict. */}
+              {(attempt.selections ?? []).map((selection) => {
+                const item = items.find((candidate) => candidate.slug === selection.item)!
+                const options = item.options[lang]
+                const keyed = options.find((option) => option.correct)
+                // An item reworded since the attempt was scored can leave the
+                // stored index pointing nowhere. The verdict itself was frozen
+                // at submission and stays right; only the reprint of what was
+                // chosen is unavailable, and it is left out rather than guessed.
+                const chosen = selection.choice >= 0 ? options[selection.choice] : undefined
+                return (
+                  /*
+                    Each item folds, and a missed one starts open (2026-08-05).
+                    Five explained items is a long card, and the Learner who
+                    asked for it wants their own five in a shape they can scan
+                    — but the item that went the other way is the one they came
+                    for, so it is not something to go looking for behind a
+                    press. The four they got right are offered rather than
+                    served: closed, named, and one press away.
+
+                    `<details>`, not a state hook. The page is a server
+                    component and there is nothing here worth shipping a
+                    bundle for: this way it folds before hydration, folds with
+                    JavaScript off, answers the keyboard, and tells a screen
+                    reader whether it is open — all of which a hand-built
+                    toggle would have to earn back.
+                  */
+                  <details
+                    key={selection.item}
+                    open={!selection.correct}
+                    className="group border-b border-khaki/40 last:border-b-0"
+                  >
+                    <summary
+                      // The native triangle is dropped for the caret below,
+                      // which is the one that can sit where this layout needs
+                      // it and turn when the item opens.
+                      className="grid cursor-pointer list-none grid-cols-[14px_minmax(0,1fr)] items-start gap-3.5 py-[15px] [&::-webkit-details-marker]:hidden"
+                    >
+                      {/* Filled for an item that was answered, hollow for one
+                          that went the other way — the same two marks the
+                          stations wear inside the attempt, meaning the same
+                          thing. The word beside it carries the state too: with
+                          both verdicts in one list, a mark alone would leave a
+                          Learner who cannot see it unable to tell which was
+                          which. */}
+                      <i
+                        aria-hidden
+                        className={`mt-[3px] size-[14px] rounded-full ${
+                          selection.correct
+                            ? 'bg-oxblood'
+                            : 'shadow-[inset_0_0_0_2.5px_var(--blue-grey)]'
+                        }`}
+                      />
+                      <span>
+                        <span className="flex items-center gap-1.5 text-label font-bold text-ink-2">
+                          {selection.correct ? copy.itemCorrect : copy.itemMissed}
+                          {/* Something has to say this row can be pressed. A
+                              row that opens on click and looks exactly like a
+                              row that does not is the Perceived clickability
+                              defect this platform's fourth Competency teaches
+                              — committed on the screen a Learner reaches by
+                              passing it. It sits against the status word
+                              rather than out at the right edge: on a 720px
+                              column that edge is most of a screen away from
+                              the words it belongs to, and an affordance the
+                              eye has to go find is one it does not find. The
+                              caret turns rather than swapping glyph, so one
+                              object reports both states. */}
+                          <span
+                            aria-hidden
+                            className="inline-block transition-transform group-open:rotate-180"
+                          >
+                            ▾
+                          </span>
+                        </span>
+                        <span className="mt-1.5 block max-w-measure text-title font-bold">
+                          {item.prompt[lang]}
+                        </span>
+                      </span>
+                    </summary>
+
+                    {/* Indented to the text column — 14px of mark plus the
+                        14px gap — so the answer reads as belonging to the
+                        prompt above it rather than starting a new row. */}
+                    <div className="pb-[15px] pl-[28px] group-last:pb-0.5">
+                      {/*
+                        The artefact, before anything said about it. Without it
+                        this card was a receipt rather than an explanation: the
+                        prompts are written about a thing — "이 흐린 화면은…",
+                        "어디이고" — and the answers name parts of it ("B안"),
+                        so every line here was addressed to a screen that was
+                        not on the page. An Attempt is a permanent record the
+                        doorstep links back to, so "the Learner will remember
+                        it" stops being true within a week.
+
+                        ADR-0006's "one channel, not two" still holds and is
+                        why the prose stays the frame's accessible name rather
+                        than being printed beside it — a paragraph saying the
+                        button is light grey answers the item in words. That
+                        the answer is already given above does not license
+                        printing both: a Learner rereading this is checking
+                        their own judgement against the screen, and a
+                        description of the defect does that work for them.
+
+                        Drawn at the same floor width as everywhere else, so
+                        what is examined here is what was examined during the
+                        attempt. Narrow screens pan it rather than reflowing
+                        it — the arrangement is frequently the question.
+                      */}
+                      {/* Pulled out of the text indent to the card's own inner
+                          edge. The words are indented because they belong to
+                          the prompt above them; the artefact is the widest
+                          thing here and every pixel it gives up is a pixel the
+                          Learner has to pan to.
+
+                          Capped at the floor, not merely floored. `Frame` sets
+                          `w-full min-w-(--item-screen-floor)`, so in a box
+                          wider than 720 the screen stretches — and a screen
+                          given more room than it was drawn for is no longer
+                          the arrangement the item asked about, which on these
+                          items is the question itself. DESIGN.md settled this
+                          for the wizard's two-column row: the screen sits at
+                          exactly its floor. It sits there here too. */}
+                      <div className="mb-3.5 -ml-[28px] w-full max-w-(--item-screen-floor)">
+                        {item.sequence ? (
+                          <ItemSequence
+                            slug={`review:${item.slug}`}
+                            lang={lang}
+                            steps={item.sequence.map((step) => ({
+                              caption: step.caption[lang],
+                              html: step.screen[lang],
+                            }))}
+                            css={itemScreenCss}
+                            description={item.artefact[lang]}
+                          />
+                        ) : item.screen ? (
+                          <ItemScreen
+                            slug={`review:${item.slug}`}
+                            lang={lang}
+                            html={item.screen[lang]}
+                            css={itemScreenCss}
+                            description={item.artefact[lang]}
+                          />
+                        ) : (
+                          // The format ADR-0006 also allows: an item whose
+                          // artefact is described rather than drawn. Same sunk
+                          // box the wizard gives it, so the two surfaces do not
+                          // disagree about what a described artefact looks like.
+                          <div className="rounded-badge bg-sunk p-[17px] text-body whitespace-pre-line">
+                            {item.artefact[lang]}
+                          </div>
+                        )}
+                      </div>
+
+                      <div>
+                          {/* Only where it differs from the answer. On an item
+                              they got right the two lines would be the same
+                              sentence twice, and the second one would be read
+                              as a correction that is not there. */}
+                          {!selection.correct && (
+                            <p className="max-w-measure text-body-sm text-ink-2">
+                              {chosen ? `${copy.yourChoice}: ${chosen.text}` : copy.noChoice}
+                            </p>
+                          )}
+                          {keyed && (
+                            <p className="mt-1 max-w-measure text-body-sm">
+                              <span className="font-bold">
+                                {copy.keyedAnswer}: {keyed.text}
+                              </span>
+                              {/* The grounds, which are the explanation: the
+                                  same sentence the item already carries under
+                                  each option, so the answer is explained by the
+                                  content rather than by a second thing to
+                                  author. */}
+                              <span className="mt-1 block text-ink-2">{keyed.reason}</span>
+                            </p>
+                          )}
+                          <p className="mt-2.5 text-body-sm text-ink-2">
+                            {copy.coveredIn}:{' '}
+                            <a
+                              href={competency.source.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="font-bold text-oxblood"
+                            >
+                              {item.sourceSection}
+                              <span aria-hidden> ↗</span>
+                            </a>
+                          </p>
+                      </div>
+                    </div>
+                  </details>
+                )
+              })}
+            </div>
           </section>
         )}
 
