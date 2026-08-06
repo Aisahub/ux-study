@@ -121,9 +121,16 @@
      rem, not px: at the browser default 1rem is 16px, so nothing moves for
      anyone who has not asked it to — but a Learner who raises their browser's
      default font size now gets a page that answers. WCAG 2.2 AA is a hard
-     acceptance line here (accessibility is itself a Stage 3 Competency), and
-     a scale nailed to px ignores the one accessibility preference a reader
-     sets before they ever arrive. */
+     acceptance line here, and a scale nailed to px ignores the one
+     accessibility preference a reader sets before they ever arrive.
+
+     This said "accessibility is itself a Stage 3 Competency" until
+     2026-08-06. It was settled on 2026-08-03 that it is not one — ADR-0011's
+     follow-up left Stage 3 at four Competencies and a fifth would break that
+     structure. The reason AA binds here is the stronger one and does not need
+     the curriculum: this platform trains people to find exactly the defects it
+     might commit, so a barrier shipped here is disproof of what it teaches
+     rather than an oversight in it (PRODUCT.md, Product Principle 1). */
   --text-display: 2.75rem; /* 44px */
   --text-display--line-height: 1.1;
   --text-display--letter-spacing: -0.02em;
