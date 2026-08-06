@@ -116,6 +116,14 @@ before it did not move at all. Accessibility is a Stage 3 Competency here, and
 a scale nailed to `px` ignores the one accessibility preference a reader sets
 before they ever arrive.
 
+> **Correction, 2026-08-06.** Accessibility is *not* a Competency; that was
+> settled on 2026-08-03, after this document was written, when ADR-0011's
+> follow-up left Stage 3 at four and ruled that a fifth would break its
+> structure. The sentence is left standing because it records what was believed
+> at the time, and the fix it justifies is unaffected: AA binds here as a hard
+> acceptance line on the platform itself, which is the stronger claim of the
+> two. The same stale parenthetical survived in `globals.css` until this date.
+
 The rest, each fixed at its own level:
 
 - `sm:items-start` on both directory rows. Measured after: badge-to-title
