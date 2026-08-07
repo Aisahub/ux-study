@@ -131,11 +131,19 @@ Four defects the rebuild exposed, which the source alone did not show:
       it did **not** convert. `ERR-206` migrated the Learner surfaces and left
       nine files behind with nothing naming them, so the split was invisible
       until someone opened one of those pages a month later.
-- [ ] `dark:` is a live media query even in a light-only product. A world that
+- [x] `dark:` is a live media query even in a light-only product. A world that
       has decided against a dark theme should make the variant unavailable —
       `@custom-variant dark (&:where(.nothing))` or a lint rule — not merely
       unused. Text that darkens on a background that does not is worse than no
       dark theme at all.
+
+      > **Done 2026-08-07**, in the syntax this line proposed — seven days late
+      > and only because the defect was reported from a screenshot of the front
+      > door, where the sign-in button was rendering white on near-white. The
+      > six surfaces this document names below as unconverted are exactly the
+      > six that were still shipping it; thirty variants were removed with it.
+      > See `ERR-219`, which is about why this box stayed empty rather than
+      > about dark mode.
 - [ ] A clean design-detector run is evidence about the detector. It returned
       `[]` on the least system-conformant page in the application. Read the
       page against `DESIGN.md` by hand before concluding it conforms.

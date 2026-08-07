@@ -38,6 +38,28 @@ test('a signed-in Learner is sent to where the programme starts', async () => {
   expect(response.headers.get('location')).toContain('/en/learn')
 })
 
+test('nothing on the door repaints itself when the visitor\'s system is dark', async () => {
+  // This world is light-only and says so in three places — DESIGN.md's Don't,
+  // the note above the tokens, and the deleted `prefers-color-scheme` block in
+  // `globals.css`. None of them stopped `dark:` variants living on in the
+  // scaffold-era pages, which repainted individual elements against a
+  // background that stays light: the sign-in button went white on near-white
+  // and could not be found (ERR-219).
+  //
+  // The served stylesheet is what is asserted, not the markup. Tailwind emits
+  // this at-rule only if a `dark:` variant survives somewhere in the source, so
+  // one assertion here covers every page and every variant typed after it — a
+  // grep for `dark:` in the files that exist today would not.
+  const html = await (await fetch(`${BASE_URL}/en/signin`)).text()
+  const hrefs = [...html.matchAll(/<link[^>]*href="([^"]+\.css[^"]*)"/g)].map((match) => match[1])
+  expect(hrefs.length).toBeGreaterThan(0)
+  const css = (
+    await Promise.all(hrefs.map(async (href) => (await fetch(new URL(href, BASE_URL))).text()))
+  ).join('\n')
+
+  expect(css).not.toContain('prefers-color-scheme')
+})
+
 test('the application still reads from a real database on the way through', async () => {
   // Not a rendered number any more: an allowlist row is inserted here and the
   // sign-in it admits is observable only if the application read it back.

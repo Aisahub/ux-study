@@ -84,7 +84,7 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
       <h1 className="text-2xl font-semibold tracking-tight">{copy.heading}</h1>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">{copy.explanation}</p>
+      <p className="text-sm text-zinc-600">{copy.explanation}</p>
 
       {/* One shelf per Stage the reader has earned, so a Finding is always read
           next to the page it was written about. */}
@@ -100,7 +100,7 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
             {shelf.length === 0 && <p className="text-sm text-zinc-500">{copy.empty}</p>}
             <ul className="flex flex-col gap-2">
               {shelf.map((row) => (
-                <li key={row.finding.id} className="rounded-md border border-zinc-200 p-3 text-sm dark:border-zinc-800">
+                <li key={row.finding.id} className="rounded-md border border-zinc-200 p-3 text-sm">
                   <Link href={`/${lang}/findings/${row.finding.id}`} className="underline-offset-4 hover:underline">
                     <span className="font-mono text-xs">{row.finding.element}</span> — {row.finding.description}
                   </Link>

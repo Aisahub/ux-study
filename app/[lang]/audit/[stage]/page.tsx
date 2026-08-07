@@ -126,7 +126,7 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
         <h1 className="text-2xl font-semibold tracking-tight">{briefField('title')[lang]}</h1>
         <p className="text-sm font-medium">{copy.noSubject}</p>
-        <p className="text-zinc-600 dark:text-zinc-400">{copy.noSubjectWhy}</p>
+        <p className="text-zinc-600">{copy.noSubjectWhy}</p>
         <Link href={`/${lang}/learn`} className="text-sm text-zinc-500 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
         </Link>
@@ -140,7 +140,7 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
         <h1 className="text-2xl font-semibold tracking-tight">{briefField('title')[lang]}</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">{briefField('intro')[lang]}</p>
+        <p className="text-zinc-600">{briefField('intro')[lang]}</p>
         <p className="text-sm font-medium">{copy.locked}</p>
         <Link href={`/${lang}/learn`} className="text-sm text-zinc-500 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
@@ -164,16 +164,16 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
         <h1 className="text-2xl font-semibold tracking-tight">{copy.revealHeading}</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">{copy.revealIntro}</p>
+        <p className="text-zinc-600">{copy.revealIntro}</p>
 
         <ul className="flex flex-col gap-3">
           {subject.defects.map((defect) => (
-            <li key={defect.slug} className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+            <li key={defect.slug} className="rounded-lg border border-zinc-200 p-4">
               <p className="text-sm">
                 <span
                   className={
                     foundElements.has(defect.element)
-                      ? 'font-medium text-green-700 dark:text-green-400'
+                      ? 'font-medium text-green-700'
                       : 'font-medium text-zinc-500'
                   }
                 >
@@ -201,7 +201,7 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
           <h2 className="text-sm font-medium text-zinc-500">{copy.yourFindings}</h2>
           <ul className="mt-2 flex flex-col gap-2">
             {findings.map((finding) => (
-              <li key={finding.id} className="rounded-md border border-zinc-200 p-3 text-sm dark:border-zinc-800">
+              <li key={finding.id} className="rounded-md border border-zinc-200 p-3 text-sm">
                 <p className="font-mono text-xs">{finding.element}</p>
                 <p className="mt-1">{finding.description}</p>
                 <p className="mt-1 text-zinc-500">{finding.fix}</p>
@@ -210,9 +210,9 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
           </ul>
         </section>
 
-        <section className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+        <section className="rounded-lg border border-zinc-200 p-4">
           <h2 className="text-sm font-medium">{copy.issueHeading}</h2>
-          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{copy.issueExplanation}</p>
+          <p className="mt-1 text-sm text-zinc-600">{copy.issueExplanation}</p>
           <form
             action={async (data: FormData) => {
               'use server'
@@ -225,11 +225,11 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
               name="url"
               defaultValue={report.issueUrl ?? ''}
               placeholder="https://…"
-              className="w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
+              className="w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm"
             />
             <button
               type="submit"
-              className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-white dark:text-zinc-900"
+              className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white"
             >
               {copy.issueSave}
             </button>
@@ -237,7 +237,7 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
           {report.issueUrl && <p className="mt-1 text-xs text-zinc-500">{copy.issueSaved}</p>}
         </section>
 
-        <p className="text-sm font-medium text-green-700 dark:text-green-400">{copy.complete(stage)}</p>
+        <p className="text-sm font-medium text-green-700">{copy.complete(stage)}</p>
       </main>
     )
   }
@@ -246,9 +246,9 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   // iframe so the platform around it stays outside its bounds (#23).
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 font-sans">
-      <details className="mx-auto w-full max-w-4xl rounded-lg border border-zinc-200 p-4 open:pb-4 dark:border-zinc-800" open>
+      <details className="mx-auto w-full max-w-4xl rounded-lg border border-zinc-200 p-4 open:pb-4" open>
         <summary className="cursor-pointer font-medium">{briefField('title')[lang]}</summary>
-        <div className="mt-2 flex flex-col gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <div className="mt-2 flex flex-col gap-2 text-sm text-zinc-600">
           <p>{briefField('intro')[lang]}</p>
           <p>{briefField('whatCounts')[lang]}</p>
           <p>{briefField('advice')[lang]}</p>
@@ -258,7 +258,7 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
         <iframe
           src={`/${lang}/audit/${stage}/page`}
           title={briefField('title')[lang]}
-          className="min-h-[70vh] w-full flex-1 rounded-lg border border-zinc-200 dark:border-zinc-800"
+          className="min-h-[70vh] w-full flex-1 rounded-lg border border-zinc-200"
         />
         <FindingsDrawer
           lang={lang}

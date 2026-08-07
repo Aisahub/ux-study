@@ -164,7 +164,7 @@ export function FindingsDrawer({
       <h2 className="text-sm font-medium text-zinc-500">{copy.formHeading}</h2>
       <label className="text-sm">
         {copy.element}
-        <output className="mt-1 block rounded-md border border-zinc-200 px-2 py-1.5 font-mono text-xs dark:border-zinc-800">
+        <output className="mt-1 block rounded-md border border-zinc-200 px-2 py-1.5 font-mono text-xs">
           {element === '' ? copy.elementHint : element}
         </output>
       </label>
@@ -173,7 +173,7 @@ export function FindingsDrawer({
         <select
           value={principle}
           onChange={(event) => setPrinciple(event.target.value)}
-          className="mt-1 block min-h-11 w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
+          className="mt-1 block min-h-11 w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm"
         >
           <option value="">{copy.principlePlaceholder}</option>
           {glossary.map((entry) => (
@@ -189,7 +189,7 @@ export function FindingsDrawer({
           value={description}
           onChange={(event) => setDescription(event.target.value)}
           rows={3}
-          className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
+          className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm"
         />
       </label>
       <label className="text-sm">
@@ -198,18 +198,18 @@ export function FindingsDrawer({
           value={fix}
           onChange={(event) => setFix(event.target.value)}
           rows={2}
-          className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm dark:border-zinc-800"
+          className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm"
         />
       </label>
       <button
         type="button"
         disabled={pending}
         onClick={() => saveCurrentFinding(onSaved)}
-        className="min-h-11 w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40 dark:bg-white dark:text-zinc-900"
+        className="min-h-11 w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40"
       >
         {copy.add}
       </button>
-      {error && <p className="text-sm text-red-700 dark:text-red-400">{copy.errors[error] ?? error}</p>}
+      {error && <p className="text-sm text-red-700">{copy.errors[error] ?? error}</p>}
     </section>
   )
 
@@ -218,7 +218,7 @@ export function FindingsDrawer({
       <h2 className="text-sm font-medium text-zinc-500">{copy.saved(findings.length)}</h2>
       <ul className="flex flex-col gap-2">
         {findings.map((finding) => (
-          <li key={finding.id} className="rounded-md border border-zinc-200 p-2 text-sm dark:border-zinc-800">
+          <li key={finding.id} className="rounded-md border border-zinc-200 p-2 text-sm">
             <p className="font-mono text-xs">{finding.element}</p>
             <p className="mt-1">{finding.description}</p>
             <button
@@ -235,7 +235,7 @@ export function FindingsDrawer({
   )
 
   const submission = (
-    <section className="mt-auto flex flex-col gap-2 border-t border-zinc-200 pt-3 dark:border-zinc-800">
+    <section className="mt-auto flex flex-col gap-2 border-t border-zinc-200 pt-3">
       {/* Told before submitting, not at the moment of refusal (#24). */}
       {missing > 0 ? (
         <p className="text-sm text-zinc-500">{copy.needMore(missing)}</p>
@@ -250,7 +250,7 @@ export function FindingsDrawer({
             setError(await submitReport(lang, stage))
           })
         }
-        className="min-h-11 w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40 dark:bg-white dark:text-zinc-900"
+        className="min-h-11 w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40"
       >
         {copy.submit}
       </button>
@@ -310,7 +310,7 @@ export function FindingsDrawer({
 
       {/* The desktop keeps the established two-surface report: the page and
           its drawer remain visible beside one another. */}
-      <aside className="hidden w-full flex-col gap-4 border-l border-zinc-200 p-4 wide:flex wide:max-w-sm dark:border-zinc-800">
+      <aside className="hidden w-full flex-col gap-4 border-l border-zinc-200 p-4 wide:flex wide:max-w-sm">
         <button
           type="button"
           onClick={() => setOpen(!open)}
