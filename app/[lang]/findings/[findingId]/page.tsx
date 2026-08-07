@@ -153,7 +153,7 @@ export default async function FindingPage({
         {row.author === session.email ? (
           <span className="text-zinc-500">{copy.ownFinding}</span>
         ) : mine ? (
-          <span className="font-medium text-green-700 dark:text-green-400">{copy.agreed}</span>
+          <span className="font-medium text-green-700">{copy.agreed}</span>
         ) : (
           <form action={agree}>
             <SubmitButton pendingLabel={copy.agreeing} className="font-medium underline underline-offset-4">

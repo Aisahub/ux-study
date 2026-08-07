@@ -10,6 +10,19 @@
  * left unfinished.
  */
 
+/* The `dark:` variant, disarmed. Deleting the dark block above only made a dark
+   theme absent from the page; it left `dark:` on an element still asking the
+   operating system and still repainting that one element against a background
+   that no longer moves with it. Half a theme is worse than none — the sign-in
+   button spent the fifteen days the door existed rendering white on near-white
+   for anyone whose system was dark (ERR-219).
+   Rebound to a class nothing carries, so a `dark:` utility compiles to a
+   selector that can never match. ERR-210's checklist asked for exactly this and
+   it is the third document to ask; the variant is now unavailable rather than
+   merely unused. A `prefers-color-scheme: dark` rule can no longer reach the
+   stylesheet from anywhere, which is what skeleton.test.ts asserts. */
+@custom-variant dark (&:where(.this-world-is-light-only));
+
 :root {
   /* ── palette ─────────────────────────────────────────── */
   /* A glass stack. A soft colour field (blue-grey + sand + a warm haze) is
