@@ -56,6 +56,10 @@ _Avoid_: assignment, homework, project, final exam
 One defect a Learner reports inside a Self-Audit Report. Four parts: the page element (selected), the UX Principle it violates (selected from the Glossary), a description of the defect, and a proposed fix. The two selected parts are what make one Learner's Finding comparable to another's; the two written parts are what make it useful.
 _Avoid_: issue, item, observation, comment
 
+**Note** (메모 / 笔记):
+Something a Learner writes down for themselves against one Competency, while reading it. The one artefact in the programme written for nobody else: not compared across Learners, not counted toward Completion, not read by a Maintainer, and free-form precisely because none of those things are true of it. That is the whole distinction from a Finding — a Finding's element and Principle are selections *so that* two Learners' Findings are comparable, and a Note is comparable to nothing. Added and deleted, never edited: re-writing a jotting is what writing the next one does. Added 2026-08-12.
+_Avoid_: finding, comment, annotation, highlight, journal
+
 **Brief** (브리프 / 任务说明):
 The instructions a Learner reads before auditing the Practice Page, in both Learner-facing languages, stating what a complete Self-Audit Report requires: the minimum of three Findings and the four parts of a Finding. It never states how many Planted Defects the page contains — the count is withheld until submission so the Learner looks at the page rather than counting toward a number. It also describes the optional fix-and-show step, for which a screenshot is sufficient from a non-developer. Every UX Principle it cites exists in the Principle Glossary in both languages.
 _Avoid_: instructions, prompt, assignment sheet, task description
@@ -99,6 +103,11 @@ we intended.
 **점검**, never 감사, for what a Learner does to a page. `감사` is 監査, the
 accounting sense, and is a homophone of 感謝 — on a card headed
 `자가 점검 리포트` it made one action read as two.
+
+**메모**, not 노트, for what a Learner jots against a Competency. 노트 is the
+book, and what this platform stores is the jottings — `메모 3개` counts
+something, `노트 3개` counts notebooks. `Note` stays the record's name in
+code, issues and English copy.
 
 **발견**, never the English `Finding`, in Korean copy. The Competency articles
 already taught 발견 while the drawer a Learner writes into said `Finding`.
