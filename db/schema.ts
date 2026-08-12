@@ -97,6 +97,43 @@ export const attempts = pgTable(
 )
 
 /**
+ * A Learner's own notes, written against one Competency.
+ *
+ * Private, and structurally so: every read is filtered by the session's own
+ * address and every write is scoped to it in the statement itself, so there is
+ * no query in the application that returns one Learner's notes to another —
+ * not to a colleague and not to a Maintainer. That is the whole difference
+ * between a note and a Finding. A Finding is part of an assessed artefact and
+ * is deliberately comparable across Learners, which is why its element and
+ * Principle are selections rather than typed text; a note is comparable to
+ * nothing, is counted toward nothing, and is therefore free-form.
+ *
+ * Many rows per Competency rather than one: notes accumulate while an article
+ * is being read, and a single field would mean re-opening and re-editing one
+ * block to add the next thought. They are added and removed, never edited —
+ * editing a jotting is re-writing it, which is what adding a second one does.
+ *
+ * No foreign key to `users`: that table holds a row only for someone who has
+ * signed in and been written to since, and every other Learner-owned table
+ * here keys on the address for the same reason.
+ */
+export const notes = pgTable(
+  'notes',
+  {
+    id: serial('id').primaryKey(),
+    email: text('email').notNull(),
+    /** The Competency slug this note was written against, as config.md declares it. */
+    competency: text('competency').notNull(),
+    body: text('body').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  // Both questions asked of this table start with the address — one
+  // Competency's notes on a lesson page, and all of them on the notes page —
+  // so one index leading with it serves both.
+  (table) => [index('notes_email_competency_idx').on(table.email, table.competency)],
+)
+
+/**
  * The Self-Audit Report (#24) — at most one per Learner **per Stage** (#61),
  * because submission is final: once that Stage's manifest is revealed, a
  * second attempt at it measures nothing. Finality is per Stage and not per

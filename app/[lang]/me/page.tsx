@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { eq } from 'drizzle-orm'
@@ -5,6 +6,7 @@ import { eq } from 'drizzle-orm'
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
+import { notesFor } from '@/lib/notes'
 import { attemptHistoryFor, reportsFor } from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
@@ -27,6 +29,10 @@ const COPY: Record<
     attempts: string
     attemptsNone: string
     scoreLabel: string
+    notes: string
+    noteCount: (n: number) => string
+    notesNone: string
+    allNotes: string
   }
 > = {
   en: {
@@ -44,6 +50,12 @@ const COPY: Record<
     attempts: 'Attempts',
     attemptsNone: 'No finished attempts yet.',
     scoreLabel: 'Score',
+    notes: 'Notes',
+    // The number of notes, never a number for the person: this counts what
+    // was written down, and writing more of it is not a higher standing.
+    noteCount: (n) => (n === 1 ? '1 note' : `${n} notes`),
+    notesNone: 'Nothing written down yet',
+    allNotes: 'All notes',
   },
   ko: {
     heading: '마이페이지',
@@ -60,6 +72,10 @@ const COPY: Record<
     attempts: '시도 기록',
     attemptsNone: '아직 완료한 시도가 없습니다.',
     scoreLabel: '점수',
+    notes: '메모',
+    noteCount: (n) => `메모 ${n}개`,
+    notesNone: '아직 적어 둔 것이 없습니다',
+    allNotes: '전체 메모 보기',
   },
 }
 
@@ -121,6 +137,10 @@ export default async function Me({ params }: { params: Promise<{ lang: string }>
   // users row is what a new device inherits at sign-in (#12).
   const [user] = await db.select().from(schema.users).where(eq(schema.users.email, session.email))
   const preference: Language = isLanguage(user?.language) ? user.language : lang
+  // The notebook is not listed here, only counted and pointed at: the notes
+  // themselves are a surface of their own, and repeating them under a card on
+  // this page would be the duplication that got My progress renamed (#54).
+  const notes = await notesFor(session.email)
 
   const nameOf = (slug: string) =>
     content.competencies.find((competency) => competency.slug === slug)?.name[lang] ?? slug
@@ -166,6 +186,28 @@ export default async function Me({ params }: { params: Promise<{ lang: string }>
             {copy.report}
           </h2>
           <p className="text-label font-bold text-ink-2">{reportState}</p>
+        </section>
+
+        {/* The way into the notebook, and the only one besides a lesson's own
+            notes step — the rail's bottom-bar form is full at six marks, which
+            is what a Maintainer already carries, so a seventh would put every
+            target on a 320px screen under 44px. */}
+        <section aria-labelledby="notes" className="rounded-card bg-surface p-[26px] shadow-card">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-[22px] gap-y-1">
+            <h2 id="notes" className="text-title font-bold text-ink">
+              {copy.notes}
+            </h2>
+            <p className="text-label font-bold text-ink-2">
+              {notes.length === 0 ? copy.notesNone : copy.noteCount(notes.length)}
+            </p>
+          </div>
+          <Link
+            href={`/${lang}/notes`}
+            className="mt-2.5 inline-flex min-h-11 items-center text-label font-bold text-oxblood"
+          >
+            {copy.allNotes}
+            <span aria-hidden> →</span>
+          </Link>
         </section>
 
         <section aria-labelledby="attempts" className="rounded-card bg-surface p-[26px] shadow-card">

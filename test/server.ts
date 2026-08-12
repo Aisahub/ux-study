@@ -113,7 +113,7 @@ export function waitUntilOwnServerAnswers(server: ChildProcess, port: number, at
  * The guard `sweep()` sits behind: the suite still owns what it is about to
  * empty, or the run ends without emptying it.
  *
- * `sweep()` TRUNCATEs six tables, which is safe only while the suite owns the
+ * `sweep()` TRUNCATEs every Learner-owned table, which is safe only while the suite owns the
  * server reading them — on 2026-07-29 it ran underneath a colleague's dev
  * server and destroyed state that session was using. Setup establishes that
  * ownership; this is where it is checked to have held, because teardown sits at
@@ -157,7 +157,8 @@ async function sweep() {
   await testDb.execute(sql`
     TRUNCATE TABLE
       ${schema.users}, ${schema.sessions}, ${schema.attempts},
-      ${schema.reports}, ${schema.findings}, ${schema.agreements}
+      ${schema.reports}, ${schema.findings}, ${schema.agreements},
+      ${schema.notes}
     RESTART IDENTITY CASCADE
   `)
   await testDb

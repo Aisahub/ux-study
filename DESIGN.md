@@ -211,7 +211,8 @@ their Gate Quiz actions. Stage 2 and Stage 3 use the same information structure
 and remain non-interactive as `In preparation`. A Competency page is a `720px`
 column of four numbered steps, in the order the work is done: what the Learner
 will be able to do, the questions to carry into the reading, the source article,
-then the Gate Quiz. It takes the doorstep's width rather than the board's
+then the Gate Quiz. Since 2026-08-12 that column is one of **two panels** the
+Competency holds — see The Two Panel Rule below. It takes the doorstep's width rather than the board's
 because it is the same thread of reading, continued — and because its prose is
 held at the reading measure either way, so a wider card would only add blank space beside a
 fixed measure. The Gate Quiz doorstep and verdict are single columns of `720px`
@@ -263,6 +264,28 @@ beside the options is worth more than the `104px`. And the left column ends
 where the drawn screen ends, which on a short item leaves the card taller than
 its screen. Nothing is invented to fill that; the artefact is as tall as it is.
 
+**The Two Panel Rule** (decided 2026-08-12). A Competency is two panels behind
+one heading: the taught material at `/learn/<slug>`, and the Learner's own
+notes at `/learn/<slug>/notes`. Both carry the same back link, title, station
+chip and status; only the body below the switch changes.
+
+Each panel is a **real address**, never a state a control toggles. The language
+switcher builds its counterpart from the pathname alone, so a `?tab=` would be
+dropped on the way across and a Korean Learner would silently land on the other
+panel — which bilingual parity does not permit. A path segment also survives a
+refresh, a bookmark and a link pasted to a colleague, and it matches how the
+Gate Quiz already hangs off this route.
+
+The cost is recorded rather than glossed: the notes panel is out of sight while
+the article and the pre-reading questions are being read, and those are exactly
+what a Learner is writing *about*. The single numbered column had that and was
+long; this has the short column and not that. The trade was made deliberately.
+
+**Two panels is the ceiling.** A third would make this a section index wearing
+a switch, and the moment a Learner has to hunt through panels for the article,
+the platform has committed the defect its own first Stage teaches. Anything
+that does not belong to one of these two belongs on a page of its own.
+
 **The Studio Board Rule.** Show orientation before work: programme Stages and
 progress precede the task stack. Each open Competency gets one white task panel
 with a Learning Objective, status, Attempt count, Competency link, and separate
@@ -284,6 +307,14 @@ the information. They are set in the display face at `25px`, sit in a fixed
 edge of the column, and are `aria-hidden` — reading order already carries the
 sequence to a screen reader, and speaking "01" before every heading would say
 it twice.
+
+The Learner's notes panel carries **no numeral at all**, and that is the rule
+working rather than an exception to it. The numbers say *do this, then this*;
+a `05` on the notes panel would say writing comes after the Gate Quiz, and
+nothing about a note is true of that. Only what happens in order is numbered.
+(For part of 2026-08-12 the notes step did stand at 04 with the gate at 05,
+inside the single column. It was moved to its own panel; the trade is recorded
+in The Two Panel Rule.)
 
 On the **Learn overview** the numerals label the entries of a table of
 contents, which is what that section is called. A table of contents numbers its
@@ -385,6 +416,7 @@ The exception is narrow. It applies only to a list of peers, only to the identic
 ### Navigation
 - **Rail:** A `78px` column in two parts. The **marks** sit at the top — `44px` circular icon buttons on white pills, the active one filled oxblood with a white glyph, labels in `aria-label` and not on screen. **Signing out** sits at the foot, drawn as one more mark and never filled, because it is an action and not a place. The gap between the two absorbs whatever height the marks do not use, so the control lands identically for a Learner with two marks and a Maintainer with six. The column is sticky and viewport-tall: the foot has to be the foot of the screen, or on a Gate Quiz signing out is several screens below the fold.
 - **Language switcher:** A white pill holding two segments; the current language is an oxblood pill with white text, the other is plain ink. It navigates to the counterpart of the current page, never to a section root.
+- **Panel switch:** The same silhouette as the language switcher, and deliberately not a new one — that control is already how this platform says "the same page, in the other version", which is exactly what a Competency's two panels are. Two segments in a white pill, the current one oxblood with white text, the other plain ink, each a link carrying `aria-current="page"` and a `44px` minimum height. Never `role="tab"`: that role promises a scripted widget where arrow keys move between panels without leaving the page, and these are navigation. A trailing count may ride a segment as a quiet detail (72% on the filled segment, ink-72% on the plain one), in the treatment the primary button's "5문항" already uses.
 - **Mobile:** Below `640px` the rail's two parts go to two different edges. The marks become the bottom bar, where a thumb reaches them and where they show their labels. Signing out goes to the **top bar**, last in the trailing group after the account pill — the bottom bar is full at six marks, and a seventh puts every target under `44px` on a `320px` screen. It sits after the pill rather than before the language switcher so that who you are and how you leave stay adjacent, and so the pill, the only item in that group that truncates, keeps the slack between two fixed widths.
 
   A control that changes place with width is normally the Consistency defect the third Competency teaches, so the reason is recorded here rather than left to be rediscovered: on a phone the rail does not shrink, it is dismantled, and its two parts are re-housed in the two bars that remain. What stays constant is the drawing — the same `44px` mark, at both widths — and that the control is never a link.
