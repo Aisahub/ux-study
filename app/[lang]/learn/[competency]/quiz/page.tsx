@@ -5,7 +5,7 @@ import { and, desc, eq } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
-import { stageOf } from '@/lib/content'
+import { itemPoolOf, stageOf } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
@@ -20,6 +20,9 @@ const COPY: Record<
   {
     heading: (name: string) => string
     rules: (draw: number, threshold: number) => string
+    /** Said where the gate would be, on a Competency whose pool is unwritten. */
+    notReady: string
+    notReadyWhy: string
     start: string
     continueOpen: string
     retry: string
@@ -39,6 +42,9 @@ const COPY: Record<
     heading: (name) => `Gate Quiz — ${name}`,
     rules: (draw, threshold) =>
       `${draw} items, drawn from this Competency's pool. ${threshold} correct passes. You see the verdict the moment you submit, and you can retry immediately, as often as you need.`,
+    notReady: 'This Competency has no Gate Quiz yet.',
+    notReadyWhy:
+      'Its items are still being written. Nothing is broken and nothing is lost — read the article and keep your notes; the quiz will be here when it arrives.',
     start: 'Start',
     continueOpen: 'Continue the open attempt',
     retry: 'Try again',
@@ -56,6 +62,9 @@ const COPY: Record<
     heading: (name) => `퀴즈 — ${name}`,
     rules: (draw, threshold) =>
       `이 역량의 문항 풀에서 ${draw}문항이 무작위로 나옵니다. ${threshold}문항을 맞히면 통과합니다. 제출하는 순간 결과가 바로 보이고, 필요한 만큼 곧바로 다시 도전할 수 있습니다.`,
+    notReady: '이 역량에는 아직 퀴즈가 없습니다.',
+    notReadyWhy:
+      '문항을 아직 작성하는 중입니다. 잘못된 것도, 사라진 것도 없습니다 — 기사를 읽고 메모를 남겨 두세요. 문항이 준비되면 여기에 나타납니다.',
     start: '시작',
     continueOpen: '진행 중인 시도 이어서 하기',
     retry: '다시 도전',
@@ -88,6 +97,12 @@ export default async function QuizStart({
   const session = await requireSession(lang)
   const copy = COPY[lang]
   const { drawSize, passThreshold } = content.config
+  // Declared under a Stage, but nobody has written its items yet — a state
+  // this route reaches on its own, because a Competency page links to its quiz
+  // from the day the Competency is declared and the route is flat (ADR-0008).
+  // Null is what the gate below branches on, in words rather than as a screen
+  // with the button missing.
+  const pool = itemPoolOf(content, slug)
 
   const attempts = await db
     .select()
@@ -130,34 +145,49 @@ export default async function QuizStart({
           it is a link. The note says why discarding is safe rather than
           leaving it to be guessed.
         */}
-        <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
-          <p className="max-w-measure text-body">{copy.rules(drawSize, passThreshold)}</p>
-          {/* Both buttons report their own flight. This one spends a draw, an
-              insert and a redirect before its next screen exists, and until
-              2026-08-05 it spent all of that looking untouched — which is the
-              defect this platform's fourth Competency teaches, on the screen
-              that gates it. */}
-          <form action={start}>
-            <SubmitButton
-              pendingLabel={copy.drawing}
-              className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
-            >
-              {open ? copy.continueOpen : attempts.length > 0 ? copy.retry : copy.start}
-            </SubmitButton>
-          </form>
-          {open && (
-            <>
-              {/* Full ink, not the 72% fade: that value is measured against
-                  white and drops below AA on the sand field. */}
-              <p className="mt-4.5 max-w-measure text-body-sm">{copy.restartNote}</p>
-              <form action={restart}>
-                <SubmitButton pendingLabel={copy.drawing} className="mt-2 text-title font-bold text-oxblood">
-                  {copy.restart}
-                </SubmitButton>
-              </form>
-            </>
-          )}
-        </section>
+        {!pool ? (
+          /*
+            No pool authored, so there is no next action and nothing to warm:
+            the sand field is the single way through a gate (The One Warm Field
+            Rule), and there is no way through this one yet. A white card that
+            says so, in the same two beats the audit surface uses for a Stage
+            with no subject — what the state is, then that it is a gap in the
+            writing rather than something the Learner broke.
+          */
+          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+            <p className="max-w-measure text-title font-bold text-ink">{copy.notReady}</p>
+            <p className="mt-2.5 max-w-measure text-body">{copy.notReadyWhy}</p>
+          </section>
+        ) : (
+          <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
+            <p className="max-w-measure text-body">{copy.rules(drawSize, passThreshold)}</p>
+            {/* Both buttons report their own flight. This one spends a draw, an
+                insert and a redirect before its next screen exists, and until
+                2026-08-05 it spent all of that looking untouched — which is the
+                defect this platform's fourth Competency teaches, on the screen
+                that gates it. */}
+            <form action={start}>
+              <SubmitButton
+                pendingLabel={copy.drawing}
+                className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+              >
+                {open ? copy.continueOpen : attempts.length > 0 ? copy.retry : copy.start}
+              </SubmitButton>
+            </form>
+            {open && (
+              <>
+                {/* Full ink, not the 72% fade: that value is measured against
+                    white and drops below AA on the sand field. */}
+                <p className="mt-4.5 max-w-measure text-body-sm">{copy.restartNote}</p>
+                <form action={restart}>
+                  <SubmitButton pendingLabel={copy.drawing} className="mt-2 text-title font-bold text-oxblood">
+                    {copy.restart}
+                  </SubmitButton>
+                </form>
+              </>
+            )}
+          </section>
+        )}
 
         {attempts.length > 0 && (
           <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">

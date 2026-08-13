@@ -189,7 +189,14 @@ export interface Content {
   config: ContentConfig
   glossary: GlossaryEntry[]
   competencies: Competency[]
-  /** Item pools keyed by Competency slug. */
+  /**
+   * Item pools keyed by Competency slug.
+   *
+   * Sparse on purpose, exactly as `practicePages` is: config.md may declare a
+   * Competency before anyone writes its pool, and `loadItems` treats a missing
+   * pool directory as unwritten rather than broken. Ask through `itemPoolOf`,
+   * which says "not authored" rather than handing back undefined.
+   */
   items: Record<string, QuizItem[]>
   /** The one stylesheet every item screen is drawn with, so pools cannot drift visually. */
   itemScreenCss: string
@@ -216,6 +223,25 @@ export interface Content {
  */
 export function practicePageOf(content: Content, stage: number): PracticePage | null {
   return content.practicePages.find((page) => page.stage === stage) ?? null
+}
+
+/**
+ * A Competency's item pool, or null where nobody has authored one yet.
+ *
+ * The same answer `practicePageOf` gives, for the same reason. `loadItems`
+ * tolerates a Competency with no pool directory — config.md says declaring a
+ * Stage is not authoring it — so every reader of a pool meets that state
+ * sooner or later, and reading `content.items[slug]` straight hands back
+ * `undefined` for it. The Gate Quiz's draw called `.map` on that undefined and
+ * crashed the Competency's own doorstep, on a route flat enough (ADR-0008)
+ * that a Learner needed only a session to reach it (ERR-220).
+ *
+ * A pool that is present is always full: once the directory exists, a pool
+ * smaller than one draw fails the build. So null is the only "cannot draw"
+ * this has to say, and it is said in words on the doorstep.
+ */
+export function itemPoolOf(content: Content, slug: string): QuizItem[] | null {
+  return content.items[slug] ?? null
 }
 
 export class ContentError extends Error {
