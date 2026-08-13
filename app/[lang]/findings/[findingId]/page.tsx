@@ -122,41 +122,41 @@ export default async function FindingPage({
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
-      <nav className="text-sm">
-        <Link href={`/${lang}/findings`} className="text-zinc-500 underline-offset-4 hover:underline">
+      <nav className="text-body-sm">
+        <Link href={`/${lang}/findings`} className="text-ink-2 underline-offset-4 hover:underline">
           ← {copy.back}
         </Link>
       </nav>
 
-      <h1 className="font-mono text-lg">{row.finding.element}</h1>
-      <p className="text-sm text-zinc-500">
+      <h1 className="font-mono text-title">{row.finding.element}</h1>
+      <p className="text-body-sm text-ink-2">
         {copy.by} {row.author}
       </p>
 
-      <section className="flex flex-col gap-3 text-sm">
+      <section className="flex flex-col gap-3 text-body-sm">
         <p>
-          <span className="text-zinc-500">{copy.principle}: </span>
+          <span className="text-ink-2">{copy.principle}: </span>
           {principle ? principle.name[lang] : row.finding.principle}
         </p>
         <p>
-          <span className="text-zinc-500">{copy.description}: </span>
+          <span className="text-ink-2">{copy.description}: </span>
           {row.finding.description}
         </p>
         <p>
-          <span className="text-zinc-500">{copy.fix}: </span>
+          <span className="text-ink-2">{copy.fix}: </span>
           {row.finding.fix}
         </p>
       </section>
 
-      <section className="flex items-center gap-4 text-sm">
-        <span className="text-zinc-500">{copy.agreementCount(count)}</span>
+      <section className="flex items-center gap-4 text-body-sm">
+        <span className="text-ink-2">{copy.agreementCount(count)}</span>
         {row.author === session.email ? (
-          <span className="text-zinc-500">{copy.ownFinding}</span>
+          <span className="text-ink-2">{copy.ownFinding}</span>
         ) : mine ? (
-          <span className="font-medium text-green-700">{copy.agreed}</span>
+          <span className="font-bold text-oxblood">{copy.agreed}</span>
         ) : (
           <form action={agree}>
-            <SubmitButton pendingLabel={copy.agreeing} className="font-medium underline underline-offset-4">
+            <SubmitButton pendingLabel={copy.agreeing} className="font-bold underline underline-offset-4">
               {copy.agree}
             </SubmitButton>
           </form>

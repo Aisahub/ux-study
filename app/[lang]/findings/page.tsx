@@ -83,8 +83,8 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
-      <h1 className="text-2xl font-semibold tracking-tight">{copy.heading}</h1>
-      <p className="text-sm text-zinc-600">{copy.explanation}</p>
+      <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
+      <p className="text-body-sm text-ink-2">{copy.explanation}</p>
 
       {/* One shelf per Stage the reader has earned, so a Finding is always read
           next to the page it was written about. */}
@@ -92,19 +92,19 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
         const shelf = rows.filter((row) => row.stage === stage)
         return (
           <section key={stage} className="flex flex-col gap-2">
-            <h2 className="text-sm font-medium text-zinc-500">
+            <h2 className="text-body-sm font-bold text-ink-2">
               {copy.stage(stage)} · {copy.board}
             </h2>
             {/* Which emptiness this is, rather than an empty list a reader
                 cannot tell from a broken page. */}
-            {shelf.length === 0 && <p className="text-sm text-zinc-500">{copy.empty}</p>}
+            {shelf.length === 0 && <p className="text-body-sm text-ink-2">{copy.empty}</p>}
             <ul className="flex flex-col gap-2">
               {shelf.map((row) => (
-                <li key={row.finding.id} className="rounded-md border border-zinc-200 p-3 text-sm">
+                <li key={row.finding.id} className="rounded-card bg-surface shadow-card p-3 text-body-sm">
                   <Link href={`/${lang}/findings/${row.finding.id}`} className="underline-offset-4 hover:underline">
-                    <span className="font-mono text-xs">{row.finding.element}</span> — {row.finding.description}
+                    <span className="font-mono text-body-sm">{row.finding.element}</span> — {row.finding.description}
                   </Link>
-                  <p className="mt-1 text-xs text-zinc-500">
+                  <p className="mt-1 text-body-sm text-ink-2">
                     {copy.by} {row.author} · {copy.agreementCount(row.agreements)}
                   </p>
                 </li>

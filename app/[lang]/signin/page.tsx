@@ -28,11 +28,11 @@ export default async function SignIn({ params }: { params: Promise<{ lang: strin
 
   return (
     <main className="mx-auto flex max-w-xl flex-1 flex-col justify-center gap-4 p-16 font-sans">
-      <h1 className="text-2xl font-semibold tracking-tight">{copy.heading}</h1>
-      <p className="text-zinc-600">{copy.explanation}</p>
+      <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
+      <p className="text-ink-2">{copy.explanation}</p>
       <a
         href={`/api/auth/google?lang=${language}`}
-        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white"
+        className="w-fit rounded-badge bg-oxblood px-4 py-2 text-body-sm font-bold text-white"
       >
         {copy.button}
       </a>
