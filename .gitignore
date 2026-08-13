@@ -52,3 +52,10 @@ next-env.d.ts
 # have every worktree overwrite the others.
 /architect-advisor/state/
 /architect-advisor/.active
+
+# Claude Code keeps shared and personal configuration side by side under
+# .claude/. The shared half is committed — agents/, launch.json, and a
+# settings.json if the team ever wants one. `settings.local.json` is the
+# personal half by convention: one person's permission grants, which depend on
+# what they run locally and are nobody else's to inherit.
+/.claude/settings.local.json
