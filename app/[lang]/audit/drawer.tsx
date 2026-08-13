@@ -161,19 +161,19 @@ export function FindingsDrawer({
 
   const findingForm = (onSaved?: () => void) => (
     <section className="flex flex-col gap-2">
-      <h2 className="text-sm font-medium text-zinc-500">{copy.formHeading}</h2>
-      <label className="text-sm">
+      <h2 className="text-body-sm font-bold text-ink-2">{copy.formHeading}</h2>
+      <label className="text-body-sm">
         {copy.element}
-        <output className="mt-1 block rounded-md border border-zinc-200 px-2 py-1.5 font-mono text-xs">
+        <output className="mt-1 block rounded-badge bg-sunk px-2 py-1.5 font-mono text-body-sm">
           {element === '' ? copy.elementHint : element}
         </output>
       </label>
-      <label className="text-sm">
+      <label className="text-body-sm">
         {copy.principle}
         <select
           value={principle}
           onChange={(event) => setPrinciple(event.target.value)}
-          className="mt-1 block min-h-11 w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm"
+          className="mt-1 block min-h-11 w-full rounded-badge bg-sunk px-2 py-1.5 text-body-sm"
         >
           <option value="">{copy.principlePlaceholder}</option>
           {glossary.map((entry) => (
@@ -183,48 +183,48 @@ export function FindingsDrawer({
           ))}
         </select>
       </label>
-      <label className="text-sm">
+      <label className="text-body-sm">
         {copy.description}
         <textarea
           value={description}
           onChange={(event) => setDescription(event.target.value)}
           rows={3}
-          className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm"
+          className="mt-1 block w-full rounded-badge bg-sunk px-2 py-1.5 text-body-sm"
         />
       </label>
-      <label className="text-sm">
+      <label className="text-body-sm">
         {copy.fix}
         <textarea
           value={fix}
           onChange={(event) => setFix(event.target.value)}
           rows={2}
-          className="mt-1 block w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm"
+          className="mt-1 block w-full rounded-badge bg-sunk px-2 py-1.5 text-body-sm"
         />
       </label>
       <button
         type="button"
         disabled={pending}
         onClick={() => saveCurrentFinding(onSaved)}
-        className="min-h-11 w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40"
+        className="min-h-11 w-fit rounded-badge bg-oxblood px-3 py-1.5 text-body-sm font-bold text-white disabled:opacity-40"
       >
         {copy.add}
       </button>
-      {error && <p className="text-sm text-red-700">{copy.errors[error] ?? error}</p>}
+      {error && <p className="text-body-sm text-red-700">{copy.errors[error] ?? error}</p>}
     </section>
   )
 
   const savedFindings = (
     <section className="flex flex-col gap-2">
-      <h2 className="text-sm font-medium text-zinc-500">{copy.saved(findings.length)}</h2>
+      <h2 className="text-body-sm font-bold text-ink-2">{copy.saved(findings.length)}</h2>
       <ul className="flex flex-col gap-2">
         {findings.map((finding) => (
-          <li key={finding.id} className="rounded-md border border-zinc-200 p-2 text-sm">
-            <p className="font-mono text-xs">{finding.element}</p>
+          <li key={finding.id} className="rounded-card bg-surface shadow-card p-2 text-body-sm">
+            <p className="font-mono text-body-sm">{finding.element}</p>
             <p className="mt-1">{finding.description}</p>
             <button
               type="button"
               onClick={() => startTransition(() => removeFinding(lang, stage, finding.id))}
-              className="mt-1 min-h-11 text-xs text-zinc-500 underline-offset-4 hover:underline"
+              className="mt-1 min-h-11 text-body-sm text-ink-2 underline-offset-4 hover:underline"
             >
               {copy.remove}
             </button>
@@ -235,12 +235,12 @@ export function FindingsDrawer({
   )
 
   const submission = (
-    <section className="mt-auto flex flex-col gap-2 border-t border-zinc-200 pt-3">
+    <section className="mt-auto flex flex-col gap-2 border-t border-khaki/40 pt-3">
       {/* Told before submitting, not at the moment of refusal (#24). */}
       {missing > 0 ? (
-        <p className="text-sm text-zinc-500">{copy.needMore(missing)}</p>
+        <p className="text-body-sm text-ink-2">{copy.needMore(missing)}</p>
       ) : (
-        <p className="text-sm text-zinc-500">{copy.submitWarning}</p>
+        <p className="text-body-sm text-ink-2">{copy.submitWarning}</p>
       )}
       <button
         type="button"
@@ -250,7 +250,7 @@ export function FindingsDrawer({
             setError(await submitReport(lang, stage))
           })
         }
-        className="min-h-11 w-fit rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40"
+        className="min-h-11 w-fit rounded-badge bg-oxblood px-3 py-1.5 text-body-sm font-bold text-white disabled:opacity-40"
       >
         {copy.submit}
       </button>
@@ -268,7 +268,7 @@ export function FindingsDrawer({
           <button
             type="button"
             onClick={() => setMobileSheet('list')}
-            className="pointer-events-auto absolute right-3 bottom-3 flex min-h-14 items-center rounded-full bg-oxblood px-5 text-sm font-bold text-white shadow-card"
+            className="pointer-events-auto absolute right-3 bottom-3 flex min-h-14 items-center rounded-full bg-oxblood px-5 text-body-sm font-bold text-white shadow-card"
           >
             {copy.toggle} · {findings.length}
           </button>
@@ -277,11 +277,11 @@ export function FindingsDrawer({
         {mobileSheet === 'composer' && (
           <aside className="pointer-events-auto absolute inset-0 flex flex-col rounded-card bg-surface p-4 shadow-card">
             <div className="flex items-center justify-between pb-3">
-              <h2 className="text-base font-bold">{copy.formHeading}</h2>
+              <h2 className="text-title font-bold">{copy.formHeading}</h2>
               <button
                 type="button"
                 onClick={() => setMobileSheet('none')}
-                className="min-h-11 px-2 text-sm font-medium text-zinc-500"
+                className="min-h-11 px-2 text-body-sm font-bold text-ink-2"
               >
                 {copy.close}
               </button>
@@ -293,11 +293,11 @@ export function FindingsDrawer({
         {mobileSheet === 'list' && (
           <aside className="pointer-events-auto absolute inset-0 flex flex-col gap-4 overflow-y-auto rounded-card bg-surface p-4 shadow-card">
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-bold">{copy.saved(findings.length)}</h2>
+              <h2 className="text-title font-bold">{copy.saved(findings.length)}</h2>
               <button
                 type="button"
                 onClick={() => setMobileSheet('none')}
-                className="min-h-11 px-2 text-sm font-medium text-zinc-500"
+                className="min-h-11 px-2 text-body-sm font-bold text-ink-2"
               >
                 {copy.close}
               </button>
@@ -310,11 +310,11 @@ export function FindingsDrawer({
 
       {/* The desktop keeps the established two-surface report: the page and
           its drawer remain visible beside one another. */}
-      <aside className="hidden w-full flex-col gap-4 border-l border-zinc-200 p-4 wide:flex wide:max-w-sm">
+      <aside className="hidden w-full flex-col gap-4 border-l border-khaki/40 p-4 wide:flex wide:max-w-sm">
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          className="min-h-11 w-fit text-sm font-medium underline-offset-4 hover:underline"
+          className="min-h-11 w-fit text-body-sm font-bold underline-offset-4 hover:underline"
           aria-expanded={open}
         >
           {copy.toggle} {open ? '▾' : '▸'}

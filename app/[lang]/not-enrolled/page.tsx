@@ -35,9 +35,9 @@ export default async function NotEnrolled({ params }: { params: Promise<{ lang: 
 
   return (
     <main className="mx-auto flex max-w-xl flex-1 flex-col justify-center gap-4 p-16 font-sans">
-      <h1 className="text-2xl font-semibold tracking-tight">{copy.heading}</h1>
-      <p className="text-zinc-600">{copy.body(email)}</p>
-      <p className="text-sm text-zinc-500">{copy.hint}</p>
+      <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
+      <p className="text-ink-2">{copy.body(email)}</p>
+      <p className="text-body-sm text-ink-2">{copy.hint}</p>
     </main>
   )
 }

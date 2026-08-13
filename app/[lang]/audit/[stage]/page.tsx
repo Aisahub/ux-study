@@ -132,7 +132,7 @@ function BriefBody({ brief, lang }: { brief: Brief; lang: Language }) {
   // Stage needs — that nothing waits on anybody else.
   const peerReview = optionalBriefField(brief, 'peerReview')
   return (
-    <div className="mt-2 flex flex-col gap-2 text-sm text-zinc-600">
+    <div className="mt-2 flex flex-col gap-2 text-body-sm text-ink-2">
       <p>{briefField(brief, 'intro')[lang]}</p>
       <p>{briefField(brief, 'whatCounts')[lang]}</p>
       <p>{briefField(brief, 'advice')[lang]}</p>
@@ -179,12 +179,12 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
         {/* The brief's title where there is one, and the absence itself as the
             heading where there is not — rather than printing `noSubject` as
             both the heading and the line under it. */}
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="font-serif text-display font-bold text-ink">
           {brief ? briefField(brief, 'title')[lang] : copy.noSubject}
         </h1>
-        {brief && <p className="text-sm font-medium">{copy.noSubject}</p>}
-        <p className="text-zinc-600">{copy.noSubjectWhy}</p>
-        <Link href={`/${lang}/learn`} className="text-sm text-zinc-500 underline-offset-4 hover:underline">
+        {brief && <p className="text-body-sm font-bold">{copy.noSubject}</p>}
+        <p className="text-ink-2">{copy.noSubjectWhy}</p>
+        <Link href={`/${lang}/learn`} className="text-body-sm text-ink-2 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
         </Link>
       </main>
@@ -196,12 +196,12 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   if (!progress.allPassed) {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="font-serif text-display font-bold text-ink">
           {brief ? briefField(brief, 'title')[lang] : copy.noBrief}
         </h1>
-        {brief && <p className="text-zinc-600">{briefField(brief, 'intro')[lang]}</p>}
-        <p className="text-sm font-medium">{copy.locked}</p>
-        <Link href={`/${lang}/learn`} className="text-sm text-zinc-500 underline-offset-4 hover:underline">
+        {brief && <p className="text-ink-2">{briefField(brief, 'intro')[lang]}</p>}
+        <p className="text-body-sm font-bold">{copy.locked}</p>
+        <Link href={`/${lang}/learn`} className="text-body-sm text-ink-2 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
         </Link>
       </main>
@@ -215,9 +215,9 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   if (!brief) {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
-        <h1 className="text-2xl font-semibold tracking-tight">{copy.noBrief}</h1>
-        <p className="text-zinc-600">{copy.noBriefWhy}</p>
-        <Link href={`/${lang}/learn`} className="text-sm text-zinc-500 underline-offset-4 hover:underline">
+        <h1 className="font-serif text-display font-bold text-ink">{copy.noBrief}</h1>
+        <p className="text-ink-2">{copy.noBriefWhy}</p>
+        <Link href={`/${lang}/learn`} className="text-body-sm text-ink-2 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
         </Link>
       </main>
@@ -238,56 +238,56 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
 
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
-        <h1 className="text-2xl font-semibold tracking-tight">{copy.revealHeading}</h1>
-        <p className="text-zinc-600">{copy.revealIntro}</p>
+        <h1 className="font-serif text-display font-bold text-ink">{copy.revealHeading}</h1>
+        <p className="text-ink-2">{copy.revealIntro}</p>
 
         <ul className="flex flex-col gap-3">
           {subject.defects.map((defect) => (
-            <li key={defect.slug} className="rounded-lg border border-zinc-200 p-4">
-              <p className="text-sm">
+            <li key={defect.slug} className="rounded-card bg-surface shadow-card p-4">
+              <p className="text-body-sm">
                 <span
                   className={
                     foundElements.has(defect.element)
-                      ? 'font-medium text-green-700'
-                      : 'font-medium text-zinc-500'
+                      ? 'font-bold text-oxblood'
+                      : 'font-bold text-ink-2'
                   }
                 >
                   {foundElements.has(defect.element) ? copy.found : copy.missed}
                 </span>
                 {defect.step !== undefined && (
-                  <span className="ml-2 text-xs text-zinc-500">
+                  <span className="ml-2 text-body-sm text-ink-2">
                     {copy.defectStep(defect.step, subject.steps.length)}
                   </span>
                 )}
-                <span className="ml-2 font-mono text-xs text-zinc-500">{defect.element}</span>
+                <span className="ml-2 font-mono text-body-sm text-ink-2">{defect.element}</span>
               </p>
-              <p className="mt-2 text-sm">{defect.explanation[lang]}</p>
+              <p className="mt-2 text-body-sm">{defect.explanation[lang]}</p>
             </li>
           ))}
         </ul>
 
         <p>
-          <a href={`/${lang}/audit/${stage}/page/source`} className="text-sm underline underline-offset-4">
+          <a href={`/${lang}/audit/${stage}/page/source`} className="text-body-sm underline underline-offset-4">
             {copy.source}
           </a>
         </p>
 
         <section>
-          <h2 className="text-sm font-medium text-zinc-500">{copy.yourFindings}</h2>
+          <h2 className="text-body-sm font-bold text-ink-2">{copy.yourFindings}</h2>
           <ul className="mt-2 flex flex-col gap-2">
             {findings.map((finding) => (
-              <li key={finding.id} className="rounded-md border border-zinc-200 p-3 text-sm">
-                <p className="font-mono text-xs">{finding.element}</p>
+              <li key={finding.id} className="rounded-card bg-surface shadow-card p-3 text-body-sm">
+                <p className="font-mono text-body-sm">{finding.element}</p>
                 <p className="mt-1">{finding.description}</p>
-                <p className="mt-1 text-zinc-500">{finding.fix}</p>
+                <p className="mt-1 text-ink-2">{finding.fix}</p>
               </li>
             ))}
           </ul>
         </section>
 
-        <section className="rounded-lg border border-zinc-200 p-4">
-          <h2 className="text-sm font-medium">{copy.issueHeading}</h2>
-          <p className="mt-1 text-sm text-zinc-600">{copy.issueExplanation}</p>
+        <section className="rounded-card bg-surface shadow-card p-4">
+          <h2 className="text-body-sm font-bold">{copy.issueHeading}</h2>
+          <p className="mt-1 text-body-sm text-ink-2">{copy.issueExplanation}</p>
           <form
             action={async (data: FormData) => {
               'use server'
@@ -300,19 +300,19 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
               name="url"
               defaultValue={report.issueUrl ?? ''}
               placeholder="https://…"
-              className="w-full rounded-md border border-zinc-200 bg-transparent px-2 py-1.5 text-sm"
+              className="w-full rounded-badge bg-sunk px-2 py-1.5 text-body-sm"
             />
             <button
               type="submit"
-              className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white"
+              className="press inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold whitespace-nowrap text-white shadow-pill"
             >
               {copy.issueSave}
             </button>
           </form>
-          {report.issueUrl && <p className="mt-1 text-xs text-zinc-500">{copy.issueSaved}</p>}
+          {report.issueUrl && <p className="mt-1 text-body-sm text-ink-2">{copy.issueSaved}</p>}
         </section>
 
-        <p className="text-sm font-medium text-green-700">{copy.complete(stage)}</p>
+        <p className="text-body-sm font-bold text-oxblood">{copy.complete(stage)}</p>
       </main>
     )
   }
@@ -334,19 +334,19 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
           a style: nothing in CSS can set it per breakpoint, and driving it from
           a media query in the client would mean a flash of the wrong state on
           every load. The copy is read from one brief either way. */}
-      <details className="mx-auto w-full max-w-4xl rounded-lg border border-zinc-200 p-4 open:pb-4 wide:hidden">
-        <summary className="cursor-pointer font-medium">{briefField(brief, 'title')[lang]}</summary>
+      <details className="mx-auto w-full max-w-4xl rounded-card bg-surface shadow-card p-4 open:pb-4 wide:hidden">
+        <summary className="cursor-pointer font-bold">{briefField(brief, 'title')[lang]}</summary>
         <BriefBody brief={brief} lang={lang} />
       </details>
-      <section className="mx-auto hidden w-full max-w-4xl rounded-lg border border-zinc-200 p-4 wide:block">
-        <h2 className="font-medium">{briefField(brief, 'title')[lang]}</h2>
+      <section className="mx-auto hidden w-full max-w-4xl rounded-card bg-surface shadow-card p-4 wide:block">
+        <h2 className="font-bold">{briefField(brief, 'title')[lang]}</h2>
         <BriefBody brief={brief} lang={lang} />
       </section>
       <div className="relative flex min-h-[70vh] flex-1 flex-col gap-4 wide:flex-row">
         <iframe
           src={`/${lang}/audit/${stage}/page`}
           title={briefField(brief, 'title')[lang]}
-          className="min-h-[70vh] w-full flex-1 rounded-lg border border-zinc-200"
+          className="min-h-[70vh] w-full flex-1 rounded-card bg-surface shadow-card"
         />
         <FindingsDrawer
           lang={lang}
