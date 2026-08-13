@@ -256,3 +256,64 @@ test('a Stage 2 report goes in end to end, and reveals Stage 2 alone', async () 
     expect(text).not.toContain(defect.slug)
   }
 })
+
+// ------------------------------------------------ Stage 3, and what Peer Review is
+
+/**
+ * Stage 3's subject is a page again, but judged against a stated reader
+ * (ADR-0011), and its brief is the only one carrying a Peer Review section.
+ * That section is the one place a Learner is told the thing ADR-0011 exists to
+ * settle — that Peer Review is not a verdict and that nothing waits on another
+ * person — so it is asserted rather than assumed to have rendered.
+ */
+test("the Stage 3 audit reads Stage 3's brief, Peer Review included, in both languages", async () => {
+  const email = freshLearner()
+  await passAllQuizzes(email, 3)
+  const cookie = await sessionCookieFor(email)
+
+  const en = visibleText(await (await fetch(`${BASE_URL}/en/audit/3`, { headers: { cookie } })).text())
+  expect(en).toContain('Audit the page against its reader')
+  expect(en).toContain('It is not a verdict')
+  expect(en).toContain('does not depend on another Learner being there')
+  expect(en).not.toContain('Audit the practice page')
+  expect(en).not.toContain('Audit the practice flow')
+
+  const ko = visibleText(await (await fetch(`${BASE_URL}/ko/audit/3`, { headers: { cookie } })).text())
+  expect(ko).toContain('읽는 사람을 기준으로 페이지 점검하기')
+  expect(ko).toContain('판정이 아니며')
+})
+
+test('only Stage 3 carries a Peer Review section', async () => {
+  const email = freshLearner()
+  await passAllQuizzes(email, 3)
+  const cookie = await sessionCookieFor(email)
+
+  for (const stage of [1, 2]) {
+    const text = visibleText(await (await fetch(`${BASE_URL}/en/audit/${stage}`, { headers: { cookie } })).text())
+    expect(text, `stage ${stage}`).not.toContain('It is not a verdict')
+  }
+})
+
+test('a Stage 3 report goes in end to end, and reveals Stage 3 alone', async () => {
+  const stage3Page = practicePageOf(content, 3)!
+  const email = freshLearner()
+  await passAllQuizzes(email, 3)
+  const report = await draftWithFindings(email, 3, 3)
+  await testDb.update(schema.reports).set({ submittedAt: new Date() }).where(eq(schema.reports.id, report.id))
+  const cookie = await sessionCookieFor(email)
+
+  const html = await (await fetch(`${BASE_URL}/en/audit/3`, { headers: { cookie } })).text()
+  const text = visibleText(html)
+
+  for (const defect of stage3Page.defects) {
+    expect(text).toContain(defect.element)
+  }
+  expect(text).toContain('Stage 3 complete')
+  expect(html).toContain('/en/audit/3/page/source')
+
+  // Submitting Stage 3 reveals Stage 3. Stage 1's manifest this Learner has
+  // seen; Stage 2's they may not have, and neither belongs in this response.
+  for (const defect of practicePageOf(content, 2)!.defects) {
+    expect(text).not.toContain(defect.slug)
+  }
+})

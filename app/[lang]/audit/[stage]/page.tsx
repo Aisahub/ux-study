@@ -113,13 +113,30 @@ function briefField(brief: Brief, name: string): Bilingual {
   return brief.frontmatter[name] as Bilingual
 }
 
-/** The brief's three paragraphs, shared by its collapsed and static forms. */
+/**
+ * A field only some Stages' briefs carry, or null.
+ *
+ * `peerReview` is Stage 3's alone (ADR-0011). Reading it the plain way would
+ * hand back `undefined` and throw on the language index, so the optionality is
+ * answered here rather than at each call site — the same shape `briefOf` and
+ * `practicePageOf` use one level up.
+ */
+function optionalBriefField(brief: Brief, name: string): Bilingual | null {
+  const value = brief.frontmatter[name]
+  return value && typeof value === 'object' ? (value as Bilingual) : null
+}
+
+/** The brief's paragraphs, shared by its collapsed and static forms. */
 function BriefBody({ brief, lang }: { brief: Brief; lang: Language }) {
+  // Stage 3 alone: what Peer Review is, and — the half a Learner alone at this
+  // Stage needs — that nothing waits on anybody else.
+  const peerReview = optionalBriefField(brief, 'peerReview')
   return (
     <div className="mt-2 flex flex-col gap-2 text-sm text-zinc-600">
       <p>{briefField(brief, 'intro')[lang]}</p>
       <p>{briefField(brief, 'whatCounts')[lang]}</p>
       <p>{briefField(brief, 'advice')[lang]}</p>
+      {peerReview && <p>{peerReview[lang]}</p>}
     </div>
   )
 }
