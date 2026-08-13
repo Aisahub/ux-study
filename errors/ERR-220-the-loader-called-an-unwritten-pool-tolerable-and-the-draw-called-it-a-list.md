@@ -10,14 +10,22 @@ TypeError: Cannot read properties of undefined (reading 'map')
     at startAttempt (app/[lang]/learn/[competency]/quiz/actions.ts:57:42)
 ```
 
-Four Competencies are in that state today — the whole of Stage 3: `jargon`,
-`mental-model-mismatch`, `heuristic-evaluation` and `testing-with-real-users`.
-Each one is declared in `config.md`, each one has a definition file and a
-Competency page, and each one's page links to a quiz that cannot exist yet.
-The Competency route is flat (ADR-0008), so nothing but a session stood
-between a Learner and the crash: no Stage gate, no pass requirement, no
-sequence. The doorstep offered **Start** in a warm field, the way it does on a
-Competency that is ready, and answered the press with a stack trace.
+Four Competencies were in that state when this was found — the whole of Stage
+3: `jargon`, `mental-model-mismatch`, `heuristic-evaluation` and
+`testing-with-real-users`. Each was declared in `config.md`, each had a
+definition file and a Competency page, and each page linked to a quiz that
+could not exist yet. The Competency route is flat (ADR-0008), so nothing but a
+session stood between a Learner and the crash: no Stage gate, no pass
+requirement, no sequence. The doorstep offered **Start** in a warm field, the
+way it does on a Competency that is ready, and answered the press with a stack
+trace.
+
+All four pools were authored the same day, in #108, #109, #110 and #111, while
+the fix was in review. That closes today's instance and none of the defect:
+declaring a Competency before writing its pool is a workflow `config.md` states
+outright, so the next Stage — or the next Competency added to an existing one —
+puts a Learner back on this doorstep. What changed is that the doorstep now has
+something to say when it happens.
 
 Worse than the error is what the error replaced. The state is not a fault —
 it is "these items are still being written", which is the most ordinary thing
@@ -73,9 +81,13 @@ declared before it was authored is what arrived.
 
 ## Reproduction
 
+Every pool has since been authored, so this cannot be reproduced against
+`content/` as it now stands. It was reproduced against the code before the fix,
+on 2026-08-13, like this:
+
 1. Sign in as any Learner.
-2. Visit `/en/learn/testing-with-real-users/quiz` — a Competency declared in
-   `config.md` with no directory under `content/items/`.
+2. Visit `/en/learn/testing-with-real-users/quiz` — at that point a Competency
+   declared in `config.md` with no directory under `content/items/`.
 3. Press **Start**.
 
 Before the fix: `POST … 500`, and the TypeError above in the server log. No
@@ -124,13 +136,24 @@ a pool deleted after the page was rendered, from reaching the draw.
 - **An empty state is copy, not an absence.** Two sentences: what the state is,
   then that it is a gap in the writing rather than something the Learner broke.
   Both languages, and no button that cannot do anything.
+- **A rule about unauthored content cannot be held by a test against authored
+  content.** The subject disappears the moment somebody does the authoring, and
+  a test written over HTTP against real `content/` then either goes quiet or
+  goes red for a reason that has nothing to do with the rule. Write it against a
+  fixture root from the start — `test/content.test.ts` shows the shape.
 
 ## Related files
 
 - `lib/content.ts` — `itemPoolOf`, `loadItems`, the `items` field on `Content`
 - `app/[lang]/learn/[competency]/quiz/actions.ts` — `startAttempt`
 - `app/[lang]/learn/[competency]/quiz/page.tsx` — the doorstep
-- `test/content.test.ts` — the null answer, on a fixture root, so it survives
-  Stage 3 being authored
-- `test/quiz.test.ts` — the doorstep of an unwritten Competency over HTTP
+- `test/content.test.ts` — the null answer, on a fixture root, which is now the
+  only place the state exists. An HTTP test of the doorstep shipped beside it
+  and was deleted within the hour: #111 authored the last pool, the test's own
+  guard fired, and a fixture root is the only root that can still hold a
+  Competency nobody has written. That was the outcome it was written to force
+  rather than a surprise — but it is the second time this repository has
+  discovered that a rule about unauthored content cannot be tested against
+  authored content (the first was #61's audit surface), and the lesson is to
+  reach for the fixture root first.
 - `content/config.md` — "Declaring a Stage is not authoring it"
