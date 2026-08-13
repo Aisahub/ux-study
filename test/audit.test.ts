@@ -28,8 +28,18 @@ function freshLearner(): string {
   return `learner-${randomBytes(6).toString('hex')}@aisahub.com`
 }
 
-async function passAllQuizzes(email: string) {
-  for (const competency of stage1) {
+/**
+ * Every Gate Quiz up to and including `stage` passed.
+ *
+ * Cumulative rather than one Stage's, because the Stage 2 audit is reached by
+ * a Learner who has been through Stage 1 — seeding Stage 2 alone would test a
+ * state the programme cannot produce.
+ */
+async function passAllQuizzes(email: string, stage = 1) {
+  const competencies = config.stages
+    .filter((entry) => entry.stage <= stage)
+    .flatMap((entry) => entry.competencies)
+  for (const competency of competencies) {
     await testDb.insert(schema.attempts).values({
       email,
       competency,
@@ -43,9 +53,9 @@ async function passAllQuizzes(email: string) {
   }
 }
 
-async function draftWithFindings(email: string, count: number) {
-  const [report] = await testDb.insert(schema.reports).values({ email, stage: 1 }).returning()
-  const defects = practicePage.defects.slice(0, count)
+async function draftWithFindings(email: string, count: number, stage = 1) {
+  const [report] = await testDb.insert(schema.reports).values({ email, stage }).returning()
+  const defects = practicePageOf(content, stage)!.defects.slice(0, count)
   for (const defect of defects) {
     await testDb.insert(schema.findings).values({
       reportId: report.id,
@@ -180,4 +190,69 @@ test('the reveal shows the issue-url slot, absent when not supplied', async () =
   expect(visibleText(html)).toContain('Optional: show a fix')
   expect(visibleText(html)).toContain('screenshot')
   expect(visibleText(html)).not.toContain('Saved.')
+})
+
+// --------------------------------------------------- a Stage brings its own brief
+
+/**
+ * Stage 2's subject is walked rather than read (ADR-0010), so its instructions
+ * are its own (#71). The surface picks the brief by Stage; before this, one
+ * brief served every Stage and a Learner stepping through a three-step flow was
+ * told to examine "the page".
+ */
+test("the Stage 2 audit reads Stage 2's brief, in both languages", async () => {
+  const email = freshLearner()
+  await passAllQuizzes(email, 2)
+  const cookie = await sessionCookieFor(email)
+
+  const en = visibleText(await (await fetch(`${BASE_URL}/en/audit/2`, { headers: { cookie } })).text())
+  expect(en).toContain('Audit the practice flow')
+  expect(en).toContain('three steps, start to finish')
+  // The tell that the wrong brief is being served: Stage 1's title, on a
+  // subject that is not a page.
+  expect(en).not.toContain('Audit the practice page')
+
+  // Asserted in Korean too, because a suite that exercises one language does
+  // not know whether the other is there.
+  const ko = visibleText(await (await fetch(`${BASE_URL}/ko/audit/2`, { headers: { cookie } })).text())
+  expect(ko).toContain('연습 흐름 점검하기')
+  expect(ko).not.toContain('연습 페이지 점검하기')
+})
+
+test("Stage 1's brief is untouched by Stage 2 gaining its own", async () => {
+  const email = freshLearner()
+  await passAllQuizzes(email, 1)
+  const cookie = await sessionCookieFor(email)
+
+  const en = visibleText(await (await fetch(`${BASE_URL}/en/audit/1`, { headers: { cookie } })).text())
+  expect(en).toContain('Audit the practice page')
+  expect(en).not.toContain('Audit the practice flow')
+
+  const ko = visibleText(await (await fetch(`${BASE_URL}/ko/audit/1`, { headers: { cookie } })).text())
+  expect(ko).toContain('연습 페이지 점검하기')
+})
+
+test('a Stage 2 report goes in end to end, and reveals Stage 2 alone', async () => {
+  const stage2Page = practicePageOf(content, 2)!
+  const email = freshLearner()
+  await passAllQuizzes(email, 2)
+  const report = await draftWithFindings(email, 3, 2)
+  await testDb.update(schema.reports).set({ submittedAt: new Date() }).where(eq(schema.reports.id, report.id))
+  const cookie = await sessionCookieFor(email)
+
+  const html = await (await fetch(`${BASE_URL}/en/audit/2`, { headers: { cookie } })).text()
+  const text = visibleText(html)
+
+  for (const defect of stage2Page.defects) {
+    expect(text).toContain(defect.element)
+  }
+  expect(text).toContain('Stage 2 complete')
+  expect(html).toContain('/en/audit/2/page/source')
+
+  // Submitting Stage 2 reveals Stage 2. Stage 1's manifest is a different
+  // Learner-facing secret on a report they may not have written yet, and a
+  // query keyed on the address alone would have handed it over here.
+  for (const defect of practicePage.defects) {
+    expect(text).not.toContain(defect.slug)
+  }
 })

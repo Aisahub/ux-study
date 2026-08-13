@@ -9,6 +9,12 @@
 # It also never states how many defects the page contains — the count is
 # withheld until submission, so the Learner looks at the page rather than
 # counting toward a number.
+#
+# `stage` says which Stage's audit surface reads this brief. It arrived with
+# Stage 2's sibling (#71): a Learner walking a three-step flow cannot be told
+# to examine "the page", and the surface has to pick between them by something
+# other than the filename it happened to be written under.
+stage: 1
 title:
   en: Audit the practice page
   ko: 연습 페이지 점검하기

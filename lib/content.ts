@@ -151,6 +151,12 @@ export interface QuizItem {
 
 export interface Brief {
   slug: string
+  /**
+   * The Stage whose audit surface reads this brief (#71). A Stage's subject is
+   * its own — Stage 1 reads a page, Stage 2 walks a flow — so the instructions
+   * cannot be shared, and the surface picks by Stage rather than by a filename.
+   */
+  stage: number
   /** UX Principles the brief cites, each required to exist in the Glossary. */
   principles: string[]
   frontmatter: Record<string, unknown>
@@ -244,6 +250,19 @@ export function itemPoolOf(content: Content, slug: string): QuizItem[] | null {
   return content.items[slug] ?? null
 }
 
+/**
+ * The brief a Stage's audit surface reads, or null where none is authored.
+ *
+ * Null the same way `practicePageOf` is null, and for the same reason: a Stage
+ * with a subject but no instructions is a state the surface has to say out
+ * loud, not one it should paper over by falling back to another Stage's brief.
+ * Telling a Learner walking a three-step flow to examine "the page" is worse
+ * than telling them the brief is missing.
+ */
+export function briefOf(content: Content, stage: number): Brief | null {
+  return content.briefs.find((brief) => brief.stage === stage) ?? null
+}
+
 export class ContentError extends Error {
   constructor(readonly problems: string[]) {
     super(['Content validation failed:', ...problems.map((problem) => `  - ${problem}`)].join('\n'))
@@ -263,7 +282,7 @@ export function loadContent(root: string = join(process.cwd(), 'content')): Cont
   const competencies = loadCompetencies(root, config, problems)
   const items = loadItems(root, config, principles, problems)
   const itemScreenCss = loadItemScreenCss(root, items, problems)
-  const briefs = loadBriefs(root, principles, problems)
+  const briefs = loadBriefs(root, config, principles, problems)
   const practicePages = loadPracticePages(root, config, principles, problems)
 
   if (problems.length > 0) throw new ContentError(problems)
@@ -616,14 +635,31 @@ function loadItemScreenCss(root: string, items: Record<string, QuizItem[]>, prob
   return ''
 }
 
-function loadBriefs(root: string, principles: Set<string>, problems: string[]): Brief[] {
+function loadBriefs(root: string, config: ContentConfig, principles: Set<string>, problems: string[]): Brief[] {
   const briefs: Brief[] = []
+  const declared = new Set(config.stages.map((entry) => entry.stage))
+  const claimed = new Map<number, string>()
+
   for (const file of markdownFiles(join(root, 'briefs'))) {
     const rel = `briefs/${file}`
     const { data, body } = readFrontmatter(join(root, 'briefs', file), rel, problems)
     checkLanguagePairs(data, rel, problems)
+
+    const stage = data.stage
+    if (!Number.isInteger(stage) || !declared.has(stage as number)) {
+      problems.push(`${rel}: stage must name a Stage declared in config.md — this brief reaches no audit surface`)
+    } else {
+      // Two briefs claiming one Stage is not a preference between them: the
+      // surface reads whichever the directory listing hands over first, so the
+      // Learner's instructions would depend on a filename nobody was choosing.
+      const already = claimed.get(stage as number)
+      if (already) problems.push(`${rel}: Stage ${stage} already has a brief in ${already}`)
+      else claimed.set(stage as number, rel)
+    }
+
     briefs.push({
       slug: file.replace(/\.md$/, ''),
+      stage: Number.isInteger(stage) ? (stage as number) : 0,
       principles: citedPrinciples(data.principles, rel, principles, problems),
       frontmatter: data,
       body,
