@@ -622,7 +622,10 @@ test('a passed attempt advances exactly that one Competency on the overview', as
   const text = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
 
   expect(text.match(/Passed/g)).toHaveLength(1)
-  expect(text.match(/Not started/g)).toHaveLength(3)
+  // Every other Competency, plus the two Stages nothing has been started in —
+  // Stage 1's own card now reads "In progress" instead.
+  expect(text.match(/Not started/g)).toHaveLength(11 + 2)
+  expect(text.match(/In progress/g)).toHaveLength(1)
 })
 
 test('every earlier attempt stays visible on the doorstep', async () => {

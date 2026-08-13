@@ -5,7 +5,13 @@ import { LinkPending } from '@/app/[lang]/pending'
 import { requireSession } from '@/lib/auth'
 import { competenciesOfStage } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
-import { progressFor, stageProgress, type QuizStatus } from '@/lib/progress'
+import {
+  isComplete,
+  progressFor,
+  stageProgress,
+  type QuizStatus,
+  type StageProgress,
+} from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
 export const dynamic = 'force-dynamic'
@@ -15,12 +21,18 @@ const COPY: Record<
   {
     heading: string
     intro: string
-    stageProgress: string
+    /**
+     * Named for the Stage it counts. With three Stages open it is no longer
+     * always Stage 1's, and a bar labelled "Stage 1 progress" above somebody's
+     * Stage 2 work counts something they closed months ago.
+     */
+    stageProgress: (stage: number) => string
     programmeStages: string
     open: string
     contentsTitle: string
-    stageOne: string
-    stageOneDetail: string
+    /** A Stage's own state, said in words beside the colour and the shape. */
+    stageState: Record<StageState, string>
+    stageHeading: (stage: number) => string
     done: (done: number, total: number) => string
     status: Record<QuizStatus, string>
     attempts: (n: number) => string
@@ -43,20 +55,20 @@ const COPY: Record<
     locked: string
     capstoneOpen: string
     capstoneSubmitted: string
+    /** All three, in Stage order — one list rather than a first and a rest. */
     stages: { name: string; detail: string }[]
-    preparing: string
     visibility: string
   }
 > = {
   en: {
     heading: 'Learn',
     intro: 'Choose any Competency and train the observation skill you need now.',
-    stageProgress: 'Stage 1 progress',
+    stageProgress: (stage) => `Stage ${stage} progress`,
     programmeStages: 'Programme stages',
     open: 'Open',
     contentsTitle: 'Programme contents',
-    stageOne: 'Stage 1',
-    stageOneDetail: 'Visible at a glance',
+    stageState: { unstarted: 'Not started', 'in-progress': 'In progress', complete: 'Complete' },
+    stageHeading: (stage) => `Stage ${stage}`,
     done: (done, total) => `${done} / ${total} done`,
     status: {
       unstarted: 'Not started',
@@ -78,22 +90,22 @@ const COPY: Record<
     capstoneOpen: 'Open the Self-Audit Report',
     capstoneSubmitted: 'Submitted',
     stages: [
+      { name: 'Stage 1', detail: 'Visible at a glance' },
       { name: 'Stage 2', detail: 'Visible by walking the flow' },
       { name: 'Stage 3', detail: 'Visible only to someone else' },
     ],
-    preparing: 'In preparation',
     visibility:
-      'A programme maintainer can see your progress: your Stage 1 completion, how long since your last activity, and how many attempts each quiz took. Nothing ranks you against anyone.',
+      'A programme maintainer can see your progress: which Stages you have completed, how long since your last activity, and how many attempts each quiz took. Nothing ranks you against anyone.',
   },
   ko: {
     heading: '학습',
     intro: '원하는 역량부터 골라 지금 필요한 관찰력을 훈련하세요.',
-    stageProgress: '1단계 진도',
+    stageProgress: (stage) => `${stage}단계 진도`,
     programmeStages: '프로그램 단계',
     open: '열림',
     contentsTitle: '목차',
-    stageOne: '1단계',
-    stageOneDetail: '한눈에 보이는 결함',
+    stageState: { unstarted: '시작 전', 'in-progress': '진행 중', complete: '수료' },
+    stageHeading: (stage) => `${stage}단계`,
     done: (done, total) => `${total}개 중 ${done}개 완료`,
     status: { unstarted: '시작 전', 'in-progress': '진행 중', passed: '통과' },
     attempts: (n) => `${n}회 시도`,
@@ -111,12 +123,12 @@ const COPY: Record<
     capstoneOpen: '자가 점검 리포트 열기',
     capstoneSubmitted: '제출 완료',
     stages: [
+      { name: '1단계', detail: '한눈에 보이는 결함' },
       { name: '2단계', detail: '플로우를 따라가야 보이는 결함' },
       { name: '3단계', detail: '남이 봐야 보이는 결함' },
     ],
-    preparing: '준비 중',
     visibility:
-      '운영자는 학습자의 진행 상황을 볼 수 있습니다 — 1단계 완료 현황, 마지막 활동이 얼마나 지났는지, 퀴즈마다 몇 번 시도했는지. 누구와도 순위를 매기지 않습니다.',
+      '운영자는 학습자의 진행 상황을 볼 수 있습니다 — 어느 단계까지 수료했는지, 마지막 활동이 얼마나 지났는지, 퀴즈마다 몇 번 시도했는지. 누구와도 순위를 매기지 않습니다.',
   },
 }
 
@@ -145,6 +157,19 @@ function ReportMark({ className }: { className: string }) {
       <path d="M9 17h4" />
     </svg>
   )
+}
+
+/**
+ * A Stage's own state, which is deliberately not a QuizStatus: a Stage is
+ * complete when every Gate Quiz in it is passed *and* its report is submitted.
+ * Sharing one vocabulary would let a Stage read `passed` with its capstone
+ * still outstanding.
+ */
+type StageState = 'unstarted' | 'in-progress' | 'complete'
+
+function stageStateOf(progress: StageProgress): StageState {
+  if (isComplete(progress)) return 'complete'
+  return progress.stepsDone > 0 ? 'in-progress' : 'unstarted'
 }
 
 /**
@@ -177,17 +202,28 @@ function StageCard({
   name: string
   detail: string
   status: string
-  state: 'open' | 'preparing'
+  state: StageState
 }) {
-  const isOpen = state === 'open'
+  // Three ways at once — the fill is the colour, the ring and its half-fill are
+  // the shape, and `status` beside it is the word. This platform teaches that
+  // colour alone is unreadable to some Learners, so its own overview may not
+  // encode a state in colour and nothing else.
+  const mark =
+    state === 'complete'
+      ? 'bg-oxblood text-white'
+      : state === 'in-progress'
+        ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood),inset_0_-5px_0_0_var(--oxblood)]'
+        : 'shadow-[inset_0_0_0_2px_var(--blue-grey)]'
 
   return (
-    <div className="grid grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-x-3.5 text-ink sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-[14px] sm:rounded-card sm:bg-surface sm:p-[26px] sm:shadow-card">
+    <div
+      data-stage={number}
+      data-stage-state={state}
+      className="grid grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-x-3.5 text-ink sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-[14px] sm:rounded-card sm:bg-surface sm:p-[26px] sm:shadow-card"
+    >
       <span
         aria-hidden
-        className={`col-start-1 row-start-1 grid size-7 place-items-center rounded-full text-label font-bold sm:size-9 ${
-          isOpen ? 'bg-oxblood text-white' : 'shadow-[inset_0_0_0_2px_var(--blue-grey)]'
-        }`}
+        className={`col-start-1 row-start-1 grid size-7 place-items-center rounded-full text-label font-bold sm:size-9 ${mark}`}
       >
         {number}
       </span>
@@ -219,16 +255,30 @@ export default async function Learn({
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
-  // Stage 1's alone, which is all this overview opens today; #79 is where the
-  // later two arrive on it.
-  const stage1 = stageProgress(await progressFor(session.email), 1)
-  const competencies = competenciesOfStage(content.config, 1).map((slug) =>
-    content.competencies.find((competency) => competency.slug === slug)!,
-  )
+  // Every declared Stage, in the programme's order (#79). This overview showed
+  // Stage 1 and called the other two "In preparation"; both are authored now,
+  // and a statement that has become false is worse than one that is missing.
+  const progress = await progressFor(session.email)
+  const stages = content.config.stages.map((declared) => ({
+    stage: declared.stage,
+    progress: stageProgress(progress, declared.stage),
+    competencies: competenciesOfStage(content.config, declared.stage).map((slug) =>
+      content.competencies.find((competency) => competency.slug === slug)!,
+    ),
+  }))
+
+  // The Stage the Learner is standing in: the earliest unfinished one, or the
+  // last where every Stage is done. The bar counts that Stage and names it —
+  // this page's job is to answer "what now", and a bar counting a Stage closed
+  // months ago answers nothing.
+  const current = stages.find((entry) => !isComplete(entry.progress)) ?? stages[stages.length - 1]
   const completionPercent =
-    stage1.stepsTotal === 0
+    current.progress.stepsTotal === 0
       ? 0
-      : Math.min(100, Math.round((stage1.stepsDone / stage1.stepsTotal) * 100))
+      : Math.min(
+          100,
+          Math.round((current.progress.stepsDone / current.progress.stepsTotal) * 100),
+        )
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
@@ -239,20 +289,20 @@ export default async function Learn({
         </div>
         <div>
           <div className="flex items-center justify-between gap-[14px] text-label font-bold">
-            <span>{copy.stageProgress}</span>
-            <span>{copy.done(stage1.stepsDone, stage1.stepsTotal)}</span>
+            <span>{copy.stageProgress(current.stage)}</span>
+            <span>{copy.done(current.progress.stepsDone, current.progress.stepsTotal)}</span>
           </div>
           <div
             className="mt-2 h-2 overflow-hidden rounded-full bg-blue-grey/35"
             role="progressbar"
-            aria-label={copy.stageProgress}
+            aria-label={copy.stageProgress(current.stage)}
             aria-valuemin={0}
-            aria-valuemax={stage1.stepsTotal}
-            aria-valuenow={stage1.stepsDone}
+            aria-valuemax={current.progress.stepsTotal}
+            aria-valuenow={current.progress.stepsDone}
             // Without this a screen reader announces a bare "20%", which counts
             // nothing a Learner can name. The visible line beside the bar
             // already says what is being counted; this makes them say it alike.
-            aria-valuetext={copy.done(stage1.stepsDone, stage1.stepsTotal)}
+            aria-valuetext={copy.done(current.progress.stepsDone, current.progress.stepsTotal)}
           >
             <span
               className="block h-full rounded-full bg-oxblood"
@@ -271,23 +321,19 @@ export default async function Learn({
           {copy.programmeStages}
         </h2>
         <div className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-3 sm:bg-transparent sm:p-0 sm:shadow-none">
-          <StageCard
-            number={1}
-            name={copy.stageOne}
-            detail={copy.stageOneDetail}
-            status={copy.open}
-            state="open"
-          />
-          {copy.stages.map((stage, index) => (
-            <StageCard
-              key={stage.name}
-              number={index + 2}
-              name={stage.name}
-              detail={stage.detail}
-              status={copy.preparing}
-              state="preparing"
-            />
-          ))}
+          {stages.map((entry, index) => {
+            const state = stageStateOf(entry.progress)
+            return (
+              <StageCard
+                key={entry.stage}
+                number={entry.stage}
+                name={copy.stages[index].name}
+                detail={copy.stages[index].detail}
+                status={copy.stageState[state]}
+                state={state}
+              />
+            )
+          })}
         </div>
       </section>
 
@@ -298,124 +344,134 @@ export default async function Learn({
           </h2>
         </div>
 
-        <div className="mt-[14px] grid gap-[14px]">
-          {competencies.map((competency, index) => {
-            const quiz = stage1.quizzes[competency.slug]
+        {/* One block per Stage, each with its own heading and its own capstone.
+            The rows are identical across the three on purpose: a Competency is
+            an entry point wherever it sits, and giving the later Stages a
+            different row would say they are a different kind of work. */}
+        {stages.map((entry) => (
+          <div key={entry.stage} className="mt-[26px] first:mt-[14px]">
+            <h3 className="px-1.5 font-serif text-headline font-bold text-ink">
+              {copy.stageHeading(entry.stage)}
+            </h3>
 
-            return (
-              <article
-                key={competency.slug}
-                data-competency={competency.slug}
-                data-quiz-status={quiz.status}
-                className="@container grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
-              >
-                <span
-                  aria-hidden
-                  className={`grid size-11 place-items-center rounded-badge text-label font-bold ${
-                    quiz.status === 'passed'
-                      ? 'bg-oxblood text-white'
-                      : quiz.status === 'in-progress'
-                        ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood),inset_0_-5px_0_0_var(--oxblood)]'
-                        : 'text-ink shadow-[inset_0_0_0_2px_var(--blue-grey)]'
-                  }`}
-                >
-                  {String(index + 1).padStart(2, '0')}
-                </span>
+            <div className="mt-[14px] grid gap-[14px]">
+              {entry.competencies.map((competency, index) => {
+                const quiz = entry.progress.quizzes[competency.slug]
 
-                <div className="min-w-0">
-                  {/* The 44px row height belongs to the link, not to the
-                      heading around it. It was on the heading, so the row
-                      looked like a 44px target and only the 22px of text
-                      actually answered a tap. */}
-                  <h3 className="text-title font-bold">
-                    <Link
-                      href={`/${lang}/learn/${competency.slug}`}
-                      className="inline-flex min-h-11 items-center underline-offset-4 hover:underline"
+                return (
+                  <article
+                    key={competency.slug}
+                    data-competency={competency.slug}
+                    data-quiz-status={quiz.status}
+                    className="@container grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
+                  >
+                    <span
+                      aria-hidden
+                      className={`grid size-11 place-items-center rounded-badge text-label font-bold ${
+                        quiz.status === 'passed'
+                          ? 'bg-oxblood text-white'
+                          : quiz.status === 'in-progress'
+                            ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood),inset_0_-5px_0_0_var(--oxblood)]'
+                            : 'text-ink shadow-[inset_0_0_0_2px_var(--blue-grey)]'
+                      }`}
                     >
-                      {competency.name[lang]}
-                    </Link>
-                  </h3>
-                  <p className="mt-1 max-w-measure text-body-sm text-ink-2">
-                    {competency.objective[lang]}
-                  </p>
-                </div>
-
-                <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
-                  {/* The 44px is what holds this line level with the row's
-                      name and mark. The inner span is load-bearing: as direct
-                      flex children the status and the attempt count become
-                      separate flex items, and flex layout drops the space
-                      before the separator. */}
-                  <p className="text-label font-bold text-ink sm:flex sm:min-h-11 sm:items-center">
-                    <span>
-                      {copy.status[quiz.status]}
-                      <span className="text-ink-2"> · {copy.attempts(quiz.attempts)}</span>
+                      {String(index + 1).padStart(2, '0')}
                     </span>
-                  </p>
-                  {/* The row's two ways in, in the order they are meant to be
-                      taken. The Competency was reachable only through its own
-                      name, which recovers its underline on hover — and a phone
-                      has no hover to recover it from, so on touch the only
-                      thing in the row that looked pressable was the quiz. A
-                      directory whose sole visible action skips the reading is
-                      not what the Studio Board Rule describes.
 
-                      A link and not a second pill: DESIGN.md's Row Action
-                      Exception permits the one repeated button per row and
-                      says never alongside a second differently-weighted one.
-                      Oxblood at the label step is what this system already
-                      makes links out of, and the arrow is what makes it read
-                      as a way in rather than as a word.
+                    <div className="min-w-0">
+                      {/* The 44px row height belongs to the link, not to the
+                          heading around it. It was on the heading, so the row
+                          looked like a 44px target and only the 22px of text
+                          actually answered a tap. */}
+                      <h3 className="text-title font-bold">
+                        <Link
+                          href={`/${lang}/learn/${competency.slug}`}
+                          className="inline-flex min-h-11 items-center underline-offset-4 hover:underline"
+                        >
+                          {competency.name[lang]}
+                        </Link>
+                      </h3>
+                      <p className="mt-1 max-w-measure text-body-sm text-ink-2">
+                        {competency.objective[lang]}
+                      </p>
+                    </div>
 
-                      Side by side only where the card can pay for it. The
-                      description beside this column is a `minmax(0,1fr)`,
-                      which will shrink to nothing rather than push the action
-                      column back: laid out as a row on a 560px card, the
-                      English objective measured 93px wide and ran to twelve
-                      lines of ribbon — on the row whose own Competency is
-                      Readability. Below the threshold the link stacks over the
-                      button and the column is the button's width again, which
-                      is what it was before this link existed.
+                    <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
+                      {/* The 44px is what holds this line level with the row's
+                          name and mark. The inner span is load-bearing: as direct
+                          flex children the status and the attempt count become
+                          separate flex items, and flex layout drops the space
+                          before the separator. */}
+                      <p className="text-label font-bold text-ink sm:flex sm:min-h-11 sm:items-center">
+                        <span>
+                          {copy.status[quiz.status]}
+                          <span className="text-ink-2"> · {copy.attempts(quiz.attempts)}</span>
+                        </span>
+                      </p>
+                      {/* The row's two ways in, in the order they are meant to be
+                          taken. The Competency was reachable only through its own
+                          name, which recovers its underline on hover — and a phone
+                          has no hover to recover it from, so on touch the only
+                          thing in the row that looked pressable was the quiz. A
+                          directory whose sole visible action skips the reading is
+                          not what the Studio Board Rule describes.
 
-                      The card is asked and not the viewport: DESIGN.md allows
-                      three viewport bands and no fourth, and a component with
-                      a width of its own asks the container it stands in. 780px
-                      is where the description still has ~390px at the moment
-                      the row forms, measured on the English labels, which are
-                      the wider pair. */}
-                  <div className="flex flex-col gap-[14px] @min-[780px]:flex-row @min-[780px]:items-center">
-                    <Link
-                      href={`/${lang}/learn/${competency.slug}`}
-                      className="inline-flex min-h-11 items-center self-start text-label font-bold text-oxblood underline-offset-4 hover:underline sm:self-end @min-[780px]:self-auto"
-                    >
-                      {copy.openCompetency[quiz.status]}
-                      <span aria-hidden>&nbsp;→</span>
-                    </Link>
-                    <Link
-                      href={`/${lang}/learn/${competency.slug}/quiz`}
-                      className="press relative inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill @min-[780px]:w-auto"
-                    >
-                      {copy.openQuiz}
-                      <LinkPending />
-                    </Link>
-                  </div>
-                </div>
-              </article>
+                          A link and not a second pill: DESIGN.md's Row Action
+                          Exception permits the one repeated button per row and
+                          says never alongside a second differently-weighted one.
+                          Oxblood at the label step is what this system already
+                          makes links out of, and the arrow is what makes it read
+                          as a way in rather than as a word.
+
+                          Side by side only where the card can pay for it. The
+                          description beside this column is a `minmax(0,1fr)`,
+                          which will shrink to nothing rather than push the action
+                          column back: laid out as a row on a 560px card, the
+                          English objective measured 93px wide and ran to twelve
+                          lines of ribbon — on the row whose own Competency is
+                          Readability. Below the threshold the link stacks over the
+                          button and the column is the button's width again, which
+                          is what it was before this link existed.
+
+                          The card is asked and not the viewport: DESIGN.md allows
+                          three viewport bands and no fourth, and a component with
+                          a width of its own asks the container it stands in. 780px
+                          is where the description still has ~390px at the moment
+                          the row forms, measured on the English labels, which are
+                          the wider pair. */}
+                      <div className="flex flex-col gap-[14px] @min-[780px]:flex-row @min-[780px]:items-center">
+                        <Link
+                          href={`/${lang}/learn/${competency.slug}`}
+                          className="inline-flex min-h-11 items-center self-start text-label font-bold text-oxblood underline-offset-4 hover:underline sm:self-end @min-[780px]:self-auto"
+                        >
+                          {copy.openCompetency[quiz.status]}
+                          <span aria-hidden>&nbsp;→</span>
+                        </Link>
+                        <Link
+                          href={`/${lang}/learn/${competency.slug}/quiz`}
+                          className="press relative inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill @min-[780px]:w-auto"
+                        >
+                          {copy.openQuiz}
+                          <LinkPending />
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
             )
           })}
 
           <article
             data-report-status={
-              stage1.reportSubmitted ? 'submitted' : stage1.allPassed ? 'open' : 'locked'
+              entry.progress.reportSubmitted ? 'submitted' : entry.progress.allPassed ? 'open' : 'locked'
             }
             className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
           >
             <span
               aria-hidden
               className={`grid size-11 place-items-center rounded-badge ${
-                stage1.reportSubmitted
+                entry.progress.reportSubmitted
                   ? 'bg-oxblood text-white'
-                  : stage1.allPassed
+                  : entry.progress.allPassed
                     ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood),inset_0_-5px_0_0_var(--oxblood)]'
                     : 'text-ink shadow-[inset_0_0_0_2px_var(--blue-grey)]'
               }`}
@@ -431,21 +487,21 @@ export default async function Learn({
                 {copy.capstoneHeading}
               </h3>
               <p className="mt-1 max-w-measure text-body-sm text-ink-2">
-                {stage1.allPassed ? copy.capstoneExplanation : copy.capstoneLocked}
+                {entry.progress.allPassed ? copy.capstoneExplanation : copy.capstoneLocked}
               </p>
             </div>
 
             <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
               <p className="text-label font-bold text-ink sm:flex sm:min-h-11 sm:items-center">
-                {stage1.reportSubmitted
+                {entry.progress.reportSubmitted
                   ? copy.capstoneSubmitted
-                  : stage1.allPassed
+                  : entry.progress.allPassed
                     ? copy.open
                     : copy.locked}
               </p>
-              {(stage1.allPassed || stage1.reportSubmitted) && (
+              {(entry.progress.allPassed || entry.progress.reportSubmitted) && (
                 <Link
-                  href={`/${lang}/audit`}
+                  href={`/${lang}/audit/${entry.stage}`}
                   className="press relative inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill"
                 >
                   {copy.capstoneOpen}
@@ -454,7 +510,9 @@ export default async function Learn({
               )}
             </div>
           </article>
-        </div>
+            </div>
+          </div>
+        ))}
       </section>
 
       {/* Visible on the page every Learner lands on, before any first
