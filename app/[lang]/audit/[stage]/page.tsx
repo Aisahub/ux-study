@@ -5,7 +5,7 @@ import { and, eq } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
-import type { Bilingual } from '@/lib/content'
+import { briefOf, type Bilingual, type Brief } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
 import { progressFor, stageProgress } from '@/lib/progress'
 import { content, practicePage } from '@/lib/server-content'
@@ -34,6 +34,8 @@ const COPY: Record<
     defectStep: (step: number, of: number) => string
     noSubject: string
     noSubjectWhy: string
+    noBrief: string
+    noBriefWhy: string
   }
 > = {
   en: {
@@ -63,6 +65,12 @@ const COPY: Record<
     noSubject: 'This Stage has no page to audit yet.',
     noSubjectWhy:
       'The Gate Quizzes here are ready; the page to practise them on is still being written. Nothing is broken and nothing is lost — the Stage will finish once it arrives.',
+    // Separate from noSubject, because they are separate absences and a
+    // Learner can act on the difference: a Stage with a subject and no brief
+    // is one the writing has reached, and the subject is worth a look now.
+    noBrief: 'The instructions for this Stage are still being written.',
+    noBriefWhy:
+      'The subject is here and the Gate Quizzes are passed, but what a complete report asks of you has not been set down yet. Auditing without it would mean guessing what counts, so this Stage waits.',
   },
   ko: {
     locked: '이 단계의 퀴즈를 모두 통과하면 자가 점검이 열립니다.',
@@ -87,12 +95,33 @@ const COPY: Record<
     noSubject: '이 단계에는 아직 점검할 페이지가 없습니다.',
     noSubjectWhy:
       '이 단계의 퀴즈는 준비되어 있고, 연습할 페이지는 아직 작성 중입니다. 잘못된 것도, 사라진 것도 없습니다 — 페이지가 준비되면 이 단계를 마칠 수 있습니다.',
+    noBrief: '이 단계의 안내문은 아직 작성 중입니다.',
+    noBriefWhy:
+      '점검할 대상도 있고 퀴즈도 통과했지만, 완결된 보고서가 무엇을 요구하는지가 아직 정리되지 않았습니다. 그것 없이 점검하면 무엇이 인정되는지 짐작해야 하므로, 이 단계는 기다립니다.',
   },
 }
 
-function briefField(name: string): Bilingual {
-  const brief = content.briefs.find((entry) => entry.slug === 'self-audit-report')!
+/**
+ * A field of this Stage's brief (#71).
+ *
+ * Keyed by Stage rather than by the one brief there used to be: Stage 1 reads
+ * a page and Stage 2 walks a flow, so "examine the page" is wrong wording for
+ * half the programme, and falling back to a sibling Stage's brief would hand a
+ * Learner instructions for a subject they are not looking at.
+ */
+function briefField(brief: Brief, name: string): Bilingual {
   return brief.frontmatter[name] as Bilingual
+}
+
+/** The brief's three paragraphs, shared by its collapsed and static forms. */
+function BriefBody({ brief, lang }: { brief: Brief; lang: Language }) {
+  return (
+    <div className="mt-2 flex flex-col gap-2 text-sm text-zinc-600">
+      <p>{briefField(brief, 'intro')[lang]}</p>
+      <p>{briefField(brief, 'whatCounts')[lang]}</p>
+      <p>{briefField(brief, 'advice')[lang]}</p>
+    </div>
+  )
 }
 
 /**
@@ -117,6 +146,12 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
+  // This Stage's own brief, which a Stage may not have yet — Stage 3's arrives
+  // with #78. Resolved before the branches below because two of them print its
+  // title, and a Stage with a subject and no brief must not crash on the way to
+  // saying so.
+  const brief = briefOf(content, stage)
+
   const subject = practicePage(stage)
   if (!subject) {
     // Said, not shown as an empty frame. A Learner who reached a declared
@@ -124,8 +159,13 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
     // a broken one.
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
-        <h1 className="text-2xl font-semibold tracking-tight">{briefField('title')[lang]}</h1>
-        <p className="text-sm font-medium">{copy.noSubject}</p>
+        {/* The brief's title where there is one, and the absence itself as the
+            heading where there is not — rather than printing `noSubject` as
+            both the heading and the line under it. */}
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {brief ? briefField(brief, 'title')[lang] : copy.noSubject}
+        </h1>
+        {brief && <p className="text-sm font-medium">{copy.noSubject}</p>}
         <p className="text-zinc-600">{copy.noSubjectWhy}</p>
         <Link href={`/${lang}/learn`} className="text-sm text-zinc-500 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
@@ -139,9 +179,27 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   if (!progress.allPassed) {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
-        <h1 className="text-2xl font-semibold tracking-tight">{briefField('title')[lang]}</h1>
-        <p className="text-zinc-600">{briefField('intro')[lang]}</p>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {brief ? briefField(brief, 'title')[lang] : copy.noBrief}
+        </h1>
+        {brief && <p className="text-zinc-600">{briefField(brief, 'intro')[lang]}</p>}
         <p className="text-sm font-medium">{copy.locked}</p>
+        <Link href={`/${lang}/learn`} className="text-sm text-zinc-500 underline-offset-4 hover:underline">
+          ← {copy.lockedBack}
+        </Link>
+      </main>
+    )
+  }
+
+  // Past the gate, with a subject to audit and nothing telling the Learner what
+  // a complete report asks of them. Said out loud rather than falling back to
+  // another Stage's brief, which would describe a subject they are not looking
+  // at — Stage 1's says "examine the page" to somebody walking a flow.
+  if (!brief) {
+    return (
+      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
+        <h1 className="text-2xl font-semibold tracking-tight">{copy.noBrief}</h1>
+        <p className="text-zinc-600">{copy.noBriefWhy}</p>
         <Link href={`/${lang}/learn`} className="text-sm text-zinc-500 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
         </Link>
@@ -246,18 +304,31 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   // iframe so the platform around it stays outside its bounds (#23).
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 font-sans">
-      <details className="mx-auto w-full max-w-4xl rounded-lg border border-zinc-200 p-4 open:pb-4" open>
-        <summary className="cursor-pointer font-medium">{briefField('title')[lang]}</summary>
-        <div className="mt-2 flex flex-col gap-2 text-sm text-zinc-600">
-          <p>{briefField('intro')[lang]}</p>
-          <p>{briefField('whatCounts')[lang]}</p>
-          <p>{briefField('advice')[lang]}</p>
-        </div>
+      {/* Below 1100px the brief starts closed; at 1100px and up it is a static
+          panel with nothing to open.
+
+          It was `<details open>` at every width, and on a 375×812 phone the
+          three paragraphs ran 662px — the subject began 16px past the fold on
+          Stage 1 and far lower on Stage 2, whose flow needs more saying. A
+          first screen carrying only orientation is the shape drop-out takes on
+          a self-paced programme, so it is a defect rather than a preference.
+
+          Two elements rather than one, because `open` is an attribute and not
+          a style: nothing in CSS can set it per breakpoint, and driving it from
+          a media query in the client would mean a flash of the wrong state on
+          every load. The copy is read from one brief either way. */}
+      <details className="mx-auto w-full max-w-4xl rounded-lg border border-zinc-200 p-4 open:pb-4 wide:hidden">
+        <summary className="cursor-pointer font-medium">{briefField(brief, 'title')[lang]}</summary>
+        <BriefBody brief={brief} lang={lang} />
       </details>
+      <section className="mx-auto hidden w-full max-w-4xl rounded-lg border border-zinc-200 p-4 wide:block">
+        <h2 className="font-medium">{briefField(brief, 'title')[lang]}</h2>
+        <BriefBody brief={brief} lang={lang} />
+      </section>
       <div className="relative flex min-h-[70vh] flex-1 flex-col gap-4 wide:flex-row">
         <iframe
           src={`/${lang}/audit/${stage}/page`}
-          title={briefField('title')[lang]}
+          title={briefField(brief, 'title')[lang]}
           className="min-h-[70vh] w-full flex-1 rounded-lg border border-zinc-200"
         />
         <FindingsDrawer
