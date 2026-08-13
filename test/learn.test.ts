@@ -20,12 +20,23 @@ function freshLearner(): string {
   return `learner-${randomBytes(6).toString('hex')}@aisahub.com`
 }
 
+const content = loadContent(join(__dirname, '..', 'content'))
+
 const STAGE_ONE_COMPETENCIES = [
   'visual-hierarchy',
   'readability',
   'consistency',
   'perceived-clickability',
 ]
+
+/**
+ * Every Competency, in programme order. The overview listed Stage 1's four and
+ * called the rest "In preparation"; since #79 it lists all three Stages, so the
+ * counts here are read off the curriculum rather than written down — a Stage
+ * gaining a fifth Competency should not need this file edited.
+ */
+const ALL_COMPETENCIES = content.config.stages.flatMap((stage) => stage.competencies)
+const STAGE_COUNT = content.config.stages.length
 
 async function passQuiz(email: string, competency: string) {
   await testDb.insert(schema.attempts).values({
@@ -46,16 +57,21 @@ test('the overview is a Learner surface: unauthenticated requests are refused', 
   expect(response.headers.get('location')).toContain('/en/signin')
 })
 
-test('a fresh Learner sees four Competencies unstarted and their current progress', async () => {
+test('a fresh Learner sees every Competency unstarted and their current progress', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 
   const text = visibleText(await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text())
 
-  expect(text.match(/Not started/g)).toHaveLength(4)
-  expect(text.match(/0 attempts/g)).toHaveLength(4)
+  // One per Competency row, plus one per Stage card in the strip: nothing has
+  // been started anywhere.
+  expect(text.match(/Not started/g)).toHaveLength(ALL_COMPETENCIES.length + STAGE_COUNT)
+  expect(text.match(/0 attempts/g)).toHaveLength(ALL_COMPETENCIES.length)
+  // The bar counts the Stage they are standing in, which for a fresh Learner
+  // is the first one.
+  expect(text).toContain('Stage 1 progress')
   expect(text).toContain('0 / 5 done')
-  // The capstone is locked rather than merely absent.
-  expect(text).toContain('Unlocks when all four Gate Quizzes are passed')
+  // Every capstone is locked rather than merely absent.
+  expect(text.match(/Unlocks when all four Gate Quizzes are passed/g)).toHaveLength(STAGE_COUNT)
 })
 
 test('the programme contents shows the whole route without inventing a next Competency', async () => {
@@ -96,19 +112,19 @@ test('every Stage 1 Competency exposes its own Gate Quiz', async () => {
   const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
   const text = visibleText(html)
 
-  for (const slug of STAGE_ONE_COMPETENCIES) {
+  for (const slug of ALL_COMPETENCIES) {
     expect(html).toContain(`href="/en/learn/${slug}/quiz"`)
   }
-  expect(text.match(/Open the Gate Quiz/g)).toHaveLength(4)
+  expect(text.match(/Open the Gate Quiz/g)).toHaveLength(ALL_COMPETENCIES.length)
 })
 
-test('Stage 1 is four distinct task panels with separate learning and quiz links', async () => {
+test('the programme is one task panel per Competency, in Stage order', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 
   const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
 
   const panels = [...html.matchAll(/<article data-competency="([^"]+)"[\s\S]*?<\/article>/g)]
-  expect(panels.map((panel) => panel[1])).toEqual(STAGE_ONE_COMPETENCIES)
+  expect(panels.map((panel) => panel[1])).toEqual(ALL_COMPETENCIES)
   for (const [panel, slug] of panels.map((match) => [match[0], match[1]])) {
     expect(panel).toContain(`href="/en/learn/${slug}"`)
     expect(panel).toContain(`href="/en/learn/${slug}/quiz"`)
@@ -164,8 +180,11 @@ test('both languages present the same Competency set', async () => {
   expect(ko).toContain('시각적 위계')
   expect(en).toContain('Choose any Competency')
   expect(ko).toContain('원하는 역량부터')
-  expect(en.match(/Not started/g)).toHaveLength(4)
-  expect(ko.match(/시작 전/g)).toHaveLength(4)
+  // Counted against each other rather than against a number, which is what
+  // "the same set" means and what a hard-coded 4 stopped saying the moment the
+  // overview grew from one Stage to three.
+  expect(en.match(/Not started/g)).toHaveLength(ALL_COMPETENCIES.length + STAGE_COUNT)
+  expect(ko.match(/시작 전/g)).toHaveLength(en.match(/Not started/g)!.length)
 })
 
 test('a passed Gate Quiz shows as passed, and progress survives a brand-new session', async () => {
@@ -182,7 +201,7 @@ test('a passed Gate Quiz shows as passed, and progress survives a brand-new sess
   expect(text).toContain('1 / 5 done')
 })
 
-test('the labelled progress bar reaches 100% when Stage 1 is complete', async () => {
+test('the labelled bar moves to the next Stage once one is complete', async () => {
   const email = freshLearner()
   for (const slug of STAGE_ONE_COMPETENCIES) {
     await passQuiz(email, slug)
@@ -191,9 +210,32 @@ test('the labelled progress bar reaches 100% when Stage 1 is complete', async ()
 
   const cookie = await sessionCookieFor(email)
   const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+  const text = visibleText(html)
 
-  expect(html).toContain('aria-valuenow="5"')
+  // Stage 1 is finished, so the bar counts the Stage with work left in it and
+  // says which. Before #79 it was Stage 1's for ever, and a Learner well into
+  // Stage 2 read a full bar over work they had not started.
+  expect(text).toContain('Stage 2 progress')
+  expect(html).toContain('aria-valuenow="0"')
+  expect(text).toContain('Stage 1')
+  expect(text).toContain('Complete')
+})
+
+test('the bar reads 100% only when every Stage is complete', async () => {
+  const email = freshLearner()
+  for (const stage of content.config.stages) {
+    for (const slug of stage.competencies) await passQuiz(email, slug)
+    await testDb.insert(schema.reports).values({ email, stage: stage.stage, submittedAt: new Date() })
+  }
+
+  const cookie = await sessionCookieFor(email)
+  const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+
+  // Nothing is unfinished, so the bar rests on the last Stage rather than
+  // bouncing back to the first.
+  expect(visibleText(html)).toContain(`Stage ${content.config.stages.length} progress`)
   expect(html).toContain('style="width:100%"')
+  expect(visibleText(html).match(/Complete/g)).toHaveLength(STAGE_COUNT)
 })
 
 test('the report panel stays locked until every quiz passes and remains revisitable after submission', async () => {
@@ -202,7 +244,7 @@ test('the report panel stays locked until every quiz passes and remains revisita
   const locked = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie: lockedCookie } })).text()
 
   expect(locked).toContain('data-report-status="locked"')
-  expect(locked).not.toContain('href="/en/audit"')
+  expect(locked).not.toContain('href="/en/audit/1"')
 
   for (const slug of STAGE_ONE_COMPETENCIES) {
     await passQuiz(email, slug)
@@ -215,7 +257,9 @@ test('the report panel stays locked until every quiz passes and remains revisita
   ).text()
 
   expect(submitted).toContain('data-report-status="submitted"')
-  expect(submitted).toContain('href="/en/audit"')
+  // Per Stage since #79: `/en/audit` alone redirects to whichever Stage is
+  // unfinished, which is not the row the Learner pressed.
+  expect(submitted).toContain('href="/en/audit/1"')
   expect(visibleText(submitted)).toContain('Submitted')
 })
 
@@ -230,7 +274,7 @@ test("one Learner's progress never colours another's overview", async () => {
     await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie: strangerCookie } })).text(),
   )
 
-  expect(text.match(/Not started/g)).toHaveLength(4)
+  expect(text.match(/Not started/g)).toHaveLength(ALL_COMPETENCIES.length + STAGE_COUNT)
   expect(text).not.toContain('Passed')
 })
 
