@@ -144,15 +144,26 @@ test('the doorstep of a Competency whose pool is unwritten says so, and offers n
   // pool directory gives back (ERR-220).
   //
   // The subject is taken from config.md rather than named, so this follows
-  // whichever Competency is unwritten on the day it runs. It asserts one
-  // exists first: once every pool is authored no request can produce this
-  // state, and an unguarded version of this test would go on passing while
-  // asserting nothing. That failure is the signal to move the assertion — the
-  // fixture-root test in content.test.ts is the one that survives the move.
+  // whichever Competency is unwritten on the day it runs. That day is nearly
+  // over: as of 2026-08-13 only `testing-with-real-users` is left, so the pool
+  // that retires this test is the next one somebody writes.
+  //
+  // It refuses to run on nothing rather than passing quietly, because a test
+  // whose subject has disappeared asserts nothing while still reporting green
+  // — which is how #61's audit-surface rule went untested for a while. The
+  // message says what to do, so the author who trips it is not left reading a
+  // bare `expected 0 to be greater than 0` in a CI log.
   const unwritten = config.stages
     .flatMap((entry) => entry.competencies)
     .filter((slug) => itemPoolOf(content, slug) === null)
-  expect(unwritten.length).toBeGreaterThan(0)
+  if (unwritten.length === 0) {
+    throw new Error(
+      'Every declared Competency now has an item pool, so no request can reach the unwritten-pool ' +
+        'doorstep and this test has no subject left. Delete it: the fixture-root test in ' +
+        'content.test.ts ("a Competency declared but unauthored has no item pool") is the one that ' +
+        'survives, and it still covers ERR-220.',
+    )
+  }
 
   const cookie = await sessionCookieFor(freshLearner())
   const response = await fetch(`${BASE_URL}/en/learn/${unwritten[0]}/quiz`, { headers: { cookie } })
