@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path'
 
 import { afterEach, expect, test, vi } from 'vitest'
 
-import { competenciesOfStage, ContentError, loadContent, practicePageOf } from '../lib/content'
+import { competenciesOfStage, ContentError, itemPoolOf, loadContent, practicePageOf } from '../lib/content'
 
 /**
  * Fixture-driven proof of every build-failing content check (#10). Each test
@@ -627,6 +627,29 @@ test('a Stage declared but wholly unauthored loads: no definitions, no pools', (
   expect(competenciesOfStage(content.config, 2)).toEqual(['system-status', 'form-burden'])
   expect(content.competencies.map((competency) => competency.slug)).toEqual(['visual-hierarchy'])
   expect(content.items['form-burden']).toBeUndefined()
+})
+
+test('a Competency declared but unauthored has no item pool — the state the Gate Quiz doorstep says out loud', () => {
+  // The sibling of the subject rule below, and the one that was missing. The
+  // loader has always tolerated a Competency with no pool directory, but the
+  // only way to ask was `content.items[slug]`, which answers `undefined` — and
+  // the draw behind the Start button called `.map` on it, so a Learner who
+  // opened the quiz of a declared-but-unwritten Competency got a TypeError
+  // where the doorstep should have said the items were not written yet
+  // (ERR-220). `itemPoolOf` is what both the doorstep and the draw now branch
+  // on.
+  //
+  // A fixture root rather than the real content, so this keeps testing the
+  // rule after Stage 3's pools are authored and no request can reach the state
+  // any more — the move #77 forced on the subject rule, made in advance here.
+  const root = scaffold()
+  write(root, 'config.md', CONFIG_TWO_STAGES)
+  const content = loadContent(root)
+
+  expect(itemPoolOf(content, 'form-burden')).toBeNull()
+  // Against an authored Competency in the same root, so that null means
+  // "nobody has written this yet" and not "this loader answers null".
+  expect(itemPoolOf(content, 'visual-hierarchy')).not.toBeNull()
 })
 
 test('a Stage declared but unauthored has no subject — the state both audit surfaces are built to say out loud', () => {

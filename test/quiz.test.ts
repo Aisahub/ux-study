@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { eq } from 'drizzle-orm'
 import { expect, test } from 'vitest'
 
-import { loadContent } from '../lib/content'
+import { itemPoolOf, loadContent } from '../lib/content'
 import { drawItems, scoreDraw, shuffledOrder } from '../lib/quiz'
 import { BASE_URL } from './config'
 import { schema, sessionCookieFor, testDb } from './db'
@@ -16,7 +16,8 @@ import { visibleText } from './html'
  * attempts arranged in the database, the same way the auth suite works.
  */
 
-const { config, items, competencies } = loadContent(join(__dirname, '..', 'content'))
+const content = loadContent(join(__dirname, '..', 'content'))
+const { config, items, competencies } = content
 const pool = items['visual-hierarchy']
 const slugs = pool.map((item) => item.slug)
 
@@ -132,6 +133,36 @@ test('the doorstep states how many items and how many must be right, before anyt
 
   expect(text).toContain(`${config.drawSize} items`)
   expect(text).toContain(`${config.passThreshold} correct passes`)
+})
+
+test('the doorstep of a Competency whose pool is unwritten says so, and offers no way to start', async () => {
+  // The Competency route is flat (ADR-0008), so a Learner with a session can
+  // reach the quiz of any declared Competency from the day it is declared —
+  // including the Stage 3 four, whose pools do not exist yet. This screen used
+  // to offer Start there and throw a TypeError on the press, because the draw
+  // read `content.items[slug]` and called `.map` on the `undefined` a missing
+  // pool directory gives back (ERR-220).
+  //
+  // The subject is taken from config.md rather than named, so this follows
+  // whichever Competency is unwritten on the day it runs. It asserts one
+  // exists first: once every pool is authored no request can produce this
+  // state, and an unguarded version of this test would go on passing while
+  // asserting nothing. That failure is the signal to move the assertion — the
+  // fixture-root test in content.test.ts is the one that survives the move.
+  const unwritten = config.stages
+    .flatMap((entry) => entry.competencies)
+    .filter((slug) => itemPoolOf(content, slug) === null)
+  expect(unwritten.length).toBeGreaterThan(0)
+
+  const cookie = await sessionCookieFor(freshLearner())
+  const response = await fetch(`${BASE_URL}/en/learn/${unwritten[0]}/quiz`, { headers: { cookie } })
+
+  expect(response.status).toBe(200)
+  const text = visibleText(await response.text())
+  expect(text).toContain('This Competency has no Gate Quiz yet.')
+  // The gate's own sentence, which is the thing that would be there if this
+  // screen were still offering a draw it cannot make.
+  expect(text).not.toContain(`${config.drawSize} items, drawn from`)
 })
 
 async function openAttempt(email: string, drawn: string[], language = 'en') {
