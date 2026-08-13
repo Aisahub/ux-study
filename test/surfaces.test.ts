@@ -561,12 +561,20 @@ test('the content half shows per-item rates beside draw counts, and the location
     await (await fetch(`${BASE_URL}/en/maintain/content`, { headers: { cookie } })).text(),
   )
 
-  // Grouped by Stage, and a Stage nobody has authored yet shows as a gap
-  // rather than as nothing. A page that simply omits Stage 2 reads exactly
-  // like a Stage 2 that is finished, and this view exists to be read.
+  // Grouped by Stage, every Stage the curriculum declares. A page that simply
+  // omits a Stage reads exactly like a Stage that is finished, and this view
+  // exists to be read.
+  //
+  // This asserted `No pool authored yet` until the last of the twelve pools
+  // landed (#76). The gap it proved is still rendered — `notAuthored` in the
+  // page's COPY — but real content no longer has an instance of it, so the
+  // assertion could only ever fail from here on. It is dropped rather than
+  // weakened, and the empty state is now unexercised: covering it needs a
+  // fixture with a declared-but-unauthored Competency, which is a change to
+  // how this suite loads content and does not belong in an authoring ticket.
   expect(text).toContain('Stage 1')
   expect(text).toContain('Stage 2')
-  expect(text).toContain('No pool authored yet')
+  expect(text).toContain('Stage 3')
 
   // A rate never appears without its draw count.
   expect(text).toMatch(/correct of \d+ drawn/)
