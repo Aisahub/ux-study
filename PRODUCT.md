@@ -76,8 +76,9 @@ Four mechanisms distinguish this from a generic course platform, and each was de
 **Open, not undecided-by-omission:**
 
 - All twelve Competencies and all three Self-Audit subjects are now authored (as of 2026-08-05); the sentence that stood here, that Stage 2 and Stage 3 content did not exist, was true when written and stopped being true on 2026-08-03. Stage 2's subject is the three-step flow ADR-0010 decided — it may remember what a Learner entered and may never branch — and every one of its Planted Defects needs the flow operated to be seen, which is what ADR-0009 required of it. Stage 3's is the page carrying a stated user that ADR-0011 decided.
-- What is still unauthored: **Stage 3's four Item Pools**, and the **briefs for Stages 2 and 3** — the briefs being also what keeps the audit surface from serving those two Stages' reports. The **specimen Self-Audit Report** that ADR-0011 pairs with Stage 3's page is likewise decided and unwritten.
-- Peer Review is no longer an assessment (ADR-0011). It is optional exposure to a colleague's submitted report, it gates nothing, and it is not built.
+- Every item the sentence that stood here listed as unauthored has since been written, and it was true when written: **Stage 3's four Item Pools** and the **briefs for Stages 2 and 3** stopped being missing on 2026-08-13, and the **specimen Self-Audit Report** ADR-0011 pairs with Stage 3's page on 2026-08-14. All twelve pools, all three briefs and both of Stage 3's artefacts are now in `content/`.
+- What is outstanding is no longer authoring but reach: **no surface serves the specimen**. It is a file the build validates and nothing a Learner can open, so what ADR-0011 asked for — an artefact a Learner practises reviewing — is not yet true of it. That is the one thing on this list.
+- Peer Review is no longer an assessment (ADR-0011). It is optional exposure to a colleague's submitted report, and it gates nothing. The clause that ended this line, that it is not built, was wrong when it was written rather than merely gone stale: the Findings library, the agreement marks and the gate that withholds a Stage until the reader has submitted their own report have all been in the repository since 2026-07-23, and ADR-0011's own text describes that gate as one the library "already uses". Corrected 2026-08-14.
 
 ## Brand Commitments
 
