@@ -46,6 +46,10 @@
 # their own language. `Export CSV` and `CSV 내보내기` are one button, and a
 # Korean reader sent to the English string is being pointed at nothing.
 subject: 1
+# The Competency whose page links here. Heuristic evaluation is the ability to
+# judge somebody else's finding against a named heuristic, and this report is
+# what there is to practise that on.
+competency: heuristic-evaluation
 findings:
   - element: confirm-selected-orders
     principle: contrast

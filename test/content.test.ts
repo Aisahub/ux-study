@@ -228,6 +228,7 @@ defects:
  */
 const SPECIMEN = `---
 subject: 1
+competency: visual-hierarchy
 findings:
   - element: confirm-selected-orders
     principle: contrast
@@ -948,6 +949,15 @@ test('a specimen reviewing a Stage with no authored subject fails the build', ()
   write(root, 'config.md', CONFIG_TWO_STAGES)
   write(root, 'specimen-report.md', edit(SPECIMEN, 'subject: 1', 'subject: 2'))
   expectProblem(root, /reviews Stage 2, which has no authored subject/)
+})
+
+test('a specimen naming a Competency the curriculum does not declare fails the build', () => {
+  // The only route to this artefact is a link on one Competency's page. A slug
+  // that names nothing would take that link away with nothing to notice it —
+  // the build would pass and the report would simply be unreachable.
+  const root = scaffold()
+  write(root, 'specimen-report.md', edit(SPECIMEN, 'competency: visual-hierarchy', 'competency: heuristic-evaluation'))
+  expectProblem(root, /names Competency "heuristic-evaluation", which config.md does not declare/)
 })
 
 test('a specimen reviewing a Stage the curriculum does not declare fails the build', () => {
