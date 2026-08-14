@@ -191,6 +191,46 @@ export interface PracticePage {
   defects: PlantedDefect[]
 }
 
+/**
+ * What the specimen's author was doing in one Finding (ADR-0011).
+ *
+ * The specimen is a report of deliberately mixed quality, and these are the
+ * four shapes the mix is made of. The label is authoring-side and never
+ * reaches a Learner: it exists so the build can prove all four are present,
+ * and so the next author can tell a wrong Principle we chose from one we
+ * mistyped. Which Finding is which is settled for the reader by the Stage 1
+ * manifest they have already been shown, not by us telling them.
+ */
+export const SPECIMEN_QUALITIES = ['sound', 'wrong-principle', 'taste', 'not-a-defect'] as const
+
+export type SpecimenQuality = (typeof SPECIMEN_QUALITIES)[number]
+
+/** One Finding of the specimen, in the four parts every Finding has. */
+export interface SpecimenFinding {
+  element: string
+  principle: string
+  /** Authoring-side only — stripped by `specimenAsServed`. */
+  quality: SpecimenQuality
+  defect: Bilingual
+  fix: Bilingual
+}
+
+export interface Specimen {
+  /**
+   * The Stage whose Practice Page this report reviews — Stage 1 (ADR-0011).
+   * Not the Stage it is read at, which is a different number: this is Stage 3
+   * material about a Stage 1 page.
+   */
+  subject: number
+  findings: SpecimenFinding[]
+}
+
+/** The specimen as a Learner meets it: the same report, with no answer on it. */
+export interface ServedSpecimen {
+  subject: number
+  findings: Omit<SpecimenFinding, 'quality'>[]
+}
+
 export interface Content {
   config: ContentConfig
   glossary: GlossaryEntry[]
@@ -218,6 +258,30 @@ export interface Content {
    * undefined for a caller to misread as "nothing wrong here".
    */
   practicePages: PracticePage[]
+  /**
+   * The specimen Self-Audit Report (ADR-0011), or null where nobody has
+   * written one. Null the same way an unauthored subject is null, and read
+   * through `specimenAsServed` by anything a Learner sees.
+   */
+  specimen: Specimen | null
+}
+
+/**
+ * The specimen with its authoring labels removed, or null where none exists.
+ *
+ * The Practice Page is served the same way — comments stripped, because a note
+ * to whoever maintains the file is a hint to whoever is being asked to find
+ * something. Here the note is the quality label, and dropping it in the
+ * projection rather than in each surface is what stops the next surface from
+ * having to remember.
+ */
+export function specimenAsServed(content: Content): ServedSpecimen | null {
+  const specimen = content.specimen
+  if (!specimen) return null
+  return {
+    subject: specimen.subject,
+    findings: specimen.findings.map(({ element, principle, defect, fix }) => ({ element, principle, defect, fix })),
+  }
 }
 
 /**
@@ -284,9 +348,10 @@ export function loadContent(root: string = join(process.cwd(), 'content')): Cont
   const itemScreenCss = loadItemScreenCss(root, items, problems)
   const briefs = loadBriefs(root, config, principles, problems)
   const practicePages = loadPracticePages(root, config, principles, problems)
+  const specimen = loadSpecimen(root, config, principles, practicePages, problems)
 
   if (problems.length > 0) throw new ContentError(problems)
-  return { config, glossary, competencies, items, itemScreenCss, briefs, practicePages }
+  return { config, glossary, competencies, items, itemScreenCss, briefs, practicePages, specimen }
 }
 
 function loadConfig(root: string, problems: string[]): ContentConfig | null {
@@ -867,6 +932,124 @@ function loadPracticePage(
   }
 
   return { stage, html, css, js, elements: [...elements], steps: steps.en, defects }
+}
+
+/**
+ * The specimen Self-Audit Report (ADR-0011, artefact B).
+ *
+ * Every rule here is one `addFinding` already enforces on a Learner's own
+ * submission: the element exists on the subject, the Principle is a Glossary
+ * slug, one element carries one Finding, and the report is no thinner than a
+ * complete one. A specimen breaking any of them is a report this platform
+ * would have refused, and a Learner asked to judge it would be judging
+ * something that could not have happened.
+ *
+ * The wrongness the artefact is made of therefore lives entirely in the
+ * *prose* — a Principle that is real but not the one this element breaks, a
+ * defect that is a preference, a defect that is not there. None of it is
+ * spellable as a broken record, which is what keeps "this is authored badly on
+ * purpose" from ever being an excuse the build has to take on trust.
+ *
+ * A missing file is not a failure: it is an artefact nobody has written yet,
+ * the same tolerance an unauthored item pool and an unauthored subject have.
+ */
+function loadSpecimen(
+  root: string,
+  config: ContentConfig,
+  principles: Set<string>,
+  practicePages: PracticePage[],
+  problems: string[],
+): Specimen | null {
+  const rel = 'specimen-report.md'
+  const path = join(root, rel)
+  if (!existsSync(path)) return null
+
+  const { data } = readFrontmatter(path, rel, problems)
+  checkLanguagePairs(data, rel, problems)
+
+  // Named `subject` rather than `stage` all the way down, because this
+  // artefact has two Stages about it and they are different numbers: it is
+  // read on the way to a Stage 3 Competency and it reviews Stage 1's page.
+  // Renaming it to `stage` on arrival is how the two get confused.
+  const subject = data.subject
+  if (typeof subject !== 'number' || !Number.isInteger(subject)) {
+    problems.push(`${rel}: subject must name the Stage whose Practice Page this report reviews`)
+    return null
+  }
+  if (!config.stages.some((entry) => entry.stage === subject)) {
+    problems.push(`${rel}: reviews Stage ${subject}, which config.md does not declare`)
+    return null
+  }
+  const page = practicePages.find((candidate) => candidate.stage === subject)
+  if (!page) {
+    // Without the page there is nothing to check an element against, so every
+    // rule below would pass by having nothing to compare with.
+    problems.push(`${rel}: reviews Stage ${subject}, which has no authored subject`)
+    return null
+  }
+
+  let list: unknown[] = []
+  if (Array.isArray(data.findings)) {
+    list = data.findings
+    // No floor under this check: an empty list is a report carrying nothing,
+    // which is the one length a "report is too thin" rule must not let past.
+    if (list.length < config.minFindings) {
+      problems.push(
+        `${rel}: carries ${list.length} Findings, fewer than the ${config.minFindings} a complete report requires`,
+      )
+    }
+  } else problems.push(`${rel}: findings must be a list`)
+
+  const findings: SpecimenFinding[] = []
+  const claimed = new Set<string>()
+  for (const [index, raw] of list.entries()) {
+    const record = isRecord(raw) ? raw : {}
+    // Located the way `checkLanguagePairs` locates the same record's prose, so
+    // one broken Finding reports under one address rather than two.
+    const label = `findings[${index}]`
+
+    for (const field of ['element', 'principle', 'quality'] as const) {
+      if (typeof record[field] !== 'string' || record[field].trim() === '') {
+        problems.push(`${rel}: ${label} is missing its ${field}`)
+      }
+    }
+    for (const field of ['defect', 'fix'] as const) {
+      if (!isLanguagePair(record[field])) problems.push(`${rel}: ${label} must carry an en/ko ${field}`)
+    }
+
+    const element = stringOrEmpty(record.element)
+    const principle = stringOrEmpty(record.principle)
+    const quality = stringOrEmpty(record.quality)
+
+    // Empty fields were reported above; reporting the same omission twice
+    // would bury the one line that says what to do about it.
+    if (element !== '' && !page.elements.includes(element)) {
+      problems.push(
+        `${rel}: ${label} names element "${element}", which does not exist on the Stage ${subject} subject`,
+      )
+    } else if (element !== '') {
+      if (claimed.has(element)) {
+        problems.push(`${rel}: two Findings on element "${element}" — one element, one Finding, as a submission is`)
+      }
+      claimed.add(element)
+    }
+    if (principle !== '' && !principles.has(principle)) {
+      problems.push(`${rel}: ${label} cites UX Principle "${principle}", absent from the Glossary`)
+    }
+    if (quality !== '' && !SPECIMEN_QUALITIES.includes(quality as SpecimenQuality)) {
+      problems.push(`${rel}: ${label} declares quality "${quality}", which is none of ${SPECIMEN_QUALITIES.join(', ')}`)
+    }
+
+    findings.push({
+      element,
+      principle,
+      quality: quality as SpecimenQuality,
+      defect: asBilingual(record.defect),
+      fix: asBilingual(record.fix),
+    })
+  }
+
+  return { subject, findings }
 }
 
 /**

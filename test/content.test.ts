@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path'
 
 import { afterEach, expect, test, vi } from 'vitest'
 
-import { competenciesOfStage, ContentError, itemPoolOf, loadContent, practicePageOf } from '../lib/content'
+import { competenciesOfStage, ContentError, itemPoolOf, loadContent, practicePageOf, specimenAsServed } from '../lib/content'
 
 /**
  * Fixture-driven proof of every build-failing content check (#10). Each test
@@ -221,6 +221,36 @@ defects:
 `
 
 /**
+ * The specimen Self-Audit Report (ADR-0011, artefact B) — a report this project
+ * wrote as if a Learner had, of deliberately mixed quality, reviewing a Stage's
+ * Practice Page. Its Findings obey the rules a real Learner's Finding obeys,
+ * because a specimen that could not have been submitted is not a specimen.
+ */
+const SPECIMEN = `---
+subject: 1
+findings:
+  - element: confirm-selected-orders
+    principle: contrast
+    quality: sound
+    defect:
+      en: The button this page exists for is the palest control on it.
+      ko: 이 페이지의 존재 이유인 버튼이 화면에서 가장 흐린 컨트롤입니다.
+    fix:
+      en: Give it the strongest contrast on the page.
+      ko: 페이지에서 가장 강한 대비를 이 버튼에 주세요.
+  - element: page-title
+    principle: contrast
+    quality: taste
+    defect:
+      en: The heading would look better centred.
+      ko: 제목은 가운데 정렬이 더 보기 좋겠습니다.
+    fix:
+      en: Centre the heading.
+      ko: 제목을 가운데로 옮기세요.
+---
+`
+
+/**
  * The same subject, walked instead of read (ADR-0010): identical elements,
  * arranged as steps a Learner moves between, with the behaviour in one file
  * both variants load.
@@ -273,6 +303,7 @@ function scaffold(): string {
   write(root, 'practice-page/stage-1/ko.html', PRACTICE_KO)
   write(root, 'practice-page/stage-1/practice-page.css', 'main { padding: 1rem; }\n')
   write(root, 'practice-page/stage-1/manifest.md', MANIFEST)
+  write(root, 'specimen-report.md', SPECIMEN)
   return root
 }
 
@@ -306,6 +337,8 @@ test('the baseline fixture is valid, so each failing test below fails for its on
   expect(content.briefs.map((brief) => brief.slug)).toEqual(['stage-1'])
   expect(practicePageOf(content, 1)!.elements.sort()).toEqual(['confirm-selected-orders', 'page-title'])
   expect(practicePageOf(content, 1)!.defects).toHaveLength(1)
+  expect(content.specimen!.subject).toBe(1)
+  expect(content.specimen!.findings.map((finding) => finding.quality)).toEqual(['sound', 'taste'])
 })
 
 test('an item can draw a sequence of states instead of one screen', () => {
@@ -835,6 +868,115 @@ test('a Planted Defect on a subject that walks nowhere may not name a step', () 
   const root = scaffold()
   write(root, 'practice-page/stage-1/manifest.md', MANIFEST_WALKABLE)
   expectProblem(root, /names a step, but this subject is one page and walks nowhere/)
+})
+
+/**
+ * The specimen Self-Audit Report (ADR-0011, artefact B). Every rule below is
+ * one `addFinding` already enforces on a Learner's own submission — the element
+ * exists on the subject, the Principle is a Glossary slug, one element carries
+ * one Finding. A specimen breaking any of them is a report the platform would
+ * have refused, and the Learner it is handed to is being asked to judge
+ * something that could not have happened.
+ */
+
+test('a specimen Finding naming an element the subject does not expose fails the build', () => {
+  const root = scaffold()
+  write(root, 'specimen-report.md', edit(SPECIMEN, 'element: page-title', 'element: shipping-form'))
+  expectProblem(root, /names element "shipping-form", which does not exist/)
+})
+
+test('a specimen Finding citing a Principle absent from the Glossary fails the build', () => {
+  // Wrongness is the point of this artefact, and this is the line between the
+  // two kinds. A Learner selects the Principle from the Glossary, so a name
+  // that is not in it is not a Learner's mistake we authored — it is ours.
+  const root = scaffold()
+  write(root, 'specimen-report.md', edit(SPECIMEN, 'principle: contrast\n    quality: taste', 'principle: proximity\n    quality: taste'))
+  expectProblem(root, /cites UX Principle "proximity", absent from the Glossary/)
+})
+
+test('two specimen Findings on one element fail the build', () => {
+  const root = scaffold()
+  write(root, 'specimen-report.md', edit(SPECIMEN, 'element: page-title', 'element: confirm-selected-orders'))
+  expectProblem(root, /two Findings on element "confirm-selected-orders"/)
+})
+
+test('a specimen Finding whose quality is not one of the four authored shapes fails the build', () => {
+  // The quality labels are what prove the mix ADR-0011 asks for is present. A
+  // typo here would quietly drop one shape out of the count.
+  const root = scaffold()
+  write(root, 'specimen-report.md', edit(SPECIMEN, 'quality: taste', 'quality: preference'))
+  expectProblem(root, /quality "preference"/)
+})
+
+test('a specimen Finding missing its Korean fails the build', () => {
+  const root = scaffold()
+  write(root, 'specimen-report.md', edit(SPECIMEN, '      ko: 제목을 가운데로 옮기세요.\n', ''))
+  expectProblem(root, /findings\[1\]\.fix is missing its ko language variant/)
+})
+
+test('a specimen Finding missing its English fails the build', () => {
+  // The other direction, because a suite that only ever deletes the Korean
+  // proves the check runs and not that it runs both ways — and the cohort
+  // reading English is the one nobody here would notice was missing.
+  const root = scaffold()
+  write(root, 'specimen-report.md', edit(SPECIMEN, '      en: Centre the heading.\n', ''))
+  expectProblem(root, /findings\[1\]\.fix is missing its en language variant/)
+})
+
+test('a specimen carrying fewer Findings than a complete report requires fails the build', () => {
+  // The minimum is config.md's, not a number typed here: a specimen thinner
+  // than a submission the platform would accept is not the artefact a Learner
+  // is being asked to judge.
+  const root = scaffold()
+  write(root, 'config.md', edit(CONFIG, 'minFindings: 1', 'minFindings: 3'))
+  expectProblem(root, /carries 2 Findings, fewer than the 3 a complete report requires/)
+})
+
+test('a specimen carrying no Findings at all fails the build', () => {
+  // The length a "too thin" rule is likeliest to be written around rather than
+  // for: an empty list is a report of nothing, and it has to fail the same
+  // check a short one does rather than fall through it.
+  const root = scaffold()
+  write(root, 'specimen-report.md', SPECIMEN.slice(0, SPECIMEN.indexOf('findings:')) + 'findings: []\n---\n')
+  expectProblem(root, /carries 0 Findings, fewer than the 1 a complete report requires/)
+})
+
+test('a specimen reviewing a Stage with no authored subject fails the build', () => {
+  // Without the page, no Finding's element can be checked against anything —
+  // the specimen would load with every rule above unenforced.
+  const root = scaffold()
+  write(root, 'config.md', CONFIG_TWO_STAGES)
+  write(root, 'specimen-report.md', edit(SPECIMEN, 'subject: 1', 'subject: 2'))
+  expectProblem(root, /reviews Stage 2, which has no authored subject/)
+})
+
+test('a specimen reviewing a Stage the curriculum does not declare fails the build', () => {
+  const root = scaffold()
+  write(root, 'specimen-report.md', edit(SPECIMEN, 'subject: 1', 'subject: 4'))
+  expectProblem(root, /reviews Stage 4, which config.md does not declare/)
+})
+
+test('no specimen at all is not a failure — it simply has none yet', () => {
+  // The same tolerance an unauthored item pool and an unauthored subject
+  // already have. What must never be silent is a surface meeting that state,
+  // and `specimenAsServed` hands back null for it rather than an empty report.
+  const root = scaffold()
+  rmSync(join(root, 'specimen-report.md'))
+
+  const content = loadContent(root)
+  expect(content.specimen).toBeNull()
+  expect(specimenAsServed(content)).toBeNull()
+})
+
+test('the specimen as served carries no quality label', () => {
+  // The reader judges the report; the Stage 1 manifest they were already shown
+  // is what settles it. Serving the labels would answer the exercise, so the
+  // projection drops them rather than a surface remembering not to render one.
+  const served = specimenAsServed(loadContent(scaffold()))!
+  expect(JSON.stringify(served)).not.toContain('quality')
+  expect(JSON.stringify(served)).not.toContain('sound')
+  expect(served.findings.map((finding) => finding.element)).toEqual(['confirm-selected-orders', 'page-title'])
+  expect(served.findings[0].fix.ko).toBe('페이지에서 가장 강한 대비를 이 버튼에 주세요.')
 })
 
 test('the repository content loads, with every authored Glossary entry accounted for', () => {

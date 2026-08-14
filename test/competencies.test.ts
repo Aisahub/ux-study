@@ -13,7 +13,7 @@ import { loadContent } from '../lib/content'
  * anything a visitor can observe over HTTP yet.
  */
 
-const { config, competencies, glossary, briefs, items } = loadContent(join(__dirname, '..', 'content'))
+const { config, competencies, glossary, briefs, items, specimen } = loadContent(join(__dirname, '..', 'content'))
 
 test('every Competency the curriculum declares is authored', () => {
   // This was Stage 1's list alone while the later Stages were declared and
@@ -124,6 +124,15 @@ test('Learner-facing copy avoids the words CONTEXT.md rules out', () => {
     // grader, in a programme whose Maintainer judges nothing. The check was
     // right and pointed at two of the four surfaces a Learner reads.
     ...briefs.map((brief): [string, string] => [`brief ${brief.slug}`, JSON.stringify(brief.frontmatter)]),
+    // The specimen Self-Audit Report is inside the scan, unlike the item
+    // screens below it. Its Findings are deliberately of mixed quality, but
+    // that badness is judgement — a Principle that does not fit, a preference
+    // with no reader in it — and never vocabulary. It is our prose, written
+    // for a Learner to read closely and, on the sound ones, to imitate.
+    ...(specimen?.findings ?? []).map((finding, index): [string, string] => [
+      `specimen findings[${index}]`,
+      `${finding.defect.en} ${finding.defect.ko} ${finding.fix.en} ${finding.fix.ko}`,
+    ]),
     // Screens are excluded, as everywhere else: their copy is the defective
     // specimen a Learner judges, and a fictional product may lawfully call
     // somebody a 학생 on a screen about a school.
