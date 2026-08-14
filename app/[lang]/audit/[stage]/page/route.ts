@@ -62,10 +62,23 @@ body[data-audit-mode='operate'] [data-element] { cursor: auto; }
 [data-selected] { outline: 3px solid #2563eb; outline-offset: 2px; }
 </style>`
 
+/**
+ * The same subject with nothing to point at, for a reader who is checking a
+ * claim about it rather than auditing it (#120).
+ *
+ * The specimen Self-Audit Report sends a reader here to see whether a Finding
+ * is true of the real element. Served the auditing way, every element would
+ * carry a pointer cursor and take a selection outline, and the selection would
+ * be posted to a surrounding surface that is not there — a control that
+ * answers a press by doing nothing, which is the defect this platform's fourth
+ * Competency is about. Withholding the script is how it stops being one.
+ */
 export async function GET(request: NextRequest, { params }: { params: Promise<{ lang: string; stage: string }> }) {
   const { lang, stage } = await params
   if (!isLanguage(lang)) notFound()
   await requireSession(lang)
+
+  const selectable = !request.nextUrl.searchParams.has('read')
 
   const number = Number(stage)
   const subject = Number.isInteger(number) ? practicePage(number) : null
@@ -77,7 +90,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const document = subject.html[lang]
     .replace('<link rel="stylesheet" href="./practice-page.css">', `<style>\n${practicePageCss(number)}</style>`)
     .replace('<script src="./practice-page.js"></script>', `<script>\n${practicePageJs(number)}</script>`)
-    .replace('</body>', `${SELECTION_SCRIPT}\n</body>`)
+    .replace('</body>', selectable ? `${SELECTION_SCRIPT}\n</body>` : '</body>')
 
   return new Response(document, { headers: { 'content-type': 'text/html; charset=utf-8' } })
 }

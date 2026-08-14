@@ -222,6 +222,16 @@ export interface Specimen {
    * material about a Stage 1 page.
    */
   subject: number
+  /**
+   * The Competency whose page links to this report (#120).
+   *
+   * Declared in content rather than named in a surface's JSX, because which
+   * Competency owns this artefact is the curriculum's to say — the same reason
+   * config.md holds the Stage lists. A slug typed into a page would go on
+   * compiling after the curriculum moved, and the link would simply stop
+   * appearing with nothing to notice it.
+   */
+  competency: string
   findings: SpecimenFinding[]
 }
 
@@ -988,6 +998,17 @@ function loadSpecimen(
     return null
   }
 
+  // The Competency whose page carries the link to this report. Checked against
+  // the curriculum rather than trusted, so moving a slug in config.md breaks
+  // the build instead of quietly unhooking the only route to this artefact.
+  const competency = stringOrEmpty(data.competency)
+  const declaredCompetencies = config.stages.flatMap((entry) => entry.competencies)
+  if (competency === '') {
+    problems.push(`${rel}: competency must name the Competency whose page links to this report`)
+  } else if (!declaredCompetencies.includes(competency)) {
+    problems.push(`${rel}: names Competency "${competency}", which config.md does not declare`)
+  }
+
   let list: unknown[] = []
   if (Array.isArray(data.findings)) {
     list = data.findings
@@ -1049,7 +1070,7 @@ function loadSpecimen(
     })
   }
 
-  return { subject, findings }
+  return { subject, competency, findings }
 }
 
 /**

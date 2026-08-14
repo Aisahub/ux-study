@@ -26,6 +26,9 @@ const COPY: Record<
     quizTitle: string
     quizRules: (draw: number, threshold: number) => string
     items: (n: number) => string
+    specimenTitle: string
+    specimenBody: string
+    specimenLink: string
     passedBody: string
   }
 > = {
@@ -44,6 +47,10 @@ const COPY: Record<
     quizRules: (draw, threshold) =>
       `${draw} items, drawn from this Competency's pool. ${threshold} correct passes.`,
     items: (n) => `${n} items`,
+    specimenTitle: 'Practise reading a review',
+    specimenBody:
+      'A report we wrote about the Stage 1 Practice Page, with some Findings that hold up and some that do not. Judging somebody else’s review is the ability this Competency names, and this is where you can practise it. Nothing here is assessed and nothing is recorded.',
+    specimenLink: 'Read the report',
     passedBody: 'You can take it again whenever you like — every attempt is kept, and none replaces another.',
   },
   ko: {
@@ -61,6 +68,10 @@ const COPY: Record<
     quizRules: (draw, threshold) =>
       `이 역량의 문항 풀에서 ${draw}문항이 나옵니다. ${threshold}문항을 맞히면 통과합니다.`,
     items: (n) => `${n}문항`,
+    specimenTitle: '리뷰 읽는 연습',
+    specimenBody:
+      '1단계 연습 페이지를 두고 저희가 써 둔 리포트입니다. 말이 되는 발견도 있고 그렇지 않은 것도 섞여 있습니다. 남이 한 점검을 판단하는 것이 이 역량이 말하는 능력이고, 여기서 그 연습을 해 볼 수 있습니다. 평가하지 않고, 기록도 남지 않습니다.',
+    specimenLink: '리포트 읽기',
     passedBody: '원하는 때에 다시 도전할 수 있습니다 — 모든 시도가 남고, 어느 것도 다른 것을 지우지 않습니다.',
   },
 }
@@ -298,6 +309,27 @@ export default async function CompetencyPage({
                   label is a 700 step — pairing it with font-normal renders a
                   size and weight the scale does not name. */}
               <span className="text-body-sm font-normal opacity-70">{copy.items(drawSize)}</span>
+              <LinkPending />
+            </Link>
+          </section>
+        )}
+
+        {/* Optional practice, on the one Competency that has an artefact to
+            practise on (ADR-0011, #120). Deliberately unnumbered and after the
+            gate, for the reason the notes panel carries no numeral either: a
+            numeral would place it in the order the work is done, and this is
+            not a step on the way to anything. It is a plain card rather than a
+            warm one because the single sand field per screen belongs to the
+            one thing to do next, which is the Gate Quiz above. */}
+        {content.specimen?.competency === slug && (
+          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+            <h2 className="font-serif text-headline font-bold text-ink">{copy.specimenTitle}</h2>
+            <p className="mt-3.5 max-w-measure text-body-sm text-ink-2">{copy.specimenBody}</p>
+            <Link
+              href={`/${lang}/specimen`}
+              className="press mt-5.5 inline-flex text-title font-bold text-oxblood"
+            >
+              {copy.specimenLink}
               <LinkPending />
             </Link>
           </section>
