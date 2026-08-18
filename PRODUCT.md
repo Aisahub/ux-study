@@ -92,11 +92,11 @@ The one identity constraint that *is* real is behavioural rather than visual: th
 
 Real, authored, in-repo:
 
-- **64 Quiz Items** — 8 per Competency for Stages 1 and 2, under `content/items/`, each rendering a real screen rather than describing one (`content/items/item-screen.css`); where the judgement is about an interaction, the item draws it as stacked, captioned stills (ADR-0012). Stage 3's four pools are not authored.
+- **96 Quiz Items** — 8 per Competency for all twelve, under `content/items/`, each rendering a real screen rather than describing one (`content/items/item-screen.css`); where the judgement is about an interaction, the item draws it as stacked, captioned stills (ADR-0012). The sentence that stood here counted 64 and said Stage 3's four pools were not authored; it was true when written and stopped being true on 2026-08-13.
 - **12 Competency definitions** — `content/competencies/`, four per Stage.
 - **31 Principle Glossary entries** — `content/glossary/`.
 - **Three authored audit subjects** — `content/practice-page/stage-{1,2,3}/`, each `{en,ko}.html` plus its `manifest.md` of Planted Defects and `practice-page.css`. Stage 1 plants **six** defects across its four Competencies, Stage 2 **seven** (none findable in a still of any one step; its `practice-page.js` is what makes the flow operable), and Stage 3 **eight**, spread 4-2-1-1. No count carries a hint about its distribution.
-- **The Stage 1 Self-Audit Report brief** — `content/briefs/`. Stages 2 and 3 have none.
+- **Three Self-Audit Report briefs** — `content/briefs/`, one per Stage. The sentence that stood here named Stage 1's as the only one, which it was until 2026-08-13.
 - **Fixed quantities** — `content/config.md` (pool 8, draw 5, pass 4, minimum 3 Findings), which also declares which Stage each of the twelve Competencies belongs to. These are content configuration; changing one is an edit there, not a code change.
 - **Product truth** — `CONTEXT.md` (the domain glossary) and `docs/adr/0001`–`0012`, which record not only what was decided but what was reversed and why.
 
