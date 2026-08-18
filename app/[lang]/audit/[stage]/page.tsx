@@ -7,7 +7,7 @@ import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import { briefOf, type Bilingual, type Brief } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
-import { progressFor, stageProgress } from '@/lib/progress'
+import { capstoneState, progressFor, stageProgress } from '@/lib/progress'
 import { content, practicePage } from '@/lib/server-content'
 
 import { attachIssueUrl } from '../actions'
@@ -193,7 +193,7 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
 
   const progress = stageProgress(await progressFor(session.email), stage)
 
-  if (!progress.allPassed) {
+  if (capstoneState(progress) === 'locked') {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
         <h1 className="font-serif text-display font-bold text-ink">

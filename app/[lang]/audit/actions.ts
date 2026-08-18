@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
-import { progressFor, stageProgress } from '@/lib/progress'
+import { capstoneState, progressFor, stageProgress } from '@/lib/progress'
 import { content, practicePage } from '@/lib/server-content'
 
 /**
@@ -39,7 +39,7 @@ async function openSubject(lang: Language, stage: number, email: string) {
   if (!subject) return { error: 'no-subject' as const }
 
   const progress = stageProgress(await progressFor(email), stage)
-  if (!progress.allPassed) return { error: 'locked' as const }
+  if (capstoneState(progress) === 'locked') return { error: 'locked' as const }
   return { subject }
 }
 

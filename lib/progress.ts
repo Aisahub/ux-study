@@ -163,3 +163,87 @@ export async function progressFor(email: string): Promise<Progress> {
 export function isComplete(stage: StageProgress): boolean {
   return stage.allPassed && stage.reportSubmitted
 }
+
+/**
+ * A Stage's own state, which is deliberately not a QuizStatus: a Stage is
+ * complete when every Gate Quiz in it is passed *and* its report is submitted.
+ * Sharing one vocabulary would let a Stage read `passed` with its capstone
+ * still outstanding.
+ */
+export type StageState = 'unstarted' | 'in-progress' | 'complete'
+
+export function stageState(stage: StageProgress): StageState {
+  if (isComplete(stage)) return 'complete'
+  return stage.stepsDone > 0 ? 'in-progress' : 'unstarted'
+}
+
+/**
+ * Where a Stage's Self-Audit Report stands, as one word instead of the two
+ * booleans it is derived from.
+ *
+ * `submitted` outranks `open` because a submitted report is also an unlocked
+ * one — the Stage's quizzes were passed before it could be written (#24), and
+ * a passed quiz never un-passes. Asking the booleans in the other order would
+ * report a submitted report as merely open.
+ */
+export type CapstoneState = 'locked' | 'open' | 'submitted'
+
+export function capstoneState(stage: StageProgress): CapstoneState {
+  if (stage.reportSubmitted) return 'submitted'
+  return stage.allPassed ? 'open' : 'locked'
+}
+
+/**
+ * How far through one Stage, as a whole percent of its steps.
+ *
+ * Clamped because the arithmetic is over records rather than over a fixed
+ * plan: `stepsTotal` comes from what config.md declares now, and a Stage that
+ * lost a Competency after a Learner passed it would otherwise read past 100.
+ */
+export function completionPercent(stage: StageProgress): number {
+  if (stage.stepsTotal === 0) return 0
+  return Math.min(100, Math.round((stage.stepsDone / stage.stepsTotal) * 100))
+}
+
+/**
+ * The Stage a Learner is standing in: the earliest not complete, or the last
+ * where every Stage is done.
+ *
+ * This is the Learn overview's question — "what now" — and the bar counts this
+ * Stage and names it, because a bar counting a Stage closed months ago answers
+ * nothing.
+ *
+ * Kept apart from `stageToAudit` although the two cannot currently disagree:
+ * that they agree is a consequence of submission requiring a passed Stage
+ * (#24), not of their being one question. This one asks what a Learner should
+ * do next; that one asks which report they still owe. Folding them together
+ * would make the next change to either gate silently move both.
+ */
+export function stageStandingIn(progress: Progress): StageProgress {
+  return progress.stages.find((entry) => !isComplete(entry)) ?? progress.stages[progress.stages.length - 1]
+}
+
+/**
+ * The Stage the audit entry sends a Learner to: the earliest without a
+ * submitted report, or the last declared once all three are in.
+ *
+ * Only the report is asked about, not the quizzes: this surface's job is to
+ * put a Learner in front of the report they still owe, and the locked screen
+ * on the other side is what says the quizzes come first (#61).
+ */
+export function stageToAudit(progress: Progress): number {
+  const unfinished = progress.stages.find((entry) => !entry.reportSubmitted)
+  return unfinished?.stage ?? progress.stages[progress.stages.length - 1].stage
+}
+
+/**
+ * The furthest report a Learner has, which is the one they are living in: a
+ * Stage 2 draft is the answer for someone who submitted Stage 1 months ago.
+ *
+ * One row and not a tally of all three — a per-person total across the
+ * programme is what PRODUCT.md rules out, and a column of Stages with ticks
+ * against them is that total wearing a list (#54, #61).
+ */
+export async function furthestReportFor(email: string) {
+  return (await reportsFor(email)).at(-1) ?? null
+}

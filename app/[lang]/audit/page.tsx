@@ -2,8 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 
 import { requireSession } from '@/lib/auth'
 import { isLanguage } from '@/lib/language'
-import { progressFor } from '@/lib/progress'
-import { content } from '@/lib/server-content'
+import { progressFor, stageToAudit } from '@/lib/progress'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,8 +22,7 @@ export default async function AuditEntry({ params }: { params: Promise<{ lang: s
   const session = await requireSession(lang)
 
   const progress = await progressFor(session.email)
-  const unfinished = progress.stages.find((stage) => !stage.reportSubmitted)
-  const stage = unfinished?.stage ?? content.config.stages[content.config.stages.length - 1].stage
+  const stage = stageToAudit(progress)
 
   redirect(`/${lang}/audit/${stage}`)
 }
