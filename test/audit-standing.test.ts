@@ -2,7 +2,7 @@ import { join } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { auditStandingFrom } from '@/lib/audit'
+import { auditStandingFrom, reveal } from '@/lib/audit'
 import { briefOf, loadContent, practicePageOf } from '@/lib/content'
 import { type StageProgress } from '@/lib/progress'
 
@@ -75,5 +75,28 @@ describe('auditStandingFrom', () => {
   it('stays open after the report is submitted, which is where the reveal is read', () => {
     const submitted = progressOf({ allPassed: true, reportSubmitted: true, stepsDone: 5 })
     expect(auditStandingFrom(subject, brief, submitted).state).toBe('open')
+  })
+})
+
+describe('reveal', () => {
+  it('finds a defect when a Finding cites the element it was planted on', () => {
+    const [first] = subject.defects
+    const revealed = reveal(subject.defects, [{ element: first.element }])
+    expect(revealed.find((entry) => entry.defect.slug === first.slug)?.found).toBe(true)
+  })
+
+  it('reads nothing but the element — nobody grades the words', () => {
+    // A Finding is four parts, and only the element is a selection. The two
+    // written halves are what make it useful to a person and are not what
+    // decides whether it found anything (ADR-0007).
+    const [first] = subject.defects
+    expect(reveal([first], [{ element: first.element }])[0].found).toBe(true)
+    expect(reveal([first], [{ element: 'something-else' }])[0].found).toBe(false)
+  })
+
+  it('keeps every defect, in the manifest order, found or not', () => {
+    const revealed = reveal(subject.defects, [])
+    expect(revealed.map((entry) => entry.defect.slug)).toEqual(subject.defects.map((defect) => defect.slug))
+    expect(revealed.every((entry) => entry.found)).toBe(false)
   })
 })
