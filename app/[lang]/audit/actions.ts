@@ -24,8 +24,6 @@ import { content } from '@/lib/server-content'
  * report, and a missing Stage that quietly meant 1 would let them (#61).
  */
 
-export type { FindingInput }
-
 const isPrinciple = (slug: string) => content.glossary.some((entry) => entry.slug === slug)
 
 export async function saveFinding(
