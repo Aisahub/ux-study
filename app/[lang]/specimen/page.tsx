@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
 import { reportFor } from '@/lib/progress'
+import { specimen } from '@/lib/served-content'
 import { content } from '@/lib/server-content'
-import { specimenAsServed } from '@/lib/content'
 
 export const dynamic = 'force-dynamic'
 
@@ -112,7 +112,6 @@ export default async function Specimen({ params }: { params: Promise<{ lang: str
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
-  const specimen = specimenAsServed(content)
 
   // Said in words rather than by a missing page. An unauthored artefact and a
   // broken one look identical from a 404, and this platform's own second Stage

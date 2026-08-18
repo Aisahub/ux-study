@@ -1,49 +1,19 @@
-import { loadContent, practicePageOf, type PracticePage } from './content'
+import { loadContent } from './content'
 
 /**
  * The content, loaded once per server process. Build time already validated
  * it (next.config.ts), so this load cannot fail on anything the build let
  * through; module scope makes it a read, not a re-parse, on every request.
+ *
+ * Read from the same place the build validated. `CONTENT_DIR` is set only by
+ * the test suite, which points it at broken fixture content to prove the build
+ * refuses it — but until #133 only next.config.ts honoured it, so "the build
+ * validated what the server serves" was true by coincidence rather than by
+ * construction.
  */
-export const content = loadContent()
-
-/** This Stage's audit subject, or null where none is authored yet (#61). */
-export function practicePage(stage: number): PracticePage | null {
-  return practicePageOf(content, stage)
-}
+export const content = loadContent(process.env.CONTENT_DIR)
 
 /**
- * An authored file as served (#23, #70): authoring comments stripped.
- *
- * The stylesheet's header comment says where the planted defects live, and the
- * behaviour's explains which moments were built to go quiet — documentation
- * for a maintainer, a hint for a Learner. Nothing authored may reach the
- * Learner's view-source that the audit is meant to withhold. Both files are
- * written with block comments only, so one pattern removes all of them.
- *
- * Stripped once per Stage at module scope rather than per request, as it was
- * when there was one page to strip.
+ * Projections of this content live in `served-content.ts`, not here. This
+ * module is the load; that one is the rule about what a Learner may see.
  */
-function strippedPerStage(part: (page: PracticePage) => string): Map<number, string> {
-  return new Map(content.practicePages.map((page) => [page.stage, part(page).replace(COMMENT, '').trimStart()]))
-}
-
-const COMMENT = /\/\*[\s\S]*?\*\//g
-
-const strippedCss = strippedPerStage((page) => page.css)
-const strippedJs = strippedPerStage((page) => page.js)
-
-export function practicePageCss(stage: number): string {
-  return strippedCss.get(stage) ?? ''
-}
-
-export function practicePageJs(stage: number): string {
-  return strippedJs.get(stage) ?? ''
-}
-
-/**
- * The item-screen stylesheet as served, comments stripped for the same reason.
- * Its header explains to an author which class choices make a screen wrong —
- * a Learner reading it would be handed the thing the item asks them to find.
- */
-export const itemScreenCss = content.itemScreenCss.replace(/\/\*[\s\S]*?\*\//g, '').trimStart()
