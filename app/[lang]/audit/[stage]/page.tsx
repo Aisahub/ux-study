@@ -5,7 +5,7 @@ import { and, eq } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
-import { briefOf, type Bilingual, type Brief } from '@/lib/content'
+import { briefOf, type Brief } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
 import { capstoneState, progressFor, stageProgress } from '@/lib/progress'
 import { content, practicePage } from '@/lib/server-content'
@@ -101,42 +101,16 @@ const COPY: Record<
   },
 }
 
-/**
- * A field of this Stage's brief (#71).
- *
- * Keyed by Stage rather than by the one brief there used to be: Stage 1 reads
- * a page and Stage 2 walks a flow, so "examine the page" is wrong wording for
- * half the programme, and falling back to a sibling Stage's brief would hand a
- * Learner instructions for a subject they are not looking at.
- */
-function briefField(brief: Brief, name: string): Bilingual {
-  return brief.frontmatter[name] as Bilingual
-}
-
-/**
- * A field only some Stages' briefs carry, or null.
- *
- * `peerReview` is Stage 3's alone (ADR-0011). Reading it the plain way would
- * hand back `undefined` and throw on the language index, so the optionality is
- * answered here rather than at each call site — the same shape `briefOf` and
- * `practicePageOf` use one level up.
- */
-function optionalBriefField(brief: Brief, name: string): Bilingual | null {
-  const value = brief.frontmatter[name]
-  return value && typeof value === 'object' ? (value as Bilingual) : null
-}
-
 /** The brief's paragraphs, shared by its collapsed and static forms. */
 function BriefBody({ brief, lang }: { brief: Brief; lang: Language }) {
-  // Stage 3 alone: what Peer Review is, and — the half a Learner alone at this
-  // Stage needs — that nothing waits on anybody else.
-  const peerReview = optionalBriefField(brief, 'peerReview')
   return (
     <div className="mt-2 flex flex-col gap-2 text-body-sm text-ink-2">
-      <p>{briefField(brief, 'intro')[lang]}</p>
-      <p>{briefField(brief, 'whatCounts')[lang]}</p>
-      <p>{briefField(brief, 'advice')[lang]}</p>
-      {peerReview && <p>{peerReview[lang]}</p>}
+      <p>{brief.intro[lang]}</p>
+      <p>{brief.whatCounts[lang]}</p>
+      <p>{brief.advice[lang]}</p>
+      {/* Stage 3 alone: what Peer Review is, and — the half a Learner alone at
+          this Stage needs — that nothing waits on anybody else. */}
+      {brief.peerReview && <p>{brief.peerReview[lang]}</p>}
     </div>
   )
 }
@@ -180,7 +154,7 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
             heading where there is not — rather than printing `noSubject` as
             both the heading and the line under it. */}
         <h1 className="font-serif text-display font-bold text-ink">
-          {brief ? briefField(brief, 'title')[lang] : copy.noSubject}
+          {brief ? brief.title[lang] : copy.noSubject}
         </h1>
         {brief && <p className="text-body-sm font-bold">{copy.noSubject}</p>}
         <p className="text-ink-2">{copy.noSubjectWhy}</p>
@@ -197,9 +171,9 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
         <h1 className="font-serif text-display font-bold text-ink">
-          {brief ? briefField(brief, 'title')[lang] : copy.noBrief}
+          {brief ? brief.title[lang] : copy.noBrief}
         </h1>
-        {brief && <p className="text-ink-2">{briefField(brief, 'intro')[lang]}</p>}
+        {brief && <p className="text-ink-2">{brief.intro[lang]}</p>}
         <p className="text-body-sm font-bold">{copy.locked}</p>
         <Link href={`/${lang}/learn`} className="text-body-sm text-ink-2 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
@@ -335,17 +309,17 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
           a media query in the client would mean a flash of the wrong state on
           every load. The copy is read from one brief either way. */}
       <details className="mx-auto w-full max-w-4xl rounded-card bg-surface shadow-card p-4 open:pb-4 wide:hidden">
-        <summary className="cursor-pointer font-bold">{briefField(brief, 'title')[lang]}</summary>
+        <summary className="cursor-pointer font-bold">{brief.title[lang]}</summary>
         <BriefBody brief={brief} lang={lang} />
       </details>
       <section className="mx-auto hidden w-full max-w-4xl rounded-card bg-surface shadow-card p-4 wide:block">
-        <h2 className="font-bold">{briefField(brief, 'title')[lang]}</h2>
+        <h2 className="font-bold">{brief.title[lang]}</h2>
         <BriefBody brief={brief} lang={lang} />
       </section>
       <div className="relative flex min-h-[70vh] flex-1 flex-col gap-4 wide:flex-row">
         <iframe
           src={`/${lang}/audit/${stage}/page`}
-          title={briefField(brief, 'title')[lang]}
+          title={brief.title[lang]}
           className="min-h-[70vh] w-full flex-1 rounded-card bg-surface shadow-card"
         />
         <FindingsDrawer
