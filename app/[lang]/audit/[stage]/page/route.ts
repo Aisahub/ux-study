@@ -2,7 +2,9 @@ import { notFound } from 'next/navigation'
 import type { NextRequest } from 'next/server'
 
 import { requireSession } from '@/lib/auth'
-import { practicePage, practicePageCss, practicePageJs } from '@/lib/server-content'
+import { practicePageOf } from '@/lib/content'
+import { practicePageCss, practicePageJs } from '@/lib/served-content'
+import { content } from '@/lib/server-content'
 import { isLanguage } from '@/lib/language'
 
 /**
@@ -81,7 +83,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const selectable = !request.nextUrl.searchParams.has('read')
 
   const number = Number(stage)
-  const subject = Number.isInteger(number) ? practicePage(number) : null
+  const subject = Number.isInteger(number) ? practicePageOf(content, number) : null
   // A Stage with no authored subject has no document to serve. The surface
   // around this frame is where that is said in words; a route that can only
   // answer in HTML says not-found rather than returning a blank page.

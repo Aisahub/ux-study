@@ -2,7 +2,9 @@ import { notFound } from 'next/navigation'
 import type { NextRequest } from 'next/server'
 
 import { requireSession } from '@/lib/auth'
-import { practicePage, practicePageCss, practicePageJs } from '@/lib/server-content'
+import { practicePageOf } from '@/lib/content'
+import { practicePageCss, practicePageJs } from '@/lib/served-content'
+import { content } from '@/lib/server-content'
 import { isLanguage } from '@/lib/language'
 
 /**
@@ -22,7 +24,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   await requireSession(lang)
 
   const number = Number(stage)
-  const subject = Number.isInteger(number) ? practicePage(number) : null
+  const subject = Number.isInteger(number) ? practicePageOf(content, number) : null
   if (!subject) notFound()
 
   const js = practicePageJs(number)

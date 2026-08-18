@@ -1,6 +1,6 @@
-import { briefOf, type Brief, type PracticePage } from '@/lib/content'
+import { briefOf, practicePageOf, type Brief, type PracticePage } from '@/lib/content'
 import { capstoneState, progressFor, stageProgress, type StageProgress } from '@/lib/progress'
-import { content, practicePage } from '@/lib/server-content'
+import { content } from '@/lib/server-content'
 
 /**
  * Whether a Learner can get at a Stage's Self-Audit Report, and if not, which
@@ -44,7 +44,7 @@ export function auditStandingFrom(
 /** Where this Learner stands with one Stage's Self-Audit Report. */
 export async function auditStanding(email: string, stage: number): Promise<AuditStanding> {
   const progress = stageProgress(await progressFor(email), stage)
-  return auditStandingFrom(practicePage(stage), briefOf(content, stage), progress)
+  return auditStandingFrom(practicePageOf(content, stage), briefOf(content, stage), progress)
 }
 
 /**

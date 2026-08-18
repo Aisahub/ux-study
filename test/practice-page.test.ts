@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { expect, test } from 'vitest'
 
 import { competenciesOfStage, loadContent, practicePageOf } from '../lib/content'
+import { asServed } from '../lib/served-content'
 
 /**
  * Authoring rules for the audit subjects — what the spec demands of the real
@@ -91,7 +92,11 @@ test('nothing in the flow marks an element as defective', () => {
   // served: an authoring note is documentation for a maintainer and would be a
   // hint for a Learner, so the serving strips it, as it already does for the
   // stylesheet. What must carry no marker is the code that reaches the browser.
-  const code = flow.js.replace(/\/\*[\s\S]*?\*\//g, '')
+  //
+  // Asked of the serving itself rather than reproduced here. This line used to
+  // carry its own copy of the pattern, so the test could have passed while what
+  // production stripped had changed underneath it (#133).
+  const code = asServed(flow.js)
   for (const page of [flow.html.en, flow.html.ko, code]) {
     expect(page).not.toMatch(/defect|planted|결함/i)
     for (const defect of flow.defects) {
