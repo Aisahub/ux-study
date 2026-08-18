@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { expect, test } from 'vitest'
@@ -161,6 +161,90 @@ test('Learner-facing copy avoids the words CONTEXT.md rules out', () => {
       ...korean.filter((term) => text.includes(term)),
     ])
     expect(found, where).toEqual([])
+  }
+})
+
+/**
+ * The sweep above reads the authored content. The chrome — the `COPY` records
+ * the screens themselves are written in — was outside it until 2026-08-14,
+ * which is how the navigation rail came to label the Findings library
+ * `Finding` in Korean: a Korean string that was not Korean at all, on every
+ * Korean page, for as long as the rail has existed. Nothing failed, because
+ * nothing looked; it was found in a screenshot.
+ *
+ * These strings cannot be imported the way content can — a `COPY` record sits
+ * inside a server component that reaches for the database on import — so they
+ * are read out of the source instead. The `ko` record is read *whole*: the
+ * defect was an English word inside a Korean record, so a scan that picked out
+ * the Korean-looking strings would have skipped precisely it.
+ */
+function sources(dir: string): string[] {
+  return readdirSync(dir).flatMap((entry) => {
+    const path = join(dir, entry)
+    if (statSync(path).isDirectory()) return sources(path)
+    return /\.tsx?$/.test(path) ? [path] : []
+  })
+}
+
+/** Every string literal inside every `ko: { … }` record in one source file. */
+function koreanCopy(source: string): string[] {
+  const strings: string[] = []
+  for (const record of source.matchAll(/\bko: \{/g)) {
+    // Brace-matched rather than read to the next line at the same indent, so
+    // a nested object inside the record is read too instead of ending it. A
+    // literal holding an unpaired brace would over-run the record and scan
+    // past it, which shows up as a failure here rather than as a silent skip.
+    let depth = 0
+    let end = source.indexOf('{', record.index)
+    for (let i = end; i < source.length; i++) {
+      if (source[i] === '{') depth++
+      else if (source[i] === '}' && --depth === 0) {
+        end = i
+        break
+      }
+    }
+    for (const literal of source.slice(record.index, end + 1).matchAll(/'((?:[^'\\]|\\.)*)'|`((?:[^`\\]|\\.)*)`/g)) {
+      strings.push(literal[1] ?? literal[2])
+    }
+  }
+  return strings
+}
+
+/**
+ * CONTEXT.md's Learner-facing Korean section settles two of its names by
+ * saying the English one "stays the record's name in code, issues and English
+ * copy" — which is what makes that word, in a Korean string, the defect. Only
+ * those two are here. Its other rulings choose between two *Korean* words
+ * (점검 over 감사, 메모 over 노트), and each losing word is an ordinary Korean
+ * word with its own meaning — 감사합니다 is thanks, 노트북 is a laptop — so
+ * banning the substring would fail on correct copy, which is the shape of
+ * check this file already refuses above.
+ */
+const ENGLISH_IN_KOREAN = ['Finding', 'Note']
+
+test('every English word this file keeps out of Korean copy is one CONTEXT.md keeps out', () => {
+  // The same anchor as the test above, for the same reason: a hand-written
+  // list outliving its source is the failure nobody is told about.
+  const context = readFileSync(join(__dirname, '..', 'CONTEXT.md'), 'utf8')
+  const section = context.split('## Learner-facing Korean')[1] ?? ''
+  expect(ENGLISH_IN_KOREAN.filter((word) => !section.includes(`\`${word}\``))).toEqual([])
+})
+
+test('the screens name things in Korean the way CONTEXT.md settles them', () => {
+  const app = join(__dirname, '..', 'app')
+  for (const file of sources(app)) {
+    for (const text of koreanCopy(readFileSync(file, 'utf8'))) {
+      const found = [
+        // Plural too: a rail that said `Findings` in Korean would be the same
+        // defect as the one that said `Finding`.
+        ...ENGLISH_IN_KOREAN.filter((word) => new RegExp(`\\b${word}s?\\b`, 'i').test(text)),
+        ...Object.entries(NAMES_NOTHING_HERE).flatMap(([word, korean]) => [
+          ...(new RegExp(`\\b${word}\\b`, 'i').test(text) ? [word] : []),
+          ...korean.filter((term) => text.includes(term)),
+        ]),
+      ]
+      expect(found, `${file.slice(app.length - 3)}: ${text}`).toEqual([])
+    }
   }
 })
 
