@@ -4,11 +4,11 @@ import { notFound } from 'next/navigation'
 import { and, eq } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
+import { auditStanding } from '@/lib/audit'
 import { requireSession } from '@/lib/auth'
-import { briefOf, type Brief } from '@/lib/content'
+import { type Brief } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
-import { capstoneState, progressFor, stageProgress } from '@/lib/progress'
-import { content, practicePage } from '@/lib/server-content'
+import { content } from '@/lib/server-content'
 
 import { attachIssueUrl } from '../actions'
 import { FindingsDrawer } from '../drawer'
@@ -137,14 +137,14 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
-  // This Stage's own brief, which a Stage may not have yet — Stage 3's arrives
-  // with #78. Resolved before the branches below because two of them print its
-  // title, and a Stage with a subject and no brief must not crash on the way to
-  // saying so.
-  const brief = briefOf(content, stage)
+  // Where this Learner stands with this Stage's report, in the order #61
+  // settled — no subject before locked, locked before no brief. The order is
+  // the audit module's now, and the write path asks it the same question
+  // instead of re-deriving two of the three (#130). What is left here is which
+  // screen to draw.
+  const standing = await auditStanding(session.email, stage)
 
-  const subject = practicePage(stage)
-  if (!subject) {
+  if (standing.state === 'no-subject') {
     // Said, not shown as an empty frame. A Learner who reached a declared
     // Stage and found nothing would have no way to tell an unwritten page from
     // a broken one.
@@ -154,9 +154,9 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
             heading where there is not — rather than printing `noSubject` as
             both the heading and the line under it. */}
         <h1 className="font-serif text-display font-bold text-ink">
-          {brief ? brief.title[lang] : copy.noSubject}
+          {standing.brief ? standing.brief.title[lang] : copy.noSubject}
         </h1>
-        {brief && <p className="text-body-sm font-bold">{copy.noSubject}</p>}
+        {standing.brief && <p className="text-body-sm font-bold">{copy.noSubject}</p>}
         <p className="text-ink-2">{copy.noSubjectWhy}</p>
         <Link href={`/${lang}/learn`} className="text-body-sm text-ink-2 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
@@ -165,15 +165,13 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
     )
   }
 
-  const progress = stageProgress(await progressFor(session.email), stage)
-
-  if (capstoneState(progress) === 'locked') {
+  if (standing.state === 'locked') {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
         <h1 className="font-serif text-display font-bold text-ink">
-          {brief ? brief.title[lang] : copy.noBrief}
+          {standing.brief ? standing.brief.title[lang] : copy.noBrief}
         </h1>
-        {brief && <p className="text-ink-2">{brief.intro[lang]}</p>}
+        {standing.brief && <p className="text-ink-2">{standing.brief.intro[lang]}</p>}
         <p className="text-body-sm font-bold">{copy.locked}</p>
         <Link href={`/${lang}/learn`} className="text-body-sm text-ink-2 underline-offset-4 hover:underline">
           ← {copy.lockedBack}
@@ -186,7 +184,7 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   // a complete report asks of them. Said out loud rather than falling back to
   // another Stage's brief, which would describe a subject they are not looking
   // at — Stage 1's says "examine the page" to somebody walking a flow.
-  if (!brief) {
+  if (standing.state === 'no-brief') {
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center gap-4 p-8 font-sans">
         <h1 className="font-serif text-display font-bold text-ink">{copy.noBrief}</h1>
@@ -197,6 +195,8 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
       </main>
     )
   }
+
+  const { subject, brief } = standing
 
   const [report] = await db
     .select()

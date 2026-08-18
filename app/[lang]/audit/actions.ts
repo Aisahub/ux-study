@@ -4,10 +4,10 @@ import { and, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
 import { db, schema } from '@/db'
+import { subjectForWriting } from '@/lib/audit'
 import { requireSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
-import { capstoneState, progressFor, stageProgress } from '@/lib/progress'
-import { content, practicePage } from '@/lib/server-content'
+import { content } from '@/lib/server-content'
 
 /**
  * The write path of the Self-Audit Report (#24). Every action re-derives what
@@ -28,21 +28,6 @@ export interface FindingInput {
   fix: string
 }
 
-/**
- * The gate every write shares: a real Stage, with a subject to audit and its
- * Gate Quizzes behind it. Returns that Stage's subject, or the refusal.
- */
-async function openSubject(lang: Language, stage: number, email: string) {
-  const subject = practicePage(stage)
-  // Not "no such Stage" — the Stage may well be declared and simply have
-  // nothing to audit yet, which is a different thing to tell someone.
-  if (!subject) return { error: 'no-subject' as const }
-
-  const progress = stageProgress(await progressFor(email), stage)
-  if (capstoneState(progress) === 'locked') return { error: 'locked' as const }
-  return { subject }
-}
-
 export async function saveFinding(
   lang: Language,
   stage: number,
@@ -50,7 +35,7 @@ export async function saveFinding(
 ): Promise<string | null> {
   if (!isLanguage(lang)) return null
   const session = await requireSession(lang)
-  const open = await openSubject(lang, stage, session.email)
+  const open = await subjectForWriting(session.email, stage)
   if (open.error) return open.error
 
   const element = input.element.trim()
@@ -98,7 +83,7 @@ export async function removeFinding(lang: Language, stage: number, findingId: nu
 export async function submitReport(lang: Language, stage: number): Promise<string | null> {
   if (!isLanguage(lang)) return null
   const session = await requireSession(lang)
-  const open = await openSubject(lang, stage, session.email)
+  const open = await subjectForWriting(session.email, stage)
   if (open.error) return open.error
 
   const report = await reportRow(session.email, stage)
