@@ -6,11 +6,14 @@ import { requireSession } from '@/lib/auth'
 import { competenciesOfStage } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
 import {
-  isComplete,
+  capstoneState,
+  completionPercent,
   progressFor,
   stageProgress,
+  stageStandingIn,
+  stageState,
   type QuizStatus,
-  type StageProgress,
+  type StageState,
 } from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
@@ -160,19 +163,6 @@ function ReportMark({ className }: { className: string }) {
 }
 
 /**
- * A Stage's own state, which is deliberately not a QuizStatus: a Stage is
- * complete when every Gate Quiz in it is passed *and* its report is submitted.
- * Sharing one vocabulary would let a Stage read `passed` with its capstone
- * still outstanding.
- */
-type StageState = 'unstarted' | 'in-progress' | 'complete'
-
-function stageStateOf(progress: StageProgress): StageState {
-  if (isComplete(progress)) return 'complete'
-  return progress.stepsDone > 0 ? 'in-progress' : 'unstarted'
-}
-
-/**
  * One Stage, in two arrangements.
  *
  * From `sm` it is the card DESIGN.md draws: mark and status on the first line,
@@ -267,18 +257,13 @@ export default async function Learn({
     ),
   }))
 
-  // The Stage the Learner is standing in: the earliest unfinished one, or the
-  // last where every Stage is done. The bar counts that Stage and names it —
-  // this page's job is to answer "what now", and a bar counting a Stage closed
-  // months ago answers nothing.
-  const current = stages.find((entry) => !isComplete(entry.progress)) ?? stages[stages.length - 1]
-  const completionPercent =
-    current.progress.stepsTotal === 0
-      ? 0
-      : Math.min(
-          100,
-          Math.round((current.progress.stepsDone / current.progress.stepsTotal) * 100),
-        )
+  // The Stage the Learner is standing in, and how far through it. The bar
+  // counts that Stage and names it — this page's job is to answer "what now",
+  // and a bar counting a Stage closed months ago answers nothing. Both answers
+  // are the progress module's (#128); what stays here is which card to draw.
+  const standing = stageStandingIn(progress)
+  const current = stages.find((entry) => entry.stage === standing.stage)!
+  const percent = completionPercent(standing)
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
@@ -306,7 +291,7 @@ export default async function Learn({
           >
             <span
               className="block h-full rounded-full bg-oxblood"
-              style={{ width: `${completionPercent}%` }}
+              style={{ width: `${percent}%` }}
             />
           </div>
         </div>
@@ -322,7 +307,7 @@ export default async function Learn({
         </h2>
         <div className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-3 sm:bg-transparent sm:p-0 sm:shadow-none">
           {stages.map((entry, index) => {
-            const state = stageStateOf(entry.progress)
+            const state = stageState(entry.progress)
             return (
               <StageCard
                 key={entry.stage}
@@ -348,7 +333,14 @@ export default async function Learn({
             The rows are identical across the three on purpose: a Competency is
             an entry point wherever it sits, and giving the later Stages a
             different row would say they are a different kind of work. */}
-        {stages.map((entry) => (
+        {stages.map((entry) => {
+          // One word for where the capstone stands, instead of the two booleans
+          // it is derived from. This block read them four times — the attribute,
+          // the mark, the status word and whether the link renders — and four
+          // readings of one fact are four places to change it (#128).
+          const capstone = capstoneState(entry.progress)
+
+          return (
           <div key={entry.stage} className="mt-[26px] first:mt-[14px]">
             <h3 className="px-1.5 font-serif text-headline font-bold text-ink">
               {copy.stageHeading(entry.stage)}
@@ -461,17 +453,15 @@ export default async function Learn({
           })}
 
           <article
-            data-report-status={
-              entry.progress.reportSubmitted ? 'submitted' : entry.progress.allPassed ? 'open' : 'locked'
-            }
+            data-report-status={capstone}
             className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
           >
             <span
               aria-hidden
               className={`grid size-11 place-items-center rounded-badge ${
-                entry.progress.reportSubmitted
+                capstone === 'submitted'
                   ? 'bg-oxblood text-white'
-                  : entry.progress.allPassed
+                  : capstone === 'open'
                     ? 'text-oxblood shadow-[inset_0_0_0_2px_var(--oxblood),inset_0_-5px_0_0_var(--oxblood)]'
                     : 'text-ink shadow-[inset_0_0_0_2px_var(--blue-grey)]'
               }`}
@@ -487,19 +477,19 @@ export default async function Learn({
                 {copy.capstoneHeading}
               </h3>
               <p className="mt-1 max-w-measure text-body-sm text-ink-2">
-                {entry.progress.allPassed ? copy.capstoneExplanation : copy.capstoneLocked}
+                {capstone === 'locked' ? copy.capstoneLocked : copy.capstoneExplanation}
               </p>
             </div>
 
             <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
               <p className="text-label font-bold text-ink sm:flex sm:min-h-11 sm:items-center">
-                {entry.progress.reportSubmitted
+                {capstone === 'submitted'
                   ? copy.capstoneSubmitted
-                  : entry.progress.allPassed
+                  : capstone === 'open'
                     ? copy.open
                     : copy.locked}
               </p>
-              {(entry.progress.allPassed || entry.progress.reportSubmitted) && (
+              {capstone !== 'locked' && (
                 <Link
                   href={`/${lang}/audit/${entry.stage}`}
                   className="press relative inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill"
@@ -512,7 +502,8 @@ export default async function Learn({
           </article>
             </div>
           </div>
-        ))}
+          )
+        })}
       </section>
 
       {/* Visible on the page every Learner lands on, before any first
