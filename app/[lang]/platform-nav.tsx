@@ -18,7 +18,7 @@ const COPY: Record<
   ko: {
     learn: '학습',
     me: '마이페이지',
-    findings: 'Finding',
+    findings: '발견',
     learners: '학습자',
     content: '콘텐츠 상태',
     allowlist: '허용 목록',
@@ -52,6 +52,17 @@ const COPY: Record<
  * Labels match the headings of the pages they lead to, rather than being
  * shortened for the bar — the platform should not fail the Consistency
  * lesson it teaches.
+ *
+ * The Findings library is the one item that cannot, and the reason is
+ * recorded here rather than left to be re-decided: its heading is a sentence.
+ * `What colleagues found` wants three lines in a bottom-bar slot that holds
+ * two — 57px wide at 375px with six marks. Korean's `동료들이 찾아낸 것` would
+ * fit in its two, but a label that works in only one of the two scripts is
+ * what the Two-Script Rule refuses, so neither language takes the heading.
+ * Both name the record instead: `Findings`, and 발견 — the spelling CONTEXT.md
+ * fixes for Korean copy, and the one the drawer a Learner writes into already
+ * uses. This slot said the English `Finding` until 2026-08-14, on every
+ * Korean page, for as long as the rail has existed.
  */
 export async function PlatformNav({ lang }: { lang: Language }) {
   const session = await getSession()
