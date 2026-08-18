@@ -55,6 +55,26 @@ export async function resolveEntry(email: string): Promise<AllowlistEntry | null
   return rows.find((row) => row.pattern === address) ?? rows.find((row) => row.pattern === domain) ?? null
 }
 
+/**
+ * Which cohort an address belongs to.
+ *
+ * Location determines working language and nothing else (PRODUCT.md) — the
+ * curriculum, the assessments and the standard are identical — so this is only
+ * ever a way to read a Maintainer's figures apart, never a difference in what
+ * anybody is given.
+ *
+ * The address is the only signal there is: Korea-based Learners hold
+ * `@aisahub.com` Google Workspace accounts and the Indonesia cohort has no
+ * company email, which is also why they are admitted row by row rather than by
+ * the domain wildcard (ADR-0004). It lives here because this is the module that
+ * already reads an address as a domain and a local part.
+ */
+export type Cohort = 'korea' | 'indonesia'
+
+export function cohortOf(email: string): Cohort {
+  return email.toLowerCase().endsWith('@aisahub.com') ? 'korea' : 'indonesia'
+}
+
 /** What the allowlist says about an address, which is what its admitting row says. */
 export async function resolveAccess(email: string): Promise<Access> {
   const entry = await resolveEntry(email)

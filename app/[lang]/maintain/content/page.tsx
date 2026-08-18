@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { isNotNull } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
-import { requireMaintainer } from '@/lib/auth'
+import { cohortOf, requireMaintainer } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
@@ -161,7 +161,6 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
 
   const submittedIds = new Set(reports.map((report) => report.id))
   const submittedFindings = findings.filter((finding) => submittedIds.has(finding.reportId))
-  const isKorea = (email: string) => email.endsWith('@aisahub.com')
 
   // One shelf of statistics per authored subject (#61). A defect is only
   // missed by someone who was looking at the page it is on, so every count
@@ -170,7 +169,7 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
   // who never saw it.
   const subjects = content.practicePages.map((page) => {
     const stageReports = reports.filter((report) => report.stage === page.stage)
-    const korea = stageReports.filter((report) => isKorea(report.email)).length
+    const korea = stageReports.filter((report) => cohortOf(report.email) === 'korea').length
 
     return {
       stage: page.stage,
@@ -186,8 +185,8 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
             defect,
             found: finders.length,
             missed: stageReports.length - finders.length,
-            koreaFound: finders.filter((report) => isKorea(report.email)).length,
-            indonesiaFound: finders.filter((report) => !isKorea(report.email)).length,
+            koreaFound: finders.filter((report) => cohortOf(report.email) === 'korea').length,
+            indonesiaFound: finders.filter((report) => cohortOf(report.email) !== 'korea').length,
           }
         })
         .sort((a, b) => b.missed - a.missed),
