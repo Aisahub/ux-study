@@ -366,33 +366,157 @@ export class ContentError extends Error {
   }
 }
 
-export function loadContent(root: string = join(process.cwd(), 'content')): Content {
+/**
+ * A parsed document, before any rule has looked at it.
+ *
+ * `problem` is set when the bytes could not be turned into front matter at all
+ * — missing, or not valid YAML. It travels with the document rather than being
+ * reported where it was read, because reading is not where problems are said
+ * out loud (#132).
+ */
+export interface SourceDoc {
+  /** How this file is named in a problem message. */
+  rel: string
+  /** The file's own name within its directory, e.g. `contrast.md`. */
+  name: string
+  data: Record<string, unknown>
+  body: string
+  problem?: string
+}
+
+/** One directory under `practice-page/`, read but not yet judged. */
+export interface SourcePracticePage {
+  name: string
+  html: { en: string | null; ko: string | null }
+  css: string | null
+  js: string | null
+  manifest: SourceDoc | null
+}
+
+/**
+ * Everything `content/` holds, parsed and unjudged.
+ *
+ * This is the seam. On one side is the only code that touches a disk; on the
+ * other, every rule in this file — and rules over records can be asked
+ * directly, which is what a rule test used to build a temp directory and
+ * eleven files to do.
+ */
+export interface ContentSource {
+  config: SourceDoc | null
+  glossary: SourceDoc[]
+  competencies: SourceDoc[]
+  itemPools: { competency: string; docs: SourceDoc[] }[]
+  itemScreenCss: string | null
+  briefs: SourceDoc[]
+  practicePages: SourcePracticePage[]
+  specimen: SourceDoc | null
+}
+
+/** The whole of `content/`, read. No rule lives here. */
+export function readSource(root: string = join(process.cwd(), 'content')): ContentSource {
+  const itemsDir = join(root, 'items')
+  const pagesDir = join(root, 'practice-page')
+  const screenCss = join(itemsDir, 'item-screen.css')
+
+  return {
+    config: existsSync(join(root, 'config.md'))
+      ? parseDoc(readFileSync(join(root, 'config.md'), 'utf8'), 'config.md', 'config.md')
+      : null,
+    glossary: readDocs(root, 'glossary'),
+    competencies: readDocs(root, 'competencies'),
+    itemPools: !existsSync(itemsDir)
+      ? []
+      : readdirSync(itemsDir, { withFileTypes: true })
+          .filter((entry) => entry.isDirectory())
+          .map((entry) => entry.name)
+          .sort()
+          .map((competency) => ({ competency, docs: readDocs(itemsDir, competency, `items/${competency}`) })),
+    itemScreenCss: existsSync(screenCss) ? readFileSync(screenCss, 'utf8') : null,
+    briefs: readDocs(root, 'briefs'),
+    practicePages: !existsSync(pagesDir) ? [] : readdirSync(pagesDir).sort().map((name) => readPracticePage(pagesDir, name)),
+    specimen: existsSync(join(root, 'specimen-report.md'))
+      ? parseDoc(readFileSync(join(root, 'specimen-report.md'), 'utf8'), 'specimen-report.md', 'specimen-report.md')
+      : null,
+  }
+}
+
+function readDocs(parent: string, dir: string, relDir: string = dir): SourceDoc[] {
+  const path = join(parent, dir)
+  if (!existsSync(path)) return []
+  return readdirSync(path)
+    .filter((file) => file.endsWith('.md'))
+    .sort()
+    .map((file) => parseDoc(readFileSync(join(path, file), 'utf8'), `${relDir}/${file}`, file))
+}
+
+function readPracticePage(parent: string, name: string): SourcePracticePage {
+  const dir = join(parent, name)
+  const read = (file: string) => (existsSync(join(dir, file)) ? readFileSync(join(dir, file), 'utf8') : null)
+  const manifest = read('manifest.md')
+
+  return {
+    name,
+    html: { en: read('en.html'), ko: read('ko.html') },
+    css: read('practice-page.css'),
+    js: read('practice-page.js'),
+    manifest: manifest === null ? null : parseDoc(manifest, `practice-page/${name}/manifest.md`, 'manifest.md'),
+  }
+}
+
+/** Bytes to front matter. The only judgement here is whether it parsed at all. */
+function parseDoc(text: string, rel: string, name: string): SourceDoc {
+  const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(text)
+  if (!match) return { rel, name, data: {}, body: text, problem: `${rel}: missing front matter` }
+  try {
+    const data: unknown = parse(match[1])
+    return { rel, name, data: isRecord(data) ? data : {}, body: text.slice(match[0].length) }
+  } catch (error) {
+    return {
+      rel,
+      name,
+      data: {},
+      body: '',
+      problem: `${rel}: front matter is not valid YAML — ${(error as Error).message}`,
+    }
+  }
+}
+
+/**
+ * Every rule in this file, over records that are already parsed. Throws
+ * `ContentError` listing everything wrong, never only the first thing.
+ */
+export function validateContent(source: ContentSource): Content {
   const problems: string[] = []
 
-  const config = loadConfig(root, problems)
-  // Without the quantities and the Stage 1 list, nothing else can be judged.
+  const config = loadConfig(source.config, problems)
+  // Without the quantities and the Stage lists, nothing else can be judged.
   if (!config) throw new ContentError(problems)
 
-  const glossary = loadGlossary(root, problems)
+  const glossary = loadGlossary(source.glossary, problems)
   const principles = new Set(glossary.map((entry) => entry.slug))
-  const competencies = loadCompetencies(root, config, problems)
-  const items = loadItems(root, config, principles, problems)
-  const itemScreenCss = loadItemScreenCss(root, items, problems)
-  const briefs = loadBriefs(root, config, principles, problems)
-  const practicePages = loadPracticePages(root, config, principles, problems)
-  const specimen = loadSpecimen(root, config, principles, practicePages, problems)
+  const competencies = loadCompetencies(source.competencies, config, problems)
+  const items = loadItems(source.itemPools, config, principles, problems)
+  const itemScreenCss = loadItemScreenCss(source.itemScreenCss, items, problems)
+  const briefs = loadBriefs(source.briefs, config, principles, problems)
+  const practicePages = loadPracticePages(source.practicePages, config, principles, problems)
+  const specimen = loadSpecimen(source.specimen, config, principles, practicePages, problems)
 
   if (problems.length > 0) throw new ContentError(problems)
   return { config, glossary, competencies, items, itemScreenCss, briefs, practicePages, specimen }
 }
 
-function loadConfig(root: string, problems: string[]): ContentConfig | null {
-  const path = join(root, 'config.md')
-  if (!existsSync(path)) {
+/** Read `content/` and hold it to every rule. Unchanged for every caller. */
+export function loadContent(root: string = join(process.cwd(), 'content')): Content {
+  return validateContent(readSource(root))
+}
+
+function loadConfig(doc: SourceDoc | null, problems: string[]): ContentConfig | null {
+  if (!doc) {
     problems.push('config.md is missing — the fixed quantities live in content, not code')
     return null
   }
-  const { data } = readFrontmatter(path, 'config.md', problems)
+  if (doc.problem) problems.push(doc.problem)
+  const { data } = doc
 
   let usable = true
   for (const field of ['poolSize', 'drawSize', 'passThreshold', 'minFindings'] as const) {
@@ -454,12 +578,12 @@ function loadConfig(root: string, problems: string[]): ContentConfig | null {
   return config
 }
 
-function loadGlossary(root: string, problems: string[]): GlossaryEntry[] {
+function loadGlossary(docs: SourceDoc[], problems: string[]): GlossaryEntry[] {
   const entries: GlossaryEntry[] = []
-  for (const file of markdownFiles(join(root, 'glossary'))) {
-    const rel = `glossary/${file}`
-    const slug = file.replace(/\.md$/, '')
-    const { data } = readFrontmatter(join(root, 'glossary', file), rel, problems)
+  for (const doc of docs) {
+    if (doc.problem) problems.push(doc.problem)
+    const { rel, data } = doc
+    const slug = doc.name.replace(/\.md$/, '')
     checkLanguagePairs(data, rel, problems)
 
     if (data.slug !== slug) {
@@ -494,12 +618,12 @@ function loadGlossary(root: string, problems: string[]): GlossaryEntry[] {
   return entries
 }
 
-function loadCompetencies(root: string, config: ContentConfig, problems: string[]): Competency[] {
+function loadCompetencies(docs: SourceDoc[], config: ContentConfig, problems: string[]): Competency[] {
   const competencies: Competency[] = []
-  for (const file of markdownFiles(join(root, 'competencies'))) {
-    const rel = `competencies/${file}`
-    const slug = file.replace(/\.md$/, '')
-    const { data, body } = readFrontmatter(join(root, 'competencies', file), rel, problems)
+  for (const doc of docs) {
+    if (doc.problem) problems.push(doc.problem)
+    const { rel, data, body } = doc
+    const slug = doc.name.replace(/\.md$/, '')
     checkLanguagePairs(data, rel, problems)
 
     if (stageOf(config, slug) === null) {
@@ -565,29 +689,22 @@ function loadCompetencies(root: string, config: ContentConfig, problems: string[
 }
 
 function loadItems(
-  root: string,
+  sources: { competency: string; docs: SourceDoc[] }[],
   config: ContentConfig,
   principles: Set<string>,
   problems: string[],
 ): Record<string, QuizItem[]> {
   const pools: Record<string, QuizItem[]> = {}
-  const dir = join(root, 'items')
-  if (!existsSync(dir)) return pools
 
-  const poolDirs = readdirSync(dir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort()
-
-  for (const competency of poolDirs) {
+  for (const { competency, docs } of sources) {
     if (stageOf(config, competency) === null) {
       problems.push(`items/${competency}: item pool for a Competency declared under no Stage in config.md`)
     }
 
     const pool: QuizItem[] = []
-    for (const file of markdownFiles(join(dir, competency))) {
-      const rel = `items/${competency}/${file}`
-      const { data } = readFrontmatter(join(dir, competency, file), rel, problems)
+    for (const doc of docs) {
+      if (doc.problem) problems.push(doc.problem)
+      const { rel, data } = doc
       checkLanguagePairs(data, rel, problems)
 
       if (typeof data.sourceSection !== 'string' || data.sourceSection.trim() === '') {
@@ -664,7 +781,7 @@ function loadItems(
       }
 
       pool.push({
-        slug: file.replace(/\.md$/, ''),
+        slug: doc.name.replace(/\.md$/, ''),
         competency,
         sourceSection: stringOrEmpty(data.sourceSection),
         principles: citedPrinciples(data.principles, rel, principles, problems),
@@ -724,22 +841,21 @@ function readSequence(value: unknown, rel: string, problems: string[]): QuizItem
  * the screens would still render, unstyled, and a Learner would be judging a
  * layout nobody authored.
  */
-function loadItemScreenCss(root: string, items: Record<string, QuizItem[]>, problems: string[]): string {
+function loadItemScreenCss(css: string | null, items: Record<string, QuizItem[]>, problems: string[]): string {
   const drawn = Object.values(items).some((pool) => pool.some((item) => item.screen || item.sequence))
-  const path = join(root, 'items', 'item-screen.css')
-  if (existsSync(path)) return readFileSync(path, 'utf8')
+  if (css !== null) return css
   if (drawn) problems.push('items/item-screen.css is missing — items draw screens that nothing styles')
   return ''
 }
 
-function loadBriefs(root: string, config: ContentConfig, principles: Set<string>, problems: string[]): Brief[] {
+function loadBriefs(docs: SourceDoc[], config: ContentConfig, principles: Set<string>, problems: string[]): Brief[] {
   const briefs: Brief[] = []
   const declared = new Set(config.stages.map((entry) => entry.stage))
   const claimed = new Map<number, string>()
 
-  for (const file of markdownFiles(join(root, 'briefs'))) {
-    const rel = `briefs/${file}`
-    const { data, body } = readFrontmatter(join(root, 'briefs', file), rel, problems)
+  for (const doc of docs) {
+    if (doc.problem) problems.push(doc.problem)
+    const { rel, data, body } = doc
     checkLanguagePairs(data, rel, problems)
 
     const stage = data.stage
@@ -771,7 +887,7 @@ function loadBriefs(root: string, config: ContentConfig, principles: Set<string>
     }
 
     briefs.push({
-      slug: file.replace(/\.md$/, ''),
+      slug: doc.name.replace(/\.md$/, ''),
       stage: Number.isInteger(stage) ? (stage as number) : 0,
       principles: citedPrinciples(data.principles, rel, principles, problems),
       title: asBilingual(data.title),
@@ -804,18 +920,16 @@ const STEP_ATTRIBUTE = /data-step="(\d+)"/g
  * nobody can ever reach.
  */
 function loadPracticePages(
-  root: string,
+  sources: SourcePracticePage[],
   config: ContentConfig,
   principles: Set<string>,
   problems: string[],
 ): PracticePage[] {
-  const root_ = join(root, 'practice-page')
-  if (!existsSync(root_)) return []
-
   const declared = new Set(config.stages.map((entry) => entry.stage))
   const pages: PracticePage[] = []
 
-  for (const name of readdirSync(root_).sort()) {
+  for (const source of sources) {
+    const name = source.name
     const match = /^stage-(\d+)$/.exec(name)
     if (!match) {
       problems.push(
@@ -828,32 +942,30 @@ function loadPracticePages(
       problems.push(`practice-page/${name}: Stage ${stage} is not declared in config.md, so no Learner can reach this`)
       continue
     }
-    pages.push(loadPracticePage(root_, name, stage, config, principles, problems))
+    pages.push(loadPracticePage(source, stage, config, principles, problems))
   }
 
   return pages
 }
 
 function loadPracticePage(
-  parent: string,
-  name: string,
+  source: SourcePracticePage,
   stage: number,
   config: ContentConfig,
   principles: Set<string>,
   problems: string[],
 ): PracticePage {
-  const dir = join(parent, name)
+  const name = source.name
 
   const html: Bilingual = { en: '', ko: '' }
   for (const lang of LANGS) {
-    const path = join(dir, `${lang}.html`)
-    if (existsSync(path)) html[lang] = readFileSync(path, 'utf8')
+    const text = source.html[lang]
+    if (text !== null) html[lang] = text
     else problems.push(`practice-page/${name}/${lang}.html is missing`)
   }
 
-  const cssPath = join(dir, 'practice-page.css')
   let css = ''
-  if (existsSync(cssPath)) css = readFileSync(cssPath, 'utf8')
+  if (source.css !== null) css = source.css
   else {
     problems.push(`practice-page/${name}/practice-page.css is missing — most Planted Defects live in the styling`)
   }
@@ -872,9 +984,8 @@ function loadPracticePage(
     )
   }
 
-  const jsPath = join(dir, 'practice-page.js')
   let js = ''
-  if (existsSync(jsPath)) js = readFileSync(jsPath, 'utf8')
+  if (source.js !== null) js = source.js
   else if (steps.en.length > 0) {
     problems.push(
       `practice-page/${name}/practice-page.js is missing — a subject that walks needs the behaviour both variants share`,
@@ -910,14 +1021,13 @@ function loadPracticePage(
   }
 
   const defects: PlantedDefect[] = []
-  const manifestPath = join(dir, 'manifest.md')
-  if (!existsSync(manifestPath)) {
+  if (source.manifest === null) {
     problems.push(
       `practice-page/${name}/manifest.md is missing — the Planted Defects are this Stage's reference answer`,
     )
   } else {
-    const rel = `practice-page/${name}/manifest.md`
-    const { data } = readFrontmatter(manifestPath, rel, problems)
+    if (source.manifest.problem) problems.push(source.manifest.problem)
+    const { rel, data } = source.manifest
     checkLanguagePairs(data, rel, problems)
 
     let list: unknown[] = []
@@ -1008,17 +1118,15 @@ function loadPracticePage(
  * the same tolerance an unauthored item pool and an unauthored subject have.
  */
 function loadSpecimen(
-  root: string,
+  doc: SourceDoc | null,
   config: ContentConfig,
   principles: Set<string>,
   practicePages: PracticePage[],
   problems: string[],
 ): Specimen | null {
-  const rel = 'specimen-report.md'
-  const path = join(root, rel)
-  if (!existsSync(path)) return null
-
-  const { data } = readFrontmatter(path, rel, problems)
+  if (!doc) return null
+  if (doc.problem) problems.push(doc.problem)
+  const { rel, data } = doc
   checkLanguagePairs(data, rel, problems)
 
   // Named `subject` rather than `stage` all the way down, because this
@@ -1236,29 +1344,6 @@ function citedPrinciples(value: unknown, rel: string, principles: Set<string>, p
     if (!principles.has(slug)) problems.push(`${rel}: cites UX Principle "${slug}", absent from the Glossary`)
   }
   return value as string[]
-}
-
-function readFrontmatter(path: string, rel: string, problems: string[]): { data: Record<string, unknown>; body: string } {
-  const text = readFileSync(path, 'utf8')
-  const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(text)
-  if (!match) {
-    problems.push(`${rel}: missing front matter`)
-    return { data: {}, body: text }
-  }
-  try {
-    const data: unknown = parse(match[1])
-    return { data: isRecord(data) ? data : {}, body: text.slice(match[0].length) }
-  } catch (error) {
-    problems.push(`${rel}: front matter is not valid YAML — ${(error as Error).message}`)
-    return { data: {}, body: '' }
-  }
-}
-
-function markdownFiles(dir: string): string[] {
-  if (!existsSync(dir)) return []
-  return readdirSync(dir)
-    .filter((file) => file.endsWith('.md'))
-    .sort()
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
