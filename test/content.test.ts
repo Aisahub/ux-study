@@ -189,9 +189,18 @@ const BRIEF = `---
 stage: 1
 principles:
   - contrast
-brief:
-  en: Find at least one defect and name the Principle it violates.
-  ko: 결함을 하나 이상 찾고, 어긴 원칙의 이름을 대세요.
+title:
+  en: Self-Audit Report
+  ko: 자가 점검 리포트
+intro:
+  en: Examine the page and report what you find.
+  ko: 페이지를 살펴보고 발견한 것을 보고하세요.
+whatCounts:
+  en: Three Findings, each naming an element and a Principle.
+  ko: 발견 세 개, 각각 요소와 원칙을 지목합니다.
+advice:
+  en: Look before you reach for the Glossary.
+  ko: 용어집을 펼치기 전에 먼저 페이지를 보세요.
 ---
 `
 
@@ -732,6 +741,30 @@ test('a quiz item citing a Principle absent from the Glossary fails the build', 
   const root = scaffold()
   write(root, 'items/visual-hierarchy/washed-out-confirm.md', edit(ITEM_ONE, '  - contrast', '  - affordance'))
   expectProblem(root, /washed-out-confirm\.md: cites UX Principle "affordance", absent from the Glossary/)
+})
+
+test('a brief missing a paragraph a Learner reads fails the build', () => {
+  // The generic pair walker cannot catch this one: it inspects the fields that
+  // are there, so an absent field is invisible to it. Until #129 a brief
+  // without a title passed the build and threw on the audit surface instead.
+  const root = scaffold()
+  write(root, 'briefs/stage-1.md', edit(BRIEF, 'title:\n  en: Self-Audit Report\n  ko: 자가 점검 리포트\n', ''))
+  expectProblem(root, /briefs\/stage-1\.md: title must carry en and ko variants/)
+})
+
+test('a Peer Review paragraph written as one string, not a pair, fails the build', () => {
+  // Stage 3's alone, so its absence is fine. Written as a bare string it is
+  // invisible to the generic pair walker — that walker only descends into
+  // records — and would have reached the surface as `undefined[lang]`.
+  const root = scaffold()
+  write(root, 'briefs/stage-1.md', edit(BRIEF, 'advice:', 'peerReview: A colleague may read this.\nadvice:'))
+  expectProblem(root, /briefs\/stage-1\.md: peerReview must carry en and ko variants/)
+})
+
+test('a Peer Review paragraph in one language only fails the build', () => {
+  const root = scaffold()
+  write(root, 'briefs/stage-1.md', edit(BRIEF, 'advice:', 'peerReview:\n  en: A colleague may read this.\nadvice:'))
+  expectProblem(root, /briefs\/stage-1\.md: peerReview is missing its ko language variant/)
 })
 
 test('a brief citing a Principle absent from the Glossary fails the build', () => {

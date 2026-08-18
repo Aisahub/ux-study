@@ -159,6 +159,21 @@ export interface Brief {
   stage: number
   /** UX Principles the brief cites, each required to exist in the Glossary. */
   principles: string[]
+  /**
+   * The four paragraphs a Learner reads, in both languages.
+   *
+   * Declared here rather than left in `frontmatter` for the audit surface to
+   * cast out of it: a brief authored without one of these used to pass the
+   * build and throw on the surface of whichever Stage it belongs to, because a
+   * missing field is invisible to the generic pair check — that walker
+   * inspects the fields that exist (#129).
+   */
+  title: Bilingual
+  intro: Bilingual
+  whatCounts: Bilingual
+  advice: Bilingual
+  /** Stage 3's alone (ADR-0011): what Peer Review is, and that it gates nothing. */
+  peerReview: Bilingual | null
   frontmatter: Record<string, unknown>
   body: string
 }
@@ -732,10 +747,31 @@ function loadBriefs(root: string, config: ContentConfig, principles: Set<string>
       else claimed.set(stage as number, rel)
     }
 
+    // The four a Learner reads on the audit surface. Required rather than
+    // defaulted: a brief exists to say what a complete Self-Audit Report asks
+    // of them, and one that arrives without its instructions has nothing to
+    // put on the screen (#129).
+    for (const field of ['title', 'intro', 'whatCounts', 'advice'] as const) {
+      if (!isLanguagePair(data[field])) {
+        problems.push(`${rel}: ${field} must carry en and ko variants`)
+      }
+    }
+
+    // Stage 3's alone, so its absence is not a failure — but a half-written one
+    // is, the same way every other pair here is held.
+    if (data.peerReview !== undefined && !isLanguagePair(data.peerReview)) {
+      problems.push(`${rel}: peerReview must carry en and ko variants`)
+    }
+
     briefs.push({
       slug: file.replace(/\.md$/, ''),
       stage: Number.isInteger(stage) ? (stage as number) : 0,
       principles: citedPrinciples(data.principles, rel, principles, problems),
+      title: asBilingual(data.title),
+      intro: asBilingual(data.intro),
+      whatCounts: asBilingual(data.whatCounts),
+      advice: asBilingual(data.advice),
+      peerReview: data.peerReview === undefined ? null : asBilingual(data.peerReview),
       frontmatter: data,
       body,
     })
