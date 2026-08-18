@@ -1,10 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import { and, eq } from 'drizzle-orm'
-
-import { db, schema } from '@/db'
-import { auditStanding } from '@/lib/audit'
+import { auditStanding, draftFor, reveal } from '@/lib/audit'
 import { requireSession } from '@/lib/auth'
 import { type Brief } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
@@ -198,16 +195,12 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
 
   const { subject, brief } = standing
 
-  const [report] = await db
-    .select()
-    .from(schema.reports)
-    .where(and(eq(schema.reports.email, session.email), eq(schema.reports.stage, stage)))
-  const findings = report
-    ? await db.select().from(schema.findings).where(eq(schema.findings.reportId, report.id))
-    : []
+  const { report, findings } = await draftFor(session.email, stage)
 
   if (report?.submittedAt) {
-    const foundElements = new Set(findings.map((finding) => finding.element))
+    // Each Planted Defect against whether this report found it — the join the
+    // Maintainer's dashboard also makes, written once in the audit module.
+    const revealed = reveal(subject.defects, findings)
     const save = attachIssueUrl.bind(null, lang, stage)
 
     return (
@@ -216,17 +209,11 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
         <p className="text-ink-2">{copy.revealIntro}</p>
 
         <ul className="flex flex-col gap-3">
-          {subject.defects.map((defect) => (
+          {revealed.map(({ defect, found }) => (
             <li key={defect.slug} className="rounded-card bg-surface shadow-card p-4">
               <p className="text-body-sm">
-                <span
-                  className={
-                    foundElements.has(defect.element)
-                      ? 'font-bold text-oxblood'
-                      : 'font-bold text-ink-2'
-                  }
-                >
-                  {foundElements.has(defect.element) ? copy.found : copy.missed}
+                <span className={found ? 'font-bold text-oxblood' : 'font-bold text-ink-2'}>
+                  {found ? copy.found : copy.missed}
                 </span>
                 {defect.step !== undefined && (
                   <span className="ml-2 text-body-sm text-ink-2">
