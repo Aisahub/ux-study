@@ -201,6 +201,9 @@ whatCounts:
 advice:
   en: Look before you reach for the Glossary.
   ko: 용어집을 펼치기 전에 먼저 페이지를 보세요.
+optionalFix:
+  en: Optional once submitted — fix one Finding and show the change.
+  ko: 제출한 뒤에 선택으로, 발견 하나를 고치고 그 변화를 보여 주세요.
 ---
 `
 

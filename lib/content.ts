@@ -172,6 +172,13 @@ export interface Brief {
   intro: Bilingual
   whatCounts: Bilingual
   advice: Bilingual
+  /**
+   * The optional fix-and-show step, read on the reveal — after submitting,
+   * which is what the paragraph itself says and where the link it describes is
+   * attached. Authored rather than written into the surface: CONTEXT.md makes
+   * it part of what a Brief is (#135).
+   */
+  optionalFix: Bilingual
   /** Stage 3's alone (ADR-0011): what Peer Review is, and that it gates nothing. */
   peerReview: Bilingual | null
   frontmatter: Record<string, unknown>
@@ -751,7 +758,7 @@ function loadBriefs(root: string, config: ContentConfig, principles: Set<string>
     // defaulted: a brief exists to say what a complete Self-Audit Report asks
     // of them, and one that arrives without its instructions has nothing to
     // put on the screen (#129).
-    for (const field of ['title', 'intro', 'whatCounts', 'advice'] as const) {
+    for (const field of ['title', 'intro', 'whatCounts', 'advice', 'optionalFix'] as const) {
       if (!isLanguagePair(data[field])) {
         problems.push(`${rel}: ${field} must carry en and ko variants`)
       }
@@ -771,6 +778,7 @@ function loadBriefs(root: string, config: ContentConfig, principles: Set<string>
       intro: asBilingual(data.intro),
       whatCounts: asBilingual(data.whatCounts),
       advice: asBilingual(data.advice),
+      optionalFix: asBilingual(data.optionalFix),
       peerReview: data.peerReview === undefined ? null : asBilingual(data.peerReview),
       frontmatter: data,
       body,

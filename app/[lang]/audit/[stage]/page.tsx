@@ -24,7 +24,6 @@ const COPY: Record<
     yourFindings: string
     source: string
     issueHeading: string
-    issueExplanation: string
     issueSave: string
     issueSaved: string
     complete: (stage: number) => string
@@ -49,8 +48,6 @@ const COPY: Record<
     yourFindings: 'Your Findings',
     source: 'Read the page source',
     issueHeading: 'Optional: show a fix',
-    issueExplanation:
-      'Pick one Finding and actually fix it, then paste a link showing the change — a pull request if you write code, a screenshot of the corrected page if you do not. It never affects completion.',
     issueSave: 'Save link',
     issueSaved: 'Saved.',
     complete: (stage) => `Stage ${stage} complete — every Gate Quiz passed and the report submitted.`,
@@ -80,8 +77,6 @@ const COPY: Record<
     yourFindings: '나의 발견',
     source: '페이지 소스 보기',
     issueHeading: '선택: 고친 것을 보여 주기',
-    issueExplanation:
-      '발견 하나를 골라 실제로 고치고, 그 변경을 보여 주는 링크를 붙여 넣으세요 — 코드를 쓴다면 pull request, 아니라면 고쳐진 페이지의 스크린샷이면 충분합니다. 수료에는 어떤 영향도 없습니다.',
     issueSave: '링크 저장',
     issueSaved: '저장되었습니다.',
     complete: (stage) => `${stage}단계 수료 — 퀴즈 전부 통과, 보고서 제출 완료.`,
@@ -248,7 +243,10 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
 
         <section className="rounded-card bg-surface shadow-card p-4">
           <h2 className="text-body-sm font-bold">{copy.issueHeading}</h2>
-          <p className="mt-1 text-body-sm text-ink-2">{copy.issueExplanation}</p>
+          {/* The authored paragraph, not a second one written here. The brief
+              is what describes this step (CONTEXT.md), and while the surface
+              carried its own wording the authored one reached nobody (#135). */}
+          <p className="mt-1 text-body-sm text-ink-2">{brief.optionalFix[lang]}</p>
           <form
             action={async (data: FormData) => {
               'use server'
