@@ -1,12 +1,9 @@
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 
-import { and, desc, eq, inArray, isNotNull, sql } from 'drizzle-orm'
-
-import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
+import { libraryFor } from '@/lib/findings'
 import { isLanguage, type Language } from '@/lib/language'
-import { reportsFor } from '@/lib/progress'
 
 export const dynamic = 'force-dynamic'
 
@@ -63,23 +60,10 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
 
   // The Stages this reader has paid for by submitting. Everything below is
   // scoped to it, so a Stage they are still working on cannot appear by any
-  // route — not in the list, not in the counts.
-  const earned = (await reportsFor(session.email))
-    .filter((report) => report.submittedAt != null)
-    .map((report) => report.stage)
+  // route — not in the list, not in the counts. The gate and the scoping are
+  // the findings module's, which is where the other four sites ask them (#131).
+  const { earned, rows } = await libraryFor(session.email)
   if (earned.length === 0) redirect(`/${lang}/audit`)
-
-  const rows = await db
-    .select({
-      finding: schema.findings,
-      author: schema.reports.email,
-      stage: schema.reports.stage,
-      agreements: sql<number>`(select count(*)::int from ${schema.agreements} where ${schema.agreements.findingId} = ${schema.findings.id})`,
-    })
-    .from(schema.findings)
-    .innerJoin(schema.reports, eq(schema.findings.reportId, schema.reports.id))
-    .where(and(isNotNull(schema.reports.submittedAt), inArray(schema.reports.stage, earned)))
-    .orderBy(desc(sql`4`), desc(schema.findings.id))
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">

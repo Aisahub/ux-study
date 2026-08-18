@@ -2,13 +2,10 @@ import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
 import { notFound, redirect } from 'next/navigation'
 
-import { and, eq, isNotNull, sql } from 'drizzle-orm'
-
 import { SubmitButton } from '@/app/[lang]/pending'
-import { db, schema } from '@/db'
 import { requireSession } from '@/lib/auth'
+import { agreementOn, agreeWith, mayRead, submittedFinding } from '@/lib/findings'
 import { isLanguage, type Language } from '@/lib/language'
-import { reportFor } from '@/lib/progress'
 import { content } from '@/lib/server-content'
 
 export const dynamic = 'force-dynamic'
@@ -71,53 +68,27 @@ export default async function FindingPage({
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
-  const [row] = await db
-    .select({ finding: schema.findings, author: schema.reports.email, stage: schema.reports.stage })
-    .from(schema.findings)
-    .innerJoin(schema.reports, eq(schema.findings.reportId, schema.reports.id))
-    .where(and(eq(schema.findings.id, id), isNotNull(schema.reports.submittedAt)))
+  const row = await submittedFinding(id)
   if (!row) notFound()
 
   // The submitted gate, against *this Finding's* Stage rather than against
   // having submitted anything at all (#61). Reaching a Stage 2 Finding by its
   // address is the route a Learner mid-way through Stage 2 would take to read
   // its answer key, and having finished Stage 1 does not buy it.
-  const own = await reportFor(session.email, row.stage)
-  if (!own?.submittedAt) redirect(`/${lang}/audit`)
+  if (!(await mayRead(session.email, row.stage))) redirect(`/${lang}/audit`)
 
-  const [{ count }] = await db
-    .select({ count: sql<number>`count(*)::int` })
-    .from(schema.agreements)
-    .where(eq(schema.agreements.findingId, id))
-  const [mine] = await db
-    .select()
-    .from(schema.agreements)
-    .where(and(eq(schema.agreements.findingId, id), eq(schema.agreements.email, session.email)))
+  const { count, mine } = await agreementOn(id, session.email)
 
   const principle = content.glossary.find((entry) => entry.slug === row.finding.principle)
 
   async function agree() {
     'use server'
     const actor = await requireSession(lang as Language)
-    const [target] = await db
-      .select({
-        author: schema.reports.email,
-        stage: schema.reports.stage,
-        submittedAt: schema.reports.submittedAt,
-      })
-      .from(schema.findings)
-      .innerJoin(schema.reports, eq(schema.findings.reportId, schema.reports.id))
-      .where(eq(schema.findings.id, id))
-    // Own Findings cannot be agreed with, and neither can anything not yet
-    // submitted; the unique index makes a second agreement a no-op.
-    if (!target || target.author === actor.email || !target.submittedAt) return
-    // And the actor has to have submitted the Stage this Finding belongs to.
-    // Re-derived here rather than trusted from the page that rendered the
-    // button: a server action is an address, reachable without it.
-    const actorReport = await reportFor(actor.email, target.stage)
-    if (!actorReport?.submittedAt) return
-    await db.insert(schema.agreements).values({ findingId: id, email: actor.email }).onConflictDoNothing()
-    revalidatePath(`/${lang}/findings/${id}`)
+    // Every condition re-derived rather than trusted from the page that drew
+    // the button — a server action is an address, reachable without it. The
+    // conditions themselves are the findings module's, so this action and the
+    // page above it cannot drift into two different answers (#131).
+    if (await agreeWith(id, actor.email)) revalidatePath(`/${lang}/findings/${id}`)
   }
 
   return (

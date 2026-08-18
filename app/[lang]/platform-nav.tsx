@@ -1,7 +1,7 @@
 import { NavRail, type RailItem } from './nav-rail'
 import { getSession } from '@/lib/auth'
+import { earnedStages } from '@/lib/findings'
 import type { Language } from '@/lib/language'
-import { reportsFor } from '@/lib/progress'
 
 const COPY: Record<
   Language,
@@ -71,7 +71,7 @@ export async function PlatformNav({ lang }: { lang: Language }) {
   const copy = COPY[lang]
 
   // Shared with the page's own progress read, so the rows are fetched once.
-  const reports = await reportsFor(session.email)
+  const earned = await earnedStages(session.email)
 
   const items: RailItem[] = [
     { id: 'learn', href: `/${lang}/learn`, label: copy.learn },
@@ -81,7 +81,7 @@ export async function PlatformNav({ lang }: { lang: Language }) {
   // Any submitted report opens the library — it then shows that Stage's shelf
   // and no other. The link is a door to what they have earned, so the check
   // for what that is belongs behind it, not here.
-  if (reports.some((report) => report.submittedAt != null)) {
+  if (earned.length > 0) {
     items.push({ id: 'findings', href: `/${lang}/findings`, label: copy.findings })
   }
 
