@@ -592,10 +592,6 @@ function loadGlossary(docs: SourceDoc[], problems: string[]): GlossaryEntry[] {
     for (const field of ['name', 'definition', 'justification'] as const) {
       if (!isLanguagePair(data[field])) problems.push(`${rel}: ${field} must carry en and ko variants`)
     }
-    const justification = data.justification
-    if (isRecord(justification) && typeof justification.ko === 'string') {
-      checkKoreanSlotParticles(justification.ko, rel, problems)
-    }
     // The Competency references are not checked against config.md: a Glossary
     // entry may cite a later-Stage Competency (cognitive-load already cites
     // form-burden, which is Stage 2).
@@ -1245,7 +1241,7 @@ function checkLanguagePairs(node: unknown, rel: string, problems: string[], path
       const empty = value === undefined || value === null || (typeof value === 'string' && value.trim() === '')
       if (empty) problems.push(`${rel}: ${path || 'content'} is missing its ${lang} language variant`)
     }
-    checkKoreanParticleSpacing(node.ko, rel, `${path || 'content'}.ko`, problems)
+    checkKorean(node.ko, rel, `${path || 'content'}.ko`, problems)
   }
   for (const [key, value] of Object.entries(node)) {
     checkLanguagePairs(value, rel, problems, path === '' ? key : `${path}.${key}`)
@@ -1278,9 +1274,11 @@ const KOREAN_BOUND_PARTICLES =
   /[가-힣0-9"”』」\)] (입니다|입니까|이다|이고|이며|이라고|이라는|이라서|라고|라는|까지|부터|처럼|마다|집니다|졌습니다)/g
 
 /**
- * A justification is a fill-in-the-blank sentence a Learner says out loud, so
- * every `[slot]` is replaced by a word nobody knows in advance. Korean picks
- * the form of a particle from whether the word before it ends in a consonant —
+ * A sentence with a `[slot]` in it is a fill-in-the-blank a Learner says out
+ * loud — the Glossary's justification templates are what ERR-214 was written
+ * about, but the rule is about the slot, not about the Glossary. Every slot is
+ * replaced by a word nobody knows in advance, and Korean picks the form of a
+ * particle from whether the word before it ends in a consonant —
  * 을/를, 은/는, 이/가, 와/과, 으로/로 — so a particle written directly after a
  * slot is right for half the words that can land there and wrong for the rest.
  *
@@ -1296,38 +1294,52 @@ const KOREAN_BOUND_PARTICLES =
 const VARYING_PARTICLES = /\[[^\]]*\]\s*(은|는|이|가|을|를|와|과|으로|로|이라면|라면|이라고|라고|이나|이며|이라는|라는)(?![가-힣])/g
 const SELF_TERMINATING_SLOT = /(사람|명)\]$/
 
-function checkKoreanSlotParticles(korean: string, rel: string, problems: string[]): void {
-  for (const found of korean.matchAll(VARYING_PARTICLES)) {
-    const slot = found[0].slice(0, found[0].indexOf(']') + 1)
-    if (SELF_TERMINATING_SLOT.test(slot)) continue
-    problems.push(
-      `${rel}: justification.ko puts "${found[1]}" straight after ${slot}, and that particle changes ` +
-        `with whatever fills the slot. Move the slot, or put a fixed noun between them.`,
-    )
-  }
-}
-
 /**
- * The Korean side of a pair is not always one string: an option list is
- * `options.ko[]`, each option carrying its own `text` and `reason`. Those
- * are the sentences a Learner reads after answering, so they are walked too.
+ * The Korean side of a pair, held to both Korean rules wherever it is written.
+ *
+ * That side is not always one string: an option list is `options.ko[]`, each
+ * option carrying its own `text` and `reason`. Those are the sentences a
+ * Learner reads after answering, so they are walked too.
+ *
+ * Both rules hang here rather than off the one field each was first written
+ * for. Neither is a property of a directory: a slot in a brief's Korean agrees
+ * with whatever fills it exactly as a slot in a Glossary justification does,
+ * and CONTEXT.md states both as rules about Korean prose. The name of whatever
+ * field the sentence turned out to be in comes from the walk, so a problem
+ * points at the sentence a Maintainer has to go and fix.
  */
-function checkKoreanParticleSpacing(korean: unknown, rel: string, path: string, problems: string[]): void {
+function checkKorean(korean: unknown, rel: string, path: string, problems: string[]): void {
   if (Array.isArray(korean)) {
-    korean.forEach((child, index) => checkKoreanParticleSpacing(child, rel, `${path}[${index}]`, problems))
+    korean.forEach((child, index) => checkKorean(child, rel, `${path}[${index}]`, problems))
     return
   }
   if (isRecord(korean)) {
     for (const [key, value] of Object.entries(korean)) {
-      checkKoreanParticleSpacing(value, rel, `${path}.${key}`, problems)
+      checkKorean(value, rel, `${path}.${key}`, problems)
     }
     return
   }
   if (typeof korean !== 'string' || /<[a-zA-Z]/.test(korean)) return
+  checkKoreanParticleSpacing(korean, rel, path, problems)
+  checkKoreanSlotParticles(korean, rel, path, problems)
+}
+
+function checkKoreanParticleSpacing(korean: string, rel: string, path: string, problems: string[]): void {
   for (const found of korean.matchAll(KOREAN_BOUND_PARTICLES)) {
     problems.push(
       `${rel}: ${path || 'content'} splits a particle from its word — "${found[0]}". ` +
         `Korean particles carry no space before them; move the line break so "${found[1]}" stays joined.`,
+    )
+  }
+}
+
+function checkKoreanSlotParticles(korean: string, rel: string, path: string, problems: string[]): void {
+  for (const found of korean.matchAll(VARYING_PARTICLES)) {
+    const slot = found[0].slice(0, found[0].indexOf(']') + 1)
+    if (SELF_TERMINATING_SLOT.test(slot)) continue
+    problems.push(
+      `${rel}: ${path || 'content'} puts "${found[1]}" straight after ${slot}, and that particle changes ` +
+        `with whatever fills the slot. Move the slot, or put a fixed noun between them.`,
     )
   }
 }
