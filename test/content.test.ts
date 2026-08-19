@@ -634,6 +634,18 @@ test('a Glossary slot ending in a fixed noun may carry a particle', () => {
   ).not.toThrow()
 })
 
+test('a slot followed by an agreeing particle fails the build wherever it is written', () => {
+  // The rule is about the slot, not about the Glossary. It hung off
+  // `justification.ko` alone until it moved onto the walker every pair goes
+  // through, so a brief could carry the mistake a Glossary entry is refused
+  // for — and the message named a field the sentence was not in.
+  const whatCounts = { en: BRIEF.whatCounts.en, ko: '[요소]를 세 개 찾아 적으세요.' }
+  expectProblem(
+    sourceOf({ briefs: [doc('briefs/stage-1.md', { ...BRIEF, whatCounts })] }),
+    /briefs\/stage-1\.md: whatCounts\.ko puts "를" straight after \[요소\]/,
+  )
+})
+
 /** The bound nouns Korean does space are not particles, and must still load. */
 
 test('Korean spacing a bound noun such as 뿐 or 만큼 loads', () => {
