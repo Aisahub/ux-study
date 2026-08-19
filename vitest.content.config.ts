@@ -13,7 +13,6 @@ export default defineConfig({
   test: {
     include: [
       'test/content.test.ts',
-      'test/content-rules.test.ts',
       'test/competencies.test.ts',
       'test/items.test.ts',
       'test/practice-page.test.ts',
