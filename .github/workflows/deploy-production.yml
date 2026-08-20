@@ -21,31 +21,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
-      - name: Pull Vercel environment
-        run: vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build project
-        run: vercel build --prod --token=$VERCEL_TOKEN
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
+      # Deployed with a cloud build (no `vercel pull`/`vercel build --prebuilt`)
+      # rather than building locally on the runner: DATABASE_URL,
+      # GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are marked Sensitive in the
+      # Vercel project, so `vercel pull` only ever returns the literal string
+      # "[SENSITIVE]" for them outside Vercel's own build/runtime — a local
+      # build here would migrate the database against that placeholder. A
+      # cloud build runs on Vercel's infrastructure, where sensitive vars
+      # resolve to their real values.
       - name: Deploy to Vercel
         id: deploy
         run: |
-          URL=$(vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN)
+          URL=$(vercel deploy --prod --token=$VERCEL_TOKEN)
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "$URL"
         env:
