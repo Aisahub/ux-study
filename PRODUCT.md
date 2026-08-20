@@ -100,7 +100,7 @@ Real, authored, in-repo:
 - **Fixed quantities** — `content/config.md` (pool 8, draw 5, pass 4, minimum 3 Findings), which also declares which Stage each of the twelve Competencies belongs to. These are content configuration; changing one is an edit there, not a code change.
 - **Product truth** — `CONTEXT.md` (the domain glossary) and `docs/adr/0001`–`0012`, which record not only what was decided but what was reversed and why.
 
-**Absences that must never be fabricated:** no customers, testimonials, case studies, press, or logos. No usage metrics, completion rates, cohort statistics, or before/after results — the programme has not run. No launch date. No client complaint or rejected delivery (see Product Purpose). No pricing, licensing, or public availability: this is internal and not a product anyone buys.
+**Absences that must never be fabricated:** no customers, testimonials, case studies, press, or logos. No usage metrics, completion rates, cohort statistics, or before/after results — three Learners entered Stage 1 on 2026-08-18 and none has finished a Stage, so there is nothing yet to measure. The clause that stood here, that the programme has not run, was true when written and stopped being true on 2026-08-18; the absence it justified is unchanged, because a cohort part-way through its first Stage produces no completion rate and no before/after. No launch date. No client complaint or rejected delivery (see Product Purpose). No pricing, licensing, or public availability: this is internal and not a product anyone buys.
 
 ## Product Principles
 
