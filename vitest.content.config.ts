@@ -16,6 +16,7 @@ export default defineConfig({
       'test/competencies.test.ts',
       'test/items.test.ts',
       'test/practice-page.test.ts',
+      'test/element-label.test.ts',
       'test/specimen.test.ts',
       'test/walk.test.ts',
     ],

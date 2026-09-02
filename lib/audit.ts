@@ -1,4 +1,5 @@
 import { and, eq } from 'drizzle-orm'
+import { cache } from 'react'
 
 import { db, schema } from '@/db'
 import { briefOf, practicePageOf, type Brief, type PlantedDefect, type PracticePage } from '@/lib/content'
@@ -44,11 +45,18 @@ export function auditStandingFrom(
   return { state: 'open', subject, brief }
 }
 
-/** Where this Learner stands with one Stage's Self-Audit Report. */
-export async function auditStanding(email: string, stage: number): Promise<AuditStanding> {
+/**
+ * Where this Learner stands with one Stage's Self-Audit Report.
+ *
+ * Cached per request, because the reveal asks twice: the frame around the two
+ * panels has to know whether the report is submitted before it can decide
+ * whether there is a frame at all, and the panel inside it needs the subject.
+ * One question asked from two places is one read, not two.
+ */
+export const auditStanding = cache(async (email: string, stage: number): Promise<AuditStanding> => {
   const progress = stageProgress(await progressFor(email), stage)
   return auditStandingFrom(practicePageOf(content, stage), briefOf(content, stage), progress)
-}
+})
 
 /**
  * The subject a write may be made against, or the refusal to hand one over.
@@ -85,14 +93,17 @@ async function draftReport(email: string, stage: number) {
   return created
 }
 
-/** One Stage's report as its own surface reads it: the row, and the Findings written into it. */
-export async function draftFor(email: string, stage: number) {
+/**
+ * One Stage's report as its own surface reads it: the row, and the Findings
+ * written into it. Cached per request for the reason `auditStanding` is.
+ */
+export const draftFor = cache(async (email: string, stage: number) => {
   const report = await reportRow(email, stage)
   const findings = report
     ? await db.select().from(schema.findings).where(eq(schema.findings.reportId, report.id))
     : []
   return { report, findings }
-}
+})
 
 export interface FindingInput {
   element: string

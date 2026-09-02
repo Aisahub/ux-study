@@ -65,22 +65,86 @@ body[data-audit-mode='operate'] [data-element] { cursor: auto; }
 </style>`
 
 /**
- * The same subject with nothing to point at, for a reader who is checking a
- * claim about it rather than auditing it (#120).
+ * The Locate half, for a surface that points *at* the subject rather than
+ * letting the reader point at it — the reveal, where a Planted Defect and a
+ * Finding both name an element the Learner has to find again.
  *
- * The specimen Self-Audit Report sends a reader here to see whether a Finding
- * is true of the real element. Served the auditing way, every element would
- * carry a pointer cursor and take a selection outline, and the selection would
- * be posted to a surrounding surface that is not there — a control that
- * answers a press by doing nothing, which is the defect this platform's fourth
- * Competency is about. Withholding the script is how it stops being one.
+ * It listens and never speaks: no click is intercepted, no message is posted
+ * back. The reveal's report is a record of something already submitted, so a
+ * click on the subject there has nothing to change, and a page that took a
+ * selection it could not act on would be the Perceived clickability defect
+ * this platform's fourth Competency teaches.
+ *
+ * The mark is the same outline the Select half draws. A Learner has already
+ * spent an audit learning that this outline means "this element, the one the
+ * report is about", and inventing a second treatment for the same statement on
+ * the next surface is the Consistency defect the third Competency teaches.
+ *
+ * Matched by walking the identified elements rather than by building a
+ * selector out of the message: an identifier is authored content, and a
+ * `querySelector` assembled from it would throw on a value that happens not to
+ * be a valid selector.
+ */
+const LOCATE_SCRIPT = `<script>
+window.addEventListener('message', function (event) {
+  if (event.origin !== window.location.origin) return
+  var data = event.data
+  if (!data || data.type !== 'locate-element') return
+  var previous = document.querySelector('[data-located]')
+  if (previous) previous.removeAttribute('data-located')
+  var target = null
+  var candidates = document.querySelectorAll('[data-element]')
+  for (var i = 0; i < candidates.length; i++) {
+    if (candidates[i].getAttribute('data-element') === data.element) target = candidates[i]
+  }
+  if (!target) return
+  target.setAttribute('data-located', '')
+  // This document's own scroller, moved by hand rather than by
+  // scrollIntoView. That walks the whole scroll chain, so it dragged the
+  // report outside this frame along with it — the surface pointing at the
+  // subject moved itself out from under the reader's eye.
+  //
+  // A hard cut, with no smooth behaviour asked for. It is what this design
+  // system already does when a Gate Quiz moves between stations — a train
+  // arrives at the next station, it does not dissolve into it — and a smooth
+  // scroll requested from outside a frame is unreliable across that boundary
+  // anyway: measured here, it started and stopped at 13 of 558 pixels.
+  var scroller = document.scrollingElement || document.documentElement
+  var box = target.getBoundingClientRect()
+  var middle = scroller.scrollTop + box.top - (document.documentElement.clientHeight - box.height) / 2
+  scroller.scrollTop = Math.max(0, middle)
+})
+</script>
+<style>
+[data-located] { outline: 3px solid #2563eb; outline-offset: 2px; scroll-margin: 24px; }
+</style>`
+
+/**
+ * The subject in one of three modes, because three surfaces want three
+ * different things from it.
+ *
+ * **Selecting** is the default and is the audit itself: a Finding names its
+ * element by pointing at it (ADR-0008).
+ *
+ * **`?read`** has nothing to point at, for a reader who is checking a claim
+ * about the subject rather than auditing it (#120). The specimen Self-Audit
+ * Report sends a reader here to see whether a Finding is true of the real
+ * element. Served the auditing way, every element would carry a pointer cursor
+ * and take a selection outline, and the selection would be posted to a
+ * surrounding surface that is not there — a control that answers a press by
+ * doing nothing, which is the defect this platform's fourth Competency is
+ * about. Withholding the script is how it stops being one.
+ *
+ * **`?locate`** is the reveal's: the surface points, the subject answers, and
+ * a click still does nothing.
  */
 export async function GET(request: NextRequest, { params }: { params: Promise<{ lang: string; stage: string }> }) {
   const { lang, stage } = await params
   if (!isLanguage(lang)) notFound()
   await requireSession(lang)
 
-  const selectable = !request.nextUrl.searchParams.has('read')
+  const query = request.nextUrl.searchParams
+  const tools = query.has('read') ? '' : query.has('locate') ? LOCATE_SCRIPT : SELECTION_SCRIPT
 
   const number = Number(stage)
   const subject = Number.isInteger(number) ? practicePageOf(content, number) : null
@@ -92,7 +156,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const document = subject.html[lang]
     .replace('<link rel="stylesheet" href="./practice-page.css">', `<style>\n${practicePageCss(number)}</style>`)
     .replace('<script src="./practice-page.js"></script>', `<script>\n${practicePageJs(number)}</script>`)
-    .replace('</body>', selectable ? `${SELECTION_SCRIPT}\n</body>` : '</body>')
+    .replace('</body>', tools === '' ? '</body>' : `${tools}\n</body>`)
 
   return new Response(document, { headers: { 'content-type': 'text/html; charset=utf-8' } })
 }

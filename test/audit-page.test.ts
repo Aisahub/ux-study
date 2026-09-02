@@ -71,6 +71,29 @@ test('the selection mechanism is served with the page and reports the element id
   expect(html).toContain('element-selected')
 })
 
+test('the three modes are three different sets of tools, and only one of them takes a click', async () => {
+  const cookie = await sessionCookieFor('someone@aisahub.com')
+
+  const [selecting, reading, locating] = await Promise.all(
+    ['', '?read', '?locate'].map(async (query) =>
+      (await fetch(`${BASE_URL}/en/audit/1/page${query}`, { headers: { cookie } })).text(),
+    ),
+  )
+
+  // Selecting is the audit's; locating is the submitted report's, where a
+  // click has nothing left to change; reading has neither, for a reader
+  // checking a claim about the subject (#120).
+  expect(selecting).toContain('element-selected')
+  expect(selecting).not.toContain('locate-element')
+
+  expect(reading).not.toContain('element-selected')
+  expect(reading).not.toContain('locate-element')
+
+  expect(locating).toContain('locate-element')
+  expect(locating).not.toContain('element-selected')
+  expect(locating).not.toContain("addEventListener('click'")
+})
+
 test('no response reveals which elements carry a Planted Defect', async () => {
   const cookie = await sessionCookieFor('someone@aisahub.com')
 
@@ -78,7 +101,7 @@ test('no response reveals which elements carry a Planted Defect', async () => {
   // point of the exercise, and a Stage that gained a subject without gaining
   // this check would leak its answer on the day it was authored.
   for (const subject of [practicePage, flow]) {
-    for (const suffix of ['/page', '/page/source']) {
+    for (const suffix of ['/page', '/page?locate', '/page?read', '/page/source']) {
       for (const lang of ['en', 'ko'] as const) {
         const path = `/${lang}/audit/${subject.stage}${suffix}`
         const body = await (await fetch(`${BASE_URL}${path}`, { headers: { cookie } })).text()

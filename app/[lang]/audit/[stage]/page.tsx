@@ -4,30 +4,26 @@ import { notFound } from 'next/navigation'
 import { auditStanding, draftFor, reveal } from '@/lib/audit'
 import { requireSession } from '@/lib/auth'
 import { type Brief } from '@/lib/content'
+import { elementLabels } from '@/lib/element-label'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
-import { attachIssueUrl } from '../actions'
 import { FindingsDrawer } from '../drawer'
+import { COPY as REVEAL_COPY, DefectCard, GroupedPanel, byCompetency } from './reveal'
 
 export const dynamic = 'force-dynamic'
 
+/**
+ * This surface's four gate states. What a *submitted* report says lives in
+ * `reveal.tsx` beside the panels that say it — two different screens, and one
+ * copy table holding both was how the reveal's wording drifted out of reach of
+ * the surface that shows it.
+ */
 const COPY: Record<
   Language,
   {
     locked: string
     lockedBack: string
-    revealHeading: string
-    revealIntro: string
-    found: string
-    missed: string
-    yourFindings: string
-    source: string
-    issueHeading: string
-    issueSave: string
-    issueSaved: string
-    complete: (stage: number) => string
-    defectStep: (step: number, of: number) => string
     noSubject: string
     noSubjectWhy: string
     noBrief: string
@@ -40,22 +36,6 @@ const COPY: Record<
     // to change when a Stage gains a fifth Competency.
     locked: 'The audit unlocks once every Gate Quiz in this Stage is passed.',
     lockedBack: 'Back to the overview',
-    revealHeading: 'What was planted',
-    revealIntro:
-      'Every planted defect, and whether one of your Findings pointed at it. Missing some is normal — the point was the looking.',
-    found: 'Found',
-    missed: 'Missed',
-    yourFindings: 'Your Findings',
-    source: 'Read the page source',
-    issueHeading: 'Optional: show a fix',
-    issueSave: 'Save link',
-    issueSaved: 'Saved.',
-    complete: (stage) => `Stage ${stage} complete — every Gate Quiz passed and the report submitted.`,
-    // Where the subject is walked, the element alone does not locate a defect:
-    // the same control is on screen at more than one moment, and the moment is
-    // the thing to go back to. Worded as the subject words it, so a Learner
-    // reads the same phrase here and on the screen they are being sent to.
-    defectStep: (step, of) => `Step ${step} of ${of}`,
     noSubject: 'This Stage has no page to audit yet.',
     noSubjectWhy:
       'The Gate Quizzes here are ready; the page to practise them on is still being written. Nothing is broken and nothing is lost — the Stage will finish once it arrives.',
@@ -69,21 +49,6 @@ const COPY: Record<
   ko: {
     locked: '이 단계의 퀴즈를 모두 통과하면 자가 점검이 열립니다.',
     lockedBack: '학습 개요로',
-    revealHeading: '심어 둔 것들',
-    revealIntro:
-      '심어둔 결함 전부와, 내 발견이 그중 무엇을 가리켰는지입니다. 몇 개를 놓치는 건 정상입니다 — 중요한 건 들여다보는 일이었습니다.',
-    found: '발견',
-    missed: '놓침',
-    yourFindings: '나의 발견',
-    source: '페이지 소스 보기',
-    issueHeading: '선택: 고친 것을 보여 주기',
-    issueSave: '링크 저장',
-    issueSaved: '저장되었습니다.',
-    complete: (stage) => `${stage}단계 수료 — 퀴즈 전부 통과, 보고서 제출 완료.`,
-    // 화면, not 단계: the subject calls these 단계, but on this page 단계 is
-    // already the Stage — `2단계 수료` sits a few lines below — and one word
-    // cannot mean both in one view.
-    defectStep: (step, of) => `${of}개 화면 중 ${step}번째`,
     noSubject: '이 단계에는 아직 점검할 페이지가 없습니다.',
     noSubjectWhy:
       '이 단계의 퀴즈는 준비되어 있고, 연습할 페이지는 아직 작성 중입니다. 잘못된 것도, 사라진 것도 없습니다 — 페이지가 준비되면 이 단계를 마칠 수 있습니다.',
@@ -193,86 +158,38 @@ export default async function Audit({ params }: { params: Promise<{ lang: string
   const { report, findings } = await draftFor(session.email, stage)
 
   if (report?.submittedAt) {
-    // Each Planted Defect against whether this report found it — the join the
-    // Maintainer's dashboard also makes, written once in the audit module.
-    const revealed = reveal(subject.defects, findings)
-    const save = attachIssueUrl.bind(null, lang, stage)
+    // The first of the submitted report's two panels. The frame around it —
+    // the subject, the switch, and what belongs to the report as a whole — is
+    // the layout's, so that crossing to the other panel never reloads the page
+    // being talked about.
+    //
+    // Each Planted Defect against whether this report found it, which is the
+    // join the Maintainer's dashboard also makes and is written once in the
+    // audit module. The labels beside the identifiers are the subject's own
+    // words, read out of the document this Learner was looking at.
+    const revealCopy = REVEAL_COPY[lang]
+    const labels = elementLabels(subject.html[lang])
+    const groups = byCompetency(
+      reveal(subject.defects, findings),
+      ({ defect }) => defect.competency,
+      lang,
+    )
 
     return (
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
-        <h1 className="font-serif text-display font-bold text-ink">{copy.revealHeading}</h1>
-        <p className="text-ink-2">{copy.revealIntro}</p>
-
-        <ul className="flex flex-col gap-3">
-          {revealed.map(({ defect, found }) => (
-            <li key={defect.slug} className="rounded-card bg-surface shadow-card p-4">
-              <p className="text-body-sm">
-                <span className={found ? 'font-bold text-oxblood' : 'font-bold text-ink-2'}>
-                  {found ? copy.found : copy.missed}
-                </span>
-                {defect.step !== undefined && (
-                  <span className="ml-2 text-body-sm text-ink-2">
-                    {copy.defectStep(defect.step, subject.steps.length)}
-                  </span>
-                )}
-                <span className="ml-2 font-mono text-body-sm text-ink-2">{defect.element}</span>
-              </p>
-              <p className="mt-2 text-body-sm">{defect.explanation[lang]}</p>
-            </li>
-          ))}
-        </ul>
-
-        <p>
-          <a href={`/${lang}/audit/${stage}/page/source`} className="text-body-sm underline underline-offset-4">
-            {copy.source}
-          </a>
-        </p>
-
-        <section>
-          <h2 className="text-body-sm font-bold text-ink-2">{copy.yourFindings}</h2>
-          <ul className="mt-2 flex flex-col gap-2">
-            {findings.map((finding) => (
-              <li key={finding.id} className="rounded-card bg-surface shadow-card p-3 text-body-sm">
-                <p className="font-mono text-body-sm">{finding.element}</p>
-                <p className="mt-1">{finding.description}</p>
-                <p className="mt-1 text-ink-2">{finding.fix}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="rounded-card bg-surface shadow-card p-4">
-          <h2 className="text-body-sm font-bold">{copy.issueHeading}</h2>
-          {/* The authored paragraph, not a second one written here. The brief
-              is what describes this step (CONTEXT.md), and while the surface
-              carried its own wording the authored one reached nobody (#135). */}
-          <p className="mt-1 text-body-sm text-ink-2">{brief.optionalFix[lang]}</p>
-          <form
-            action={async (data: FormData) => {
-              'use server'
-              await save(String(data.get('url') ?? ''))
-            }}
-            className="mt-2 flex gap-2"
-          >
-            <input
-              type="url"
-              name="url"
-              defaultValue={report.issueUrl ?? ''}
-              placeholder="https://…"
-              className="w-full rounded-badge bg-sunk px-2 py-1.5 text-body-sm"
-            />
-            <button
-              type="submit"
-              className="press inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold whitespace-nowrap text-white shadow-pill"
-            >
-              {copy.issueSave}
-            </button>
-          </form>
-          {report.issueUrl && <p className="mt-1 text-body-sm text-ink-2">{copy.issueSaved}</p>}
-        </section>
-
-        <p className="text-body-sm font-bold text-oxblood">{copy.complete(stage)}</p>
-      </main>
+      <GroupedPanel
+        groups={groups}
+        render={({ defect, found }) => (
+          <DefectCard
+            key={defect.slug}
+            defect={defect}
+            found={found}
+            label={labels[defect.element] ?? defect.element}
+            explanation={defect.explanation[lang]}
+            steps={subject.steps.length}
+            copy={revealCopy}
+          />
+        )}
+      />
     )
   }
 
