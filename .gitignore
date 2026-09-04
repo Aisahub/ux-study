@@ -59,3 +59,9 @@ next-env.d.ts
 # personal half by convention: one person's permission grants, which depend on
 # what they run locally and are nobody else's to inherit.
 /.claude/settings.local.json
+
+# The ux-audit skill carries its own package.json so its Playwright driver can
+# run from a checkout of this repo as well as from a personal ~/.claude install.
+# The manifest and lockfile are committed; the install is not. `/node_modules`
+# above is anchored to the repo root and would not have caught this one.
+/.claude/skills/*/node_modules/
