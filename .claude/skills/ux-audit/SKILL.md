@@ -54,7 +54,36 @@ Add `--mobile` for a 390×844 pass, `--wait MS` for slow-loading pages.
 
 ## Run: pages behind a login
 
-**Most real screens are behind a sign-in, and a probe that starts signed out audits the login page and reports confidently on the wrong screen.** Do this first, once per app:
+**Most real screens are behind a sign-in, and a probe that starts signed out audits the login page and reports confidently on the wrong screen.** There are three ways in. Try them in this order.
+
+### 1. Mint a session with the project's own test helper — preferred
+
+A project with tests almost always has a way to make a signed-in session for a throwaway identity without a password. **Go and look for it before asking anyone for anything.** Search the repo for:
+
+- a fixture helper — `sessionCookieFor`, `loginAs`, `authedRequest`, `createSession`
+- a seed script — `db/seed*`, `scripts/seed*`, `prisma/seed*`, a `seed` npm script
+- e2e auth setup — `*.setup.ts`, `globalSetup`, `storageState` in a Playwright config
+- the test docs — `CONTRIBUTING.md`, `docs/`, `AGENTS.md`, `CLAUDE.md`
+
+In `ux-study` it is `sessionCookieFor(email)` in `test/db.ts`, which inserts a row into `sessions` on the **test** branch and returns `session=<token>`. Its own comment states the intent: the OAuth handshake is deliberately not driven by tests, and *"a session row plus its cookie stands in for it"*.
+
+Run that helper, then hand the probe what it returns:
+
+```bash
+node "$UXA/probe.mjs" http://localhost:3100/en/audit/1 --out /tmp/uxa/audit --cookie "session=<token>"
+```
+
+This is the best route on every count: **no password exists to be mishandled**, the identity is disposable, and it points at the test database rather than anyone's real one. Mint the session for an address that is obviously a probe (`ux-audit-probe@…`), never a real colleague's.
+
+Check the app is pointed at its **test** database first. Auditing production data is a different and much more consequential act than auditing a test row.
+
+### 2. Test credentials the repo itself provides
+
+If the only route is the login form and the repo ships a test account for exactly that (a seeded `test@example.com` in a fixture or `.env.example`), driving the form with those is fine — they are test fixtures, not anyone's credentials. Never with a real person's login, never with credentials from a password manager, and never a value you had to ask a human to read out.
+
+### 3. The person signs in themselves — for staging, production, or SSO
+
+When there is no test path — an OAuth-only app, a staging environment, a real account — do this, once per app:
 
 ```bash
 node "$UXA/probe.mjs" http://localhost:3000/login --save-session /tmp/uxa-auth.json
@@ -132,7 +161,9 @@ For the three language/model principles (22–26), you must first write down **w
 - **Static pass alone cannot judge B-group principles.** Reporting "no status feedback" from a screenshot is guessing. Run `--act` or say the principle was not checked.
 - **browser-qa's MCP blocks the `file:` protocol** — `Access to "file:" protocol is blocked`. To audit a local HTML file through a browser-qa session, serve it first (`python3 -m http.server 8791` in its directory). `probe.mjs` has no such restriction and takes a bare path.
 - **`probe.mjs` starts a fresh browser with no cookies** unless `--session` is given. Verified on a gated fixture: without it the probe reported `largest text: "Please sign in"`; with it, `"Dashboard"` and a payout button at contrast 1.17. Always check `evidence.json`'s `title` is the screen you meant.
-- **Never sign in on the user's behalf.** `--save-session` exists so the person at the keyboard types their own password into a real browser window. Don't ask for credentials, don't paste them into a form, don't put them in an `--act` script.
+- **Look for the project's test-session helper before asking a human for anything.** Route 1 above is faster, more repeatable, and involves no credential at all. Asking someone to sign in when the repo already ships `sessionCookieFor` is wasted effort.
+- **Never sign in as a real person.** Route 3 exists so the person at the keyboard types their own password into their own browser window. Don't ask for someone's credentials, don't paste them into a form, don't put them in an `--act` script, and don't read them out of a password manager or a secrets file.
+- **Confirm which database the app is pointed at** before auditing a signed-in screen. A minted session on a test branch is a throwaway row; the same trick against production is not.
 - **`evidence.json`'s `consoleMessages` is not a smoke test.** It only catches what the page logs itself. Headless Chromium doesn't even request `favicon.ico`, so browser-initiated 404s never appear — on the same page browser-qa reported 1 console error and this probe reported 0, and browser-qa was right. Don't claim a page is error-free on this field; that's browser-qa's job.
 - **`collect.js` is the single source of truth** for the measurements; `probe.mjs` reads it at runtime rather than holding its own copy. `references/live-probe.js` is a deliberately trimmed sibling for hand-pasting — if you change a formula, change it in both or the two routes will disagree.
 

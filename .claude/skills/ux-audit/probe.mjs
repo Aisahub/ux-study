@@ -27,6 +27,7 @@ if (!argv.length || argv[0].startsWith('-')) {
     '  --act FILE           JSON step list for the interactive pass',
     '  --save-session FILE  open a visible browser, you sign in, save the session',
     '  --session FILE       reuse a saved session so the audit runs signed in',
+    '  --cookie "a=1; b=2"   inject a session cookie the project minted for testing',
   ].join('\n'));
   process.exit(2);
 }
@@ -61,6 +62,22 @@ const ctx = await browser.newContext({
   viewport, deviceScaleFactor: 2, reducedMotion: 'no-preference',
   ...(sessionFile && existsSync(resolve(sessionFile)) ? { storageState: resolve(sessionFile) } : {}),
 });
+// A project's own test suite almost always has a way to mint a signed-in
+// session for a throwaway identity — a seed script, a fixture helper, a
+// `sessionCookieFor(email)`. That is the cheapest and safest way in: it needs
+// no password, invents no account, and points at the test database rather than
+// anyone's real one. --cookie takes what that helper returns, in Cookie-header
+// form ("session=abc" or "a=1; b=2").
+const cookieArg = flag('--cookie', null);
+if (cookieArg) {
+  const origin = new URL(target).origin;
+  await ctx.addCookies(cookieArg.split(';').map((pair) => {
+    const i = pair.indexOf('=');
+    if (i === -1) throw new Error(`--cookie needs name=value, got: ${pair.trim()}`);
+    return { name: pair.slice(0, i).trim(), value: pair.slice(i + 1).trim(), url: origin };
+  }));
+}
+
 const page = await ctx.newPage();
 
 if (saveSession) {
