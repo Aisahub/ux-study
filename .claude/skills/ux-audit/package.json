@@ -1,0 +1,7 @@
+{
+  "name": "ux-audit-driver",
+  "private": true,
+  "type": "module",
+  "description": "Playwright evidence probe for the ux-audit skill",
+  "dependencies": { "playwright": "^1.62.1" }
+}
