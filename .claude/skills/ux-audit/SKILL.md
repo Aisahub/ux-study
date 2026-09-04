@@ -26,9 +26,7 @@ Different layers — run browser-qa **first**:
 
 A page that 500s or has a dead nav doesn't need a hierarchy critique yet. Fix the broken thing, then audit the design. If browser-qa reports contrast/label WCAG violations, those are the same measurements this skill's `contrast` and `legibility` entries use — don't report them twice.
 
-**Reuse its browser rather than launching a second one** when a live session is already open — logged in, or mid-flow — because `probe.mjs` starts a fresh browser with no session and would land on the login page. Paste `references/live-probe.js` into `browser_evaluate`; it returns the four highest-signal measurements (largest text, faintest controls, links with no signifier, labels glued to the wrong field), verified to produce numbers identical to `probe.mjs` on the same page.
-
-For the full 26-principle evidence pack, use `probe.mjs` below.
+**For a logged-in screen, prefer `probe.mjs --session`** (see below) — it keeps the full 26-principle pack. Reach for browser-qa's live session only when you are already mid-flow in it and don't want to lose that state: paste `references/live-probe.js` into `browser_evaluate` for the four highest-signal measurements (largest text, faintest controls, links with no signifier, labels glued to the wrong field), verified to produce numbers identical to `probe.mjs` on the same page. It is a **partial** pass — say so rather than implying all 26 were checked.
 
 ## Setup (once per machine)
 
@@ -53,6 +51,26 @@ Takes a URL, or a path to a local `.html` file. Writes into `--out`:
 - `desktop-squint.png` — **blurred**. This is the squint test: detail drops away and only the hierarchy is left. If what survives isn't what the page is for, that's finding #1. **Always look at this one.**
 
 Add `--mobile` for a 390×844 pass, `--wait MS` for slow-loading pages.
+
+## Run: pages behind a login
+
+**Most real screens are behind a sign-in, and a probe that starts signed out audits the login page and reports confidently on the wrong screen.** Do this first, once per app:
+
+```bash
+node "$UXA/probe.mjs" http://localhost:3000/login --save-session /tmp/uxa-auth.json
+```
+
+A **visible** browser opens. **The person at the keyboard signs in themselves** and navigates to the screen to be audited, then presses Enter in the terminal. Cookies and localStorage are saved to the file. No password is ever typed by, passed to, or visible to this script — it only carries the session that signing in produced. Never type someone's credentials on their behalf; open the window and hand it over.
+
+Then every later run reuses it, with the full 26-principle pack intact:
+
+```bash
+node "$UXA/probe.mjs" http://localhost:3000/settings --out /tmp/uxa/settings --session /tmp/uxa-auth.json
+```
+
+**Always confirm you audited the right screen** — check `evidence.json`'s `title` and look at `desktop.png`. If it says "Sign in", the session expired; re-run `--save-session`.
+
+The session file is a live login. Keep it in `/tmp`, never in the repo, and delete it when the audit is done.
 
 ## Run: interactive pass
 
@@ -113,7 +131,8 @@ For the three language/model principles (22–26), you must first write down **w
 - **The squint image is viewport-only, not full-page.** Full-page blur costs a lot and blurs across scroll seams. Re-run with `--wait` and scroll if you need a lower section.
 - **Static pass alone cannot judge B-group principles.** Reporting "no status feedback" from a screenshot is guessing. Run `--act` or say the principle was not checked.
 - **browser-qa's MCP blocks the `file:` protocol** — `Access to "file:" protocol is blocked`. To audit a local HTML file through a browser-qa session, serve it first (`python3 -m http.server 8791` in its directory). `probe.mjs` has no such restriction and takes a bare path.
-- **`probe.mjs` starts a fresh browser with no cookies.** For anything behind a login it will audit the login page and report confidently on the wrong screen. Check `evidence.json`'s `title` matches the screen you meant. For gated pages, drive to them with browser-qa and use `references/live-probe.js` instead.
+- **`probe.mjs` starts a fresh browser with no cookies** unless `--session` is given. Verified on a gated fixture: without it the probe reported `largest text: "Please sign in"`; with it, `"Dashboard"` and a payout button at contrast 1.17. Always check `evidence.json`'s `title` is the screen you meant.
+- **Never sign in on the user's behalf.** `--save-session` exists so the person at the keyboard types their own password into a real browser window. Don't ask for credentials, don't paste them into a form, don't put them in an `--act` script.
 - **`evidence.json`'s `consoleMessages` is not a smoke test.** It only catches what the page logs itself. Headless Chromium doesn't even request `favicon.ico`, so browser-initiated 404s never appear — on the same page browser-qa reported 1 console error and this probe reported 0, and browser-qa was right. Don't claim a page is error-free on this field; that's browser-qa's job.
 - **`collect.js` is the single source of truth** for the measurements; `probe.mjs` reads it at runtime rather than holding its own copy. `references/live-probe.js` is a deliberately trimmed sibling for hand-pasting — if you change a formula, change it in both or the two routes will disagree.
 

@@ -7,17 +7,27 @@
 // decide what is a defect — it hands back numbers a reader can argue with.
 //
 //   node probe.mjs <url> [--out DIR] [--mobile] [--act FILE] [--wait MS]
+//   node probe.mjs <url> --save-session auth.json   # sign in yourself, once
+//   node probe.mjs <url> --session auth.json        # then audit signed in
 //
 // Every measurement is tagged with the Principle slug it feeds, so the agent
 // reading evidence.json can walk the checklist in order.
 
 import { chromium } from 'playwright';
-import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 
 const argv = process.argv.slice(2);
 if (!argv.length || argv[0].startsWith('-')) {
-  console.error('usage: node probe.mjs <url|file> [--out DIR] [--mobile] [--act script.json] [--wait MS]');
+  console.error([
+    'usage: node probe.mjs <url|file> [options]',
+    '  --out DIR            where evidence.json and screenshots go',
+    '  --mobile             390x844 pass instead of 1280x900',
+    '  --wait MS            settle time after load (default 600)',
+    '  --act FILE           JSON step list for the interactive pass',
+    '  --save-session FILE  open a visible browser, you sign in, save the session',
+    '  --session FILE       reuse a saved session so the audit runs signed in',
+  ].join('\n'));
   process.exit(2);
 }
 const flag = (n, d) => { const i = argv.indexOf(n); return i === -1 ? d : argv[i + 1]; };
@@ -35,9 +45,37 @@ mkdirSync(outDir, { recursive: true });
 const COLLECT_SRC = readFileSync(new URL('./collect.js', import.meta.url), 'utf8');
 
 // ------------------------------------------------------------------ drive ---
-const browser = await chromium.launch();
-const ctx = await browser.newContext({ viewport, deviceScaleFactor: 2, reducedMotion: 'no-preference' });
+// Most real screens sit behind a login, so a probe that always starts signed
+// out audits the login page and reports confidently on the wrong screen.
+//
+// --save-session opens a VISIBLE browser and waits: the person signs in
+// themselves, presses Enter, and the resulting cookies and localStorage are
+// written to a file. Nobody's password is ever typed by, passed to, or visible
+// to this script — it only carries the session that signing in produced.
+// --session then replays that file, so every later run starts signed in.
+const sessionFile = flag('--session', null);
+const saveSession = flag('--save-session', null);
+
+const browser = await chromium.launch({ headless: !saveSession });
+const ctx = await browser.newContext({
+  viewport, deviceScaleFactor: 2, reducedMotion: 'no-preference',
+  ...(sessionFile && existsSync(resolve(sessionFile)) ? { storageState: resolve(sessionFile) } : {}),
+});
 const page = await ctx.newPage();
+
+if (saveSession) {
+  await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  console.error(`\n  A browser window is open at ${target}`);
+  console.error('  Sign in there yourself, navigate to the screen you want audited,');
+  console.error('  then press Enter here to save the session.\n');
+  await new Promise((r) => { process.stdin.resume(); process.stdin.once('data', r); });
+  await ctx.storageState({ path: resolve(saveSession) });
+  console.error(`saved session -> ${resolve(saveSession)}`);
+  console.error('Re-run with --session <file> to audit signed in. This file holds a live');
+  console.error('login: keep it out of the repo and delete it when the audit is done.');
+  await browser.close();
+  process.exit(0);
+}
 
 const console_ = [];
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console_.push(`${m.type()}: ${m.text()}`.slice(0, 300)); });
