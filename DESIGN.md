@@ -248,7 +248,13 @@ wants more room than prose; the omission was that the screen and the question
 about it were stacked, so the Learner scrolled between the thing being judged
 and the judgment, and by the fourth option the screen was off the top of the
 window. From `wide` the wizard takes the full `1240px` content column, and from
-`1200px` of window its item card lays the screen and the question in one row —
+`1200px` of window its item card lays the screen and the question in one row.
+Its row tracks are written out and not left implicit: the screen spans both
+rows, a spanning item's height is shared across the tracks it covers, and an
+implicit `auto auto` put a share of a tall screen's surplus into the first row —
+a `90px` question in a `213px` track, with its options `150px` below it instead
+of `26px` (ERR-223). The first row is the question's own height; the second
+takes what is left, which is where the surplus belongs. It is the same row —
 the same arrangement as the Self-Audit Report's two surfaces, and for the same
 reason. The options hold `400px`, the least a column of them can be read in,
 and the screen takes the rest up to its `720px` floor, panning inside its own

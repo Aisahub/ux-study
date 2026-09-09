@@ -272,11 +272,21 @@ export function QuizWizard({
         `PanHint` in screen.tsx, which measures the overflow rather than
         guessing it from a width.
       */}
-      {/* `grid-cols-1` is load-bearing, not a default written out: an implicit
-          grid track is sized to its content, and the prose asks for its full
-          56ch. On a phone that is wider than the whole card, and the options
-          would hang off the right edge of it. */}
-      <section className="mt-3.5 grid grid-cols-1 gap-[26px] rounded-card bg-surface p-5 sm:p-[26px] shadow-card min-[1200px]:grid-cols-[minmax(0,var(--item-screen-floor))_minmax(400px,1fr)] min-[1200px]:items-start">
+      {/* Both track lists are load-bearing, and neither is a default written
+          out. `grid-cols-1`: an implicit grid track is sized to its content,
+          and the prose asks for its full 56ch — on a phone that is wider than
+          the whole card, and the options would hang off the right edge of it.
+
+          `grid-rows` for the row: the screen spans both rows, and a spanning
+          item's height is shared out across the tracks it covers. Left
+          implicit, a screen taller than the question and options together
+          pushed a share of its extra height into the first row, and a 90px
+          question sat in a 213px track with the options 150px below it
+          instead of 26px. `min-content` makes the first row exactly the
+          question, and the second take everything left over, which is where a
+          tall screen's slack belongs — beside the options, not inside the gap
+          above them. */}
+      <section className="mt-3.5 grid grid-cols-1 gap-[26px] rounded-card bg-surface p-5 sm:p-[26px] shadow-card min-[1200px]:grid-cols-[minmax(0,var(--item-screen-floor))_minmax(400px,1fr)] min-[1200px]:grid-rows-[min-content_minmax(0,1fr)] min-[1200px]:items-start">
         {/* The question, first in the markup and first on a stacked card.
             What is being asked has to arrive before the thing it is asked
             about: a Learner handed a screen with no question studies it for
