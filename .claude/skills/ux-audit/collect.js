@@ -79,8 +79,25 @@ function collectUxEvidence() {
       fillVsSurround: own && own.a > 0 ? ratio(over(own, surround), surround) : 1,
       fontSize: px(s.fontSize), disabled: el.disabled === true || el.getAttribute('aria-disabled') === 'true',
       box: box(el),
+      filled: !!(own && own.a > 0.5),
     };
   }).sort((a, b) => (typeof a.textContrast === 'number' ? a.textContrast : 99) - (typeof b.textContrast === 'number' ? b.textContrast : 99));
+
+  // The two numbers above are different quantities and **must not be ranked
+  // against each other.** A filled button's loudness is its block separating
+  // from the page (fillVsSurround); a plain link's is its glyphs against the
+  // paper (textContrast). Black text on white scores 17.7 and is merely text;
+  // a white label on a blue fill scores 5.2 and can dominate the screen. Put
+  // them on one ladder and the page's loudest control ranks 22nd of 89 — swap
+  // which number you sort by and it ranks 64th. Both rankings are fiction.
+  //
+  // So: compare like with like, and let the squint image settle it. These two
+  // lists are the peer groups; neither has a threshold, because "loud enough"
+  // is a question about this page's own budget, not about a constant.
+  const filledControls = contrast.filter((c) => c.filled)
+    .sort((a, b) => b.fillVsSurround - a.fillVsSurround);
+  const flatControls = contrast.filter((c) => !c.filled)
+    .sort((a, b) => (typeof b.textContrast === 'number' ? b.textContrast : 0) - (typeof a.textContrast === 'number' ? a.textContrast : 0));
 
   // --- readability / legibility: comfortable as a block, and glyph by glyph ---
   const readability = textEls.filter((el) => text(el).length > 60).map((el) => {
@@ -247,6 +264,62 @@ function collectUxEvidence() {
     bodyText: bodyText.replace(/\s+/g, ' ').slice(0, 6000),
   };
 
+  // --- offscreen actions: what the viewport cannot reach ---
+  // A control parked outside the viewport has zero visual weight however
+  // important it is, and a horizontally scrolling container hides it without
+  // saying so. Measured rather than eyeballed, because a page whose *document*
+  // does not scroll sideways still passes the naive check while its primary
+  // action sits 400px past the right edge inside a scroller.
+  const scrollers = [...document.querySelectorAll('*')].filter((el) => {
+    const s = getComputedStyle(el);
+    return /auto|scroll/.test(s.overflowX) && el.scrollWidth - el.clientWidth > 8;
+  }).map((el) => ({
+    element: name(el), hiddenPx: Math.round(el.scrollWidth - el.clientWidth),
+    // Something has to say "there is more this way" — a shadow, an arrow, a
+    // peeking half-column. None of these is provable from CSS alone, so report
+    // the fact of the hidden width and let the reader look at the screenshot.
+    scrollbarAlwaysVisible: getComputedStyle(el).overflowX === 'scroll',
+  }));
+  // Off-screen has two causes and only one of them is a defect. A drawer parked
+  // off-canvas is reachable by opening it; a control sitting past the right edge
+  // of a horizontal scroller is reachable only if the reader knows to scroll a
+  // container nothing marked as scrollable. Separate them or the drawer's thirty
+  // nav links drown the one finding that matters.
+  const scrollerOf = (el) => {
+    let n = el.parentElement;
+    while (n) {
+      const s = getComputedStyle(n);
+      if (/auto|scroll/.test(s.overflowX) && n.scrollWidth - n.clientWidth > 8) return n;
+      n = n.parentElement;
+    }
+    return null;
+  };
+  const offCanvas = (el) => {
+    let n = el;
+    while (n && n !== document.body) {
+      const s = getComputedStyle(n);
+      if (s.transform !== 'none' || n.getAttribute('aria-hidden') === 'true') return name(n);
+      n = n.parentElement;
+    }
+    return null;
+  };
+  const offscreenActions = interactive.filter((el) => {
+    const r = el.getBoundingClientRect();
+    return r.right <= 0 || r.left >= innerWidth;
+  }).map((el) => {
+    const sc = scrollerOf(el);
+    return {
+      element: name(el), text: text(el), box: box(el), viewportWidth: innerWidth,
+      // "scroller" is the reportable one; "off-canvas" is usually a drawer.
+      reason: sc ? 'inside-horizontal-scroller' : (offCanvas(el) ? 'off-canvas' : 'unknown'),
+      scroller: sc ? name(sc) : null, drawer: sc ? null : offCanvas(el),
+    };
+  });
+  const clippedActions = interactive.filter((el) => {
+    const r = el.getBoundingClientRect();
+    return r.left < innerWidth && r.right > innerWidth;
+  }).map((el) => ({ element: name(el), text: text(el), cutOffPx: Math.round(el.getBoundingClientRect().right - innerWidth) }));
+
   // --- cognitive-load: the counts, so "too much" stops being a feeling ---
   const load = {
     interactiveCount: interactive.length,
@@ -261,11 +334,12 @@ function collectUxEvidence() {
     viewport: { w: innerWidth, h: innerHeight }, scrollHeight: document.documentElement.scrollHeight,
     byPrinciple: {
       scale: sizes.slice(0, 25),
-      contrast, readability, proximity: labels, signifier, 'disabled-state': disabled,
+      contrast, filledControls, flatControls, readability, proximity: labels, signifier, 'disabled-state': disabled,
       consistency: { sameTargetDifferentLabel, sameLabelDifferentStyle, synonymCandidates, actions },
       'control-fit': selects, 'smart-defaults': fields, 'sense-of-place': place,
       'emergency-exit': exits, 'expanded-acronym': Object.values(acronyms),
       'cognitive-load': load,
+      'offscreen': { scrollers, offscreenActions, clippedActions },
     },
     corpus,
   };
