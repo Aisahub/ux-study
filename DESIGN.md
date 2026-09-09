@@ -247,15 +247,40 @@ The wizard is the one surface that outgrew that (amended 2026-07-28). It ran at
 wants more room than prose; the omission was that the screen and the question
 about it were stacked, so the Learner scrolled between the thing being judged
 and the judgment, and by the fourth option the screen was off the top of the
-window. From `wide` the wizard takes the full `1240px` content column, and its
-item card lays the screen and the question in one row as soon as the card is
-`1198px` — the `720px` screen floor, a `26px` gap, the `400px` least a column of
-options can be read in, and the card's own padding. The threshold is asked of
-the card, not the viewport, so the row appears when the room is really there.
-Below it the card stacks, and its four options pair into two columns wherever
-the card is at least `880px`. Prose is held to the reading measure in
-every one of those arrangements; it is the edge that moves, from centred in a
-stacked card to flush with the screen's own left edge.
+window. From `wide` the wizard takes the full `1240px` content column, and from
+`1200px` of window its item card lays the screen and the question in one row —
+the same arrangement as the Self-Audit Report's two surfaces, and for the same
+reason. The options hold `400px`, the least a column of them can be read in,
+and the screen takes the rest up to its `720px` floor, panning inside its own
+box below that.
+
+**The stacked card reads question, screen, options** (decided 2026-09-09). In
+one column the markup order is the reading order, and what is being asked has
+to arrive before the thing it is asked about: handed a screen with no question,
+a Learner studies it for whatever they happen to notice, reads the question
+underneath, and goes back up to look again for the thing it actually meant. The
+row places the same three blocks rather than reflowing them — screen down the
+left across both rows, question above options on the right — so the markup can
+stay in the order a screen reader should hear it. Never `order`: the picture
+would be the same and the reading order would be screen-then-question, which is
+the fault above, said to the Learners least able to work around it.
+
+Three earlier numbers were retired on 2026-09-09 and are recorded so they are
+not reinvented. The row began at `1198px` of card — the screen floor, a `26px`
+gap, the options' `400px` and the card's padding — asked of the container rather
+than the viewport, which was exact and was still a private fourth band. It moved
+to `wide`, which is the right kind of number and left only `439px` of a `720px`
+screen showing. It is now `1200px`, which is a floor on the cost rather than a
+width: it keeps three quarters of the screen in view, and below that a screen
+showing less than three quarters of itself is not something an option can be
+compared against, so the card stacks instead. The options also paired into two
+columns above `880px` of card; the stacked card now ends with them rather than
+sandwiching them, and two columns would put the fourth option level with the
+first — a run of four to compare drawn as a square of four to hunt through — so
+the pairing is gone. Prose is held to the reading measure in every one of these
+arrangements, flush with the card's left edge, which is the screen's edge too;
+it was centred in the stacked card until this date, which was a third alignment
+on a card that has one.
 
 Two consequences, both accepted. The screen sits at exactly its `720px` floor in
 the two-column row rather than the `824px` a stacked `880px` card gave it — the
@@ -343,11 +368,21 @@ Desktop and mobile are equally primary. On narrow screens the rail becomes a bot
 
 **The Stage Strip Rule** (decided 2026-07-28). The three Stage cards are three cards in a row from `sm`, and three rows inside one card below it. Only the container count changes with the band; the grouping does not, because the strip is one object at both. Three stacked cards cost 446px on a phone — 53% of the viewport — to say that Stage 1 is open and the other two are not written yet, and that pushed the first Competency, the only thing on the page a Learner can act on, entirely below the fold. Orientation precedes work on this board; it may not consume the screen the work needed. Any future summary strip on a narrow screen owes the same test: what does the Learner's first screen let them do?
 
+**The strip is a way down the page** (decided 2026-09-09). Each Stage card is a link to that Stage's block in the contents below, and the progress bar carries the same link for the Stage the Learner is standing in. The strip had been orientation and nothing else: on a board three Stages long the summary said which Stage you were in and then left you to scroll for it, which is the Way back and control defect the ninth Competency teaches, committed by the page that lists it.
+
+Three limits, and they are what keep this inside the No False Current Rule. The destination is a **Stage**, never a Competency: Stages are a sequence and this page already names the one you stand in, while the Competencies inside a Stage are peers that may be taken in any order, so nothing here may point at a next one. The cards stay **peers** — no current treatment, no `aria-current`, the same drawing on all three — because which Stage is current is the progress bar's sentence and does not want a second voice. And the strip carries **links only**: no button, on a page whose four `퀴즈 열기` pills are the Row Action Exception's one repeated action, and a fifth differently-weighted button beside them is exactly what that exception forbids.
+
+The card is the target rather than a word inside it, because on a phone the strip is three rows in one card and a link confined to the Stage's name would be a `44px` row holding a `22px` target. It takes `.press` for the same reason any `<a>` drawn as a control does, and it wears the page's own trailing arrow: a card that navigates and looks like the read-only summary it used to be is the Perceived clickability defect, on the board that teaches it.
+
 **The Target Is The Link Rule.** A `44px` row height belongs to whatever actually answers a tap, not to the element around it. A heading given `min-h-11` with an inline link inside it looks like a 44px target and offers 22px — which is the Perceived clickability defect this platform's fourth Competency teaches, committed by the page that lists it.
 
-Three bands, cut by available width rather than device class (decided 2026-07-27, #38). Below `640px` the bottom bar carries the marks with their labels — there is no hover on a phone to recover a word from, and a platform teaching Perceived clickability does not ship unlabelled circles as its only navigation. From `640px` the rail returns: a portrait tablet keeps the rail because it has the width for it. From `1100px` — not Tailwind's 1024, which is exactly iPad Pro 13" portrait and would hand a portrait screen the landscape grid — the Self-Audit Report sets its two surfaces side by side. Since 2026-07-28 that is the only split in the app: every other surface is one column at every width, so for them the third band changes nothing. The Gate Quiz's drawn screens never reflow below their authored width: the arrangement on those screens is the question, so a phone pans them, told once that it can.
+Three bands, cut by available width rather than device class (decided 2026-07-27, #38). Below `640px` the bottom bar carries the marks with their labels — there is no hover on a phone to recover a word from, and a platform teaching Perceived clickability does not ship unlabelled circles as its only navigation. From `640px` the rail returns: a portrait tablet keeps the rail because it has the width for it. From `1100px` — not Tailwind's 1024, which is exactly iPad Pro 13" portrait and would hand a portrait screen the landscape grid — the Self-Audit Report sets its two surfaces side by side, and since 2026-09-09 the Gate Quiz item card does the same — the drawn screen on the left, the question and its options on the right — from `1200px`. Those two are the only splits in the app; every other surface is one column at every width, so for them the third band changes nothing.
 
-Three bands, and no fourth. Where a component needs a threshold of its own — the Gate Quiz item card, which seats its screen beside its options at `1198px` and pairs its options at `880px` — it asks the container it is standing in, not the viewport. A fourth viewport band would be a claim about the platform; a container query is a claim about one component, which is all any of these thresholds ever knew.
+The quiz's `1200px` is not a fourth band and may not be used as one. A band is a claim about the platform; this is one card saying how much of its own subject it will let a row hide, and it happens to be answerable in window pixels because the card's width is a fixed subtraction from the window's. It replaced a container query at `1198px` of card — honest arithmetic from the screen's floor, the gap and the options' reading width, and still a private threshold that left a `1280px` window showing an audit in two surfaces and a quiz in one — and then `wide` itself, which is the right kind of number and cost more of the screen than the arrangement is worth.
+
+What yields at each width is settled the same way on both. The audit fixes its report column and lets the subject take what is left; the quiz fixes the options at `400px` — the least a column of them can be read in — and gives the screen the rest, up to but never past its `720px` floor. The Gate Quiz's drawn screens never reflow below their authored width, because the arrangement on those screens is the question, so between `1200px` and roughly `1380px` of window the screen is **panned** inside its own box rather than shrunk: `539px` of `720px` visible at `1200px`, `619px` at `1280px`. Three quarters is the floor, and it is what sets `1200px`. That the screen can be panned is said in words whenever it is true — measured from the frame's actual overflow rather than assumed from a breakpoint, which is what it was until this date, when the hint was written for phones and stayed hidden on the desktop widths that had just started panning.
+
+Three bands, and no fourth. Where a component needs a threshold of its own it asks the container it is standing in, not the viewport: a fourth viewport band would be a claim about the platform, while a container query is a claim about one component, which is all such a threshold ever knows. The Gate Quiz item card's `1200px` is the one viewport threshold that is not a band, and it is written as a bare `min-[1200px]` rather than given a name for exactly that reason — a named breakpoint is an invitation for the next component to reach for it. Read it as "this card will not hide more than a quarter of its screen", which is what it was derived from and the only thing it means.
 
 The Self-Audit Report becomes a finding-at-a-time flow below `1100px` (decided 2026-07-27, #37). The Practice Page owns the available screen until the Learner selects an element; that selection opens one focused Finding composer, and a successful save returns to the page at the same position. A floating count opens the saved Findings and final submission as their own surface. This deliberately changes the report from a document drafted beside its subject into a stream of short entries: a narrow screen cannot keep both surfaces useful, and preserving the Learner's place between entries matters more than preserving a sliver of the page while the keyboard and form cover the rest. At `1100px` and above, the established two-surface layout remains: Practice Page and report drawer side by side.
 
@@ -368,12 +403,6 @@ Every lift is a stack of at least two shadows: a short, comparatively dark **con
 ### Shadow Vocabulary
 - **Card lift** (`0 1px 2px rgba(28,44,52,.13), 0 4px 8px rgba(28,44,52,.07), 0 14px 26px rgba(28,44,52,.06)`): Every white card.
 - **Warm card lift** (`0 1px 2px rgba(74,46,30,.16), 0 4px 8px rgba(74,46,30,.09), 0 14px 26px rgba(74,46,30,.08)`): The sand card. Warmer and one step stronger — a shadow on a tinted surface reads weaker than the same shadow on white.
-**The strip is a way down the page** (decided 2026-09-09). Each Stage card is a link to that Stage's block in the contents below, and the progress bar carries the same link for the Stage the Learner is standing in. The strip had been orientation and nothing else: on a board three Stages long the summary said which Stage you were in and then left you to scroll for it, which is the Way back and control defect the ninth Competency teaches, committed by the page that lists it.
-
-Three limits, and they are what keep this inside the No False Current Rule. The destination is a **Stage**, never a Competency: Stages are a sequence and this page already names the one you stand in, while the Competencies inside a Stage are peers that may be taken in any order, so nothing here may point at a next one. The cards stay **peers** — no current treatment, no `aria-current`, the same drawing on all three — because which Stage is current is the progress bar's sentence and does not want a second voice. And the strip carries **links only**: no button, on a page whose four `퀴즈 열기` pills are the Row Action Exception's one repeated action, and a fifth differently-weighted button beside them is exactly what that exception forbids.
-
-The card is the target rather than a word inside it, because on a phone the strip is three rows in one card and a link confined to the Stage's name would be a `44px` row holding a `22px` target. It takes `.press` for the same reason any `<a>` drawn as a control does, and it wears the page's own trailing arrow: a card that navigates and looks like the read-only summary it used to be is the Perceived clickability defect, on the board that teaches it.
-
 - **Pill lift** (`0 1px 2px rgba(28,44,52,.12), 0 3px 6px rgba(28,44,52,.06)`): Chips, the language switcher, the account pill, rail icons.
 
 ### Named Rules
