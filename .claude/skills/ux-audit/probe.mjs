@@ -133,6 +133,11 @@ if (actFile) {
       else if (s.do === 'type') await page.type(s.selector, s.value ?? '', { delay: 60, timeout: 5000 });
       else if (s.do === 'press') await page.press(s.selector, s.value ?? 'Enter', { timeout: 5000 });
       else if (s.do === 'wait') await page.waitForTimeout(Number(s.value ?? 500));
+      // The browser's own Back is the only honest way to test way-back-and-control:
+      // clicking a link that happens to point at the previous screen is navigation,
+      // not going back, and it silently drops whatever state the URL was carrying.
+      else if (s.do === 'back') await page.goBack({ waitUntil: 'domcontentloaded' });
+      else if (s.do === 'forward') await page.goForward({ waitUntil: 'domcontentloaded' });
     } catch (e) { error = String(e).split('\n')[0].slice(0, 200); }
 
     // What the interface said in the first 300ms is the system-status answer;

@@ -118,7 +118,7 @@ JSON
 node "$UXA/probe.mjs" http://localhost:3000/book --out /tmp/uxa/book --act /tmp/act.json
 ```
 
-`do` is `click` | `fill` | `type` | `press` | `wait`. Each step records:
+`do` is `click` | `fill` | `type` | `press` | `wait` | `back` | `forward`. Each step records:
 
 - `acknowledgedWithin300ms` — **the system-status answer.** `false` plus an empty `newTextAfterSettle` means the click did nothing visible at all.
 - `newTextAt300ms` vs `newTextAfterSettle` — what it said immediately vs what it said in the end. Different questions.
@@ -126,6 +126,19 @@ node "$UXA/probe.mjs" http://localhost:3000/book --out /tmp/uxa/book --act /tmp/
 - `invalidFields` + `liveRegions` — validation state and the messages actually on screen.
 
 A screenshot lands per step (`act-NN.png`) plus `after-interaction.png`.
+
+## Report: the visual verdict leads
+
+**This skill exists to judge whether a screen honours the visual principles.** Structural and accessibility findings — a missing `h1`, no `<main>` — are real and worth fixing, but they change nothing anyone can see, and a report that leads with them has quietly answered a different question than the one asked.
+
+So every report opens with the visual verdict, in this order:
+
+1. **视觉层级 / visual hierarchy — pass or fail, with `*-squint.png` as the evidence.** State it even when it passes. "No visual defect found, and here is the blurred render that says so" is a finding; silently omitting the line and filling the report with invisible fixes is not.
+2. Then the rest of the A-group visual principles.
+3. Then B-group (interaction) findings.
+4. **Structural / accessibility findings last, labelled "not visible on screen".** Never present them as the audit's headline.
+
+If the visual pass genuinely turns up nothing, say so plainly and hand over the squint image. **Do not manufacture a visible finding to fill the space** — a preference dressed as a principle is the one thing the four-way filter below exists to stop, and inventing one to satisfy a quota is the worst version of it.
 
 ## Then: walk the checklist
 
@@ -152,12 +165,14 @@ For the three language/model principles (22–26), you must first write down **w
 
 ## Gotchas
 
+- **Never rank `textContrast` and `fillVsSurround` against each other** — they are different quantities. Use `filledControls` (ranked by fill-vs-surround) and `flatControls` (ranked by text contrast), and compare a control only with its own peer group. On a real dashboard, one ladder put the page's loudest button 22nd of 89; sorting by the other number put it 64th of 90. Both numbers were correct and both rankings were fiction — the squint image settled it.
 - **`textContrast: "unmeasurable-image-background"`** is not a bug. A gradient or photo behind the text has no single background colour, so any ratio would be fiction. Look at the screenshot instead. An earlier version reported `1.07` for white-on-gradient text, which was wrong and would have produced a false finding.
 - **`consistency.synonymCandidates` over-reports by design.** It flags same-verb-family labels ("Export CSV" / "Download"), which catches the real defect but also pairs unrelated things ("Confirm selected orders" / "Save settings"). Confirm the two really are one job before reporting.
 - **`liveRegions` only lists *visible* regions.** Hidden `role=alert` nodes hold last week's error text; reporting those invents a message nobody was shown.
 - **`proximity` falls back to "the next control below"** when a `<label>` has no `for`. That's deliberate — it's how a reader reads it — but it means the `ownField` guess can be wrong in exotic layouts. `readsAsCaptionForFieldAbove: true` is the signal that matters.
 - **`charsPerLine` assumes ~0.5em per latin glyph.** For CJK text it under-counts; judge from the screenshot.
 - **The squint image is viewport-only, not full-page.** Full-page blur costs a lot and blurs across scroll seams. Re-run with `--wait` and scroll if you need a lower section.
+- **Use `{"do":"back"}` for way-back-and-control, never a link that points at the previous screen.** Clicking such a link is navigation, not going back: it drops whatever state the URL carried, and you will report a filter-loss defect the product does not have.
 - **Static pass alone cannot judge B-group principles.** Reporting "no status feedback" from a screenshot is guessing. Run `--act` or say the principle was not checked.
 - **browser-qa's MCP blocks the `file:` protocol** — `Access to "file:" protocol is blocked`. To audit a local HTML file through a browser-qa session, serve it first (`python3 -m http.server 8791` in its directory). `probe.mjs` has no such restriction and takes a bare path.
 - **`probe.mjs` starts a fresh browser with no cookies** unless `--session` is given. Verified on a gated fixture: without it the probe reported `largest text: "Please sign in"`; with it, `"Dashboard"` and a payout button at contrast 1.17. Always check `evidence.json`'s `title` is the screen you meant.
