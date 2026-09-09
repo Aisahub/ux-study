@@ -242,15 +242,14 @@ export function QuizWizard({
         — by option four the screen is off the top of the window and the answer
         is being chosen from memory of it.
 
-        The threshold is `1200px` of window, and it is a floor on how much of
-        the drawn screen may be hidden rather than a width that felt right.
-        The row gives the options `400px` — the least a column of them can be
-        read in — and hands the screen everything else up to its `720px`
-        floor; at `1200px` that leaves the screen `539px`, so three quarters of
-        it is in view and the last quarter is one drag away. Below that the
-        card stacks, because a screen showing less than three quarters of
-        itself is no longer something the Learner is comparing an option
-        against.
+        The threshold is `1200px` of window, and it is a floor on how far the
+        drawn screen may be shrunk rather than a width that felt right. The row
+        gives the options `400px` — the least a column of them can be read in —
+        and hands the screen everything else up to its `720px` floor; at
+        `1200px` that leaves `539px`, three quarters, and the screen is drawn
+        at three quarters of its size. Below that the card stacks, because a
+        screen under three quarters is small enough that its own type becomes
+        part of what the Learner is judging.
 
         Two earlier answers are recorded so they are not reinvented. It was a
         container query at `1198px` of card until 2026-09-09 — honest
@@ -263,14 +262,13 @@ export function QuizWizard({
 
         Which column yields is the audit's answer, kept: there the report
         column is fixed and the subject takes what is left. Between `1200px`
-        and about `1380px` the screen is *panned* rather than shrunk — the
-        frame keeps its authored width and scrolls sideways inside its own
-        box, which is what it already does on a phone, and what the
-        alternative, reflowing it, is forbidden from doing, because in
-        thirteen of the thirty-two items the arrangement is the question. That
-        the screen can be panned is said in words whenever it is true; see
-        `PanHint` in screen.tsx, which measures the overflow rather than
-        guessing it from a width.
+        and about `1380px` the screen does not fit its column, and it is
+        *scaled* to it rather than cut down to it: the frame is drawn at its
+        authored `720px` and then shrunk whole, so nothing is hidden and the
+        arrangement — which in thirteen of the thirty-two items is the
+        question — survives exactly. See `screen.tsx`, which also says why
+        this is not the reflow the screens are forbidden to do, and where the
+        shrinking stops.
       */}
       {/* Both track lists are load-bearing, and neither is a default written
           out. `grid-cols-1`: an implicit grid track is sized to its content,

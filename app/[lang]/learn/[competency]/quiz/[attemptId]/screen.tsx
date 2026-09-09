@@ -10,6 +10,20 @@ const HEIGHT_MESSAGE = 'item-screen-height'
 /** Posted the other way, once, by a host that has started listening. */
 const MEASURE_REQUEST = 'item-screen-measure'
 
+/**
+ * How far the screen may be shrunk to fit its column before shrinking stops
+ * being the kinder answer.
+ *
+ * The item card's two-column row starts at a `1200px` window, where the screen
+ * column is `539px` of the `720px` floor — `0.749`. This sits just under that,
+ * so the row always scales and never cuts, and a box narrower than the row can
+ * ever produce (a phone, a stacked card on a small tablet) falls back to
+ * panning instead. Below three quarters the type stops being type: `0.52` on a
+ * `375px` phone would set a `14px` body face at `7px`, which is not a screen
+ * anybody can judge — it is a picture of one.
+ */
+const MIN_SCALE = 0.74
+
 /** Shown under a screen its column is too narrow to hold, until it is panned. */
 const PAN_HINT: Record<Language, string> = {
   en: 'Drag the screen sideways to see all of it.',
@@ -182,13 +196,38 @@ function Frame({
   // width and needs no number of its own.
   const box = useRef<HTMLDivElement>(null)
 
+  // What the measurement decided: how far the screen is being shrunk, and the
+  // width it is being shrunk from. One value and not two, because they are one
+  // reading of the DOM — a scale without the floor it was taken against cannot
+  // size the box that holds it. `{ scale: 1 }` until the first measurement, so
+  // the server's render and the first paint draw the screen exactly as they
+  // did before scaling existed.
+  const [fit, setFit] = useState<{ scale: number; floor: number }>({ scale: 1, floor: 0 })
+
   useEffect(() => {
     const element = box.current
     if (!element) return
-    // A pixel of slack: a fractional column width leaves `scrollWidth` a
-    // hair over `clientWidth` on a screen that is fully visible, and a hint
-    // that appears on a screen with nothing hidden is worse than none.
-    const measure = () => onOverflow(frameKey, element.scrollWidth > element.clientWidth + 1)
+    // Read from the token that declares it rather than retyped:
+    // `--item-screen-floor` is the same number the frame's `min-width` and the
+    // wizard's column track are built from, and a second copy here would be
+    // the one that failed to move when the floor did.
+    const floor =
+      Number.parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue('--item-screen-floor'),
+      ) || 0
+
+    const measure = () => {
+      const width = element.clientWidth
+      const ratio = floor > 0 && width > 0 && width < floor ? width / floor : 1
+      setFit((previous) => {
+        const scale = ratio >= MIN_SCALE ? ratio : 1
+        return previous.scale === scale && previous.floor === floor ? previous : { scale, floor }
+      })
+      // A pixel of slack: a fractional column width leaves `scrollWidth` a
+      // hair over `clientWidth` on a screen that is fully visible, and a hint
+      // that appears on a screen with nothing hidden is worse than none.
+      onOverflow(frameKey, element.scrollWidth > element.clientWidth + 1)
+    }
     measure()
     // Both edges move: the box with the window, and the frame's own height
     // arrives after the first paint and can change the box's scrollbar. One
@@ -197,6 +236,21 @@ function Frame({
     observer.observe(element)
     return () => observer.disconnect()
   }, [srcDoc, frameKey, onOverflow])
+
+  // Shrink the whole screen to the room there is, rather than hide the part
+  // that does not fit. Everything scales together — type, rules, gaps, the
+  // columns of a table — so the arrangement the item is asking about survives
+  // exactly, which is the difference between this and reflowing the frame into
+  // a narrower viewport. Reflow is the thing this component may never do; a
+  // smaller picture of the same drawing is not that.
+  //
+  // Not free, and the cost is worth naming: the screen ends up drawn smaller
+  // than the card around it, which is a difference in size the author did not
+  // put there. Two of the ninety-six items turn on absolute type size — one
+  // sets a panel at `10px` against a `14px` page and asks what the squinting
+  // means — and for those the *ratio* is what carries the answer, and the
+  // ratio is exactly what scaling preserves.
+  const { scale } = fit
 
   return (
     /*
@@ -216,21 +270,65 @@ function Frame({
       and that is content authoring rather than layout.
     */
     <div ref={box} onScroll={onPan} className="overflow-x-auto rounded-badge">
-      <iframe
-        ref={frame}
-        // Remounting on the key gives each state a frame of its own, so a
-        // stale height can never be applied to the screen that replaced it.
-        key={frameKey}
-        title={title}
-        srcDoc={srcDoc}
-        sandbox="allow-scripts"
-        scrolling="no"
-        style={{ height }}
-        // Lifted off the card rather than outlined on it: this system draws
-        // no borders, and the artefact has to read as a separate object from
-        // the page asking about it.
-        className="w-full min-w-(--item-screen-floor) rounded-badge bg-white shadow-card"
-      />
+      {/* The scaled box. A transform moves what is painted and not what is
+          laid out, so without this wrapper the frame would still occupy its
+          full `720px` and the column would go on offering a sideways scroll
+          over empty space. Given the drawn size instead, it is the thing the
+          card lays out and the thing the pan measurement reads — so a scaled
+          screen reports no overflow, and the hint stays silent because there
+          is nothing hidden to say. */}
+      <div
+        // Two things only while it is holding a scaled screen, and both would
+        // be wrong at full size.
+        //
+        // `overflow-hidden`, because a transform moves paint and not layout:
+        // without the clip the frame would still occupy its full `720px` and
+        // the column would offer a sideways scroll over empty space. Left on
+        // at full size it would do the opposite of nothing — an unscaled frame
+        // is `720px` inside a narrower box on purpose, and hiding that
+        // overflow would cut the screen off with no way to reach the rest.
+        //
+        // And the lift. `shadow-card` is on the frame, and a shadow paints
+        // outside the box it belongs to, so this clip — which is exactly the
+        // drawn size — removed it entirely: the artefact went flat against the
+        // card asking about it, which is the one thing DESIGN.md asks the
+        // shadow to prevent. An element's own shadow is not clipped by its own
+        // overflow, so the box that does the clipping is the box that must
+        // carry it.
+        className={
+          scale < 1 ? 'overflow-hidden rounded-badge bg-white shadow-card' : 'rounded-badge'
+        }
+        style={
+          scale < 1
+            ? { width: Math.floor(fit.floor * scale), height: Math.ceil(height * scale) }
+            : undefined
+        }
+      >
+        <iframe
+          ref={frame}
+          // Remounting on the key gives each state a frame of its own, so a
+          // stale height can never be applied to the screen that replaced it.
+          key={frameKey}
+          title={title}
+          srcDoc={srcDoc}
+          sandbox="allow-scripts"
+          scrolling="no"
+          style={
+            scale < 1
+              ? {
+                  height,
+                  width: fit.floor,
+                  transform: `scale(${scale})`,
+                  transformOrigin: 'top left',
+                }
+              : { height }
+          }
+          // Lifted off the card rather than outlined on it: this system draws
+          // no borders, and the artefact has to read as a separate object from
+          // the page asking about it.
+          className="w-full min-w-(--item-screen-floor) rounded-badge bg-white shadow-card"
+        />
+      </div>
     </div>
   )
 }
