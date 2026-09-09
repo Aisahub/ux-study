@@ -257,8 +257,8 @@ of `26px` (ERR-223). The first row is the question's own height; the second
 takes what is left, which is where the surplus belongs. It is the same row —
 the same arrangement as the Self-Audit Report's two surfaces, and for the same
 reason. The options hold `400px`, the least a column of them can be read in,
-and the screen takes the rest up to its `720px` floor, panning inside its own
-box below that.
+and the screen takes the rest up to its `720px` floor, drawn scaled to the
+column below that.
 
 **The stacked card reads question, screen, options** (decided 2026-09-09). In
 one column the markup order is the reading order, and what is being asked has
@@ -386,7 +386,15 @@ Three bands, cut by available width rather than device class (decided 2026-07-27
 
 The quiz's `1200px` is not a fourth band and may not be used as one. A band is a claim about the platform; this is one card saying how much of its own subject it will let a row hide, and it happens to be answerable in window pixels because the card's width is a fixed subtraction from the window's. It replaced a container query at `1198px` of card — honest arithmetic from the screen's floor, the gap and the options' reading width, and still a private threshold that left a `1280px` window showing an audit in two surfaces and a quiz in one — and then `wide` itself, which is the right kind of number and cost more of the screen than the arrangement is worth.
 
-What yields at each width is settled the same way on both. The audit fixes its report column and lets the subject take what is left; the quiz fixes the options at `400px` — the least a column of them can be read in — and gives the screen the rest, up to but never past its `720px` floor. The Gate Quiz's drawn screens never reflow below their authored width, because the arrangement on those screens is the question, so between `1200px` and roughly `1380px` of window the screen is **panned** inside its own box rather than shrunk: `539px` of `720px` visible at `1200px`, `619px` at `1280px`. Three quarters is the floor, and it is what sets `1200px`. That the screen can be panned is said in words whenever it is true — measured from the frame's actual overflow rather than assumed from a breakpoint, which is what it was until this date, when the hint was written for phones and stayed hidden on the desktop widths that had just started panning.
+What yields at each width is settled the same way on both. The audit fixes its report column and lets the subject take what is left; the quiz fixes the options at `400px` — the least a column of them can be read in — and gives the screen the rest, up to but never past its `720px` floor.
+
+**A screen too big for its column is scaled, not cut** (decided 2026-09-10). The frame is laid out at its authored `720px` and then drawn whole at the size the column allows — `0.75` at a `1200px` window, `0.86` at `1280px`, `1.0` from about `1380px`. Nothing is hidden and no drag is needed.
+
+This is not the reflow the screens are forbidden to do, and the distinction is the whole of the reason it is allowed. Reflow gives the frame a narrower viewport and the document inside re-lays-out: three panes become one, a table wraps, and in thirteen of the thirty-two items the arrangement *is* the question. Scaling changes no layout at all — type, rules, gaps and columns shrink by one factor together, so the drawing the author made is the drawing the Learner judges, smaller. It replaced panning, which preserved the arrangement equally well and hid a quarter of it: at `1200px` a Learner saw `539px` of `720px` and had to drag for the rest, mid-comparison.
+
+Two costs, both real. The screen ends up drawn smaller than the card around it, which is a difference in size the author did not put there — it is plain at `1200px` and nearly invisible by `1280px`. And two of the ninety-six items turn on absolute type size, one setting a `10px` panel against a `14px` page and asking what the squinting means; for those the *ratio* carries the answer, and the ratio is exactly what scaling preserves.
+
+Shrinking has a floor of `0.74`, just under the `0.749` the row's own threshold produces, so the row always scales and never cuts. Below it — a phone, a stacked card on a small tablet — the screen keeps its full size and is **panned** instead, because `0.52` on a `375px` phone would set a `14px` body face at `7px`, which is not a screen anybody can judge. That the screen can be panned is said in words whenever it is true, measured from the frame's actual overflow rather than assumed from a breakpoint.
 
 Three bands, and no fourth. Where a component needs a threshold of its own it asks the container it is standing in, not the viewport: a fourth viewport band would be a claim about the platform, while a container query is a claim about one component, which is all such a threshold ever knows. The Gate Quiz item card's `1200px` is the one viewport threshold that is not a band, and it is written as a bare `min-[1200px]` rather than given a name for exactly that reason — a named breakpoint is an invitation for the next component to reach for it. Read it as "this card will not hide more than a quarter of its screen", which is what it was derived from and the only thing it means.
 
