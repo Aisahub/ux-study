@@ -368,6 +368,12 @@ Every lift is a stack of at least two shadows: a short, comparatively dark **con
 ### Shadow Vocabulary
 - **Card lift** (`0 1px 2px rgba(28,44,52,.13), 0 4px 8px rgba(28,44,52,.07), 0 14px 26px rgba(28,44,52,.06)`): Every white card.
 - **Warm card lift** (`0 1px 2px rgba(74,46,30,.16), 0 4px 8px rgba(74,46,30,.09), 0 14px 26px rgba(74,46,30,.08)`): The sand card. Warmer and one step stronger — a shadow on a tinted surface reads weaker than the same shadow on white.
+**The strip is a way down the page** (decided 2026-09-09). Each Stage card is a link to that Stage's block in the contents below, and the progress bar carries the same link for the Stage the Learner is standing in. The strip had been orientation and nothing else: on a board three Stages long the summary said which Stage you were in and then left you to scroll for it, which is the Way back and control defect the ninth Competency teaches, committed by the page that lists it.
+
+Three limits, and they are what keep this inside the No False Current Rule. The destination is a **Stage**, never a Competency: Stages are a sequence and this page already names the one you stand in, while the Competencies inside a Stage are peers that may be taken in any order, so nothing here may point at a next one. The cards stay **peers** — no current treatment, no `aria-current`, the same drawing on all three — because which Stage is current is the progress bar's sentence and does not want a second voice. And the strip carries **links only**: no button, on a page whose four `퀴즈 열기` pills are the Row Action Exception's one repeated action, and a fifth differently-weighted button beside them is exactly what that exception forbids.
+
+The card is the target rather than a word inside it, because on a phone the strip is three rows in one card and a link confined to the Stage's name would be a `44px` row holding a `22px` target. It takes `.press` for the same reason any `<a>` drawn as a control does, and it wears the page's own trailing arrow: a card that navigates and looks like the read-only summary it used to be is the Perceived clickability defect, on the board that teaches it.
+
 - **Pill lift** (`0 1px 2px rgba(28,44,52,.12), 0 3px 6px rgba(28,44,52,.06)`): Chips, the language switcher, the account pill, rail icons.
 
 ### Named Rules
