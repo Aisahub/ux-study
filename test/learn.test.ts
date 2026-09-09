@@ -93,9 +93,16 @@ test('the programme contents shows the whole route without inventing a next Comp
     /<section aria-labelledby="programme-stages">[\s\S]*?<\/section>/,
   )?.[0]
   expect(stageSection).toBeDefined()
-  expect(stageSection).not.toContain('<a')
+  // The strip carries no action and is not an accordion. It gained same-page
+  // links on 2026-09-09 — each card goes to its own Stage in the contents —
+  // and this assertion is the narrower thing it was always protecting: the
+  // strip may move the Learner down this page, and may not take them off it,
+  // open a panel, or offer a button.
   expect(stageSection).not.toContain('<button')
   expect(stageSection).not.toContain('aria-expanded')
+  for (const [, href] of stageSection!.matchAll(/<a\b[^>]*\bhref="([^"]*)"/g)) {
+    expect(href).toMatch(/^#stage-\d+$/)
+  }
   expect(text).not.toContain('The Stage 1 line')
   expect(text).not.toContain('After this line')
   expect(text.indexOf('Programme stages')).toBeLessThan(text.indexOf('Stage 2'))
@@ -104,6 +111,52 @@ test('the programme contents shows the whole route without inventing a next Comp
   expect(text.indexOf('Programme contents')).toBeLessThan(text.indexOf('Visual hierarchy'))
   expect(text).not.toContain('Next stop')
   expect(text).not.toContain('You are here')
+})
+
+test('each Stage card goes to that Stage in the contents, and every target exists', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+
+  for (const stage of content.config.stages) {
+    // The card, named for where it goes rather than for everything inside it:
+    // a link whose accessible name is the whole card announces four facts
+    // where the destination is one.
+    expect(html).toContain(`aria-label="Go to Stage ${stage.stage} in the contents"`)
+    // …and the heading it lands on. A fragment with no target is a link that
+    // silently does nothing, which is the one failure this pair cannot see
+    // separately.
+    expect(html).toContain(`id="stage-${stage.stage}"`)
+  }
+
+  const fragments = [...html.matchAll(/href="(#[^"]*)"/g)].map((match) => match[1])
+  expect(fragments.length).toBeGreaterThan(0)
+  for (const fragment of fragments) {
+    expect(html).toContain(`id="${fragment.slice(1)}"`)
+  }
+})
+
+test('the progress bar offers a way to the Stage it is counting, and names no Competency', async () => {
+  const email = freshLearner()
+  const cookie = await sessionCookieFor(email)
+  for (const slug of STAGE_ONE_COMPETENCIES) await passQuiz(email, slug)
+  await testDb.insert(schema.reports).values({ email, stage: 1, submittedAt: new Date() })
+
+  const html = await (await fetch(`${BASE_URL}/en/learn`, { headers: { cookie } })).text()
+  const text = visibleText(html)
+
+  // A Learner who has closed Stage 1 stands in Stage 2, so the bar counts
+  // Stage 2 and the way beside it goes to Stage 2 — not to the Stage they
+  // finished, and not to a Competency inside it. The No False Current Rule
+  // lets this page name a current Stage, because Stages are a sequence; the
+  // Competencies within one are peers and it may name no next among them.
+  expect(text).toContain('Stage 2 progress')
+  expect(text).toContain('Go to the current stage')
+  const header = html.match(/<header[\s\S]*?<\/header>/)?.[0]
+  expect(header).toContain('href="#stage-2"')
+  for (const slug of ALL_COMPETENCIES) {
+    expect(header).not.toContain(`/learn/${slug}`)
+  }
 })
 
 test('every Stage 1 Competency exposes its own Gate Quiz', async () => {

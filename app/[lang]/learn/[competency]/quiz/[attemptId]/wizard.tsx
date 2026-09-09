@@ -195,12 +195,15 @@ export function QuizWizard({
   // held to the reading measure.
   //
   // The card is allowed the full content column from `wide` up, and asks for it
-  // because of what the item card does with the room: at 1198px it can stand
-  // the screen and the options beside each other, and the Learner stops
-  // scrolling between the thing being judged and the judgment. Below that
-  // there is no second column to give, so the card asks for nothing extra.
+  // because of what the item card does with the room: given enough of it the
+  // card can stand the screen and the options beside each other, and the
+  // Learner stops scrolling between the thing being judged and the judgment.
+  // Below `wide` there is no second column to give, so the card asks for
+  // nothing extra. The two numbers are deliberately not the same: `wide` is
+  // when the content column may widen, `1200px` is when this card has enough
+  // of it to make the row worth having.
   return (
-    <main className="@container mx-auto w-full max-w-[880px] px-0.5 wide:max-w-[1240px]">
+    <main className="mx-auto w-full max-w-[880px] px-0.5 wide:max-w-[1240px]">
       {/* ── the line, carrying the five drawn items ─────── */}
       <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
         {/* Said in words only where the line cannot say it. From `sm` the
@@ -239,18 +242,67 @@ export function QuizWizard({
         — by option four the screen is off the top of the window and the answer
         is being chosen from memory of it.
 
-        The threshold is measured, not chosen: `720px` is the floor the drawn
-        screens may never be squeezed below, `26px` is the gap between them,
-        and `400px` is the least a column of options can be read in. Padding
-        included, that is `1198px` of card. It is asked of the card rather than
-        of the viewport, so the row appears when the room is really there —
-        whatever the rail, the bed and the board have taken first.
+        The threshold is `1200px` of window, and it is a floor on how much of
+        the drawn screen may be hidden rather than a width that felt right.
+        The row gives the options `400px` — the least a column of them can be
+        read in — and hands the screen everything else up to its `720px`
+        floor; at `1200px` that leaves the screen `539px`, so three quarters of
+        it is in view and the last quarter is one drag away. Below that the
+        card stacks, because a screen showing less than three quarters of
+        itself is no longer something the Learner is comparing an option
+        against.
+
+        Two earlier answers are recorded so they are not reinvented. It was a
+        container query at `1198px` of card until 2026-09-09 — honest
+        arithmetic from the screen floor, the gap and the options, and still a
+        band private to this card, so a `1280px` window got an audit in two
+        surfaces and a quiz in one. It was then `wide` (`1100px`), the band the
+        Self-Audit Report already splits on, which is the right *kind* of
+        number and put only `439px` of a `720px` screen on the page. `1200px`
+        is that arrangement with a floor under what it costs.
+
+        Which column yields is the audit's answer, kept: there the report
+        column is fixed and the subject takes what is left. Between `1200px`
+        and about `1380px` the screen is *panned* rather than shrunk — the
+        frame keeps its authored width and scrolls sideways inside its own
+        box, which is what it already does on a phone, and what the
+        alternative, reflowing it, is forbidden from doing, because in
+        thirteen of the thirty-two items the arrangement is the question. That
+        the screen can be panned is said in words whenever it is true; see
+        `PanHint` in screen.tsx, which measures the overflow rather than
+        guessing it from a width.
       */}
       {/* `grid-cols-1` is load-bearing, not a default written out: an implicit
-          grid track is sized to its content, and the prose column asks for its
-          full 56ch. On a phone that is wider than the whole card, and the
-          options would hang off the right edge of it. */}
-      <section className="mt-3.5 grid grid-cols-1 gap-[26px] rounded-card bg-surface p-5 sm:p-[26px] shadow-card @min-[1198px]:grid-cols-[var(--item-screen-floor)_minmax(0,1fr)] @min-[1198px]:items-start">
+          grid track is sized to its content, and the prose asks for its full
+          56ch. On a phone that is wider than the whole card, and the options
+          would hang off the right edge of it. */}
+      <section className="mt-3.5 grid grid-cols-1 gap-[26px] rounded-card bg-surface p-5 sm:p-[26px] shadow-card min-[1200px]:grid-cols-[minmax(0,var(--item-screen-floor))_minmax(400px,1fr)] min-[1200px]:items-start">
+        {/* The question, first in the markup and first on a stacked card.
+            What is being asked has to arrive before the thing it is asked
+            about: a Learner handed a screen with no question studies it for
+            whatever they happen to notice, reads the question underneath, and
+            goes back up to look again for the thing it actually meant. In one
+            column the order is the reading order, so the heading sits above
+            the screen and the options below it.
+
+            In the two-column row the same three blocks are placed rather than
+            flowed — the screen down the left across both rows, the question
+            above the options on the right — so the markup can be in the order
+            a screen reader should hear it while the eye gets the arrangement
+            the comparison needs. `order` would have bought the same picture
+            and broken that: reading order is the markup's, and a row that
+            reads screen-then-question would be the thing this block exists to
+            avoid, said to the Learners least able to work around it.
+
+            The measure is held by this wrapper rather than by the heading
+            itself: `ch` is a property of the font it is set in, and 56ch of
+            the 25px serif is over 1000px — a heading given its own 56ch would
+            not be held at all. Set here, in the body face, it is the same 56ch
+            every other card on the platform is measured by. */}
+        <div className="max-w-measure min-[1200px]:col-start-2 min-[1200px]:row-start-1">
+          <h1 className="font-serif text-headline font-bold text-ink">{item.prompt}</h1>
+        </div>
+
         {/*
           One channel, never both. An item with a drawn screen keeps its prose
           as the frame's accessible name rather than printing it alongside: a
@@ -258,41 +310,32 @@ export function QuizWizard({
           question before the screen is looked at, and the Learner is back to
           reading a description of a defect instead of seeing one.
         */}
-        {item.sequence ? (
-          <ItemSequence
-            slug={item.slug}
-            lang={lang}
-            steps={item.sequence}
-            css={screenCss}
-            description={item.artefact}
-          />
-        ) : item.screen ? (
-          <ItemScreen slug={item.slug} lang={lang} html={item.screen} css={screenCss} description={item.artefact} />
-        ) : (
-          <div className="rounded-badge bg-sunk p-[17px] text-body whitespace-pre-line">
-            {item.artefact}
-          </div>
-        )}
+        <div className="min-w-0 min-[1200px]:col-start-1 min-[1200px]:row-start-1 min-[1200px]:row-span-2">
+          {item.sequence ? (
+            <ItemSequence
+              slug={item.slug}
+              lang={lang}
+              steps={item.sequence}
+              css={screenCss}
+              description={item.artefact}
+            />
+          ) : item.screen ? (
+            <ItemScreen slug={item.slug} lang={lang} html={item.screen} css={screenCss} description={item.artefact} />
+          ) : (
+            <div className="rounded-badge bg-sunk p-[17px] text-body whitespace-pre-line">
+              {item.artefact}
+            </div>
+          )}
+        </div>
 
-        {/* One measure and one edge. The prompt keeps the reading measure at
-            every width — 56ch of a 25px serif is nearly twice 56ch of the 16px
-            body face, so a prompt sized on its own would run far past a
-            comfortable line. What changes at `wide` is the edge it is measured
-            from: the column stops being centred in the card and lines up with
-            the left edge of the screen — beside it in the two-column row, above
-            it when the card is stacked. */}
-        <div className="mx-auto w-full max-w-measure wide:mx-0 wide:max-w-none">
-          {/* The measure is held by this wrapper rather than by the heading
-              itself: `ch` is a property of the font it is set in, and 56ch of
-              the 25px serif is over 1000px — a heading given its own 56ch
-              would not be held at all. Set here, in the body face, it is the
-              same 56ch every other card on the platform is measured by. */}
-          <div className="max-w-measure">
-            <h1 className="font-serif text-headline font-bold text-ink">
-              {item.prompt}
-            </h1>
-          </div>
-
+        {/* One measure and one edge. The options keep the reading measure
+            below the row and drop it inside it, where the column is already
+            narrower than the measure would be. Flush with the card's left
+            edge at both widths, which is the screen's edge too — the prose was
+            centred in the stacked card until 2026-09-09, and a centred column
+            between a full-width screen above it and a row of controls below it
+            reads as a third alignment on a card that only has one. */}
+        <div className="max-w-measure min-[1200px]:col-start-2 min-[1200px]:row-start-2 min-[1200px]:max-w-none">
           {/*
             Two lines to an option: what it proposes, then the grounds for it
             in the smaller step. Four options of forty words each is a wall,
@@ -305,16 +348,16 @@ export function QuizWizard({
             border — the same ring the station list wears, and the only way to
             draw a chosen edge in a system that has no strokes.
 
-            Four stacked options run past the fold, and an option the Learner
-            has to scroll to is one they compare from memory. So they pair up
-            in the one band where pairing is what buys the room back: a card
-            wide enough to seat them in two readable columns but not wide
-            enough to seat the screen beside them. Below that the columns would
-            be too narrow to read; above it the options are already a column of
-            their own next to the screen, and splitting that column again would
-            hand each option half of 442px.
+            One column, at every width. They paired into two between `880px`
+            and `1198px` of card while that was the band where the screen was
+            stacked above them and the card still had room to spare. The
+            stacked card now reads question, screen, options, so these are the
+            last thing on it rather than a block with a screen above and
+            controls below — and two columns would put the fourth option level
+            with the first, which is a run of four to compare drawn as a square
+            of four to hunt through.
           */}
-          <fieldset className="mt-5.5 grid gap-2.5 [@container(880px<=width<1198px)]:grid-cols-2">
+          <fieldset className="grid gap-2.5">
             {item.options.map((option) => (
               // Left to stretch rather than sized to its own text: two options
               // side by side with different-length grounds would otherwise

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import type { Language } from '@/lib/language'
 
@@ -10,7 +10,7 @@ const HEIGHT_MESSAGE = 'item-screen-height'
 /** Posted the other way, once, by a host that has started listening. */
 const MEASURE_REQUEST = 'item-screen-measure'
 
-/** Shown under a screen the phone is too narrow to hold, until it is panned. */
+/** Shown under a screen its column is too narrow to hold, until it is panned. */
 const PAN_HINT: Record<Language, string> = {
   en: 'Drag the screen sideways to see all of it.',
   ko: '화면을 옆으로 밀면 전체가 보입니다.',
@@ -87,6 +87,36 @@ function useFrameHeights() {
 }
 
 /**
+ * Which of an artefact's frames are wider than the box holding them.
+ *
+ * A map rather than a boolean, and reported by a callback that never changes
+ * identity, for the same two reasons `useFrameHeights` is shaped this way: a
+ * sequence has one frame per state, and an effect whose dependency is a fresh
+ * arrow on every render measures forever.
+ *
+ * It is asked about named frames rather than about everything it has ever
+ * heard, and that is the whole of the difference from a plain boolean. Neither
+ * `ItemScreen` nor `ItemSequence` is remounted when the Learner moves to the
+ * next item, so the map keeps the previous artefact's keys; answered over all
+ * of them, a panned item 1 would put a pan hint under an item 2 that fits.
+ * `useFrameHeights` is safe from this because it is read one key at a time.
+ */
+function useFrameOverflow(frameKeys: string[]) {
+  const [frames, setFrames] = useState<Record<string, boolean>>({})
+
+  const report = useCallback((frameKey: string, overflowing: boolean) => {
+    setFrames((previous) =>
+      previous[frameKey] === overflowing ? previous : { ...previous, [frameKey]: overflowing },
+    )
+  }, [])
+
+  // Any of this artefact's own: its frames share one column, so in practice
+  // they overflow together — but the hint is about the artefact, and it is
+  // true the moment one state of it is cut off.
+  return { overflowing: frameKeys.some((frameKey) => frames[frameKey]), report }
+}
+
+/**
  * One drawn state in its own sandbox, sized to what it reports.
  *
  * It renders in a sandboxed frame for the reason #23 served the Practice Page
@@ -110,6 +140,7 @@ function Frame({
   title,
   height,
   onPan,
+  onOverflow,
 }: {
   frameKey: string
   lang: Language
@@ -119,6 +150,8 @@ function Frame({
   title: string
   height: number
   onPan: () => void
+  /** Told whenever this frame is wider than the box, so the host can say so. */
+  onOverflow: (frameKey: string, overflowing: boolean) => void
 }) {
   const frame = useRef<HTMLIFrameElement>(null)
 
@@ -136,9 +169,38 @@ function Frame({
 <body>${html}<script>var SLUG = ${JSON.stringify(frameKey)};${MEASURE_SCRIPT}</script></body>
 </html>`
 
+  // Whether the frame is actually wider than the box holding it, which is the
+  // only thing that makes the pan hint true. It used to be inferred from a
+  // breakpoint — the hint was `sm:hidden`, on the assumption that only a phone
+  // was ever too narrow. That stopped being true on 2026-09-09, when the item
+  // card began setting the screen beside its question from `wide`: between
+  // roughly 1100px and 1380px of window the column is under the screen's own
+  // width and the screen pans on a desktop, where the hint was hidden and
+  // macOS hides the scrollbar until it is already being used. A screen that
+  // pans and does not say so is the Perceived clickability defect this
+  // platform's fourth Competency teaches. Measured, so it is right at every
+  // width and needs no number of its own.
+  const box = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const element = box.current
+    if (!element) return
+    // A pixel of slack: a fractional column width leaves `scrollWidth` a
+    // hair over `clientWidth` on a screen that is fully visible, and a hint
+    // that appears on a screen with nothing hidden is worse than none.
+    const measure = () => onOverflow(frameKey, element.scrollWidth > element.clientWidth + 1)
+    measure()
+    // Both edges move: the box with the window, and the frame's own height
+    // arrives after the first paint and can change the box's scrollbar. One
+    // observer on the box catches both; `srcDoc` changing re-runs the effect.
+    const observer = new ResizeObserver(measure)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [srcDoc, frameKey, onOverflow])
+
   return (
     /*
-      The screen is held to a floor width and panned when the phone is
+      The screen is held to a floor width and panned when its column is
       narrower, rather than allowed to reflow into the space available.
       Reflow looks like the accommodating choice and is the one thing this
       component may not do: thirteen of the thirty-two items are two or more
@@ -153,7 +215,7 @@ function Frame({
       of them ask about — the screens need a phone-native form of their own,
       and that is content authoring rather than layout.
     */
-    <div onScroll={onPan} className="overflow-x-auto rounded-badge">
+    <div ref={box} onScroll={onPan} className="overflow-x-auto rounded-badge">
       <iframe
         ref={frame}
         // Remounting on the key gives each state a frame of its own, so a
@@ -174,13 +236,22 @@ function Frame({
 }
 
 /** Said only while it is true, and once for the artefact rather than once per frame. */
-function PanHint({ lang, panned }: { lang: Language; panned: boolean }) {
+function PanHint({
+  lang,
+  panned,
+  overflowing,
+}: {
+  lang: Language
+  panned: boolean
+  /** True while any of the artefact's frames is wider than the box holding it. */
+  overflowing: boolean
+}) {
   // An artefact that pans with nothing to say so is the Perceived clickability
   // defect this platform's fourth Competency teaches Learners to find,
   // committed on the page teaching it — and it stops being worth saying the
-  // moment they have panned.
-  if (panned) return null
-  return <p className="mt-2.5 text-label font-bold text-ink-2 sm:hidden">{PAN_HINT[lang]}</p>
+  // moment they have panned, or the moment the whole screen fits.
+  if (panned || !overflowing) return null
+  return <p className="mt-2.5 text-label font-bold text-ink-2">{PAN_HINT[lang]}</p>
 }
 
 /** The artefact drawn as one still (ADR-0006: "a good scenario item needs a real screenshot"). */
@@ -199,6 +270,7 @@ export function ItemScreen({
   description: string
 }) {
   const heightOf = useFrameHeights()
+  const { overflowing, report } = useFrameOverflow([slug])
   const [panned, setPanned] = useState(false)
 
   return (
@@ -211,10 +283,16 @@ export function ItemScreen({
         title={description}
         height={heightOf(slug)}
         onPan={() => setPanned(true)}
+        onOverflow={report}
       />
-      <PanHint lang={lang} panned={panned} />
+      <PanHint lang={lang} panned={panned} overflowing={overflowing} />
     </div>
   )
+}
+
+/** One state's frame key, written once because two places now spell it. */
+function frameKeyOf(slug: string, index: number): string {
+  return `${slug}#${index}`
 }
 
 /**
@@ -255,6 +333,7 @@ export function ItemSequence({
   description: string
 }) {
   const heightOf = useFrameHeights()
+  const { overflowing, report } = useFrameOverflow(steps.map((_, index) => frameKeyOf(slug, index)))
   const [panned, setPanned] = useState(false)
 
   return (
@@ -268,7 +347,7 @@ export function ItemSequence({
       */}
       <ol aria-label={description} className="flex flex-col gap-[22px]">
         {steps.map((step, index) => {
-          const frameKey = `${slug}#${index}`
+          const frameKey = frameKeyOf(slug, index)
           return (
             <li key={frameKey}>
               {/* The caption above its state, because it says which moment is
@@ -283,12 +362,13 @@ export function ItemSequence({
                 title={step.caption}
                 height={heightOf(frameKey)}
                 onPan={() => setPanned(true)}
+                onOverflow={report}
               />
             </li>
           )
         })}
       </ol>
-      <PanHint lang={lang} panned={panned} />
+      <PanHint lang={lang} panned={panned} overflowing={overflowing} />
     </div>
   )
 }

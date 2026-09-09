@@ -30,6 +30,22 @@ const COPY: Record<
      * Stage 2 work counts something they closed months ago.
      */
     stageProgress: (stage: number) => string
+    /**
+     * The Stage card's own accessible name. The card is a link into that
+     * Stage's block in the contents, and a link whose name is everything
+     * inside it announces "1 Complete Stage 1 Visible at a glance" — four
+     * facts where the destination is one. It names the Stage it goes to, so
+     * the visible "Stage 1" is inside the spoken name (WCAG 2.5.3).
+     */
+    goToStage: (stage: number) => string
+    /**
+     * The way from the progress bar to the work it is counting. It names the
+     * Stage rather than a Competency: Stages are a sequence and this page
+     * already says which one the Learner stands in, while the Competencies
+     * inside one may be taken in any order and the No False Current Rule
+     * forbids this page naming a next one.
+     */
+    goToCurrentStage: string
     programmeStages: string
     open: string
     contentsTitle: string
@@ -67,6 +83,8 @@ const COPY: Record<
     heading: 'Learn',
     intro: 'Choose any Competency and train the observation skill you need now.',
     stageProgress: (stage) => `Stage ${stage} progress`,
+    goToStage: (stage) => `Go to Stage ${stage} in the contents`,
+    goToCurrentStage: 'Go to the current stage',
     programmeStages: 'Programme stages',
     open: 'Open',
     contentsTitle: 'Programme contents',
@@ -104,6 +122,8 @@ const COPY: Record<
     heading: '학습',
     intro: '원하는 역량부터 골라 지금 필요한 관찰력을 훈련하세요.',
     stageProgress: (stage) => `${stage}단계 진도`,
+    goToStage: (stage) => `${stage}단계 목차로 이동`,
+    goToCurrentStage: '현재 단계로 이동',
     programmeStages: '프로그램 단계',
     open: '열림',
     contentsTitle: '목차',
@@ -163,6 +183,16 @@ function ReportMark({ className }: { className: string }) {
 }
 
 /**
+ * Where a Stage's block sits in the contents, written once because two places
+ * point at it — the Stage's own card, and the progress bar's way to the Stage
+ * the Learner stands in — and a fragment that only matches in one of them is
+ * a link that silently does nothing.
+ */
+function stageAnchor(stage: number): string {
+  return `stage-${stage}`
+}
+
+/**
  * One Stage, in two arrangements.
  *
  * From `sm` it is the card DESIGN.md draws: mark and status on the first line,
@@ -187,12 +217,18 @@ function StageCard({
   detail,
   status,
   state,
+  href,
+  label,
 }: {
   number: number
   name: string
   detail: string
   status: string
   state: StageState
+  /** The Stage's block in the contents below, on this same page. */
+  href: string
+  /** What the card is called when it is spoken rather than seen. */
+  label: string
 }) {
   // Three ways at once — the fill is the colour, the ring and its half-fill are
   // the shape, and `status` beside it is the word. This platform teaches that
@@ -206,10 +242,30 @@ function StageCard({
         : 'shadow-[inset_0_0_0_2px_var(--blue-grey)]'
 
   return (
-    <div
+    /*
+      The whole card is the way into its Stage's block in the contents below.
+      A card and not a word inside it: the strip is three peers and the target
+      is the Stage, so the object that names the Stage is the object that goes
+      to it — and on a phone, where the three are rows in one card, a link
+      confined to the name would be a 44px row with a 22px target in it.
+
+      `press` because this is a control the Answering Control Rule reaches by
+      opt-in and not by shape: an `<a>` may be a pill, a card, or three words
+      in a sentence, and only the author knows which. Without it a card that
+      is plainly pressable answers a press with nothing, which is ERR-216's
+      defect on the page whose fourth Competency teaches it.
+
+      No `aria-current` on the Stage the Learner stands in, and no treatment
+      picking it out: the strip says each Stage's own state in three channels
+      already, and a current card would be the sequence the No False Current
+      Rule refuses. Which Stage is current is the progress bar's sentence.
+    */
+    <Link
+      href={href}
+      aria-label={label}
       data-stage={number}
       data-stage-state={state}
-      className="grid grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-x-3.5 text-ink sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-[14px] sm:rounded-card sm:bg-surface sm:p-[26px] sm:shadow-card"
+      className="press group grid grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-x-3.5 text-ink sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-[14px] sm:rounded-card sm:bg-surface sm:p-[26px] sm:shadow-card"
     >
       <span
         aria-hidden
@@ -220,13 +276,21 @@ function StageCard({
       <span className="col-start-3 row-start-1 justify-self-end text-label font-bold sm:col-start-2">
         {status}
       </span>
-      <h3 className="col-start-2 row-start-1 min-w-0 text-title font-bold text-ink sm:col-span-2 sm:col-start-1 sm:row-start-2 sm:mt-[14px]">
+      {/* The arrow is the page's own way of drawing a way in — the same one
+          each Competency row's link wears — and it is what stops a card that
+          navigates from looking like the read-only summary it used to be.
+          `aria-hidden`, because the destination is already in the card's
+          spoken name and a repeated glyph is noise there. */}
+      <h3 className="col-start-2 row-start-1 min-w-0 text-title font-bold text-ink underline-offset-4 group-hover:underline sm:col-span-2 sm:col-start-1 sm:row-start-2 sm:mt-[14px]">
         {name}
+        <span aria-hidden className="text-oxblood">
+          &nbsp;→
+        </span>
       </h3>
       <p className="col-span-2 col-start-2 row-start-2 mt-1 text-body-sm text-ink-2 sm:col-span-2 sm:col-start-1 sm:row-start-3">
         {detail}
       </p>
-    </div>
+    </Link>
   )
 }
 
@@ -294,6 +358,23 @@ export default async function Learn({
               style={{ width: `${percent}%` }}
             />
           </div>
+          {/* The bar names a Stage and counts it; this is the way to it. The
+              sentence above is the only place on the page that says which
+              Stage the Learner stands in, so it is the only place a way there
+              can hang without inventing a current one among peers.
+
+              A link and not a pill: the Row Action Exception permits the one
+              repeated button per row and forbids a second, differently
+              weighted one beside it, and the four `퀴즈 열기` pills below are
+              that one. Oxblood at the label step with a trailing arrow is what
+              this page already makes its non-pill ways in out of. */}
+          <Link
+            href={`#${stageAnchor(current.stage)}`}
+            className="mt-1 inline-flex min-h-11 items-center text-label font-bold text-oxblood underline-offset-4 hover:underline"
+          >
+            {copy.goToCurrentStage}
+            <span aria-hidden>&nbsp;→</span>
+          </Link>
         </div>
       </header>
 
@@ -316,6 +397,8 @@ export default async function Learn({
                 detail={copy.stages[index].detail}
                 status={copy.stageState[state]}
                 state={state}
+                href={`#${stageAnchor(entry.stage)}`}
+                label={copy.goToStage(entry.stage)}
               />
             )
           })}
@@ -342,7 +425,18 @@ export default async function Learn({
 
           return (
           <div key={entry.stage} className="mt-[26px] first:mt-[14px]">
-            <h3 className="px-1.5 font-serif text-headline font-bold text-ink">
+            {/* The landing point for the Stage's card and for the progress
+                bar's way here. `scroll-mt` clears the board and bed insets the
+                fragment jump knows nothing about, so the heading arrives below
+                the frosted edge rather than flush against it; `tabIndex={-1}`
+                is what carries the keyboard and the screen reader to the same
+                place the scroll took the eye, since a heading is not focusable
+                on its own and the browser would otherwise move focus nowhere. */}
+            <h3
+              id={stageAnchor(entry.stage)}
+              tabIndex={-1}
+              className="scroll-mt-[26px] px-1.5 font-serif text-headline font-bold text-ink"
+            >
               {copy.stageHeading(entry.stage)}
             </h3>
 
