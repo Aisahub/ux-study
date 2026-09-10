@@ -70,7 +70,7 @@ options:
         Nothing on the screen then needs explaining, because nothing on it is
         written in a word from outside the reader's vocabulary.
   ko:
-    - text: 뜻풀이를 지우고, 이 상황에서 무슨 뜻인지 — 남은 64만 원은 쓸 수 있다는 것과 언제 풀리는지 — 를 적습니다
+    - text: 뜻풀이를 지우고, 이 상황에서 무슨 뜻인지(남은 64만 원은 쓸 수 있다는 것과 언제 풀리는지)를 적습니다
       reason: >-
         독자는 어떤 말을 언제나 자기 상황 안에서 만나고, 그 상황이야말로 이
         화면에 들어온 이유입니다.

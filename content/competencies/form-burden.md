@@ -22,7 +22,7 @@ roleHint:
       no remembered format, no test data on the clipboard — and count what you
       had to leave the page to find out.
     ko: >-
-      직접 만든 폼을 만든 사람의 지식 없이 채워 보세요 — 외우고 있는 입력
+      직접 만든 폼을 만든 사람의 지식 없이 채워 보세요. 외우고 있는 입력
       형식도, 클립보드에 담아 둔 테스트 데이터도 쓰지 말고요. 그러고서 답을
       찾으러 화면 밖으로 나가야 했던 횟수를 세어 보세요.
   pm:
@@ -60,7 +60,7 @@ source:
 koTranslationNotice: >-
   원문은 영어로 쓰여 있습니다. 그대로 읽어도 충분하고, 필요하면 브라우저의
   페이지 번역 기능을 켜서 함께 봐도 됩니다. 다만 용어만큼은 이 플랫폼의 원칙
-  용어집에 있는 한국어 이름을 기준으로 삼으세요 — 자동 번역은 같은 용어를 매번
+  용어집에 있는 한국어 이름을 기준으로 삼으세요. 자동 번역은 같은 용어를 매번
   다르게 옮깁니다.
 explanation: ''
 ---

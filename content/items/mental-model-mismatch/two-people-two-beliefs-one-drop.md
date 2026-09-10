@@ -85,7 +85,7 @@ options:
         Everybody is told the rule once, before the first drop rather than
         after it.
   ko:
-    - text: 놓는 순간 화면에서 무슨 일이 일어났는지 말해 줍니다 — 여기서 빠져 재무로 옮겨졌다고
+    - text: 놓는 순간 화면에서 무슨 일이 일어났는지, 곧 여기서 빠져 재무로 옮겨졌다는 것을 말해 줍니다
       reason: >-
         미리 골라 둔 어떤 문구도 두 사람 모두에게 맞을 수 없고, 그 순간 두 사람
         모두 화면을 보고 있습니다.

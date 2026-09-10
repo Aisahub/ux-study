@@ -15,7 +15,7 @@ roleHint:
       Open two screens you built months apart and compare — does the same
       action carry the same name and the same style in both?
     ko: >-
-      몇 달 간격으로 만든 두 화면을 열어 비교해 보세요 — 같은 동작이 두 곳에서
+      몇 달 간격으로 만든 두 화면을 열어 비교해 보세요. 같은 동작이 두 곳에서
       같은 이름, 같은 모양인가요?
   pm:
     en: >-
@@ -52,7 +52,7 @@ source:
 koTranslationNotice: >-
   원문은 영어로 쓰여 있습니다. 그대로 읽어도 충분하고, 필요하면 브라우저의
   페이지 번역 기능을 켜서 함께 봐도 됩니다. 다만 용어만큼은 이 플랫폼의 원칙
-  용어집에 있는 한국어 이름을 기준으로 삼으세요 — 자동 번역은 같은 용어를 매번
+  용어집에 있는 한국어 이름을 기준으로 삼으세요. 자동 번역은 같은 용어를 매번
   다르게 옮깁니다.
 explanation: ''
 ---

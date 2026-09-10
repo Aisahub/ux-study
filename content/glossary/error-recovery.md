@@ -9,9 +9,9 @@ definition:
     about it. A message that only reports the problem leaves the user exactly
     where they were stuck, now with a red border.
   ko: >-
-    오류 메시지의 두 번째 임무. 무엇이 잘못됐는지 짚은 다음, 그래서 어떻게 하면
-    되는지까지 말해 주는 것. 문제만 알려 주는 메시지는 사용자를 막혔던 그 자리에
-    그대로 세워 둔다 — 이제 빨간 테두리까지 두른 채로.
+    오류 메시지의 두 번째 임무. 무엇이 잘못됐는지 짚은 다음, 그래서 어떻게
+    하면 되는지까지 말해 주는 것. 문제만 알려 주는 메시지는 사용자를 막혔던 그
+    자리에, 이제 빨간 테두리까지 두른 채로 그대로 세워 둔다.
 justification:
   en: >-
     [Message] says what is wrong but not what to do next, so the user can only

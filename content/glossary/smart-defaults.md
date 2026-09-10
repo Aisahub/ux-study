@@ -10,7 +10,7 @@ definition:
     Asking for something the product already knows is work the user is doing on
     the product's behalf.
   ko: >-
-    시스템이 스스로 알아낼 수 있는 값은 폼이 처음부터 채워진 채로 나오는 것 —
+    시스템이 스스로 알아낼 수 있는 값은 폼이 처음부터 채워진 채로 나오는 것.
     오늘 날짜, 사용자가 있는 나라, 지난번에 저장해 둔 주소 같은 것. 이미 알고
     있는 것을 다시 묻는다면, 그 일은 사용자가 제품 대신 해 주는 셈이다.
 justification:

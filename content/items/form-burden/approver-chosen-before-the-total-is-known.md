@@ -150,7 +150,7 @@ options:
         Anyone raising a large request meets the right name first, instead of
         scrolling past a dozen team leads to reach it.
   ko:
-    - text: 결재자를 품목 아래에서 묻고, 합계에서 채워 넣습니다 — 기본값은 맞게, 바꿀 수는 있게
+    - text: 결재자를 품목 아래에서 묻고, 합계에서 채워 넣습니다. 기본값은 맞되 바꿀 수는 있게 합니다
       reason: >-
         답을 알 수 있게 되는 첫 순간에 질문이 놓이고, 대부분의 사람은 그 질문에
         아예 답하지 않아도 됩니다.

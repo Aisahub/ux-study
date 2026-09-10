@@ -9,9 +9,9 @@ definition:
     field, while they are still in it — rather than collecting every problem
     into a list at the top after they submit.
   ko: >-
-    사용자가 아직 손을 댈 수 있는 자리에서 필드를 검사하는 것 — 제출한 뒤 위쪽에
-    문제 목록을 모아 보여 주는 대신, 그 필드 옆에서 사용자가 그 필드에 머물러
-    있는 동안 알려 준다.
+    사용자가 아직 손을 댈 수 있는 자리에서 필드를 검사하는 것. 제출한 뒤
+    위쪽에 문제 목록을 모아 보여 주는 대신, 그 필드 옆에서 사용자가 그 필드에
+    머물러 있는 동안 알려 준다.
 justification:
   en: >-
     [Field] only reports its problem after submit, at the top of the page, so

@@ -72,7 +72,7 @@ options:
         One definition written once then serves every page in the product that
         uses the term.
   ko:
-    - text: 상태를 구매자의 말로 적습니다 — 물건이 실려 비행기에 실릴 예약까지 끝났다는 뜻으로
+    - text: 물건이 실려 비행기에 실릴 예약까지 끝났다는 뜻으로, 상태를 구매자의 말로 적습니다
       reason: >-
         구매자가 지금 정하려는 것은 더 기다릴지 말지이고, 이 상태가 알려 주는
         것이 바로 그것입니다.

@@ -16,8 +16,8 @@ roleHint:
       Look at the small print in screens you built — error messages, table
       captions, form help text.
     ko: >-
-      직접 만든 화면의 작은 글씨 — 오류 메시지, 표 설명, 입력 도움말 — 을
-      살펴보세요.
+      직접 만든 화면의 작은 글씨, 그러니까 오류 메시지나 표 설명, 입력
+      도움말을 살펴보세요.
   pm:
     en: >-
       Reread the longest paragraph you approved and ask what a reader in a
@@ -30,20 +30,20 @@ preReadingQuestions:
       The article separates legibility, readability, and comprehension. Where
       does each one fail — at the letters, at the sentences, or at the meaning?
     ko: >-
-      이 글은 판독성, 가독성, 이해도를 구분한다. 각각은 어디에서 무너지는가 —
-      글자에서인가, 문장에서인가, 의미에서인가?
+      이 글은 판독성, 가독성, 이해도를 구분한다. 각각은 어디에서
+      무너지는가? 글자에서인가, 문장에서인가, 의미에서인가?
   - en: >-
       Why is passing one of the three levels not enough — what does each later
       level demand that the earlier one cannot supply?
     ko: >-
-      세 단계 중 하나를 통과하는 것으로는 왜 부족한가 — 뒤의 단계는 앞의 단계가
-      채워 줄 수 없는 무엇을 더 요구하는가?
+      세 단계 중 하나를 통과하는 것으로는 왜 부족한가? 뒤의 단계는 앞의
+      단계가 채워 줄 수 없는 무엇을 더 요구하는가?
   - en: >-
       What does the article say about matching text to its audience — how should
       writing for the general public differ from writing for specialists?
     ko: >-
-      이 글은 텍스트를 독자에 맞추는 일에 대해 무엇을 말하는가 — 일반 대중을
-      위한 글은 전문가를 위한 글과 어떻게 달라야 하는가?
+      이 글은 텍스트를 독자에게 맞추는 일을 두고 무엇을 말하는가? 일반
+      대중을 위한 글은 전문가를 위한 글과 어떻게 달라야 하는가?
 source:
   url: https://www.nngroup.com/articles/legibility-readability-comprehension/
   attribution: >-
@@ -52,7 +52,7 @@ source:
 koTranslationNotice: >-
   원문은 영어로 쓰여 있습니다. 그대로 읽어도 충분하고, 필요하면 브라우저의
   페이지 번역 기능을 켜서 함께 봐도 됩니다. 다만 용어만큼은 이 플랫폼의 원칙
-  용어집에 있는 한국어 이름을 기준으로 삼으세요 — 자동 번역은 같은 용어를 매번
+  용어집에 있는 한국어 이름을 기준으로 삼으세요. 자동 번역은 같은 용어를 매번
   다르게 옮깁니다.
 explanation: ''
 ---

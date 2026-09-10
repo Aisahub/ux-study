@@ -104,7 +104,7 @@ options:
         A qualitative study's evidence is what people said and did, and the
         board hears it in the participants' own words.
   ko:
-    - text: 사람 수로 적습니다 — 다섯 중 넷, 다섯 중 둘 — 그리고 평균 시간은 뺍니다
+    - text: 사람 수(다섯 중 넷, 다섯 중 둘)로 적고, 평균 시간은 뺍니다
       reason: >-
         백분율은 다섯 번의 세션을 전체에 대한 측정처럼 읽게 만들고, 이만큼 벌어진
         다섯 개의 평균은 아무것도 재지 못합니다.
