@@ -42,7 +42,7 @@ const COPY: Record<
   ko: {
     heading: '학습자',
     explanation:
-      '모두가 어디쯤 있고, 마지막 활동이 얼마나 지났는지입니다 — 멈춘 동료를 조용히 사라지기 전에 알아차리기 위한 화면입니다. 순위는 어디에도 없습니다.',
+      '모두가 어디쯤 있고, 마지막 활동이 얼마나 지났는지입니다. 멈춘 동료를 조용히 사라지기 전에 알아차리기 위한 화면입니다. 순위는 어디에도 없습니다.',
     position: (passed, total) => `퀴즈 ${total}개 중 ${passed}개 통과`,
     reportSubmitted: '보고서 제출',
     lastActivity: '마지막 활동',

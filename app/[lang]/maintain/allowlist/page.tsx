@@ -21,6 +21,13 @@ const COPY: Record<
     pattern: string
     maintainer: string
     addedBy: string
+    /**
+     * Who added an entry, when nobody is recorded — the seeded rows and
+     * anything inserted straight into the table. It is a word rather than a
+     * dash: this platform says a state in words everywhere else, and a Korean
+     * screen does not spend a 줄표 on "no value".
+     */
+    addedByUnknown: string
     addedOn: string
     add: string
     adding: string
@@ -41,6 +48,7 @@ const COPY: Record<
     pattern: 'Address or wildcard',
     maintainer: 'Maintainer',
     addedBy: 'added by',
+    addedByUnknown: 'unknown',
     addedOn: 'on',
     add: 'Add',
     adding: 'Adding…',
@@ -63,13 +71,14 @@ const COPY: Record<
     pattern: '주소 또는 와일드카드',
     maintainer: '운영자',
     addedBy: '추가한 사람',
+    addedByUnknown: '알 수 없음',
     addedOn: '일시',
     add: '추가',
     adding: '추가하는 중…',
     remove: '삭제',
     removing: '삭제하는 중…',
     removeEntry: (pattern) => `${pattern} 삭제`,
-    admitsYou: '본인을 들여보내는 항목 — 삭제하면 다시 들어올 수 없습니다',
+    admitsYou: '본인을 들여보내는 항목입니다. 삭제하면 다시 들어올 수 없습니다',
     addPlaceholder: 'colleague@example.com',
     nobodyYet: '아직 항목이 없습니다. 하나라도 추가되기 전에는 아무도 로그인할 수 없습니다.',
   },
@@ -208,7 +217,7 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
                   )}
 
                   <p className="col-start-1 mt-1 text-body-sm text-ink-2">
-                    {copy.addedBy} {entry.addedBy ?? '—'} · {copy.addedOn}{' '}
+                    {copy.addedBy} {entry.addedBy ?? copy.addedByUnknown} · {copy.addedOn}{' '}
                     {entry.createdAt.toISOString().slice(0, 10)}
                   </p>
                 </li>

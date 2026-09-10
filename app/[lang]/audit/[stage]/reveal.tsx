@@ -80,7 +80,7 @@ export const COPY: Record<
   ko: {
     heading: (stage) => `${stage}단계 자가 점검 리포트`,
     intro:
-      '심어둔 결함 전부와, 내 발견이 그중 무엇을 가리켰는지입니다. 몇 개를 놓치는 건 정상입니다 — 중요한 건 들여다보는 일이었습니다.',
+      '심어둔 결함 전부와, 내 발견이 그중 무엇을 가리켰는지입니다. 몇 개를 놓치는 건 정상입니다. 중요한 건 들여다보는 일이었습니다.',
     panels: '이 리포트',
     planted: '심어 둔 것들',
     yours: '나의 발견',
@@ -94,7 +94,7 @@ export const COPY: Record<
     issueHeading: '선택: 고친 것을 보여 주기',
     issueSave: '링크 저장',
     issueSaved: '저장되었습니다.',
-    complete: (stage) => `${stage}단계 수료 — 퀴즈 전부 통과, 보고서 제출 완료.`,
+    complete: (stage) => `${stage}단계 수료 · 퀴즈 전부 통과, 보고서 제출 완료.`,
     // 화면, not 단계: the subject calls these 단계, but on this page 단계 is
     // already the Stage — `2단계 수료` sits a few lines below — and one word
     // cannot mean both in one view.

@@ -253,7 +253,13 @@ test('being watched is stated before any first attempt, in both languages (#30)'
   expect(en).toContain('maintainer can see your progress')
   expect(en).toContain('how long since your last activity')
   expect(en).toContain('how many attempts')
-  expect(ko).toContain('운영자는 학습자의 진행 상황을 볼 수 있습니다')
+  // The three facts, the way the English half is checked, rather than one
+  // sentence quoted whole: the Korean was reworded when the 줄표 came out of
+  // screen copy, and an assertion on the sentence went red for a page that
+  // still said everything it had to.
+  expect(ko).toContain('어느 단계까지 수료했는지')
+  expect(ko).toContain('마지막 활동이 얼마나 지났는지')
+  expect(ko).toContain('몇 번 시도했는지')
 })
 
 test('both languages present the same Competency set', async () => {
