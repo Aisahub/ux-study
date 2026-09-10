@@ -185,7 +185,14 @@ test('the programme is one task panel per Competency, in Stage order', async () 
   }
 })
 
-test('a row carries the objective\'s first sentence, and the Competency page carries all of it', async () => {
+/**
+ * Two requests and no more. The other half of this — that the Competency page
+ * still carries the whole objective — is asserted where that page is already
+ * being fetched, in "every declared Competency has a page in both languages"
+ * below. Fetching all twelve of them a second time here cost 48 requests and
+ * timed out at 30s in CI, on a test whose subject is one page.
+ */
+test('a row carries the objective\'s first sentence and not the boundary note', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 
   for (const lang of ['en', 'ko'] as const) {
@@ -207,11 +214,6 @@ test('a row carries the objective\'s first sentence, and the Competency page car
         const tail = objective.slice(end).trim()
         expect(overview, `${lang}/${slug} tail`).not.toContain(tail)
       }
-
-      const page = visibleText(
-        await (await fetch(`${BASE_URL}/${lang}/learn/${slug}`, { headers: { cookie } })).text(),
-      )
-      expect(page, `${lang}/${slug} full objective`).toContain(objective)
     }
   }
 })
@@ -418,7 +420,10 @@ test("every declared Competency has a page in both languages, carrying that lang
       // page that renders in `ko` while showing English copy passes a status
       // check and fails the Learner.
       expect(text, `${lang}/${slug} name`).toContain(competency.name[lang])
-      expect(text, `${lang}/${slug} objective`).toContain(competency.objective[lang].slice(0, 24))
+      // The whole objective, not its opening: the Learn overview shows the
+      // first sentence only, and this is the page the rest of it is one click
+      // away on. A prefix match would pass on a page that cut it here too.
+      expect(text, `${lang}/${slug} objective`).toContain(competency.objective[lang])
     }
   }
 })
