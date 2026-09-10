@@ -71,6 +71,24 @@ test that cannot go red.
 Corrected in passing, inside a sentence being re-cut anyway:
 `누를 컨트롤를` → `누를 컨트롤을`.
 
+**Read by a Korean reader before merge, and three of the five connectives came
+back.** The grammar was sound in all five, and the fault was one an LLM writing
+Korean makes and does not hear:
+
+- `읽는 것은 … 그 인원이다` / `찾는 자리는 … 명단이다` took the English
+  pseudo-cleft a phrase at a time, and the copula then welded a thing to a
+  person and a place to a list. The em-dash had held the same items loosely, as
+  apposition, which hid the clash. Replaced by predicates the author's own voice
+  uses — `… 그 인원을 읽는다. … 명단을 찾아낸다.` The English had the same
+  stiffness and became `The plan says three things: … Look for …`.
+- `그런 일이란 … 컨트롤이다` turned a list of examples into a closed definition
+  and equated work with a value. Now `그런 일을 만드는 것은 … 컨트롤이다`.
+- `어긋나는 지점은` repeated the previous sentence's whole modifier. Now `그 지점은`.
+
+`그런 말이란 … 약어다` was left exactly as written: there the copula defines
+rather than equates, and the reviewer's instruction was to ship the author's
+shape rather than an improvement on it.
+
 ## Prevention
 
 **When the measurement that named a defect does not move, the fix addressed a
