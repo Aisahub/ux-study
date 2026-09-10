@@ -91,7 +91,7 @@ const COPY: Record<
     article: 'the article',
   },
   ko: {
-    pageTitle: (name) => `퀴즈 — ${name}`,
+    pageTitle: (name) => `${name} 퀴즈`,
     verdictPassed: '통과',
     verdictFailed: '미통과',
     score: (score, of) => `${of}문항 중 ${score}문항 정답.`,
@@ -99,10 +99,10 @@ const COPY: Record<
     reviewNote: (missed, of) =>
       missed === 0
         ? `${of}문항 모두 아래에 정답과 그 근거가 있습니다.`
-        : `${missed}문항은 틀렸습니다 — ${of}문항 모두 아래에 정답과 그 근거가 있습니다.`,
+        : `${missed}문항은 틀렸습니다. ${of}문항 모두 아래에 정답과 그 근거가 있습니다.`,
     summaryHeading: '핵심 요약',
     failedExplanation:
-      '아래는 틀린 문항과, 기사에서 그 내용을 다루는 위치입니다. 정답은 공개하지 않습니다 — 다시 읽고, 새로 뽑힌 문항으로 도전하세요.',
+      '아래는 틀린 문항과, 기사에서 그 내용을 다루는 위치입니다. 정답은 공개하지 않습니다. 다시 읽고, 새로 뽑힌 문항으로 도전하세요.',
     reviewHeading: '문항별 정답과 해설',
     wrongHeading: '다시 볼 문항',
     itemCorrect: '맞힘',

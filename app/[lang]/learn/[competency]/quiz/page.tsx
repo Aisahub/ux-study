@@ -60,12 +60,12 @@ const COPY: Record<
     back: 'Back to the Competency',
   },
   ko: {
-    heading: (name) => `퀴즈 — ${name}`,
+    heading: (name) => `${name} 퀴즈`,
     rules: (draw, threshold) =>
       `이 역량의 문항 풀에서 ${draw}문항이 무작위로 나옵니다. ${threshold}문항을 맞히면 통과합니다. 제출하는 순간 결과가 바로 보이고, 필요한 만큼 곧바로 다시 도전할 수 있습니다.`,
     notReady: '이 역량에는 아직 퀴즈가 없습니다.',
     notReadyWhy:
-      '문항을 아직 작성하는 중입니다. 잘못된 것도, 사라진 것도 없습니다 — 기사를 읽고 메모를 남겨 두세요. 문항이 준비되면 여기에 나타납니다.',
+      '문항을 아직 작성하는 중입니다. 잘못된 것도, 사라진 것도 없습니다. 기사를 읽고 메모를 남겨 두세요. 문항이 준비되면 여기에 나타납니다.',
     start: '시작',
     continueOpen: '진행 중인 시도 이어서 하기',
     retry: '다시 도전',
@@ -73,7 +73,7 @@ const COPY: Record<
     restart: '새 문항으로 다시 시작',
     restartNote: '진행 중인 시도는 아직 채점되지 않았으므로, 다시 시작해도 잃는 것은 없습니다.',
     history: '시도 기록',
-    submittedOn: (date, score, draw) => `${date} — ${draw}문항 중 ${score}문항`,
+    submittedOn: (date, score, draw) => `${date} · ${draw}문항 중 ${score}문항`,
     passed: '통과',
     failed: '미통과',
     open: '진행 중',

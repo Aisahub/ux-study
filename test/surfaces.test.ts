@@ -420,7 +420,7 @@ test('the Remove control is not offered on the row that would refuse it, and the
   expect(html).toContain('aria-label="Remove @aisahub.com"')
 
   const ko = await (await fetch(`${BASE_URL}/ko/maintain/allowlist`, { headers: { cookie } })).text()
-  expect(visibleText(ko)).toContain('본인을 들여보내는 항목 — 삭제하면 다시 들어올 수 없습니다')
+  expect(visibleText(ko)).toContain('본인을 들여보내는 항목입니다. 삭제하면 다시 들어올 수 없습니다')
 })
 
 test('the guard keys on the entry that admits, not on the address it spells', async () => {

@@ -140,3 +140,27 @@ A Principle's justification sentence is said out loud with a `[slot]` filled in,
 so no slot may be followed by a particle that agrees with the word filling it
 (을/를, 은/는, 이/가, 와/과, 으로/로). Put a fixed noun after the slot, or let
 the clause end on a copula. The content build refuses the rest. See ERR-214.
+
+### Punctuation on a Korean screen
+
+Korean screen copy uses neither **줄표** (`—`) nor **낫표** (`「」` `『』`).
+
+The 줄표 is in the 문장 부호 규정 and is not a mistake in Korean; it is ruled
+out here because of what it was being used *for*. Nearly every one on these
+screens hung a second complete sentence off the end of a first, which is an
+English writing habit — Korean writes that as two sentences, and the dash was
+carrying nothing the full stop does not.
+
+Two shapes it also carried, and what replaces each:
+
+- **A list, not a sentence.** Put the list inside the sentence as its object
+  (`운영자는 학습자가 …를 볼 수 있습니다`), or give it a sentence that names what
+  it is a list of (`… 같은 것입니다`). Do not simply full-stop it and reach for a
+  copula: `A는 B이다` equates where the dash exemplified, and ERR-226 is what
+  that cost.
+- **A separator between a row's facts.** The screens already use the
+  가운뎃점 (`·`) for that — `시작 전 · 0회 시도` — and a new one should too.
+
+A 줄표 standing in for an absent value (`추가한 사람 —`) is a third thing and is
+not punctuation at all: say it in words, as every other state on this platform
+is said. See ERR-228.

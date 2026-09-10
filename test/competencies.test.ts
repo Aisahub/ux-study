@@ -198,6 +198,41 @@ function koreanContentStrings(): [string, string][] {
   return out
 }
 
+/**
+ * Marks a Korean screen does not use here.
+ *
+ * The 줄표 is the one that had spread: 23 places in the chrome and 182 in the
+ * content, nearly all of them an English writing habit carried across — a
+ * complete sentence hung off the end of another one. Korean writes that as two
+ * sentences, and where the dash introduced a list rather than a sentence, the
+ * list belongs inside the sentence as its object.
+ *
+ * The 낫표 pair never appeared and is listed so it cannot start.
+ */
+const BANNED_MARKS = ['—', '「', '」', '『', '』']
+
+test('Korean screen copy uses neither 줄표 nor 낫표', () => {
+  const found: string[] = []
+
+  // The chrome — the `ko` records the screens are written in — is clear of all
+  // of these. The authored content still carries 줄표 and is the next tranche;
+  // until it lands only the 낫표 pair is held there, which it has always met.
+  for (const path of sources(join(__dirname, '..', 'app'))) {
+    for (const text of koreanCopy(readFileSync(path, 'utf8'))) {
+      for (const mark of BANNED_MARKS) {
+        if (text.includes(mark)) found.push(`${path}: ${mark} in ${text.slice(0, 40)}…`)
+      }
+    }
+  }
+  for (const [where, text] of koreanContentStrings()) {
+    for (const mark of ['「', '」', '『', '』']) {
+      if (text.includes(mark)) found.push(`${where}: ${mark} in ${text.slice(0, 40)}…`)
+    }
+  }
+
+  expect(found).toEqual([])
+})
+
 test('a borrowed noun takes the particle its final consonant calls for', () => {
   const wrong: string[] = []
 

@@ -59,7 +59,7 @@ const COPY: Record<
     roleHint: '어디에 적용해 볼까',
     roles: { developer: '개발자라면', pm: 'PM이라면' },
     questionsHeading: '이 질문들을 들고 기사를 읽으세요',
-    questionsExplanation: '훑어보는 대신 가설을 세우고 읽습니다 — 기사가 답하기 전에 스스로 예상해 보세요.',
+    questionsExplanation: '훑어보는 대신 가설을 세우고 읽습니다. 기사가 답하기 전에 스스로 예상해 보세요.',
     articleTitle: '원문 기사',
     article: '원문 기사 읽기',
     quizPassed: '퀴즈 통과',
@@ -73,7 +73,7 @@ const COPY: Record<
     specimenBody:
       '1단계 연습 페이지를 두고 저희가 써 둔 리포트입니다. 말이 되는 발견도 있고 그렇지 않은 것도 섞여 있습니다. 남이 한 점검을 판단하는 것이 이 역량이 말하는 능력이고, 여기서 그 연습을 해 볼 수 있습니다. 평가하지 않고, 기록도 남지 않습니다.',
     specimenLink: '리포트 읽기',
-    passedBody: '원하는 때에 다시 도전할 수 있습니다 — 모든 시도가 남고, 어느 것도 다른 것을 지우지 않습니다.',
+    passedBody: '원하는 때에 다시 도전할 수 있습니다. 모든 시도가 남고, 어느 것도 다른 것을 지우지 않습니다.',
   },
 }
 
