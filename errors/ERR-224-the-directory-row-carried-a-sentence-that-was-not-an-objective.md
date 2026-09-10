@@ -62,10 +62,13 @@ belongs to the claim; `testing-with-real-users` spends its two on a
 mid-sentence aside, and cutting there would leave `계획을 읽고` — an
 incomplete clause. A rule the content does not uniformly support is not a rule.
 
-**This does not close the finding.** Two objectives are single sentences of
-`214자` and `243자`, and the longest sentence on the board is unchanged at 59
-units against a threshold of 40. What is left is content — rewriting an
-objective in two languages — and is not a change the renderer can make.
+**This did not close the finding**, and [ERR-226] is the other half. Two
+objectives were single sentences of `214자` and `243자`, so the longest sentence
+on the board was unchanged at 59 units against a threshold of 40 — a rule that
+cuts at a sentence end can only choose between sentences that exist. Four
+objectives were re-cut so the claim is one sentence and its examples the next,
+and the row then shortened through this same mechanism: `70–243자` → `51–122자`
+in Korean, longest sentence 59 → 36.
 
 ## Prevention
 
