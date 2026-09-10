@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 
@@ -52,6 +53,15 @@ const COPY: Record<
  * (ADR-0005, amended). Splitting the shelves by Stage does not change that —
  * a count is still per Finding, and nothing is summed down a column.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
+}
+
 export default async function Findings({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   if (!isLanguage(lang)) notFound()

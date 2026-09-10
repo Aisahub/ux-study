@@ -76,7 +76,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params
   return {
-    title: 'ux-study',
+    /*
+      Every surface said "ux-study" and nothing else, so a Learner with the
+      Learn board, a Gate Quiz and their notes open read three identical tabs
+      and had to click to find out which was which — and every bookmark and
+      history entry came out under the same name. The template is what lets a
+      page contribute its own name without each of them repeating the
+      platform's; `default` is what a page that has not named itself falls back
+      to, which is the two routes that only ever redirect.
+    */
+    title: { template: '%s · ux-study', default: 'ux-study' },
     description: isLanguage(lang) ? DESCRIPTION[lang] : DESCRIPTION.en,
   }
 }

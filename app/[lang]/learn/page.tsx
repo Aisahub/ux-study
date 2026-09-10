@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -193,6 +194,28 @@ function stageAnchor(stage: number): string {
 }
 
 /**
+ * The line a row shows: the objective's first sentence, and nothing after it.
+ *
+ * Six of the twelve objectives end in a sentence that draws a boundary rather
+ * than naming an action — where this Competency stops and the neighbouring one
+ * takes over ("무언가 잘못됐을 때 인터페이스가 하는 말은 오류 처리의 몫이다"). That
+ * sentence earns its place on the Competency page, where the Learner has
+ * already chosen and is asking what they are in for. It does not earn a place
+ * in a directory, whose whole job is comparing thirteen peers: it made the
+ * rows three and a half times one another's length, on the board that lists
+ * Readability as a Competency.
+ *
+ * The objective field is the same one the Competency page prints whole under
+ * "마치고 나면 할 수 있는 것", so nothing is lost by cutting here — the rest of it
+ * is one click away, under a heading that says what it is. An objective with
+ * no sentence end inside it is returned untouched rather than cut mid-clause.
+ */
+function directoryLine(objective: string): string {
+  const end = objective.search(/(?<=[.。])\s/)
+  return end === -1 ? objective : objective.slice(0, end)
+}
+
+/**
  * One Stage, in two arrangements.
  *
  * From `sm` it is the card DESIGN.md draws: mark and status on the first line,
@@ -299,6 +322,15 @@ function StageCard({
  * with Stage 1 expanded. Its Competencies are independent entry points rather
  * than a sequence; everything shown comes from this Learner's own records.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
+}
+
 export default async function Learn({
   params,
 }: {
@@ -478,7 +510,7 @@ export default async function Learn({
                         </Link>
                       </h3>
                       <p className="mt-1 max-w-measure text-body-sm text-ink-2">
-                        {competency.objective[lang]}
+                        {directoryLine(competency.objective[lang])}
                       </p>
                     </div>
 

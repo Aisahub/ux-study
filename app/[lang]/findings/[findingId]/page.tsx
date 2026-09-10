@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
 import { notFound, redirect } from 'next/navigation'
@@ -13,6 +14,13 @@ export const dynamic = 'force-dynamic'
 const COPY: Record<
   Language,
   {
+    /**
+     * The tab's name. The Finding's own words are not in it on purpose: this
+     * route is readable only to a Learner whose Stage has been reached, and a
+     * title is written before that gate has been asked — so what a tab, a
+     * bookmark or a history entry says here must be true of every Finding.
+     */
+    pageTitle: string
     by: string
     principle: string
     description: string
@@ -26,6 +34,7 @@ const COPY: Record<
   }
 > = {
   en: {
+    pageTitle: 'Finding',
     by: 'by',
     principle: 'UX Principle',
     description: 'What goes wrong',
@@ -38,6 +47,7 @@ const COPY: Record<
     back: 'All Findings',
   },
   ko: {
+    pageTitle: '발견',
     by: '작성',
     principle: 'UX 원칙',
     description: '무엇이 잘못되는지',
@@ -49,6 +59,15 @@ const COPY: Record<
     ownFinding: '내가 쓴 발견입니다 — 동의는 동료의 몫입니다.',
     back: '전체 발견',
   },
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].pageTitle }
 }
 
 /**

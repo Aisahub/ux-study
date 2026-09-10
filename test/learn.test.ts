@@ -185,6 +185,39 @@ test('the programme is one task panel per Competency, in Stage order', async () 
   }
 })
 
+/**
+ * Two requests and no more. The other half of this — that the Competency page
+ * still carries the whole objective — is asserted where that page is already
+ * being fetched, in "every declared Competency has a page in both languages"
+ * below. Fetching all twelve of them a second time here cost 48 requests and
+ * timed out at 30s in CI, on a test whose subject is one page.
+ */
+test('a row carries the objective\'s first sentence and not the boundary note', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  for (const lang of ['en', 'ko'] as const) {
+    const overview = visibleText(await (await fetch(`${BASE_URL}/${lang}/learn`, { headers: { cookie } })).text())
+
+    for (const slug of ALL_COMPETENCIES) {
+      const objective = content.competencies.find((entry) => entry.slug === slug)!.objective[lang]
+      const end = objective.search(/(?<=[.。])\s/)
+
+      // The claim itself is on the row in every case — that is what a Learner
+      // chooses on, and it is never the thing that gets cut.
+      const claim = end === -1 ? objective : objective.slice(0, end)
+      expect(overview, `${lang}/${slug} claim`).toContain(claim)
+
+      // What follows it draws a boundary rather than naming an action, and it
+      // belongs to the page a Learner reaches after choosing. An objective
+      // written as one sentence has no tail and is simply shown whole.
+      if (end !== -1) {
+        const tail = objective.slice(end).trim()
+        expect(overview, `${lang}/${slug} tail`).not.toContain(tail)
+      }
+    }
+  }
+})
+
 test('several in-progress Competencies do not invent one current panel', async () => {
   const email = freshLearner()
   for (const competency of STAGE_ONE_COMPETENCIES.slice(0, 2)) {
@@ -387,7 +420,10 @@ test("every declared Competency has a page in both languages, carrying that lang
       // page that renders in `ko` while showing English copy passes a status
       // check and fails the Learner.
       expect(text, `${lang}/${slug} name`).toContain(competency.name[lang])
-      expect(text, `${lang}/${slug} objective`).toContain(competency.objective[lang].slice(0, 24))
+      // The whole objective, not its opening: the Learn overview shows the
+      // first sentence only, and this is the page the rest of it is one click
+      // away on. A prefix match would pass on a page that cut it here too.
+      expect(text, `${lang}/${slug} objective`).toContain(competency.objective[lang])
     }
   }
 })

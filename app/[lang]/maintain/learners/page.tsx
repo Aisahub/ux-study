@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { asc } from 'drizzle-orm'
@@ -65,6 +66,15 @@ const COPY: Record<
  * built to refuse. Inside, 22px separates people and 4px holds one person's
  * three lines together.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
+}
+
 export default async function Learners({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   if (!isLanguage(lang)) notFound()
