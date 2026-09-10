@@ -45,7 +45,7 @@ prompt:
     The button stays inert until Team and Role are filled — that decision is
     made. What should its look do in the meantime?
   ko: >-
-    소속 팀과 직무가 채워질 때까지 버튼은 눌리지 않습니다 — 그 결정은 이미
+    소속 팀과 직무가 채워질 때까지 버튼은 눌리지 않습니다. 그 결정은 이미
     내려졌습니다. 그동안 버튼의 겉모습은 어때야 할까요?
 options:
   en:

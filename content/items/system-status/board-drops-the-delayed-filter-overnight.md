@@ -107,7 +107,7 @@ prompt:
     The board cannot keep a filter past the end of a session — that is settled.
     Which change should it make for the morning?
   ko: >-
-    이 보드는 세션이 끝나면 필터를 유지할 수 없습니다 — 그 점은 이미
+    이 보드는 세션이 끝나면 필터를 유지할 수 없습니다. 그 점은 이미
     정해졌습니다. 그렇다면 아침 화면은 무엇을 바꿔야 할까요?
 options:
   en:

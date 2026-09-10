@@ -21,15 +21,16 @@ roleHint:
       connection — between the click and the result, what is on screen?
     ko: >-
       직접 만든 화면에서 가장 느린 동작을 네트워크 속도를 낮춘 상태로 실행해
-      보세요 — 클릭한 순간부터 결과가 나올 때까지 화면에는 무엇이 있나요?
+      보세요. 클릭한 순간부터 결과가 나올 때까지 화면에는 무엇이 있나요?
   pm:
     en: >-
       In a flow you signed off, start something that takes more than a moment,
       look away for ten seconds, and look back — can you tell whether it
       worked, is still working, or failed?
     ko: >-
-      승인한 플로우에서 시간이 조금 걸리는 작업을 시작한 뒤 10초쯤 눈을 떼었다가
-      다시 보세요 — 성공한 건지, 아직 진행 중인지, 실패한 건지 구분이 되나요?
+      승인한 플로우에서 시간이 조금 걸리는 작업을 시작한 뒤 10초쯤 눈을
+      떼었다가 다시 보세요. 성공한 건지, 아직 진행 중인지, 실패한 건지 구분이
+      되나요?
 preReadingQuestions:
   - en: >-
       The article ties this heuristic to trust rather than to convenience. What
@@ -57,7 +58,7 @@ source:
 koTranslationNotice: >-
   원문은 영어로 쓰여 있습니다. 그대로 읽어도 충분하고, 필요하면 브라우저의
   페이지 번역 기능을 켜서 함께 봐도 됩니다. 다만 용어만큼은 이 플랫폼의 원칙
-  용어집에 있는 한국어 이름을 기준으로 삼으세요 — 자동 번역은 같은 용어를 매번
+  용어집에 있는 한국어 이름을 기준으로 삼으세요. 자동 번역은 같은 용어를 매번
   다르게 옮깁니다.
 explanation: ''
 ---

@@ -17,7 +17,7 @@ roleHint:
       Look at a component you restyled — when you stripped the browser's
       default look, did the "you can click this" look survive?
     ko: >-
-      직접 스타일을 다시 입힌 컴포넌트를 보세요 — 브라우저 기본 모양을 걷어낼
+      직접 스타일을 다시 입힌 컴포넌트를 보세요. 브라우저 기본 모양을 걷어낼
       때 "누를 수 있다"는 신호까지 걷어내지는 않았나요?
   pm:
     en: >-
@@ -53,7 +53,7 @@ source:
 koTranslationNotice: >-
   원문은 영어로 쓰여 있습니다. 그대로 읽어도 충분하고, 필요하면 브라우저의
   페이지 번역 기능을 켜서 함께 봐도 됩니다. 다만 용어만큼은 이 플랫폼의 원칙
-  용어집에 있는 한국어 이름을 기준으로 삼으세요 — 자동 번역은 같은 용어를 매번
+  용어집에 있는 한국어 이름을 기준으로 삼으세요. 자동 번역은 같은 용어를 매번
   다르게 옮깁니다.
 explanation: ''
 ---

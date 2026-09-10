@@ -18,8 +18,8 @@ roleHint:
       it — does the application agree with the browser about what just
       happened?
     ko: >-
-      직접 만든 플로우 한가운데서 브라우저의 뒤로 가기를 눌러 보세요 — 방금 무슨
-      일이 있었는지에 대해 애플리케이션과 브라우저의 생각이 같나요?
+      직접 만든 플로우 한가운데서 브라우저의 뒤로 가기를 눌러 보세요. 방금
+      무슨 일이 있었는지에 대해 애플리케이션과 브라우저의 생각이 같나요?
   pm:
     en: >-
       In a flow you signed off, get three steps in and then decide you have
@@ -54,7 +54,7 @@ source:
 koTranslationNotice: >-
   원문은 영어로 쓰여 있습니다. 그대로 읽어도 충분하고, 필요하면 브라우저의
   페이지 번역 기능을 켜서 함께 봐도 됩니다. 다만 용어만큼은 이 플랫폼의 원칙
-  용어집에 있는 한국어 이름을 기준으로 삼으세요 — 자동 번역은 같은 용어를 매번
+  용어집에 있는 한국어 이름을 기준으로 삼으세요. 자동 번역은 같은 용어를 매번
   다르게 옮깁니다.
 explanation: ''
 ---

@@ -35,9 +35,9 @@ roleHint:
       the result differ is a finding, including the ones where they were
       pleasantly surprised.
     ko: >-
-      제품을 한 번도 본 적 없는 사람에게 화면을 보여 주고, 누르기 전에 무슨 일이
-      일어날지 먼저 말해 달라고 해 보세요. 예상과 결과가 어긋나는 자리는 모두
-      발견입니다 — 기분 좋게 어긋난 자리도 마찬가지입니다.
+      제품을 한 번도 본 적 없는 사람에게 화면을 보여 주고, 누르기 전에 무슨
+      일이 일어날지 먼저 말해 달라고 해 보세요. 예상과 결과가 어긋나는 자리는
+      모두 발견입니다. 기분 좋게 어긋난 자리도 마찬가지입니다.
 preReadingQuestions:
   - en: >-
       A mental model is described as what the user knows, or thinks they know.
@@ -68,7 +68,7 @@ source:
 koTranslationNotice: >-
   원문은 영어로 쓰여 있습니다. 그대로 읽어도 충분하고, 필요하면 브라우저의
   페이지 번역 기능을 켜서 함께 봐도 됩니다. 다만 용어만큼은 이 플랫폼의 원칙
-  용어집에 있는 한국어 이름을 기준으로 삼으세요 — 자동 번역은 같은 용어를 매번
+  용어집에 있는 한국어 이름을 기준으로 삼으세요. 자동 번역은 같은 용어를 매번
   다르게 옮깁니다.
 explanation: ''
 ---

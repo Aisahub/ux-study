@@ -94,7 +94,7 @@ options:
         Nobody's session is wasted, and the report does not blur two kinds of
         person into one set of findings.
   ko:
-    - text: 한 집단씩 두 개의 연구로 보고 그에 맞게 모집합니다 — 아니면 지금은 두 질문 중 하나를 내려놓습니다
+    - text: 한 집단씩 두 개의 연구로 보고 그에 맞게 모집합니다. 아니면 지금은 두 질문 중 하나를 내려놓습니다
       reason: >-
         제품의 서로 다른 쪽을 쓰는 두 집단은 각자의 문제를 가지고 있고, 두 명으로
         대표되는 집단은 사실상 대표되지 않은 것입니다.

@@ -32,9 +32,9 @@ roleHint:
       nothing, and mark every word they stop at — the stops are the findings,
       not the questions they ask you afterwards.
     ko: >-
-      직접 문구를 쓴 페이지를 다른 팀 사람에게 아무 설명 없이 건네고, 그 사람이
-      멈칫하는 단어마다 표시해 보세요 — 발견은 그 사람이 나중에 던지는 물음이
-      아니라 멈칫한 지점 자체입니다.
+      직접 문구를 쓴 페이지를 다른 팀 사람에게 아무 설명 없이 건네고, 그
+      사람이 멈칫하는 단어마다 표시해 보세요. 발견은 그 사람이 나중에 던지는
+      물음이 아니라 멈칫한 지점 자체입니다.
 preReadingQuestions:
   - en: >-
       The article says whether a word counts as jargon is not a property of the
@@ -62,7 +62,7 @@ source:
 koTranslationNotice: >-
   원문은 영어로 쓰여 있습니다. 그대로 읽어도 충분하고, 필요하면 브라우저의
   페이지 번역 기능을 켜서 함께 봐도 됩니다. 다만 용어만큼은 이 플랫폼의 원칙
-  용어집에 있는 한국어 이름을 기준으로 삼으세요 — 자동 번역은 같은 용어를 매번
+  용어집에 있는 한국어 이름을 기준으로 삼으세요. 자동 번역은 같은 용어를 매번
   다르게 옮깁니다.
 explanation: ''
 ---

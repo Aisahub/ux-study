@@ -25,10 +25,10 @@ intro:
     where it works against the person using it, and write down what you find.
     There is no time limit and nothing is watching how long you take.
   ko: >-
-    지금부터 보는 페이지는, 언젠가 동료가 여러분이 만든 페이지를 보게 될
-    방식 그대로 봅니다 — 옆에서 의도를 설명해 줄 작성자 없이요. 페이지를
-    살펴보고, 어디가 사용자를 방해하는지 판단하고, 발견한 것을 기록하세요.
-    제한 시간은 없고, 얼마나 걸리는지 아무도 재지 않습니다.
+    지금부터 보는 페이지는, 언젠가 동료가 여러분이 만든 페이지를 보게 될 방식
+    그대로 봅니다. 옆에서 의도를 설명해 줄 작성자 없이요. 페이지를 살펴보고,
+    어디가 사용자를 방해하는지 판단하고, 발견한 것을 기록하세요. 제한 시간은
+    없고, 얼마나 걸리는지 아무도 재지 않습니다.
 whatCounts:
   en: >-
     A complete submission carries at least three Findings. Each Finding has
@@ -67,9 +67,9 @@ optionalFix:
     entirely sufficient — this step is about seeing your fix exist, not about
     tooling. It does not affect completion either way.
   ko: >-
-    제출 후 선택 사항: 작성한 발견 중 하나를 골라 실제로 고쳐 보고, 그
-    변경을 보여 주는 링크를 첨부하세요. 코드를 쓴다면 pull request나 commit이면
-    되고, 그렇지 않다면 고쳐진 페이지의 스크린샷으로 충분합니다 — 이 단계의
-    목적은 자신의 수정이 실재하는 걸 보는 것이지, 도구를 다루는 것이
-    아닙니다. 첨부 여부는 수료에 어떤 영향도 주지 않습니다.
+    제출 후 선택 사항: 작성한 발견 중 하나를 골라 실제로 고쳐 보고, 그 변경을
+    보여 주는 링크를 첨부하세요. 코드를 쓴다면 pull request나 commit이면 되고,
+    그렇지 않다면 고쳐진 페이지의 스크린샷으로 충분합니다. 이 단계의 목적은
+    자신의 수정이 실재하는 걸 보는 것이지, 도구를 다루는 것이 아닙니다. 첨부
+    여부는 수료에 어떤 영향도 주지 않습니다.
 ---
