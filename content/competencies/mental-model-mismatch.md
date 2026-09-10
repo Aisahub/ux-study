@@ -25,7 +25,7 @@ roleHint:
       happening when they press the main control; then write what actually
       happens. The gap between those two sentences is where the findings are.
     ko: >-
-      직접 만든 플로우에서 사용자가 주요 컨트롤를 누를 때 무슨 일이
+      직접 만든 플로우에서 사용자가 주요 컨트롤을 누를 때 무슨 일이
       벌어진다고 생각하는지를 한 문장으로 적고, 이어서 실제로 무슨 일이
       벌어지는지를 적어 보세요. 두 문장 사이의 간격이 곧 발견이 있는 자리입니다.
   pm:

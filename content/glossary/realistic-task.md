@@ -10,7 +10,7 @@ definition:
     to press has already answered the thing the session was meant to find out.
   ko: >-
     참가자가 처한 상황이라면 그렇게 말했을 법한 방식으로 적힌, 이루어야 할 일.
-    그것을 이루는 절차가 아니다. 어떤 컨트롤를 누르라고 이름을 대는 과제는,
+    그것을 이루는 절차가 아니다. 어떤 컨트롤을 누르라고 이름을 대는 과제는,
     그 자리에서 알아내려던 것을 이미 스스로 답해 버린 과제다.
 justification:
   en: >-
