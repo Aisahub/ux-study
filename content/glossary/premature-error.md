@@ -10,7 +10,7 @@ definition:
     it is the interface telling someone they are failing at something they are
     still in the middle of doing.
   ko: >-
-    사용자가 말을 다 끝내기도 전에 띄우는 오류 — 아직 입력하고 있는 중인 필드에
+    사용자가 말을 다 끝내기도 전에 띄우는 오류. 아직 입력하고 있는 중인 필드에
     벌써 틀렸다고 표시하는 것. 이것은 미리 도와주는 것이 아니라, 아직 하는
     중인 일을 두고 실패했다고 말하는 것이다.
 justification:

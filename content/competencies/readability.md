@@ -16,7 +16,7 @@ roleHint:
       Look at the small print in screens you built — error messages, table
       captions, form help text.
     ko: >-
-      직접 만든 화면의 작은 글씨 — 오류 메시지, 표 설명, 입력 도움말 — 을
+      오류 메시지, 표 설명, 입력 도움말처럼 직접 만든 화면의 작은 글씨를
       살펴보세요.
   pm:
     en: >-
@@ -30,20 +30,20 @@ preReadingQuestions:
       The article separates legibility, readability, and comprehension. Where
       does each one fail — at the letters, at the sentences, or at the meaning?
     ko: >-
-      이 글은 판독성, 가독성, 이해도를 구분한다. 각각은 어디에서 무너지는가 —
-      글자에서인가, 문장에서인가, 의미에서인가?
+      이 글은 판독성, 가독성, 이해도를 구분한다. 각각은 어디에서
+      무너지는가? 글자에서인가, 문장에서인가, 의미에서인가?
   - en: >-
       Why is passing one of the three levels not enough — what does each later
       level demand that the earlier one cannot supply?
     ko: >-
-      세 단계 중 하나를 통과하는 것으로는 왜 부족한가 — 뒤의 단계는 앞의 단계가
-      채워 줄 수 없는 무엇을 더 요구하는가?
+      세 단계 중 하나를 통과하는 것으로는 왜 부족한가? 뒤의 단계는 앞의
+      단계가 채워 줄 수 없는 무엇을 더 요구하는가?
   - en: >-
       What does the article say about matching text to its audience — how should
       writing for the general public differ from writing for specialists?
     ko: >-
-      이 글은 텍스트를 독자에 맞추는 일에 대해 무엇을 말하는가 — 일반 대중을
-      위한 글은 전문가를 위한 글과 어떻게 달라야 하는가?
+      이 글은 텍스트를 독자에 맞추는 일에 대해 무엇을 말하는가? 일반
+      대중을 위한 글은 전문가를 위한 글과 어떻게 달라야 하는가?
 source:
   url: https://www.nngroup.com/articles/legibility-readability-comprehension/
   attribution: >-
