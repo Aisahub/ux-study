@@ -54,10 +54,11 @@ out.
 
 The four objectives are re-cut so the claim is one sentence and the examples
 are the next. **No word is removed and no wording is changed**: the em-dash or
-colon becomes a full stop, and the connective the new sentence needs is added
-(`읽는 것은 …이다`, `어긋나는 지점은 …다`, `That work is …`, `Such a term is …`).
-Everything the objective said, it still says, and the Competency page still
-prints all of it.
+colon becomes a full stop, and the new sentence takes the connective it needs
+(`… 그 인원을 읽는다`, `그 지점은 …다`, `그런 일을 만드는 것은 …이다`,
+`그런 말이란 …다`; see the reviewer's note below for how three of those reached
+their shipped form). Everything the objective said, it still says, and the
+Competency page still prints all of it.
 
 The row therefore shortens through the mechanism ERR-224 already shipped,
 which is the sign the two halves belong to one fix.
