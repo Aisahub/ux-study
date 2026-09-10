@@ -4,18 +4,19 @@ name:
   ko: 실제 사용자 검증
 objective:
   en: >-
-    Read a plan to put an interface in front of somebody who does not work here
-    — the task as it will be said out loud, who is being asked to carry it out,
-    and how many of them — and find where the plan will answer for itself
-    instead of for the interface: a task that names the control to press, a
-    question that tells the participant what to think, a group who already know
-    how the thing works.
+    Read a plan to put an interface in front of somebody who does not work
+    here, and find where the plan will answer for itself instead of for the
+    interface. The plan says three things: the task as it will be said out
+    loud, who is being asked to carry it out, and how many of them. Look for a
+    task that names the control to press, a question that tells the
+    participant what to think, a group who already know how the thing works.
   ko: >-
-    이곳에서 일하지 않는 사람 앞에 인터페이스를 내놓기 위한 계획을 읽고 — 실제로
-    소리 내어 전달될 과제 문장, 그 과제를 부탁할 사람, 그리고 그 인원 — 그
-    계획이 인터페이스가 아니라 계획 자신에 대한 답을 내놓게 될 자리를 찾아낼 수
-    있다: 누를 컨트롤를 이름으로 알려 주는 과제, 참가자에게 무엇을 생각해야
-    하는지 일러 주는 물음, 이미 작동 방식을 아는 사람들로 채워진 명단.
+    이곳에서 일하지 않는 사람 앞에 인터페이스를 내놓기 위한 계획을 읽고, 그
+    계획이 인터페이스가 아니라 계획 자신에 대한 답을 내놓게 될 자리를 찾아낼
+    수 있다. 실제로 소리 내어 전달될 과제 문장, 그 과제를 부탁할 사람, 그리고
+    그 인원을 읽는다. 누를 컨트롤을 이름으로 알려 주는 과제, 참가자에게 무엇을
+    생각해야 하는지 일러 주는 물음, 이미 작동 방식을 아는 사람들로 채워진
+    명단을 찾아낸다.
 roleHint:
   developer:
     en: >-

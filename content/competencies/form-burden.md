@@ -4,17 +4,17 @@ name:
   ko: 폼 부담
 objective:
   en: >-
-    Fill something in from start to finish and name the work it demanded that it
-    did not need to — a value the user had to go and fetch, remember, convert,
-    or type twice, or a control that turned a simple choice into several steps.
-    This is the cost of the path where nothing goes wrong; what the interface
-    says when something does go wrong is error handling.
+    Fill something in from start to finish and name the work it demanded that
+    it did not need to. That work is a value the user had to go and fetch,
+    remember, convert, or type twice, or a control that turned a simple choice
+    into several steps. This is the cost of the path where nothing goes wrong;
+    what the interface says when something does go wrong is error handling.
   ko: >-
     무언가를 처음부터 끝까지 직접 채워 보고, 굳이 시키지 않아도 되었을 일을
-    짚어낼 수 있다 — 사용자가 다른 데서 찾아오거나, 외워 두거나, 변환하거나, 두
-    번 입력해야 했던 값, 혹은 간단한 선택 하나를 여러 단계로 만들어 버린 컨트롤.
-    이것은 아무것도 잘못되지 않은 길에서 치르는 비용이다. 무언가 잘못됐을 때
-    인터페이스가 하는 말은 오류 처리의 몫이다.
+    짚어낼 수 있다. 그런 일을 만드는 것은 사용자가 다른 데서 찾아오거나, 외워
+    두거나, 변환하거나, 두 번 입력해야 했던 값, 혹은 간단한 선택 하나를 여러
+    단계로 만들어 버린 컨트롤이다. 이것은 아무것도 잘못되지 않은 길에서 치르는
+    비용이다. 무언가 잘못됐을 때 인터페이스가 하는 말은 오류 처리의 몫이다.
 roleHint:
   developer:
     en: >-

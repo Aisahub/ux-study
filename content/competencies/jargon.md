@@ -4,18 +4,18 @@ name:
   ko: 전문 용어
 objective:
   en: >-
-    Read a screen's words as somebody who does not work here would, and find the
-    terms that carry meaning inside the team and none outside it — a word taken
-    from the schema, a name only the vendor uses, an acronym nobody expanded.
-    Whether a word is jargon is a fact about its readers rather than about the
-    word, so the judgement is made against a stated reader and never against
-    your own ear.
+    Read a screen's words as somebody who does not work here would, and find
+    the terms that carry meaning inside the team and none outside it. Such a
+    term is a word taken from the schema, a name only the vendor uses, an
+    acronym nobody expanded. Whether a word is jargon is a fact about its
+    readers rather than about the word, so the judgement is made against a
+    stated reader and never against your own ear.
   ko: >-
-    화면의 문구를 이곳에서 일하지 않는 사람의 눈으로 읽으면서, 팀 안에서만 뜻이
-    통하고 밖에서는 통하지 않는 말을 찾아낼 수 있다 — 스키마에서 그대로 가져온
-    단어, 공급사만 쓰는 이름, 아무도 풀어 쓰지 않은 약어. 어떤 말이 전문 용어인지
-    아닌지는 그 말 자체가 아니라 읽는 사람에 달린 문제이므로, 판단의 기준은
-    명시된 독자이지 내 귀가 아니다.
+    화면의 문구를 이곳에서 일하지 않는 사람의 눈으로 읽으면서, 팀 안에서만
+    뜻이 통하고 밖에서는 통하지 않는 말을 찾아낼 수 있다. 그런 말이란
+    스키마에서 그대로 가져온 단어, 공급사만 쓰는 이름, 아무도 풀어 쓰지 않은
+    약어다. 어떤 말이 전문 용어인지 아닌지는 그 말 자체가 아니라 읽는 사람에
+    달린 문제이므로, 판단의 기준은 명시된 독자이지 내 귀가 아니다.
 roleHint:
   developer:
     en: >-

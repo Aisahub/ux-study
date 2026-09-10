@@ -49,6 +49,43 @@ test('each Competency cites its source article on nngroup.com with attribution',
   }
 })
 
+/**
+ * The ceiling on an objective's opening sentence, in space-separated units.
+ *
+ * It is not a style rule about prose: it guards the Learn overview, which
+ * prints that sentence alone and lists thirteen peers for the Learner to
+ * choose between. Two objectives once carried their examples inside the claim
+ * and reached 59 and 80 units, setting the rows at three and a half times one
+ * another's length — ERR-224. Examples belong to a sentence of their own, and
+ * every objective is well under this once they are.
+ *
+ * 40 is not a number invented here: it is the line the repository's own
+ * ux-audit checklist draws for a sentence (`references/checklist.md`, the
+ * readability entry), and this file is where that line can be held. The worst
+ * claim now stands at 37.
+ */
+const OBJECTIVE_CLAIM_MAX_UNITS = 40
+
+test('an objective opens with a claim short enough to compare against twelve others', () => {
+  const long: string[] = []
+
+  for (const competency of competencies) {
+    for (const lang of ['en', 'ko'] as const) {
+      const objective = competency.objective[lang]
+      const end = objective.search(/(?<=[.。])\s/)
+      const claim = end === -1 ? objective : objective.slice(0, end)
+      const units = claim.split(/\s+/).filter(Boolean).length
+      if (units > OBJECTIVE_CLAIM_MAX_UNITS) {
+        long.push(`${competency.slug} [${lang}] ${units} units: ${claim}`)
+      }
+    }
+  }
+
+  // Named in the failure rather than counted, because the fix is to the one
+  // that is too long and the reader of a red suite needs to know which.
+  expect(long).toEqual([])
+})
+
 test('the browser-translation notice is Korean-only: present, and not an en/ko pair', () => {
   for (const competency of competencies) {
     expect(competency.koTranslationNotice, competency.slug).toBeTruthy()
