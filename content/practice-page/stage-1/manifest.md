@@ -20,11 +20,11 @@ defects:
         strongest on the confirm button, quietest on the banner.
       ko: >-
         선택한 주문을 확정하는 것이 이 페이지의 존재 이유인데, 정작 그 버튼은
-        옅은 회색 바탕에 옅은 회색 글자. 페이지의 모든 컨트롤 중 대비가 가장
-        약합니다. 반면 가장 덜 중요한 업그레이드 배너가 가장 강한 대비를
+        옅은 회색 바탕에 옅은 회색 글자입니다. 페이지의 모든 컨트롤 중 대비가
+        가장 약합니다. 반면 가장 덜 중요한 업그레이드 배너가 가장 강한 대비를
         차지하고 있습니다. 시선이 주요 동작만 빼고 사방으로 끌려가고, 버튼은
-        비활성 상태이거나 부차적인 것으로 읽힙니다. 확정 버튼에 가장 강하게,
-        배너에 가장 약하게, 대비는 중요도에 비례해 써야 합니다.
+        비활성 상태이거나 부차적인 것으로 읽힙니다. 대비는 중요도에 비례해,
+        확정 버튼에 가장 강하게 배너에 가장 약하게 써야 합니다.
   - slug: refresh-time-dominates
     element: stat-last-refreshed
     competency: visual-hierarchy
@@ -58,11 +58,11 @@ defects:
         spacing. Each label needs to sit close to its own field and clearly
         apart from the previous one.
       ko: >-
-        배송 설정 폼에서 각 이름표이 자기 입력칸과는 멀고, 바로 위 입력칸에 딱
+        배송 설정 폼에서 각 이름표가 자기 입력칸과는 멀고, 바로 위 입력칸에 딱
         붙어 있습니다. 눈은 간격으로 소속을 판단하기 때문에 "연락처"는 담당자
         이름 칸의 설명처럼, "출고지 주소"는 연락처 칸의 설명처럼 읽힙니다.
         마크업이 잘못 연결된 곳은 한 군데도 없습니다. 오직 간격만으로 묶음이
-        틀어진 것입니다. 이름표은 자기 입력칸에 가깝게, 이전 칸과는 확실히
+        틀어진 것입니다. 이름표는 자기 입력칸에 가깝게, 이전 칸과는 확실히
         떨어뜨려야 합니다.
   - slug: help-text-wall
     element: shipping-help-text

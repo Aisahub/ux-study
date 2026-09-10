@@ -157,7 +157,7 @@ options:
         The run is written down permanently, in the place the team already
         reads every morning.
   ko:
-    - text: 실행을 목록에 기록으로 남깁니다. 지급 18건, 11시 04분 발송입니다
+    - text: 실행을 "지급 18건, 11시 04분 발송"으로 목록에 남깁니다
       reason: >-
         돈이 나갔다는 표시가 화면에 남아, 한 시간 뒤에 보는 사람에게도 그대로
         보입니다. 어떤 메시지보다도 오래 갑니다.

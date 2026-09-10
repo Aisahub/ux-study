@@ -16,8 +16,8 @@ roleHint:
       Look at the small print in screens you built — error messages, table
       captions, form help text.
     ko: >-
-      오류 메시지, 표 설명, 입력 도움말처럼 직접 만든 화면의 작은 글씨를
-      살펴보세요.
+      직접 만든 화면의 작은 글씨, 그러니까 오류 메시지나 표 설명, 입력
+      도움말을 살펴보세요.
   pm:
     en: >-
       Reread the longest paragraph you approved and ask what a reader in a
@@ -42,7 +42,7 @@ preReadingQuestions:
       What does the article say about matching text to its audience — how should
       writing for the general public differ from writing for specialists?
     ko: >-
-      이 글은 텍스트를 독자에 맞추는 일에 대해 무엇을 말하는가? 일반
+      이 글은 텍스트를 독자에게 맞추는 일을 두고 무엇을 말하는가? 일반
       대중을 위한 글은 전문가를 위한 글과 어떻게 달라야 하는가?
 source:
   url: https://www.nngroup.com/articles/legibility-readability-comprehension/
