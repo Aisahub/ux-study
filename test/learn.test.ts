@@ -409,22 +409,32 @@ test("every declared Competency has a page in both languages, carrying that lang
   // is not iterating nothing.
   expect(declared.length).toBeGreaterThan(0)
 
-  for (const slug of declared) {
-    const competency = competencies.find((entry) => entry.slug === slug)!
-    for (const lang of ['en', 'ko'] as const) {
-      const response = await fetch(`${BASE_URL}/${lang}/learn/${slug}`, { headers: { cookie } })
-      expect(response.status, `${lang}/${slug}`).toBe(200)
+  // Fetched together rather than one after another. Twenty-four pages in a row
+  // is about half this test's own budget on an idle machine and all of it on a
+  // loaded one, and it read as a broken suite rather than as a slow test — the
+  // shape ERR-226's checklist warns about. The pages are independent of one
+  // another, so there is nothing the sequence was buying.
+  const pages = await Promise.all(
+    declared.flatMap((slug) =>
+      (['en', 'ko'] as const).map(async (lang) => {
+        const response = await fetch(`${BASE_URL}/${lang}/learn/${slug}`, { headers: { cookie } })
+        return { slug, lang, status: response.status, text: visibleText(await response.text()) }
+      }),
+    ),
+  )
 
-      const text = visibleText(await response.text())
-      // Its own language's name and objective, not the other language's. A
-      // page that renders in `ko` while showing English copy passes a status
-      // check and fails the Learner.
-      expect(text, `${lang}/${slug} name`).toContain(competency.name[lang])
-      // The whole objective, not its opening: the Learn overview shows the
-      // first sentence only, and this is the page the rest of it is one click
-      // away on. A prefix match would pass on a page that cut it here too.
-      expect(text, `${lang}/${slug} objective`).toContain(competency.objective[lang])
-    }
+  for (const { slug, lang, status, text } of pages) {
+    const competency = competencies.find((entry) => entry.slug === slug)!
+    expect(status, `${lang}/${slug}`).toBe(200)
+
+    // Its own language's name and objective, not the other language's. A page
+    // that renders in `ko` while showing English copy passes a status check
+    // and fails the Learner.
+    expect(text, `${lang}/${slug} name`).toContain(competency.name[lang])
+    // The whole objective, not its opening: the Learn overview shows the first
+    // sentence only, and this is the page the rest of it is one click away on.
+    // A prefix match would pass on a page that cut it here too.
+    expect(text, `${lang}/${slug} objective`).toContain(competency.objective[lang])
   }
 })
 
