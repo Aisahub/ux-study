@@ -116,12 +116,12 @@ defects:
         say so and wait, or it means nothing and should not have been raised.
         Holding both positions at once teaches a driver to ignore the red.
       ko: >-
-        방금 이 칸이 잘못됐다고 말한 주소를 그대로 두고 계속을 누르면 — 그냥
+        방금 이 칸이 잘못됐다고 말한 주소를 그대로 두고 계속을 누르면 그냥
         계속됩니다. 그리고 확인 화면은 그 거절당한 주소를 예약 정보인 양 다시
         보여 줍니다. 결국 그 메시지는 무언가를 걸러 내는 검사가 아니었던
         셈입니다. 나무라고는 옆으로 비켜서는 장식이었을 뿐입니다. 오류란 그
-        값을 쓸 수 없다는 뜻이거나 — 그렇다면 계속 버튼이 그렇게 말하고 멈춰
-        서야 합니다. 아무 뜻도 없거나 둘 중 하나이고, 아무 뜻도 없다면 애초에
+        값을 쓸 수 없다는 뜻이거나(그렇다면 계속 버튼이 그렇게 말하고 멈춰
+        서야 합니다) 아무 뜻도 없거나 둘 중 하나이고, 아무 뜻도 없다면 애초에
         띄우지 말았어야 합니다. 두 입장을 동시에 취하면, 운전자는 빨간색을
         무시하는 법을 배웁니다.
   - slug: phone-asked-again-at-the-last-step

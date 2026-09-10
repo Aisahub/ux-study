@@ -73,7 +73,7 @@ options:
         The schedule is written down, so the last run can be worked out from
         the clock.
   ko:
-    - text: 연동이 지금 어떤 상태인지를 페이지에 적습니다 — 마지막 연동이 끝난 시각, 그때 넘어간 건수, 지금 돌고 있는지
+    - text: 연동이 지금 어떤 상태인지를 페이지에 적습니다. 마지막 연동이 끝난 시각, 그때 넘어간 건수, 지금 돌고 있는지를 적습니다
       reason: >-
         사람들이 이 페이지에 오는 이유가 바로 그 질문이니, 도착한 자리에서
         무언가를 실행하지 않고도 답을 얻게 됩니다.

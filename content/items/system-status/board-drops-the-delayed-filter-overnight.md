@@ -127,7 +127,7 @@ options:
         The board's own space goes to the shipments rather than to the controls
         above them.
   ko:
-    - text: 칩이 있던 자리에 지금 걸린 조건을 적습니다 — "필터 없음 · 전체 배송" — 지연 건만 보기는 한 번 누르면 되도록 둡니다
+    - text: 칩이 있던 자리에 지금 걸린 조건("필터 없음 · 전체 배송")을 적고, 지연 건만 보기는 한 번 누르면 되도록 둡니다
       reason: >-
         지금 보드가 어떤 보기인지를 어젯밤 기억이 아니라 보드에서 바로 읽게
         됩니다.
