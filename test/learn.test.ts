@@ -185,6 +185,37 @@ test('the programme is one task panel per Competency, in Stage order', async () 
   }
 })
 
+test('a row carries the objective\'s first sentence, and the Competency page carries all of it', async () => {
+  const cookie = await sessionCookieFor(freshLearner())
+
+  for (const lang of ['en', 'ko'] as const) {
+    const overview = visibleText(await (await fetch(`${BASE_URL}/${lang}/learn`, { headers: { cookie } })).text())
+
+    for (const slug of ALL_COMPETENCIES) {
+      const objective = content.competencies.find((entry) => entry.slug === slug)!.objective[lang]
+      const end = objective.search(/(?<=[.。])\s/)
+
+      // The claim itself is on the row in every case — that is what a Learner
+      // chooses on, and it is never the thing that gets cut.
+      const claim = end === -1 ? objective : objective.slice(0, end)
+      expect(overview, `${lang}/${slug} claim`).toContain(claim)
+
+      // What follows it draws a boundary rather than naming an action, and it
+      // belongs to the page a Learner reaches after choosing. An objective
+      // written as one sentence has no tail and is simply shown whole.
+      if (end !== -1) {
+        const tail = objective.slice(end).trim()
+        expect(overview, `${lang}/${slug} tail`).not.toContain(tail)
+      }
+
+      const page = visibleText(
+        await (await fetch(`${BASE_URL}/${lang}/learn/${slug}`, { headers: { cookie } })).text(),
+      )
+      expect(page, `${lang}/${slug} full objective`).toContain(objective)
+    }
+  }
+})
+
 test('several in-progress Competencies do not invent one current panel', async () => {
   const email = freshLearner()
   for (const competency of STAGE_ONE_COMPETENCIES.slice(0, 2)) {
