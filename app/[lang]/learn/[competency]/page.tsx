@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -141,6 +142,23 @@ function StepHead({
  * the questions they were reading against. The four steps that remain are the
  * four that have to happen in order; writing is the one that does not.
  */
+/**
+ * The Competency's own name in the tab, so a Learner with several of these
+ * open can tell them apart without clicking. The name is read from the
+ * content, not from the page's data: metadata runs on its own and must not
+ * hold a session or a redirect.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; competency: string }>
+}): Promise<Metadata> {
+  const { lang, competency: slug } = await params
+  const language = isLanguage(lang) ? lang : 'en'
+  const name = content.competencies.find((entry) => entry.slug === slug)?.name[language]
+  return name ? { title: name } : {}
+}
+
 export default async function CompetencyPage({
   params,
 }: {

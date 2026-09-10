@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -20,6 +21,14 @@ export const dynamic = 'force-dynamic'
 const COPY: Record<
   Language,
   {
+    /**
+     * The tab's name for this route, in the same shape the Gate Quiz's front
+     * door uses for its own heading. It is written here rather than imported
+     * from that page so that one route module never has to load another; the
+     * cost is one repeated format string, and the alternative was two screens
+     * of the same quiz sharing the platform's name and nothing else.
+     */
+    pageTitle: (name: string) => string
     verdictPassed: string
     verdictFailed: string
     score: (score: number, of: number) => string
@@ -48,6 +57,7 @@ const COPY: Record<
   }
 > = {
   en: {
+    pageTitle: (name) => `Gate Quiz — ${name}`,
     verdictPassed: 'Passed',
     verdictFailed: 'Not passed',
     score: (score, of) => `${score} of ${of} correct.`,
@@ -81,6 +91,7 @@ const COPY: Record<
     article: 'the article',
   },
   ko: {
+    pageTitle: (name) => `퀴즈 — ${name}`,
     verdictPassed: '통과',
     verdictFailed: '미통과',
     score: (score, of) => `${of}문항 중 ${score}문항 정답.`,
@@ -126,6 +137,23 @@ const COPY: Record<
  * who eliminated their way to the answer and one who saw it look the same from
  * here, and only one of them has learnt anything.
  */
+/**
+ * The quiz names itself by its Competency in both of this route's states — the
+ * attempt being taken and the verdict being read. Not the verdict itself:
+ * `통과`/`미통과` in a tab would put the result in the browser's history, and
+ * reading it would cost metadata a session and a query it must not hold.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; competency: string }>
+}): Promise<Metadata> {
+  const { lang, competency: slug } = await params
+  const language = isLanguage(lang) ? lang : 'en'
+  const name = content.competencies.find((entry) => entry.slug === slug)?.name[language]
+  return name ? { title: COPY[language].pageTitle(name) } : {}
+}
+
 export default async function AttemptPage({
   params,
 }: {

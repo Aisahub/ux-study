@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 
 import { isLanguage, type Language } from '@/lib/language'
@@ -27,6 +28,15 @@ const COPY: Record<Language, { heading: string; body: (email: string | null) => 
  * The address comes from a short-lived cookie set by the callback, never from
  * the URL.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
+}
+
 export default async function NotEnrolled({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const language: Language = isLanguage(lang) ? lang : 'en'

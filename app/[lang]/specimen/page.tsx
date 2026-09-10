@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -104,6 +105,15 @@ function Frame({ lang, children }: { lang: Language; children: React.ReactNode }
       {children}
     </main>
   )
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
 }
 
 export default async function Specimen({ params }: { params: Promise<{ lang: string }> }) {

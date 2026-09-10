@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -117,6 +118,15 @@ function Fact({ label, children }: { label: string; children: React.ReactNode })
  * PRODUCT.md forbids a cumulative per-person score, and a page about one
  * person is exactly where such a total would otherwise appear.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
+}
+
 export default async function Me({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   if (!isLanguage(lang)) notFound()

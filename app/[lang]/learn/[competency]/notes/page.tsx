@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -6,6 +7,7 @@ import { NoteRow } from '@/app/[lang]/notes/note-row'
 import { SubmitButton } from '@/app/[lang]/pending'
 import { isLanguage, type Language } from '@/lib/language'
 import { NOTE_MAX_LENGTH, notesFor } from '@/lib/notes'
+import { content } from '@/lib/server-content'
 
 import { CompetencyShell, loadCompetency } from '../shell'
 
@@ -70,6 +72,23 @@ const COPY: Record<
  * this panel can carry a filled control at all while the other one spends its
  * on the Gate Quiz.
  */
+/**
+ * The Competency's own name in the tab, so a Learner with several of these
+ * open can tell them apart without clicking. The name is read from the
+ * content, not from the page's data: metadata runs on its own and must not
+ * hold a session or a redirect.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; competency: string }>
+}): Promise<Metadata> {
+  const { lang, competency: slug } = await params
+  const language = isLanguage(lang) ? lang : 'en'
+  const name = content.competencies.find((entry) => entry.slug === slug)?.name[language]
+  return name ? { title: `${COPY[language].heading} — ${name}` } : {}
+}
+
 export default async function CompetencyNotes({
   params,
 }: {

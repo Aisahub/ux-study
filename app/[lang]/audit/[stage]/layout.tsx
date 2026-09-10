@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { isLanguage } from '@/lib/language'
@@ -23,6 +24,24 @@ export const dynamic = 'force-dynamic'
  * audit itself — passes straight through. The report is not submitted, so
  * there are no panels and nothing to frame.
  */
+/**
+ * Named here rather than on the two pages beneath, because the layout is what
+ * both panels stand in and a Learner crossing between them is on one screen.
+ * It names the Stage's report in every state of the route — the audit being
+ * written, and the submitted report being read — since which of those it is
+ * takes a session and a query, and metadata may hold neither.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; stage: string }>
+}): Promise<Metadata> {
+  const { lang, stage: raw } = await params
+  const stage = Number(raw)
+  if (!isLanguage(lang) || !Number.isInteger(stage)) return {}
+  return { title: COPY[lang].heading(stage) }
+}
+
 export default async function AuditLayout({
   children,
   params,

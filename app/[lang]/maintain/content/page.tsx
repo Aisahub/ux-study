@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { isNotNull } from 'drizzle-orm'
@@ -138,6 +139,15 @@ function Cohort({ label, value, absent }: { label: string; value: string; absent
  * dark mode two explanatory paragraphs at 2.6:1, because `dark:` variants
  * darkened the text on a page whose background stays light by decision.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
+}
+
 export default async function ContentHealth({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   if (!isLanguage(lang)) notFound()

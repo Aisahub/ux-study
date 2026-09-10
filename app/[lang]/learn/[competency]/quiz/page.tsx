@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -85,6 +86,23 @@ const COPY: Record<
  * how many they need right before anything starts, and every earlier attempt
  * is preserved and visible (#22) — failing is a step, not a secret.
  */
+/**
+ * The Competency's own name in the tab, so a Learner with several of these
+ * open can tell them apart without clicking. The name is read from the
+ * content, not from the page's data: metadata runs on its own and must not
+ * hold a session or a redirect.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; competency: string }>
+}): Promise<Metadata> {
+  const { lang, competency: slug } = await params
+  const language = isLanguage(lang) ? lang : 'en'
+  const name = content.competencies.find((entry) => entry.slug === slug)?.name[language]
+  return name ? { title: COPY[language].heading(name) } : {}
+}
+
 export default async function QuizStart({
   params,
 }: {

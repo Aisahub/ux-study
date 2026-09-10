@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 import { getSession } from '@/lib/auth'
@@ -19,6 +20,15 @@ const COPY: Record<Language, { heading: string; explanation: string; button: str
 }
 
 /** The door (#11). Localised like every other page — sign-in is not an exception to ADR-0008. */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
+}
+
 export default async function SignIn({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const language: Language = isLanguage(lang) ? lang : 'en'

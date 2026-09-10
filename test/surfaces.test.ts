@@ -100,6 +100,43 @@ test('no route that ends a session answers GET', async () => {
   expect(rows).toHaveLength(1)
 })
 
+/** The name a browser tab, a bookmark and a history entry carry. */
+function titleOf(html: string): string {
+  return visibleText(html.match(/<title[^>]*>([\s\S]*?)<\/title>/)?.[1] ?? '')
+}
+
+test('every surface names itself in the tab, so open tabs are told apart without clicking', async () => {
+  const email = freshLearner()
+  await allow(email)
+  const cookie = await sessionCookieFor(email)
+  const slug = config.stages[0].competencies[0]
+
+  const paths = [
+    '/ko/learn',
+    `/ko/learn/${slug}`,
+    `/ko/learn/${slug}/quiz`,
+    `/ko/learn/${slug}/notes`,
+    '/ko/notes',
+    '/ko/me',
+  ]
+
+  const titles: string[] = []
+  for (const path of paths) {
+    const response = await fetch(`${BASE_URL}${path}`, { headers: { cookie } })
+    expect(response.status, path).toBe(200)
+    const title = titleOf(await response.text())
+    // The platform stays in the name, and the screen comes first: a tab strip
+    // shows the front of a title, and every one of these surfaces once read
+    // "ux-study" and nothing else. A Learner with the board, a quiz and their
+    // notes open had three identical tabs and had to click to tell them apart.
+    expect(title, path).toMatch(/ · ux-study$/)
+    expect(title.replace(/ · ux-study$/, ''), path).not.toBe('')
+    titles.push(title)
+  }
+
+  expect(new Set(titles).size, titles.join(' | ')).toBe(paths.length)
+})
+
 test('the Self-Audit Report has no navigation slot of its own', async () => {
   const cookie = await sessionCookieFor(freshLearner())
 

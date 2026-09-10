@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { revalidatePath } from 'next/cache'
 import { notFound } from 'next/navigation'
 
@@ -86,6 +87,15 @@ const COPY: Record<
  * with a border on every row — a stroke this design system does not have, on
  * a platform whose own rule is that an unclear edge is answered with depth.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
+}
+
 export default async function Allowlist({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   if (!isLanguage(lang)) notFound()

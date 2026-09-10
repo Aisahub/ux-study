@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -321,6 +322,15 @@ function StageCard({
  * with Stage 1 expanded. Its Competencies are independent entry points rather
  * than a sequence; everything shown comes from this Learner's own records.
  */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  return { title: COPY[isLanguage(lang) ? lang : 'en'].heading }
+}
+
 export default async function Learn({
   params,
 }: {
