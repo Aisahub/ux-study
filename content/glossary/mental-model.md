@@ -10,7 +10,7 @@ definition:
     and it is what an interface has to answer to whether or not it is accurate.
   ko: >-
     사용자가 이것이 어떻게 작동한다고 믿고 있는 내용. 실제 동작도 아니고 문서에
-    적힌 설명도 아니다. 어떤 컨트롤가 무엇을 할 것이라 기대하는지를 좌우하며,
+    적힌 설명도 아니다. 어떤 컨트롤이 무엇을 할 것이라 기대하는지를 좌우하며,
     정확하든 아니든 인터페이스가 상대해야 하는 것은 바로 이 모델이다.
 justification:
   en: >-

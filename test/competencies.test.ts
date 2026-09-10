@@ -135,6 +135,97 @@ test('every word this file bans is one CONTEXT.md actually lists', () => {
   expect(Object.keys(NAMES_NOTHING_HERE).filter((word) => !avoided.has(word))).toEqual([])
 })
 
+/**
+ * Borrowed nouns, and the particle Korean requires after each of them.
+ *
+ * Whether the particle is right depends on one thing only — whether the noun's
+ * last syllable carries a final consonant — and that is **computed here from
+ * the syllable**, never written down beside the word. Writing it down is the
+ * defect: the ear that hears `컨트롤` as the English "control" hears no final
+ * ㄹ and reaches for the particle a vowel would take, which is how seven of
+ * these reached the content (ERR-227). The first draft of this very test
+ * carried a hand-made list of "consonant-final" loanwords and got five of them
+ * wrong in the same direction — `텍스트`, `링크`, `카드`, `배너`, `필터` all
+ * end in a vowel in Korean, because a transliteration adds ㅡ after a final
+ * consonant. The rule has to be read off the Hangul, not off the English.
+ *
+ * The list below is therefore only *which* nouns to look at. It holds the
+ * borrowed nouns this content uses; a new one belongs on it. This is not a
+ * Korean grammar check and does not pretend to be one.
+ */
+const LOANWORDS = [
+  '컨트롤', '버튼', '링크', '필터', '패널', '아이콘', '레이블', '라벨',
+  '텍스트', '리스트', '폼', '카드', '탭', '토글', '체크박스', '툴팁',
+  '배너', '슬라이더', '스크롤', '모달', '입력창', '알림', '드롭다운',
+  '페이지', '메뉴', '탭바', '토스트', '배지', '다이얼로그',
+]
+
+/** Whether a Hangul syllable ends in a consonant, read off its code point. */
+function hasFinalConsonant(syllable: string): boolean {
+  const code = syllable.codePointAt(0)!
+  return (code - 0xac00) % 28 !== 0
+}
+
+/** The four particle pairs, written consonant-form first. */
+const PARTICLES: [string, string][] = [
+  ['을', '를'],
+  ['이', '가'],
+  ['은', '는'],
+  ['과', '와'],
+]
+
+/** Every Korean string in the loaded content, minus the screens. */
+function koreanContentStrings(): [string, string][] {
+  const out: [string, string][] = []
+  const walk = (node: unknown, where: string) => {
+    if (typeof node === 'string') {
+      if (/[가-힣]/.test(node)) out.push([where, node])
+      return
+    }
+    if (Array.isArray(node)) return node.forEach((child, i) => walk(child, `${where}[${i}]`))
+    if (node && typeof node === 'object') {
+      for (const [key, value] of Object.entries(node)) {
+        // Screens are excluded here as everywhere else in this file: their copy
+        // is the defective specimen a Learner judges, written as a fictional
+        // product's own words rather than as this platform's. `en` is skipped
+        // because a particle is a fact about Korean.
+        if (key === 'screen' || key === 'en') continue
+        walk(value, `${where}.${key}`)
+      }
+    }
+  }
+  walk({ competencies, glossary, briefs, items, specimen }, 'content')
+  return out
+}
+
+test('a borrowed noun takes the particle its final consonant calls for', () => {
+  const wrong: string[] = []
+
+  const check = (where: string, text: string) => {
+    for (const noun of LOANWORDS) {
+      const consonantFinal = hasFinalConsonant(noun[noun.length - 1])
+      for (const [afterConsonant, afterVowel] of PARTICLES) {
+        const bad = consonantFinal ? afterVowel : afterConsonant
+        const good = consonantFinal ? afterConsonant : afterVowel
+        // Not followed by another Hangul syllable, so `카드가` is caught while
+        // `카드가게` — a shop, one word — is not.
+        if (new RegExp(`${noun}${bad}(?![가-힣])`).test(text)) {
+          wrong.push(`${where}: ${noun}${bad} → ${noun}${good}`)
+        }
+      }
+    }
+  }
+
+  for (const [where, text] of koreanContentStrings()) check(where, text)
+  for (const path of sources(join(__dirname, '..', 'app'))) {
+    for (const text of koreanCopy(readFileSync(path, 'utf8'))) check(path, text)
+  }
+
+  // Named rather than counted: the fix is to the one that is wrong, and a red
+  // suite has to say which noun in which field.
+  expect(wrong).toEqual([])
+})
+
 test('Learner-facing copy avoids the words CONTEXT.md rules out', () => {
   const copy: [string, string][] = [
     ...competencies.flatMap((competency): [string, string][] => [
