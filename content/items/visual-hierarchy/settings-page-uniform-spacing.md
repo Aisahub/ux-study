@@ -11,12 +11,12 @@ artefact:
     anywhere. Every vertical gap is exactly 20px: between a heading and the
     row under it, and between one section's last row and the next heading.
   ko: >-
-    계정 설정 페이지이고, 제목이 넷 있습니다 — 프로필, 알림, 결제, 보안.
-    제목마다 아래에 설정 행이 서너 개씩 딸려 있습니다. 제목은 20px
-    세미볼드, 행은 15px 보통 굵기이며, 페이지의 글자는 전부 흰 바탕에 같은
-    짙은 회색이고, 테두리나 배경 패널은 어디에도 없습니다. 세로 간격은 전부
-    정확히 20px입니다. 제목과 바로 아래 행 사이도, 한 구역의 마지막 행과 다음
-    제목 사이도 똑같습니다.
+    계정 설정 페이지이고, 제목이 넷 있습니다. 프로필, 알림, 결제, 보안입니다.
+    제목마다 아래에 설정 행이 서너 개씩 딸려 있습니다. 제목은 20px 세미볼드,
+    행은 15px 보통 굵기이며, 페이지의 글자는 전부 흰 바탕에 같은 짙은
+    회색이고, 테두리나 배경 패널은 어디에도 없습니다. 세로 간격은 전부 정확히
+    20px입니다. 제목과 바로 아래 행 사이도, 한 구역의 마지막 행과 다음 제목
+    사이도 똑같습니다.
 screen:
   en: |-
     <div class="screen" style="line-height:1.4">
