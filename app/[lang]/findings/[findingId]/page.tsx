@@ -21,6 +21,7 @@ const COPY: Record<
      * bookmark or a history entry says here must be true of every Finding.
      */
     pageTitle: string
+    stage: (n: number) => string
     by: string
     principle: string
     description: string
@@ -35,6 +36,7 @@ const COPY: Record<
 > = {
   en: {
     pageTitle: 'Finding',
+    stage: (n) => `Stage ${n}`,
     by: 'by',
     principle: 'UX Principle',
     description: 'What goes wrong',
@@ -48,10 +50,18 @@ const COPY: Record<
   },
   ko: {
     pageTitle: '발견',
+    stage: (n) => `${n}단계`,
     by: '작성',
     principle: 'UX 원칙',
-    description: '무엇이 잘못되는지',
-    fix: '고치는 방법 제안',
+    // Reading-surface spellings (ERR-237): noun phrases that stand alone as
+    // headings, where the prompt clause of the drawer (`-는지`) cannot, and
+    // without the `제안` whose request the reader is not being made.
+    // `고치는 방법` is what the error copy of the drawer already calls that
+    // part; the register was settled with the owner on 2026-09-11. (No
+    // apostrophe or dash in this comment: the copy tests scan the ko record
+    // by quote pairing, and either mark breaks their frame.)
+    description: '잘못된 점',
+    fix: '고치는 방법',
     agreementCount: (n) => `동료 ${n}명이 동의했습니다`,
     agree: '이 발견에 동의합니다',
     agreeing: '기록하는 중…',
@@ -113,45 +123,83 @@ export default async function FindingPage({
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
       <nav className="text-body-sm">
-        <Link href={`/${lang}/findings`} className="text-ink-2 underline-offset-4 hover:underline">
+        {/* Underlined at rest, as the board's own links are (ERR-232): the
+            arrow says direction, the underline says pressable, and a phone
+            has no hover to say it later. */}
+        <Link
+          href={`/${lang}/findings`}
+          className="inline-flex min-h-11 items-center text-ink-2 underline underline-offset-4"
+        >
           ← {copy.back}
         </Link>
       </nav>
 
-      <h1 className="font-mono text-title">{row.finding.element}</h1>
-      <p className="text-body-sm text-ink-2">
-        {copy.by} {row.author}
-      </p>
+      {/* One card, one Finding — the reading surface the board's rows open
+          into, on the same white card the rows themselves wear. */}
+      <article className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card">
+        <h1 className="max-w-measure font-mono text-headline font-bold text-ink">{row.finding.element}</h1>
+        {/* Where it comes from before who wrote it, as the board's rows say
+            it. The local part, as the board and the top bar spell people —
+            the full address stays a hover away (see the board for why). */}
+        <p className="max-w-measure text-body-sm text-ink-2" title={row.author}>
+          <span className="font-bold">{copy.stage(row.stage)}</span> · {copy.by} {row.author.split('@')[0]}
+        </p>
 
-      <section className="flex flex-col gap-3 text-body-sm">
-        <p>
-          <span className="text-ink-2">{copy.principle}: </span>
-          {principle ? principle.name[lang] : row.finding.principle}
-        </p>
-        <p>
-          <span className="text-ink-2">{copy.description}: </span>
-          {row.finding.description}
-        </p>
-        <p>
-          <span className="text-ink-2">{copy.fix}: </span>
-          {row.finding.fix}
-        </p>
-      </section>
+        {/* A definition list, its headings in the title step over body
+            answers — same size, the weight is the difference, the pairing
+            the scale already names — and a khaki hairline between blocks,
+            the line this system draws wherever one card holds several
+            sections (the Competency page's notes head, the verdict's item
+            rows). Label-step grey alone did not hold the three apart. */}
+        <dl className="grid max-w-measure divide-y divide-khaki/40 border-t border-khaki/40">
+          <div className="py-[14px]">
+            <dt className="text-title font-bold text-ink">{copy.principle}</dt>
+            <dd className="mt-1 text-body">{principle ? principle.name[lang] : row.finding.principle}</dd>
+          </div>
+          <div className="py-[14px]">
+            <dt className="text-title font-bold text-ink">{copy.description}</dt>
+            <dd className="mt-1 text-body">{row.finding.description}</dd>
+          </div>
+          <div className="py-[14px] pb-0">
+            <dt className="text-title font-bold text-ink">{copy.fix}</dt>
+            <dd className="mt-1 text-body">{row.finding.fix}</dd>
+          </div>
+        </dl>
 
-      <section className="flex items-center gap-4 text-body-sm">
-        <span className="text-ink-2">{copy.agreementCount(count)}</span>
-        {row.author === session.email ? (
-          <span className="text-ink-2">{copy.ownFinding}</span>
-        ) : mine ? (
-          <span className="font-bold text-oxblood">{copy.agreed}</span>
-        ) : (
-          <form action={agree}>
-            <SubmitButton pendingLabel={copy.agreeing} className="font-bold underline underline-offset-4">
-              {copy.agree}
-            </SubmitButton>
-          </form>
-        )}
-      </section>
+        {/* Agreement is this screen's one action, so it is drawn as the one
+            control the system draws actions with — the full-width oxblood
+            pill the Gate Quiz doorstep uses — not as a sentence that happens
+            to submit. The count stays words beside the board's sunk-chip
+            number, and the two no-action states stay words: one is a fact
+            about authorship, the other a status already given its colour.
+            The same hairline above it marks where reading ends and acting
+            begins, as the report drawer's action foot already does. */}
+        <section className="grid gap-[14px] border-t border-khaki/40 pt-[14px]">
+          <p className="flex items-center gap-2.5 text-body-sm text-ink-2">
+            <span
+              aria-hidden
+              className="grid size-[34px] shrink-0 place-items-center rounded-badge bg-sunk text-label font-bold text-ink-2"
+            >
+              {count}
+            </span>
+            {copy.agreementCount(count)}
+          </p>
+          {row.author === session.email ? (
+            <p className="text-body-sm text-ink-2">{copy.ownFinding}</p>
+          ) : mine ? (
+            <p className="text-body font-bold text-oxblood">{copy.agreed}</p>
+          ) : (
+            <form action={agree}>
+              <SubmitButton
+                pendingLabel={copy.agreeing}
+                className="flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+              >
+                {copy.agree}
+              </SubmitButton>
+            </form>
+          )}
+        </section>
+      </article>
     </main>
   )
 }

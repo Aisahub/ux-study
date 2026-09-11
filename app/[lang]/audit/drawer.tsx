@@ -84,7 +84,9 @@ const COPY: Record<
       'duplicate-element': '이미 그 요소를 가리키는 발견이 있습니다. 요소 하나에 발견 하나입니다.',
       'unknown-element': '페이지에서 요소를 클릭해 선택하세요.',
       'unknown-principle': '용어집에서 원칙을 선택하세요.',
-      incomplete: '설명과 고치는 방법, 두 서술이 모두 필요합니다.',
+      // `서술` reads as the grammar term before it reads as "written part";
+      // the plain ask lands faster in an error message (ERR-237).
+      incomplete: '설명과 고치는 방법을 모두 채워 주세요.',
       submitted: '이미 제출된 보고서입니다.',
       locked: '이 단계의 퀴즈를 모두 통과하면 자가 점검이 열립니다.',
       'no-subject': '이 단계에는 아직 점검할 페이지가 없습니다.',

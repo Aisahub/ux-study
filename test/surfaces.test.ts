@@ -488,7 +488,10 @@ test('after submitting, the board lists Findings by agreement with authors named
   const cookie = await sessionCookieFor(admirer)
   const text = visibleText(await (await fetch(`${BASE_URL}/en/findings`, { headers: { cookie } })).text())
 
-  expect(text).toContain(author)
+  // The visible name is the address's local part; the board keeps the full
+  // address out of the running text (it is a title attribute there).
+  expect(text).toContain(author.split('@')[0])
+  expect(text).not.toContain(author)
   expect(text).toContain('1 agreement')
   // No response anywhere returns a per-Learner agreement total.
   expect(text).not.toMatch(/agreements?\s+(earned|received|total)/i)

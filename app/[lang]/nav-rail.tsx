@@ -23,9 +23,12 @@ const ICON: Record<RailId, React.ReactNode> = {
   learn: <path d="M4 5h7v14H4zM13 5h7v14h-7z" />,
   me: <path d="M4 19V9M10 19V5M16 19v-7M22 19H2" />,
   findings: (
+    // A bulb, not a magnifier: a magnifier's web-wide reading is "search",
+    // and the one guessable meaning of an unlabelled mark must not be the
+    // wrong one — Mental-model inertia, from this platform's own curriculum.
     <>
-      <circle cx="11" cy="11" r="7" />
-      <path d="M20 20l-4-4" />
+      <path d="M12 3.5a5.5 5.5 0 0 0-3.4 9.8c.9.7 1.4 1.6 1.4 2.7h4c0-1.1.5-2 1.4-2.7A5.5 5.5 0 0 0 12 3.5z" />
+      <path d="M10 19h4M10.8 21.5h2.4" />
     </>
   ),
   learners: (
