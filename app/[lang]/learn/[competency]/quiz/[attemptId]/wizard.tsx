@@ -129,7 +129,14 @@ function ItemStop({
         // run together — "1번 문항답함". Said once, with the space in it.
         aria-label={`${label} · ${meta}`}
         aria-current={here ? 'step' : undefined}
-        className="block w-full cursor-pointer rounded-badge pb-1.5"
+        // Positioned and lifted, and it has to be the *button* rather than the
+        // mark inside it. The Answering Control Rule deepens every control on
+        // hover with a `filter`, and a filter makes its element a stacking
+        // context — which traps the mark's own `z-1` inside the button and lets
+        // the next station's connector, a positioned sibling outside it, paint
+        // straight across the ring. Hovering a station behind the marker drew
+        // the solid line through the middle of its own mark (ERR-230).
+        className="relative z-1 block w-full cursor-pointer rounded-badge pb-1.5"
       >
         <span
           aria-hidden
