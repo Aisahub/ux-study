@@ -61,11 +61,21 @@ const COPY: Record<
   },
 }
 
-/** The connector to the previous stop. Solid behind the marker, dotted ahead. */
+/**
+ * The connector to the previous stop. Solid behind the marker, dotted ahead.
+ *
+ * `44px` is the mark's own centre line, not a number to nudge: the station sits
+ * under `pt-[34px]` and is `24px` across, so its centre is at `46px`, and a
+ * `4px` line is centred on that by starting `2px` above it. It read `41px`
+ * until 2026-09-11, three pixels high — enough that the line met every ring
+ * above the middle, and that the dotted track's first dot sat on the current
+ * station's upper edge instead of behind it (ERR-230). Move the mark's size or
+ * its padding and this has to move with them.
+ */
 const TRACK =
-  "before:absolute before:top-[41px] before:right-1/2 before:-left-1/2 before:h-1 before:rounded-sm before:bg-oxblood before:content-['']"
+  "before:absolute before:top-[44px] before:right-1/2 before:-left-1/2 before:h-1 before:rounded-sm before:bg-oxblood before:content-['']"
 const TRACK_AHEAD =
-  "before:absolute before:top-[41px] before:right-1/2 before:-left-1/2 before:h-0 before:border-t-4 before:border-dotted before:border-blue-grey before:content-['']"
+  "before:absolute before:top-[44px] before:right-1/2 before:-left-1/2 before:h-0 before:border-t-4 before:border-dotted before:border-blue-grey before:content-['']"
 
 /**
  * One drawn item as a station on the line, and the way back to it. The mark
