@@ -10,11 +10,11 @@ export default function Loading() {
     <main aria-busy className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8">
       <div className="h-12 w-72 max-w-full animate-pulse rounded-card bg-surface" />
       <div className="h-16 animate-pulse rounded-card bg-surface" />
-      <div className="flex flex-col gap-2">
-        <div className="h-6 w-56 max-w-full animate-pulse rounded-card bg-surface" />
-        <div className="h-[72px] animate-pulse rounded-card bg-surface shadow-card" />
-        <div className="h-[72px] animate-pulse rounded-card bg-surface shadow-card" />
-        <div className="h-[72px] animate-pulse rounded-card bg-surface shadow-card" />
+      <div className="flex flex-col gap-[14px]">
+        <div className="h-[30px] w-72 max-w-full animate-pulse rounded-card bg-surface" />
+        <div className="h-24 animate-pulse rounded-card bg-surface shadow-card" />
+        <div className="h-24 animate-pulse rounded-card bg-surface shadow-card" />
+        <div className="h-24 animate-pulse rounded-card bg-surface shadow-card" />
       </div>
     </main>
   )

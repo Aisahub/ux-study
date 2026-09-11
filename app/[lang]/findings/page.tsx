@@ -78,37 +78,73 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
       <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
-      <p className="text-body-sm text-ink-2">{copy.explanation}</p>
+      {/* Prose holds the reading measure (The One Measure Rule) — the column
+          is wider than a comfortable line at this size. */}
+      <p className="max-w-measure text-body-sm text-ink-2">{copy.explanation}</p>
 
       {/* One shelf per Stage the reader has earned, so a Finding is always read
           next to the page it was written about. */}
       {earned.map((stage) => {
         const shelf = rows.filter((row) => row.stage === stage)
         return (
-          <section key={stage} className="flex flex-col gap-2">
-            <h2 className="text-title font-bold text-ink-2">
+          <section key={stage} className="mt-[14px] first-of-type:mt-0">
+            {/* The step and the voice the Learn overview already gives a
+                Stage heading — the same word, in the same clothes. */}
+            <h2 className="px-1.5 font-serif text-headline font-bold text-ink">
               {copy.stage(stage)} · {copy.board}
             </h2>
             {/* Which emptiness this is, rather than an empty list a reader
-                cannot tell from a broken page. */}
-            {shelf.length === 0 && <p className="text-body-sm text-ink-2">{copy.empty}</p>}
-            <ul className="flex flex-col gap-2">
+                cannot tell from a broken page — on a surface of its own, so
+                the answer is a thing on the board and not a caption floating
+                under a heading. */}
+            {shelf.length === 0 && (
+              <p className="mt-[14px] rounded-card bg-surface p-[26px] text-body-sm text-ink-2 shadow-card">
+                <span className="block max-w-measure">{copy.empty}</span>
+              </p>
+            )}
+            <ul className="mt-[14px] grid gap-[14px]">
               {shelf.map((row) => (
-                <li key={row.finding.id} className="rounded-card bg-surface shadow-card p-3 text-body-sm">
-                  {/* Underlined at rest, not on hover: this line is the one
-                      thing on the page a reader came to open, and on a phone
-                      there is no hover to discover that with. */}
-                  <Link href={`/${lang}/findings/${row.finding.id}`} className="underline underline-offset-4">
-                    <span className="font-mono text-body-sm">{row.finding.element}</span> — {row.finding.description}
-                  </Link>
-                  {/* The address's local part, as the top bar spells its own
-                      reader — on a board where a cohort shares one domain the
-                      domain names nobody, and it was wrapping mid-address on a
-                      phone. The full address stays a hover away for the rare
-                      cross-cohort namesake. */}
-                  <p className="mt-1 text-body-sm text-ink-2" title={row.author}>
-                    {copy.by} {row.author.split('@')[0]} · {copy.agreementCount(row.agreements)}
-                  </p>
+                <li
+                  key={row.finding.id}
+                  className="grid grid-cols-[44px_minmax(0,1fr)] gap-[14px] rounded-card bg-surface p-[26px] shadow-card"
+                >
+                  {/* The agreement count, worn as the row's mark — the board
+                      is the one surface where order carries meaning, and the
+                      number that ordered it should be visible where the Learn
+                      directory's rows wear their station badge. A sunk chip,
+                      because it is a counter and not a state; the words repeat
+                      it below, so the mark can stay aria-hidden. */}
+                  <span
+                    aria-hidden
+                    className="grid size-11 place-items-center rounded-badge bg-sunk text-label font-bold text-ink-2"
+                  >
+                    {row.agreements}
+                  </span>
+                  <div className="min-w-0">
+                    {/* Underlined at rest, not on hover: this line is the one
+                        thing on the page a reader came to open, and on a phone
+                        there is no hover to discover that with. The 44px tap
+                        height belongs to the link itself, as the Learn rows
+                        already do it. */}
+                    <p className="max-w-measure text-body-sm">
+                      <Link
+                        href={`/${lang}/findings/${row.finding.id}`}
+                        className="inline-flex min-h-11 items-center underline underline-offset-4"
+                      >
+                        <span>
+                          <span className="font-mono">{row.finding.element}</span> — {row.finding.description}
+                        </span>
+                      </Link>
+                    </p>
+                    {/* The address's local part, as the top bar spells its own
+                        reader — on a board where a cohort shares one domain the
+                        domain names nobody, and it was wrapping mid-address on a
+                        phone. The full address stays a hover away for the rare
+                        cross-cohort namesake. */}
+                    <p className="mt-1 max-w-measure text-body-sm text-ink-2" title={row.author}>
+                      {copy.by} {row.author.split('@')[0]} · {copy.agreementCount(row.agreements)}
+                    </p>
+                  </div>
                 </li>
               ))}
             </ul>
