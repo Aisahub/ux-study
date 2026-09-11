@@ -1,4 +1,4 @@
-# [ERR-231] The one thing the board exists to open gave no sign it opens
+# [ERR-232] The one thing the board exists to open gave no sign it opens
 
 ## Summary
 

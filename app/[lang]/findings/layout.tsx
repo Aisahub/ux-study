@@ -5,7 +5,7 @@ import { earnedStages } from '@/lib/findings'
 import { isLanguage } from '@/lib/language'
 
 /**
- * The library's gate, asked above the loading boundary (ERR-235).
+ * The library's gate, asked above the loading boundary (ERR-236).
  *
  * The findings routes carry a `loading.tsx`, and a pending shell that has
  * started streaming has already fixed the status at 200 — a `redirect()`

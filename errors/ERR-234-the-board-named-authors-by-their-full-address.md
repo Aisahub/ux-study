@@ -1,8 +1,8 @@
-# [ERR-233] The board named authors by their full address
+# [ERR-234] The board named authors by their full address
 
 ## Summary
 
-Found on 2026-09-11 by the same `/ux-audit` pass as [ERR-231], loudest at
+Found on 2026-09-11 by the same `/ux-audit` pass as [ERR-232], loudest at
 `390px`: the author line wrapped mid-address, `작성 learner-` on one line and
 `c076c8d6f951@aisahub.com · 동의 0명` on the next.
 

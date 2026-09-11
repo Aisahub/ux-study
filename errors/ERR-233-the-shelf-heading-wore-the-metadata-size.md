@@ -1,8 +1,8 @@
-# [ERR-232] The shelf heading wore the metadata size
+# [ERR-233] The shelf heading wore the metadata size
 
 ## Summary
 
-Found on 2026-09-11 by the same `/ux-audit` pass as [ERR-231], and confirmed
+Found on 2026-09-11 by the same `/ux-audit` pass as [ERR-232], and confirmed
 by the squint image: blurred, the board keeps its title and its cards and
 loses the one line that says where a Stage's shelf begins.
 

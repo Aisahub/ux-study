@@ -1,8 +1,8 @@
-# [ERR-234] The findings mark was a search glass
+# [ERR-235] The findings mark was a search glass
 
 ## Summary
 
-Found on 2026-09-11 by the same `/ux-audit` pass as [ERR-231]. The rail's
+Found on 2026-09-11 by the same `/ux-audit` pass as [ERR-232]. The rail's
 mark for the Findings library was a magnifier — and from `sm` up the rail is
 icon-only, labels living in `aria-label` and a tooltip alone (a documented
 trade in `nav-rail.tsx`).

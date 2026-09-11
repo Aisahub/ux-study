@@ -1,4 +1,4 @@
-# [ERR-235] The pending shell streamed the gate's refusal into a 200
+# [ERR-236] The pending shell streamed the gate's refusal into a 200
 
 ## Summary
 

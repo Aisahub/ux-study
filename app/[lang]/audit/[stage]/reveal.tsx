@@ -90,7 +90,7 @@ export const COPY: Record<
     found: '발견',
     missed: '놓침',
     principle: '원칙',
-    // `제안` dropped on this reading surface (ERR-236): the reveal shows a
+    // `제안` dropped on this reading surface (ERR-237): the reveal shows a
     // proposal already made, and the request the word carries belongs to the
     // drawer, where the writing happens.
     fix: '고치는 방법',

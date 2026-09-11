@@ -53,11 +53,13 @@ const COPY: Record<
     stage: (n) => `${n}단계`,
     by: '작성',
     principle: 'UX 원칙',
-    // Reading-surface spellings (ERR-236): noun phrases that stand on their
-    // own as headings, where the drawer's prompt clause (`-는지`) cannot,
-    // and without the `제안` whose request the reader is not being made.
-    // `고치는 방법` is what the drawer's own error copy already calls that
-    // part; the register was settled with the owner on 2026-09-11.
+    // Reading-surface spellings (ERR-237): noun phrases that stand alone as
+    // headings, where the prompt clause of the drawer (`-는지`) cannot, and
+    // without the `제안` whose request the reader is not being made.
+    // `고치는 방법` is what the error copy of the drawer already calls that
+    // part; the register was settled with the owner on 2026-09-11. (No
+    // apostrophe or dash in this comment: the copy tests scan the ko record
+    // by quote pairing, and either mark breaks their frame.)
     description: '잘못된 점',
     fix: '고치는 방법',
     agreementCount: (n) => `동료 ${n}명이 동의했습니다`,
@@ -121,7 +123,7 @@ export default async function FindingPage({
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
       <nav className="text-body-sm">
-        {/* Underlined at rest, as the board's own links are (ERR-231): the
+        {/* Underlined at rest, as the board's own links are (ERR-232): the
             arrow says direction, the underline says pressable, and a phone
             has no hover to say it later. */}
         <Link

@@ -6,7 +6,7 @@ import { isLanguage } from '@/lib/language'
 
 /**
  * One Finding's gate, asked above the loading boundary — the same reason as
- * the segment above (ERR-235), for the question the segment above cannot
+ * the segment above (ERR-236), for the question the segment above cannot
  * ask: whether *this* Finding's Stage has been earned. Reaching a Stage 2
  * Finding by its address is the route a Learner mid-way through Stage 2
  * would take to read its answer key (#61), and that refusal has to survive
