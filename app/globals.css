@@ -1,4 +1,22 @@
-@import "tailwindcss";
+/*
+ * Scanned sources, named rather than discovered.
+ *
+ * Tailwind v4 looks for class names in every file it can reach, and a class
+ * name is a string that looks like one — including one inside backticks in a
+ * document. `errors/ERR-230` quotes the coordinate it corrects, `top-[41px]`,
+ * and that quotation compiled into a real rule and shipped to Learners
+ * (ERR-231). This repository writes an ERR document for every fix, most of
+ * them naming the utility they changed, so the leak was structural rather than
+ * a one-off.
+ *
+ * `source(none)` turns the discovery off and the two lines below say where the
+ * classes actually are. Nothing else renders through Tailwind: the practice
+ * pages and the item screens carry their own semantic classes and their own
+ * stylesheets, which is why `content/` is not on this list.
+ */
+@import "tailwindcss" source(none);
+@source "../app";
+@source "../lib";
 
 /*
  * The tokens DESIGN.md declares. Values live here once; every surface reads

@@ -505,9 +505,18 @@ test('a folded item answers a press, and its source link says it leaves the page
 
   // Both halves, or the preference is ignored by whatever the first half
   // reached and the second did not — which is the second half of ERR-218.
-  const reducedMotion = /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{((?:[^{}]|\{[^{}]*\})*)\}/.exec(css)?.[1]
-  expect(reducedMotion).toBeTruthy()
-  expect(reducedMotion).toContain('summary')
+  //
+  // Every block, not the first one. Tailwind emits its own
+  // `prefers-reduced-motion` block for the `motion-reduce:` utilities, and
+  // which of the two lands first is a question about what else the stylesheet
+  // happens to contain: narrowing the scanned sources in ERR-231 reordered
+  // them, and a test that read `exec(...)` alone then failed on a stylesheet
+  // that still carried the rule.
+  const reducedMotion = [
+    ...css.matchAll(/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{((?:[^{}]|\{[^{}]*\})*)\}/g),
+  ].map((match) => match[1])
+  expect(reducedMotion.length).toBeGreaterThan(0)
+  expect(reducedMotion.some((block) => block.includes('summary'))).toBe(true)
 })
 
 /**
