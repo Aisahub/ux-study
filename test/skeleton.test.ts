@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { expect, test } from 'vitest'
 
 import { BASE_URL } from './config'
@@ -58,6 +60,36 @@ test('nothing on the door repaints itself when the visitor\'s system is dark', a
   ).join('\n')
 
   expect(css).not.toContain('prefers-color-scheme')
+})
+
+test('a class name written in a document does not become a rule a Learner downloads', async () => {
+  // Tailwind v4 finds class names by looking for strings that look like class
+  // names, in every file it can reach. This repository writes an ERR document
+  // for every fix and most of them quote the utility they changed, so prose was
+  // compiling into the stylesheet — `top-[41px]`, the coordinate ERR-230
+  // corrects, shipped as a real rule nothing on any page uses (ERR-231).
+  //
+  // `globals.css` names its sources now instead of letting them be discovered.
+  // The canary is that same quotation: it stays in ERR-230 for good, it appears
+  // in no source file, and the stylesheet must not define it. Widen the scan
+  // again and this goes red.
+  const doc = readFileSync(
+    join(__dirname, '..', 'errors', 'ERR-230-the-route-line-ran-three-pixels-above-the-stations-it-joins.md'),
+    'utf8',
+  )
+  expect(doc, 'the canary has to still be written down somewhere').toContain('top-[41px]')
+
+  const html = await (await fetch(`${BASE_URL}/en/signin`)).text()
+  const hrefs = [...html.matchAll(/<link[^>]*href="([^"]+\.css[^"]*)"/g)].map((match) => match[1])
+  expect(hrefs.length).toBeGreaterThan(0)
+  const css = (
+    await Promise.all(hrefs.map(async (href) => (await fetch(new URL(href, BASE_URL))).text()))
+  ).join('\n')
+
+  // The rule the wizard actually uses, so this cannot pass by the stylesheet
+  // having lost its arbitrary-value utilities altogether.
+  expect(css, 'the station connector is styled from an arbitrary value').toContain(String.raw`before\:top-\[44px\]`)
+  expect(css, 'a coordinate quoted in an ERR document became a rule').not.toContain(String.raw`.top-\[41px\]`)
 })
 
 test('the application still reads from a real database on the way through', async () => {
