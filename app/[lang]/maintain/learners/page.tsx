@@ -42,7 +42,7 @@ const COPY: Record<
   ko: {
     heading: '학습자',
     explanation:
-      '모두가 어디쯤 있고, 마지막 활동이 얼마나 지났는지입니다. 멈춘 동료를 조용히 사라지기 전에 알아차리기 위한 화면입니다. 순위는 어디에도 없습니다.',
+      '전체 학습자의 진행 위치와 마지막 활동 시점을 표시합니다. 진행이 멈춘 동료가 조용히 이탈하기 전에 알아차리기 위한 화면이며, 누구에게도 순위를 매기지 않습니다.',
     position: (passed, total) => `퀴즈 ${total}개 중 ${passed}개 통과`,
     reportSubmitted: '보고서 제출',
     lastActivity: '마지막 활동',
@@ -50,7 +50,7 @@ const COPY: Record<
     today: '오늘',
     never: '아직 활동 없음',
     attemptsLabel: '시도',
-    nobodyYet: '아직 아무도 로그인하지 않았습니다. 로그인한 사람은 첫 방문부터 여기에 나타납니다.',
+    nobodyYet: '아직 아무도 로그인하지 않았습니다. 로그인한 사람은 첫 방문부터 여기에 표시됩니다.',
   },
 }
 

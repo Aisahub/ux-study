@@ -1,8 +1,10 @@
+import { and, desc, eq } from 'drizzle-orm'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { LinkPending } from '@/app/[lang]/pending'
+import { db, schema } from '@/db'
 import { isLanguage, type Language } from '@/lib/language'
 import { notesFor } from '@/lib/notes'
 import { content } from '@/lib/server-content'
@@ -22,6 +24,8 @@ const COPY: Record<
     articleTitle: string
     article: string
     quizPassed: string
+    /** The way back into a passed attempt, named as the section it lands on. */
+    reviewAnswers: string
     quizStart: (attempts: number) => string
     nextKicker: string
     quizTitle: string
@@ -42,6 +46,7 @@ const COPY: Record<
     articleTitle: 'The source article',
     article: 'Read the source article',
     quizPassed: 'Gate Quiz passed',
+    reviewAnswers: 'The answers',
     quizStart: (attempts) => (attempts > 0 ? 'Retry the Gate Quiz' : 'Take the Gate Quiz'),
     nextKicker: 'The final gate',
     quizTitle: 'Gate Quiz',
@@ -63,6 +68,7 @@ const COPY: Record<
     articleTitle: '원문 기사',
     article: '원문 기사 읽기',
     quizPassed: '퀴즈 통과',
+    reviewAnswers: '문항별 정답과 해설',
     quizStart: (attempts) => (attempts > 0 ? '퀴즈 다시 도전' : '퀴즈 시작'),
     nextKicker: '마지막 관문',
     quizTitle: '퀴즈',
@@ -71,9 +77,9 @@ const COPY: Record<
     items: (n) => `${n}문항`,
     specimenTitle: '리뷰 읽는 연습',
     specimenBody:
-      '1단계 연습 페이지를 두고 저희가 써 둔 리포트입니다. 말이 되는 발견도 있고 그렇지 않은 것도 섞여 있습니다. 남이 한 점검을 판단하는 것이 이 역량이 말하는 능력이고, 여기서 그 연습을 해 볼 수 있습니다. 평가하지 않고, 기록도 남지 않습니다.',
+      '1단계 연습 페이지를 운영자가 직접 점검해 작성해 둔 리포트입니다. 타당한 발견과 그렇지 않은 발견이 섞여 있습니다. 다른 사람의 점검을 판단하는 것이 이 역량이 말하는 능력이며, 여기서 그 연습을 할 수 있습니다. 평가되지 않고, 기록도 남지 않습니다.',
     specimenLink: '리포트 읽기',
-    passedBody: '원하는 때에 다시 도전할 수 있습니다. 모든 시도가 남고, 어느 것도 다른 것을 지우지 않습니다.',
+    passedBody: '언제든지 다시 도전할 수 있습니다. 모든 시도가 기록으로 남으며, 이전 시도를 덮어쓰지 않습니다.',
   },
 }
 
@@ -174,6 +180,27 @@ export default async function CompetencyPage({
   // with anywhere in the application.
   const noteCount = (await notesFor(session.email, slug)).length
   const { drawSize, passThreshold } = content.config
+
+  // The passed attempt this card links back into — the latest one, since any
+  // passed attempt shows every answer and the newest is the set this Learner
+  // saw last. Asked only once the status says there is one to find.
+  const passedAttemptId =
+    quiz.status === 'passed'
+      ? (
+          await db
+            .select({ id: schema.attempts.id })
+            .from(schema.attempts)
+            .where(
+              and(
+                eq(schema.attempts.email, session.email),
+                eq(schema.attempts.competency, slug),
+                eq(schema.attempts.passed, true),
+              ),
+            )
+            .orderBy(desc(schema.attempts.id))
+            .limit(1)
+        )[0]?.id ?? null
+      : null
 
   return (
     <CompetencyShell
@@ -292,12 +319,27 @@ export default async function CompetencyPage({
               </h2>
             </StepHead>
             <p className="mt-3.5 max-w-measure text-body">{copy.passedBody}</p>
-            <Link
-              href={`/${lang}/learn/${slug}/quiz`}
-              className="mt-5.5 inline-flex text-title font-bold text-oxblood"
-            >
-              {copy.quizStart(quiz.attempts)}
-            </Link>
+            {/* The way back into the passed attempt first, retrying second:
+                after a pass, rereading the answers is what this card is
+                revisited for, and the only route there used to be the retry
+                link — a door nobody opens to read. Named as the section it
+                lands on, as the rail labels are. */}
+            <div className="mt-5.5 flex flex-wrap gap-x-7 gap-y-2">
+              {passedAttemptId != null && (
+                <Link
+                  href={`/${lang}/learn/${slug}/quiz/${passedAttemptId}`}
+                  className="inline-flex text-title font-bold text-oxblood"
+                >
+                  {copy.reviewAnswers}
+                </Link>
+              )}
+              <Link
+                href={`/${lang}/learn/${slug}/quiz`}
+                className="inline-flex text-title font-bold text-oxblood"
+              >
+                {copy.quizStart(quiz.attempts)}
+              </Link>
+            </div>
           </section>
         ) : (
           // The one warm field, and it is where the order puts it: the last

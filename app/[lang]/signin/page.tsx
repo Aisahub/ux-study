@@ -14,7 +14,7 @@ const COPY: Record<Language, { heading: string; explanation: string; button: str
   ko: {
     heading: '로그인',
     explanation:
-      '버튼은 모두에게 하나입니다. Aisahub 구성원은 Workspace 계정으로, 인도네시아 동료는 등록된 개인 Google 계정으로 로그인합니다.',
+      '로그인 방법은 모두 동일합니다. Aisahub 구성원은 Workspace 계정으로, 인도네시아 동료는 등록된 개인 Google 계정으로 로그인합니다.',
     button: 'Google로 계속하기',
   },
 }
