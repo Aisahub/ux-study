@@ -116,7 +116,13 @@ export default async function FindingPage({
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8 font-sans">
       <nav className="text-body-sm">
-        <Link href={`/${lang}/findings`} className="text-ink-2 underline-offset-4 hover:underline">
+        {/* Underlined at rest, as the board's own links are (ERR-231): the
+            arrow says direction, the underline says pressable, and a phone
+            has no hover to say it later. */}
+        <Link
+          href={`/${lang}/findings`}
+          className="inline-flex min-h-11 items-center text-ink-2 underline underline-offset-4"
+        >
           ← {copy.back}
         </Link>
       </nav>
@@ -132,32 +138,52 @@ export default async function FindingPage({
           <span className="font-bold">{copy.stage(row.stage)}</span> · {copy.by} {row.author.split('@')[0]}
         </p>
 
-        {/* Body, not body-sm: the description and the fix are what this page
-            exists to be read for. The labels stay quiet beside them. */}
-        <section className="flex max-w-measure flex-col gap-3 text-body">
-          <p>
-            <span className="text-ink-2">{copy.principle}: </span>
-            {principle ? principle.name[lang] : row.finding.principle}
-          </p>
-          <p>
-            <span className="text-ink-2">{copy.description}: </span>
-            {row.finding.description}
-          </p>
-          <p>
-            <span className="text-ink-2">{copy.fix}: </span>
-            {row.finding.fix}
-          </p>
-        </section>
+        {/* A definition list, its labels stacked above their answers: three
+            steps of one ladder — the mono headline, the body answers, the
+            quiet label words — instead of three sentences that all start
+            grey. Body, not body-sm: the description and the fix are what
+            this page exists to be read for. */}
+        <dl className="grid max-w-measure gap-[14px]">
+          <div>
+            <dt className="text-label font-bold text-ink-2">{copy.principle}</dt>
+            <dd className="mt-1 text-body">{principle ? principle.name[lang] : row.finding.principle}</dd>
+          </div>
+          <div>
+            <dt className="text-label font-bold text-ink-2">{copy.description}</dt>
+            <dd className="mt-1 text-body">{row.finding.description}</dd>
+          </div>
+          <div>
+            <dt className="text-label font-bold text-ink-2">{copy.fix}</dt>
+            <dd className="mt-1 text-body">{row.finding.fix}</dd>
+          </div>
+        </dl>
 
-        <section className="flex flex-wrap items-center gap-x-4 gap-y-1 text-body">
-          <span className="text-ink-2">{copy.agreementCount(count)}</span>
+        {/* Agreement is this screen's one action, so it is drawn as the one
+            control the system draws actions with — the full-width oxblood
+            pill the Gate Quiz doorstep uses — not as a sentence that happens
+            to submit. The count stays words beside the board's sunk-chip
+            number, and the two no-action states stay words: one is a fact
+            about authorship, the other a status already given its colour. */}
+        <section className="grid gap-[14px]">
+          <p className="flex items-center gap-2.5 text-body-sm text-ink-2">
+            <span
+              aria-hidden
+              className="grid size-[34px] shrink-0 place-items-center rounded-badge bg-sunk text-label font-bold text-ink-2"
+            >
+              {count}
+            </span>
+            {copy.agreementCount(count)}
+          </p>
           {row.author === session.email ? (
-            <span className="text-ink-2">{copy.ownFinding}</span>
+            <p className="text-body-sm text-ink-2">{copy.ownFinding}</p>
           ) : mine ? (
-            <span className="font-bold text-oxblood">{copy.agreed}</span>
+            <p className="text-body font-bold text-oxblood">{copy.agreed}</p>
           ) : (
             <form action={agree}>
-              <SubmitButton pendingLabel={copy.agreeing} className="font-bold underline underline-offset-4">
+              <SubmitButton
+                pendingLabel={copy.agreeing}
+                className="flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+              >
                 {copy.agree}
               </SubmitButton>
             </form>
