@@ -5,6 +5,7 @@ import { notFound, redirect } from 'next/navigation'
 import { requireSession } from '@/lib/auth'
 import { libraryFor } from '@/lib/findings'
 import { isLanguage, type Language } from '@/lib/language'
+import { content } from '@/lib/server-content'
 
 export const dynamic = 'force-dynamic'
 
@@ -40,6 +41,13 @@ const COPY: Record<
     stage: (n) => `${n}단계`,
     empty: '이 단계에 보고서를 제출한 동료가 아직 없습니다. 내가 처음입니다. 동료들이 마치는 대로 여기에 나타납니다.',
   },
+}
+
+/** The Principle's name in the reader's language, or the stored slug when the
+    glossary no longer carries it — a Finding outlives an entry rename. */
+function principleName(slug: string, lang: Language): string {
+  const entry = content.glossary.find((e) => e.slug === slug)
+  return entry ? entry.name[lang] : slug
 }
 
 /**
@@ -125,8 +133,9 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
                         thing on the page a reader came to open, and on a phone
                         there is no hover to discover that with. The 44px tap
                         height belongs to the link itself, as the Learn rows
-                        already do it. */}
-                    <p className="max-w-measure text-body-sm">
+                        already do it. Body, not body-sm: the Finding sentence
+                        is what this card exists to be read for. */}
+                    <p className="max-w-measure text-body">
                       <Link
                         href={`/${lang}/findings/${row.finding.id}`}
                         className="inline-flex min-h-11 items-center underline underline-offset-4"
@@ -136,13 +145,18 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
                         </span>
                       </Link>
                     </p>
-                    {/* The address's local part, as the top bar spells its own
-                        reader — on a board where a cohort shares one domain the
-                        domain names nobody, and it was wrapping mid-address on a
-                        phone. The full address stays a hover away for the rare
-                        cross-cohort namesake. */}
+                    {/* Where the Finding comes from, before who wrote it: the
+                        Stage and the Principle it names, in bold so provenance
+                        and attribution read as two facts on one line. The
+                        address is its local part, as the top bar spells its
+                        own reader — the shared domain names nobody and was
+                        wrapping mid-address on a phone; the full address stays
+                        a hover away for the rare cross-cohort namesake. */}
                     <p className="mt-1 max-w-measure text-body-sm text-ink-2" title={row.author}>
-                      {copy.by} {row.author.split('@')[0]} · {copy.agreementCount(row.agreements)}
+                      <span className="font-bold">
+                        {copy.stage(row.stage)} · {principleName(row.finding.principle, lang)}
+                      </span>{' '}
+                      · {copy.by} {row.author.split('@')[0]} · {copy.agreementCount(row.agreements)}
                     </p>
                   </div>
                 </li>

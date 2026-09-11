@@ -8,9 +8,7 @@ export default function Loading() {
   return (
     <main aria-busy className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 p-8">
       <div className="h-5 w-24 animate-pulse rounded-card bg-surface" />
-      <div className="h-7 w-64 max-w-full animate-pulse rounded-card bg-surface" />
-      <div className="h-5 w-40 animate-pulse rounded-card bg-surface" />
-      <div className="h-28 animate-pulse rounded-card bg-surface" />
+      <div className="h-72 animate-pulse rounded-card bg-surface shadow-card" />
     </main>
   )
 }

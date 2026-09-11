@@ -21,6 +21,7 @@ const COPY: Record<
      * bookmark or a history entry says here must be true of every Finding.
      */
     pageTitle: string
+    stage: (n: number) => string
     by: string
     principle: string
     description: string
@@ -35,6 +36,7 @@ const COPY: Record<
 > = {
   en: {
     pageTitle: 'Finding',
+    stage: (n) => `Stage ${n}`,
     by: 'by',
     principle: 'UX Principle',
     description: 'What goes wrong',
@@ -48,6 +50,7 @@ const COPY: Record<
   },
   ko: {
     pageTitle: '발견',
+    stage: (n) => `${n}단계`,
     by: '작성',
     principle: 'UX 원칙',
     description: '무엇이 잘못되는지',
@@ -118,42 +121,49 @@ export default async function FindingPage({
         </Link>
       </nav>
 
-      <h1 className="font-mono text-title">{row.finding.element}</h1>
-      {/* The local part, as the board and the top bar spell people — the full
-          address stays a hover away (see the board for why). */}
-      <p className="text-body-sm text-ink-2" title={row.author}>
-        {copy.by} {row.author.split('@')[0]}
-      </p>
+      {/* One card, one Finding — the reading surface the board's rows open
+          into, on the same white card the rows themselves wear. */}
+      <article className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card">
+        <h1 className="max-w-measure font-mono text-headline font-bold text-ink">{row.finding.element}</h1>
+        {/* Where it comes from before who wrote it, as the board's rows say
+            it. The local part, as the board and the top bar spell people —
+            the full address stays a hover away (see the board for why). */}
+        <p className="max-w-measure text-body-sm text-ink-2" title={row.author}>
+          <span className="font-bold">{copy.stage(row.stage)}</span> · {copy.by} {row.author.split('@')[0]}
+        </p>
 
-      <section className="flex flex-col gap-3 text-body-sm">
-        <p>
-          <span className="text-ink-2">{copy.principle}: </span>
-          {principle ? principle.name[lang] : row.finding.principle}
-        </p>
-        <p>
-          <span className="text-ink-2">{copy.description}: </span>
-          {row.finding.description}
-        </p>
-        <p>
-          <span className="text-ink-2">{copy.fix}: </span>
-          {row.finding.fix}
-        </p>
-      </section>
+        {/* Body, not body-sm: the description and the fix are what this page
+            exists to be read for. The labels stay quiet beside them. */}
+        <section className="flex max-w-measure flex-col gap-3 text-body">
+          <p>
+            <span className="text-ink-2">{copy.principle}: </span>
+            {principle ? principle.name[lang] : row.finding.principle}
+          </p>
+          <p>
+            <span className="text-ink-2">{copy.description}: </span>
+            {row.finding.description}
+          </p>
+          <p>
+            <span className="text-ink-2">{copy.fix}: </span>
+            {row.finding.fix}
+          </p>
+        </section>
 
-      <section className="flex items-center gap-4 text-body-sm">
-        <span className="text-ink-2">{copy.agreementCount(count)}</span>
-        {row.author === session.email ? (
-          <span className="text-ink-2">{copy.ownFinding}</span>
-        ) : mine ? (
-          <span className="font-bold text-oxblood">{copy.agreed}</span>
-        ) : (
-          <form action={agree}>
-            <SubmitButton pendingLabel={copy.agreeing} className="font-bold underline underline-offset-4">
-              {copy.agree}
-            </SubmitButton>
-          </form>
-        )}
-      </section>
+        <section className="flex flex-wrap items-center gap-x-4 gap-y-1 text-body">
+          <span className="text-ink-2">{copy.agreementCount(count)}</span>
+          {row.author === session.email ? (
+            <span className="text-ink-2">{copy.ownFinding}</span>
+          ) : mine ? (
+            <span className="font-bold text-oxblood">{copy.agreed}</span>
+          ) : (
+            <form action={agree}>
+              <SubmitButton pendingLabel={copy.agreeing} className="font-bold underline underline-offset-4">
+                {copy.agree}
+              </SubmitButton>
+            </form>
+          )}
+        </section>
+      </article>
     </main>
   )
 }

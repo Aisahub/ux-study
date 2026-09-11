@@ -12,9 +12,9 @@ export default function Loading() {
       <div className="h-16 animate-pulse rounded-card bg-surface" />
       <div className="flex flex-col gap-[14px]">
         <div className="h-[30px] w-72 max-w-full animate-pulse rounded-card bg-surface" />
-        <div className="h-24 animate-pulse rounded-card bg-surface shadow-card" />
-        <div className="h-24 animate-pulse rounded-card bg-surface shadow-card" />
-        <div className="h-24 animate-pulse rounded-card bg-surface shadow-card" />
+        <div className="h-28 animate-pulse rounded-card bg-surface shadow-card" />
+        <div className="h-28 animate-pulse rounded-card bg-surface shadow-card" />
+        <div className="h-28 animate-pulse rounded-card bg-surface shadow-card" />
       </div>
     </main>
   )
