@@ -65,7 +65,7 @@ const COPY: Record<
   ko: {
     heading: '허용 목록',
     explanation:
-      '누가 로그인할 수 있는지의 목록입니다. 전체 주소는 그 사람을, @aisahub.com 와일드카드는 모든 Workspace 계정을 들여보냅니다. 항목을 삭제하면 그 즉시 접근이 막힙니다.',
+      '로그인할 수 있는 계정의 목록입니다. 전체 주소는 해당 계정 하나의 로그인을, @aisahub.com 와일드카드는 모든 Workspace 계정의 로그인을 허용합니다. 항목을 삭제하면 즉시 접근이 차단됩니다.',
     entriesHeading: '현재 항목',
     addHeading: '항목 추가',
     pattern: '주소 또는 와일드카드',
@@ -78,7 +78,7 @@ const COPY: Record<
     remove: '삭제',
     removing: '삭제하는 중…',
     removeEntry: (pattern) => `${pattern} 삭제`,
-    admitsYou: '본인을 들여보내는 항목입니다. 삭제하면 다시 들어올 수 없습니다',
+    admitsYou: '본인의 접근을 허용하는 항목입니다. 삭제하면 다시 로그인할 수 없습니다',
     addPlaceholder: 'colleague@example.com',
     nobodyYet: '아직 항목이 없습니다. 하나라도 추가되기 전에는 아무도 로그인할 수 없습니다.',
   },

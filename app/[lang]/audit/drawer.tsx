@@ -72,16 +72,18 @@ const COPY: Record<
     elementHint: '페이지에서 직접 클릭해 선택하세요.',
     principle: 'UX 원칙',
     principlePlaceholder: '용어집에서 선택…',
-    description: '페이지를 쓰는 사람에게 무엇이 잘못되는지',
+    // `사용하는`, not `쓰는`: with 쓰다 the reader of this prompt met the
+    // page author before the page user, and the briefs introduce neither.
+    description: '페이지를 사용하는 사람에게 무엇이 잘못되는지',
     fix: '고치는 방법 제안',
     add: '발견 추가',
     saved: (n) => `저장된 발견 ${n}개`,
     remove: '삭제',
     submit: '보고서 제출',
     needMore: (more) => `제출하려면 발견이 ${more}개 더 필요합니다.`,
-    submitWarning: '제출은 한 번뿐입니다. 정답이 공개되고, 그 뒤에는 아무것도 추가할 수 없습니다.',
+    submitWarning: '제출은 한 번만 가능하며 되돌릴 수 없습니다. 제출 즉시 정답이 공개되고, 이후에는 발견을 추가할 수 없습니다.',
     errors: {
-      'duplicate-element': '이미 그 요소를 가리키는 발견이 있습니다. 요소 하나에 발견 하나입니다.',
+      'duplicate-element': '이미 해당 요소를 가리키는 발견이 있습니다. 요소 하나당 발견 하나만 작성할 수 있습니다.',
       'unknown-element': '페이지에서 요소를 클릭해 선택하세요.',
       'unknown-principle': '용어집에서 원칙을 선택하세요.',
       // `서술` reads as the grammar term before it reads as "written part";
