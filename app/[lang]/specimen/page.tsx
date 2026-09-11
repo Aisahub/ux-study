@@ -74,8 +74,13 @@ const COPY: Record<
       '발견을 하나씩 읽으면서, 제3자가 이걸 받아서 무엇을 할 수 있을지 물어보세요. 어떤 요소를 짚었는지, 가져다 쓴 원칙이 설명한 내용과 맞는지, 애초에 거기 결함이 있기는 한지. 여기에는 말이 되는 것도 있고 아닌 것도 있습니다. 이 페이지에 무엇을 심어 두었는지는 이미 보셨으니, 주장 하나하나를 그것과 대조해 볼 수 있습니다.',
     subject: '점검 대상 페이지 열기',
     principle: '원칙',
-    defect: '무엇이 잘못되는가',
-    fix: '제안하는 수정',
+    // The reading surfaces spell a Finding's written parts the same way
+    // (ERR-236): noun phrases, and without the `제안` whose request belongs
+    // to the drawer. This pair said `무엇이 잘못되는가` and `제안하는 수정` —
+    // the second a participle carried over from `Proposed fix` whose tense
+    // reads as someone proposing right now.
+    defect: '잘못된 점',
+    fix: '고치는 방법',
     lockedHeading: '이 페이지는 내 리포트를 기다립니다',
     lockedWhy:
       '이 리포트는 1단계 연습 페이지를 점검한 것이라, 아직 점검을 마치지 않은 페이지의 무엇이 잘못되었는지를 말합니다. 제출 전에 읽으면 정답지가 됩니다. 1단계 리포트를 제출하는 순간 저절로 열립니다.',

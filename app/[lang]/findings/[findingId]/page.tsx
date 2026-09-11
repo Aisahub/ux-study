@@ -53,8 +53,13 @@ const COPY: Record<
     stage: (n) => `${n}단계`,
     by: '작성',
     principle: 'UX 원칙',
-    description: '무엇이 잘못되는지',
-    fix: '고치는 방법 제안',
+    // Reading-surface spellings (ERR-236): noun phrases that stand on their
+    // own as headings, where the drawer's prompt clause (`-는지`) cannot,
+    // and without the `제안` whose request the reader is not being made.
+    // `고치는 방법` is what the drawer's own error copy already calls that
+    // part; the register was settled with the owner on 2026-09-11.
+    description: '잘못된 점',
+    fix: '고치는 방법',
     agreementCount: (n) => `동료 ${n}명이 동의했습니다`,
     agree: '이 발견에 동의합니다',
     agreeing: '기록하는 중…',
