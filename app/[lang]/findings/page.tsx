@@ -86,7 +86,7 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
         const shelf = rows.filter((row) => row.stage === stage)
         return (
           <section key={stage} className="flex flex-col gap-2">
-            <h2 className="text-body-sm font-bold text-ink-2">
+            <h2 className="text-title font-bold text-ink-2">
               {copy.stage(stage)} · {copy.board}
             </h2>
             {/* Which emptiness this is, rather than an empty list a reader
@@ -95,11 +95,19 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
             <ul className="flex flex-col gap-2">
               {shelf.map((row) => (
                 <li key={row.finding.id} className="rounded-card bg-surface shadow-card p-3 text-body-sm">
-                  <Link href={`/${lang}/findings/${row.finding.id}`} className="underline-offset-4 hover:underline">
+                  {/* Underlined at rest, not on hover: this line is the one
+                      thing on the page a reader came to open, and on a phone
+                      there is no hover to discover that with. */}
+                  <Link href={`/${lang}/findings/${row.finding.id}`} className="underline underline-offset-4">
                     <span className="font-mono text-body-sm">{row.finding.element}</span> — {row.finding.description}
                   </Link>
-                  <p className="mt-1 text-body-sm text-ink-2">
-                    {copy.by} {row.author} · {copy.agreementCount(row.agreements)}
+                  {/* The address's local part, as the top bar spells its own
+                      reader — on a board where a cohort shares one domain the
+                      domain names nobody, and it was wrapping mid-address on a
+                      phone. The full address stays a hover away for the rare
+                      cross-cohort namesake. */}
+                  <p className="mt-1 text-body-sm text-ink-2" title={row.author}>
+                    {copy.by} {row.author.split('@')[0]} · {copy.agreementCount(row.agreements)}
                   </p>
                 </li>
               ))}

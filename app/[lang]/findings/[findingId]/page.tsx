@@ -119,8 +119,10 @@ export default async function FindingPage({
       </nav>
 
       <h1 className="font-mono text-title">{row.finding.element}</h1>
-      <p className="text-body-sm text-ink-2">
-        {copy.by} {row.author}
+      {/* The local part, as the board and the top bar spell people — the full
+          address stays a hover away (see the board for why). */}
+      <p className="text-body-sm text-ink-2" title={row.author}>
+        {copy.by} {row.author.split('@')[0]}
       </p>
 
       <section className="flex flex-col gap-3 text-body-sm">
