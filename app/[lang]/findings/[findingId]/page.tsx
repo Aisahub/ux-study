@@ -138,22 +138,23 @@ export default async function FindingPage({
           <span className="font-bold">{copy.stage(row.stage)}</span> · {copy.by} {row.author.split('@')[0]}
         </p>
 
-        {/* A definition list, its labels stacked above their answers: three
-            steps of one ladder — the mono headline, the body answers, the
-            quiet label words — instead of three sentences that all start
-            grey. Body, not body-sm: the description and the fix are what
-            this page exists to be read for. */}
-        <dl className="grid max-w-measure gap-[14px]">
-          <div>
-            <dt className="text-label font-bold text-ink-2">{copy.principle}</dt>
+        {/* A definition list, its headings in the title step over body
+            answers — same size, the weight is the difference, the pairing
+            the scale already names — and a khaki hairline between blocks,
+            the line this system draws wherever one card holds several
+            sections (the Competency page's notes head, the verdict's item
+            rows). Label-step grey alone did not hold the three apart. */}
+        <dl className="grid max-w-measure divide-y divide-khaki/40 border-t border-khaki/40">
+          <div className="py-[14px]">
+            <dt className="text-title font-bold text-ink">{copy.principle}</dt>
             <dd className="mt-1 text-body">{principle ? principle.name[lang] : row.finding.principle}</dd>
           </div>
-          <div>
-            <dt className="text-label font-bold text-ink-2">{copy.description}</dt>
+          <div className="py-[14px]">
+            <dt className="text-title font-bold text-ink">{copy.description}</dt>
             <dd className="mt-1 text-body">{row.finding.description}</dd>
           </div>
-          <div>
-            <dt className="text-label font-bold text-ink-2">{copy.fix}</dt>
+          <div className="py-[14px] pb-0">
+            <dt className="text-title font-bold text-ink">{copy.fix}</dt>
             <dd className="mt-1 text-body">{row.finding.fix}</dd>
           </div>
         </dl>
@@ -163,8 +164,10 @@ export default async function FindingPage({
             pill the Gate Quiz doorstep uses — not as a sentence that happens
             to submit. The count stays words beside the board's sunk-chip
             number, and the two no-action states stay words: one is a fact
-            about authorship, the other a status already given its colour. */}
-        <section className="grid gap-[14px]">
+            about authorship, the other a status already given its colour.
+            The same hairline above it marks where reading ends and acting
+            begins, as the report drawer's action foot already does. */}
+        <section className="grid gap-[14px] border-t border-khaki/40 pt-[14px]">
           <p className="flex items-center gap-2.5 text-body-sm text-ink-2">
             <span
               aria-hidden
