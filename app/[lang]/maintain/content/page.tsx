@@ -10,29 +10,30 @@ import { content } from '@/lib/server-content'
 
 export const dynamic = 'force-dynamic'
 
-const COPY: Record<
-  Language,
-  {
-    heading: string
-    explanation: string
-    itemsHeading: string
-    stage: (n: number) => string
-    notAuthored: string
-    noSubject: string
-    rate: (correct: number, drawn: number) => string
-    neverDrawn: string
-    defectsHeading: string
-    defectsExplanation: string
-    missedBy: (missed: number, of: number) => string
-    locationsHeading: string
-    locationsExplanation: string
-    korea: string
-    indonesia: string
-    foundBy: (found: number, of: number) => string
-    noReportsHere: string
-    noReports: string
-  }
-> = {
+/** Named rather than written inline, because the column head below takes it. */
+type Copy = {
+  heading: string
+  explanation: string
+  itemsHeading: string
+  stage: (n: number) => string
+  notAuthored: string
+  noSubject: string
+  rate: (correct: number, drawn: number) => string
+  neverDrawn: string
+  defectsHeading: string
+  defectsExplanation: string
+  missedBy: (missed: number, of: number) => string
+  locationsHeading: string
+  locationsExplanation: string
+  korea: string
+  indonesia: string
+  submitted: (reports: number) => string
+  finders: (found: number) => string
+  noReportsHere: string
+  noReports: string
+}
+
+const COPY: Record<Language, Copy> = {
   en: {
     heading: 'Content health',
     // The cohort size is deliberately not a number here. It said "four
@@ -54,7 +55,8 @@ const COPY: Record<
       'Both cohorts audit identical input, so what each found is a controlled comparison. Workspace addresses are the Korea cohort; personal addresses are Indonesia.',
     korea: 'Korea',
     indonesia: 'Indonesia',
-    foundBy: (found, of) => `${found} of ${of} found`,
+    submitted: (reports) => `${reports} submitted`,
+    finders: (found) => `${found}`,
     noReportsHere: 'no reports yet',
     noReports: 'No submitted reports yet.',
   },
@@ -79,7 +81,8 @@ const COPY: Record<
     // Korean label name the same thing its English sibling names (CONTEXT.md).
     korea: '한국팀',
     indonesia: '인도네시아팀',
-    foundBy: (found, of) => `${of}명 중 ${found}명 발견`,
+    submitted: (reports) => `${reports}명 제출`,
+    finders: (found) => `${found}명`,
     noReportsHere: '아직 제출 없음',
     noReports: '제출된 보고서가 아직 없습니다.',
   },
@@ -117,15 +120,42 @@ function Row({ name, value, absent }: { name: string; value: string; absent?: bo
   )
 }
 
-/** One cohort's result for one defect, or the fact that it has no reports to speak for it. */
-function Cohort({ label, value, absent }: { label: string; value: string; absent: boolean }) {
+/**
+ * One team's column head: who is being counted, and out of how many.
+ *
+ * The denominator belongs to the Stage, not to each defect, so it is said once
+ * here instead of inside twelve cells. A team that has submitted nothing for
+ * this Stage says so in this cell, in words, and its column below stays empty —
+ * a controlled comparison may not report an absent team as a finding of zero,
+ * because the two readings ask a Maintainer for opposite actions.
+ */
+function TeamHead({ label, reports, copy }: { label: string; reports: number; copy: Copy }) {
   return (
-    <div className="flex items-baseline gap-1.5">
-      <dt className="text-body-sm text-ink-2">{label}</dt>
-      <dd className={absent ? 'text-body-sm text-ink-2' : 'text-label font-bold text-ink'}>
-        {value}
-      </dd>
-    </div>
+    // `break-keep` because a column this narrow is where Korean breaks inside
+    // a word: on a phone `아직 제출 없음` does not fit one line, and the default
+    // rule cut it after `없` rather than at the space.
+    <th scope="col" className="break-keep pb-[14px] pr-[14px] text-left align-baseline">
+      <span className="block text-label font-bold text-ink">{label}</span>
+      <span className="block text-body-sm text-ink-2">
+        {reports === 0 ? copy.noReportsHere : copy.submitted(reports)}
+      </span>
+    </th>
+  )
+}
+
+/**
+ * How many of that team found this defect. Tabular numerals, because the
+ * column exists to be read downward and proportional digits make a `1` sit
+ * narrower than a `3` in the one place on this page where that is the point.
+ *
+ * A team with no reports for this Stage gets an empty cell rather than a `0`:
+ * its head already says so in words, and a zero here would be a finding.
+ */
+function Found({ found, reports, copy }: { found: number; reports: number; copy: Copy }) {
+  return (
+    <td className="py-[3px] pr-[14px] align-baseline text-label font-bold text-ink [font-variant-numeric:tabular-nums]">
+      {reports === 0 ? '' : copy.finders(found)}
+    </td>
   )
 }
 
@@ -312,44 +342,62 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
           {subjects.map((subject) => (
             <div key={subject.stage} className="mt-[22px]">
               <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>
-              {/* 22px between defects, 4px between a defect and its two cohort
-                  lines: each entry here is three lines, so the interval that
-                  separates entries has to beat the one that binds them. */}
               {subject.reports === 0 ? (
                 <p className="mt-1.5 text-body-sm text-ink-2">{copy.noReports}</p>
               ) : (
-                <ul className="mt-1.5 flex flex-col gap-[22px]">
-                  {subject.defects.map(({ defect, koreaFound, indonesiaFound }) => (
-                    <li key={defect.slug}>
-                      <p className="text-body-sm text-ink [overflow-wrap:anywhere]">{defect.element}</p>
-                      {/* A cohort with no reports for this Stage says so
-                          instead of rendering `0 of 0 found`. A panel that
-                          calls itself a controlled comparison may not report
-                          an absent cohort as a finding of zero — the two
-                          readings ask a Maintainer for opposite actions. */}
-                      <dl className="mt-1 flex flex-wrap gap-x-[22px] gap-y-1">
-                        <Cohort
-                          label={copy.korea}
-                          absent={subject.koreaReports === 0}
-                          value={
-                            subject.koreaReports === 0
-                              ? copy.noReportsHere
-                              : copy.foundBy(koreaFound, subject.koreaReports)
-                          }
-                        />
-                        <Cohort
-                          label={copy.indonesia}
-                          absent={subject.indonesiaReports === 0}
-                          value={
-                            subject.indonesiaReports === 0
-                              ? copy.noReportsHere
-                              : copy.foundBy(indonesiaFound, subject.indonesiaReports)
-                          }
-                        />
-                      </dl>
-                    </li>
-                  ))}
-                </ul>
+                // The one two-dimensional thing in this app, drawn as the
+                // table it is: a row per defect, a column per team. Until
+                // 2026-09-12 each defect was a three-line stack — its name,
+                // then a sentence per team — which named both teams once per
+                // defect, twenty-four times on this page, and set the two
+                // figures in wrapping flex boxes whose left edges moved with
+                // the width of the sentence beside them. The comparison the
+                // panel is named for was the one reading it did not support:
+                // nothing lined up in a column a Maintainer could read down.
+                //
+                // The row rhythm is the rest of this page's — 6px between
+                // rows, 14px to the head above them, 22px between Stages —
+                // because these rows are the same kind of thing the other two
+                // shelves list, and until now this shelf said otherwise.
+                //
+                // The table stops at 36rem rather than running to the card's
+                // edge, and the name column is the same 22rem `Row` above is
+                // capped at, for the reason written there: pushed to the two
+                // ends of an 896px card, a name and its figure sat 506px
+                // apart and invited the eye to read one row's name against the
+                // next row's number. The blank space belongs outside the
+                // table, not between its columns.
+                <table className="mt-[14px] w-full table-fixed border-separate border-spacing-0 text-left sm:w-[36rem]">
+                  <caption className="sr-only">
+                    {copy.stage(subject.stage)} — {copy.locationsHeading}
+                  </caption>
+                  <colgroup>
+                    <col className="sm:w-[22rem]" />
+                    <col className="w-[5.5rem] sm:w-[7rem]" />
+                    <col className="w-[5.5rem] sm:w-[7rem]" />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <td />
+                      <TeamHead label={copy.korea} reports={subject.koreaReports} copy={copy} />
+                      <TeamHead label={copy.indonesia} reports={subject.indonesiaReports} copy={copy} />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {subject.defects.map(({ defect, koreaFound, indonesiaFound }) => (
+                      <tr key={defect.slug}>
+                        <th
+                          scope="row"
+                          className="py-[3px] pr-[14px] text-left align-baseline text-body-sm font-normal text-ink [overflow-wrap:anywhere]"
+                        >
+                          {defect.element}
+                        </th>
+                        <Found found={koreaFound} reports={subject.koreaReports} copy={copy} />
+                        <Found found={indonesiaFound} reports={subject.indonesiaReports} copy={copy} />
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               )}
             </div>
           ))}
