@@ -60,10 +60,10 @@ const COPY: Record<
     passedBody: 'You can take it again whenever you like — every attempt is kept, and none replaces another.',
   },
   ko: {
-    objective: '마치고 나면 할 수 있는 것',
-    roleHint: '어디에 적용해 볼까',
+    objective: '이 역량 학습 후 할 수 있는 것',
+    roleHint: '역할별 적용 방법',
     roles: { developer: '개발자라면', pm: 'PM이라면' },
-    questionsHeading: '이 질문들을 들고 기사를 읽으세요',
+    questionsHeading: '기사를 읽으며 확인할 질문',
     questionsExplanation: '훑어보는 대신 가설을 세우고 읽습니다. 기사가 답하기 전에 스스로 예상해 보세요.',
     articleTitle: '원문 기사',
     article: '원문 기사 읽기',

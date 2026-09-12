@@ -94,7 +94,7 @@ export const COPY: Record<
     // proposal already made, and the request the word carries belongs to the
     // drawer, where the writing happens.
     fix: '고치는 방법',
-    issueHeading: '선택: 고친 것을 보여 주기',
+    issueHeading: '(선택) 고친 결과 공유',
     issueSave: '링크 저장',
     issueSaved: '저장되었습니다.',
     complete: (stage) => `${stage}단계 수료 · 퀴즈 전부 통과, 보고서 제출 완료.`,
