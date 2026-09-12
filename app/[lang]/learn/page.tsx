@@ -206,7 +206,7 @@ function stageAnchor(stage: number): string {
  * Readability as a Competency.
  *
  * The objective field is the same one the Competency page prints whole under
- * "마치고 나면 할 수 있는 것", so nothing is lost by cutting here — the rest of it
+ * "이 역량 학습 후 할 수 있는 것", so nothing is lost by cutting here — the rest
  * is one click away, under a heading that says what it is. An objective with
  * no sentence end inside it is returned untouched rather than cut mid-clause.
  */

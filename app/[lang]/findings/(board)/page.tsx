@@ -32,7 +32,7 @@ const COPY: Record<
     empty: 'Nobody else has submitted a report on this Stage yet — yours is the first. Colleagues appear here as they finish.',
   },
   ko: {
-    heading: '동료들이 찾아낸 것',
+    heading: '동료의 발견',
     explanation:
       '점검을 마친 페이지에 제출된 발견을, 동의한 동료 수 순으로 표시합니다. 아직 제출하지 않은 단계의 발견은 표시되지 않습니다. 제출 전에 읽으면 정답지가 되기 때문입니다. 동의는 명확하게 표현된 발견을 드러낼 뿐, 진행을 제한하지 않으며 개인별로 합산되지도 않습니다.',
     board: '가장 많이 동의받은 발견',

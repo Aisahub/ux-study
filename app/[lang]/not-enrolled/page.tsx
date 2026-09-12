@@ -13,7 +13,7 @@ const COPY: Record<Language, { heading: string; body: (email: string | null) => 
     hint: 'If you were expecting access, ask the programme maintainer to add the address — or sign in again with the account you were enrolled with.',
   },
   ko: {
-    heading: '등록되지 않은 주소입니다',
+    heading: '등록되지 않은 주소',
     body: (email) =>
       email
         ? `Google이 ${email} 계정을 확인했지만, 이 주소는 학습 프로그램 명단에 없습니다.`

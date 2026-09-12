@@ -68,10 +68,10 @@ const COPY: Record<
     noSubject: '아직 점검할 페이지가 작성되지 않았습니다',
     rate: (correct, drawn) => `${drawn}회 출제 중 ${correct}회 정답`,
     neverDrawn: '아직 출제되지 않음',
-    defectsHeading: '심어둔 결함, 많이 놓친 순',
+    defectsHeading: '심어둔 결함 · 많이 놓친 순',
     defectsExplanation: '제출된 보고서 기준: 각 결함을 몇 명이 놓쳤는지입니다.',
     missedBy: (missed, of) => `${of}명 중 ${missed}명이 놓침`,
-    locationsHeading: '두 거점, 같은 페이지',
+    locationsHeading: '같은 페이지 · 거점별 결함 발견 비교',
     locationsExplanation:
       '두 거점이 완전히 같은 페이지를 점검하므로, 발견의 차이는 통제된 비교가 됩니다. Workspace 주소는 한국, 개인 주소는 인도네시아입니다.',
     korea: '한국',

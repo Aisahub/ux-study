@@ -104,7 +104,7 @@ test('the locked page is written in both languages too', async () => {
   // one language only, because the language that gets tested is the one the
   // author was reading in.
   const { text } = await read('/ko/specimen', freshLearner())
-  expect(text).toContain('내 리포트를 기다립니다')
+  expect(text).toContain('제출 후 읽기 가능')
 })
 
 test('the page it reviews is reachable from it, and is served inert', async () => {

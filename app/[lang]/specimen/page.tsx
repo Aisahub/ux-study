@@ -83,11 +83,11 @@ const COPY: Record<
     // by quote pairing, and either mark breaks their frame.)
     defect: '잘못된 점',
     fix: '고치는 방법',
-    lockedHeading: '이 페이지는 내 리포트를 기다립니다',
+    lockedHeading: '1단계 리포트 제출 후 읽기 가능',
     lockedWhy:
       '이 리포트는 1단계 연습 페이지를 점검한 내용이므로, 제출 전에 읽으면 정답지가 됩니다. 1단계 자가 점검 리포트를 제출하면 자동으로 열립니다.',
     lockedAction: '1단계 자가 점검으로',
-    unwrittenHeading: '연습용 리포트는 아직 작성 중입니다.',
+    unwrittenHeading: '연습용 리포트 작성 중',
     unwrittenWhy:
       '오류나 누락이 아닙니다. 이 리포트가 없어도 휴리스틱 평가 역량을 마치는 데는 지장이 없습니다. 퀴즈는 자체 자료로 진행되며, 이 페이지는 관문이 아니라 연습입니다.',
   },

@@ -54,15 +54,21 @@ const COPY: Record<
  * lesson it teaches.
  *
  * The Findings library is the one item that cannot, and the reason is
- * recorded here rather than left to be re-decided: its heading is a sentence.
- * `What colleagues found` wants three lines in a bottom-bar slot that holds
- * two — 57px wide at 375px with six marks. Korean's `동료들이 찾아낸 것` would
- * fit in its two, but a label that works in only one of the two scripts is
- * what the Two-Script Rule refuses, so neither language takes the heading.
- * Both name the record instead: `Findings`, and 발견 — the spelling CONTEXT.md
- * fixes for Korean copy, and the one the drawer a Learner writes into already
- * uses. This slot said the English `Finding` until 2026-08-14, on every
- * Korean page, for as long as the rail has existed.
+ * recorded here rather than left to be re-decided: `What colleagues found`
+ * wants three lines in a bottom-bar slot that holds two — 57px wide at 375px
+ * with six marks. Korean's heading would fit in its two, but a label that
+ * works in only one of the two scripts is what the Two-Script Rule refuses,
+ * so neither language takes the heading. Both name the record instead:
+ * `Findings`, and 발견 — the spelling CONTEXT.md fixes for Korean copy, and
+ * the one the drawer a Learner writes into already uses. This slot said the
+ * English `Finding` until 2026-08-14, on every Korean page, for as long as
+ * the rail has existed.
+ *
+ * The Korean heading was the sentence `동료들이 찾아낸 것` when this was
+ * decided, and is the noun phrase `동료의 발견` since the register pass. The
+ * split survives the change: it rests on English needing three lines, which
+ * it still does, and the Korean label is now that heading's own head noun
+ * rather than a different word.
  */
 export async function PlatformNav({ lang }: { lang: Language }) {
   const session = await getSession()
