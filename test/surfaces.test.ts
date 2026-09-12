@@ -621,6 +621,10 @@ test('the content half shows per-item rates beside draw counts, and the location
   expect(text).toContain(slugsDrawn[0])
   expect(text).toContain('Korea')
   expect(text).toContain('Indonesia')
+  // Each team is a column, and how many of them submitted is said once at its
+  // head rather than inside every cell. Asserted with `\d+` because the rest
+  // of this suite writes reports to the same database.
+  expect(text).toMatch(/\d+ submitted/)
   expect(text).toMatch(/missed by \d+ of \d+/)
 })
 
