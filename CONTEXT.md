@@ -123,6 +123,14 @@ administrator, and a Korean approval flow does not use it for a person.
 **A안 / B안** for `Version A/B`, **시안 A / 시안 B** for `Draft A/B` —
 English draws that line and Korean had drawn it three ways.
 
+**한국팀 / 인도네시아팀** for the two groups of Learners, and **팀** for the
+pair of them — never 거점, 지역 or 코호트. Settled 2026-09-12, because the
+Maintainer screen that compares the two had reached for 거점 while nothing
+here said what the word should be, which is how one idea gets three names.
+English keeps `cohort` and labels its columns `Korea` and `Indonesia`; the
+Korean needs the suffix to name the same thing, since a bare `한국` beside a
+number reads as the country rather than as the people in it.
+
 Departing from the count:
 
 - **글자만 있는**, not 평문, for unstyled text. 평문 is cryptographic
