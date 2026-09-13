@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm'
 import { expect, test } from 'vitest'
 
 import { loadContent, practicePageOf } from '../lib/content'
+import { elementLabels } from '../lib/element-label'
 import { BASE_URL } from './config'
 import { schema, sessionCookieFor, testDb } from './db'
 import { visibleText } from './html'
@@ -626,6 +627,15 @@ test('the content half shows per-item rates beside draw counts, and the location
   // of this suite writes reports to the same database.
   expect(text).toMatch(/\d+ submitted/)
   expect(text).toMatch(/missed by \d+ of \d+/)
+
+  // A defect is named by the words its element shows on the page, not only by
+  // the identifier the record is keyed by — a Maintainer reading a column of
+  // slugs cannot tell which thing on the subject each one is. Read through
+  // `elementLabels` rather than typed here, so the assertion quotes the served
+  // document exactly as the page does and cannot drift from it.
+  const named = elementLabels(practicePage.html.en)[practicePage.defects[0].element]
+  expect(named).not.toBe(practicePage.defects[0].element)
+  expect(text).toContain(named)
 })
 
 // ------------------------------------------------- a report belongs to a Stage

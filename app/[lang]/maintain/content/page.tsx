@@ -5,6 +5,7 @@ import { isNotNull } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
 import { cohortOf, requireMaintainer } from '@/lib/auth'
+import { elementLabels } from '@/lib/element-label'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
@@ -109,10 +110,25 @@ const COPY: Record<Language, Copy> = {
  * every figure on one vertical line, so the column stays scannable downward:
  * median gap 143px. A name longer than the cap wraps; nothing is cut.
  */
-function Row({ name, value, absent }: { name: string; value: string; absent?: boolean }) {
+function Row({
+  name,
+  detail,
+  value,
+  absent,
+}: {
+  name: React.ReactNode
+  detail?: React.ReactNode
+  value: string
+  absent?: boolean
+}) {
   return (
     <li className="grid gap-x-[14px] sm:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] sm:items-baseline">
-      <span className="min-w-0 text-body-sm text-ink [overflow-wrap:anywhere]">{name}</span>
+      <span className="min-w-0 [overflow-wrap:anywhere]">
+        <span className={detail ? 'block text-title font-bold text-ink' : 'block text-body-sm text-ink'}>
+          {name}
+        </span>
+        {detail}
+      </span>
       <span className={absent ? 'text-body-sm text-ink-2' : 'text-label font-bold text-ink'}>
         {value}
       </span>
@@ -121,43 +137,73 @@ function Row({ name, value, absent }: { name: string; value: string; absent?: bo
 }
 
 /**
- * One team's column head: who is being counted, and out of how many.
+ * The second line under a Planted Defect's name, on both shelves that list one.
+ *
+ * A defect is named here the way the reveal already names one: the words the
+ * element shows on the page, above the identifier the record is keyed by.
+ * Both, and in that order. The identifier alone is what these shelves showed
+ * until 2026-09-13, and `shipping-help-text` says which thing on the page it is
+ * only to somebody who has the subject open in another window — which on the
+ * one surface a Maintainer watches content health from is the wrong way round.
+ * The identifier stays because it is what they search `manifest.md` for.
+ *
+ * The label is quoted from the served document by `lib/element-label`, so it is
+ * the subject's own Korean and English rather than a third description of an
+ * element that already describes itself twice.
+ *
+ * The Principle rides this line too, because an element's words say *which*
+ * thing and never *what is wrong with it*: `마지막 갱신 09:12` is not a defect
+ * until `크기` is beside it. It is read from the manifest, which authors a
+ * Principle per defect — nothing here is inferred.
+ */
+function DefectDetail({ principle, identifier }: { principle: string; identifier: string }) {
+  return (
+    <span className="mt-0.5 block text-body-sm text-ink-2">
+      {principle} · <span className="font-mono">{identifier}</span>
+    </span>
+  )
+}
+
+/** The Principle's name in the reader's language, or its slug where the Glossary lost it. */
+function principleName(slug: string, lang: Language): string {
+  return content.glossary.find((entry) => entry.slug === slug)?.name[lang] ?? slug
+}
+
+/**
+ * One team, and how many of them submitted a report for this Stage.
  *
  * The denominator belongs to the Stage, not to each defect, so it is said once
  * here instead of inside twelve cells. A team that has submitted nothing for
- * this Stage says so in this cell, in words, and its column below stays empty —
- * a controlled comparison may not report an absent team as a finding of zero,
+ * this Stage says so here, in words, and its figures below stay empty — a
+ * controlled comparison may not report an absent team as a finding of zero,
  * because the two readings ask a Maintainer for opposite actions.
  */
-function TeamHead({ label, reports, copy }: { label: string; reports: number; copy: Copy }) {
+function TeamCaption({ label, reports, copy }: { label: string; reports: number; copy: Copy }) {
   return (
-    // `break-keep` because a column this narrow is where Korean breaks inside
-    // a word: on a phone `아직 제출 없음` does not fit one line, and the default
-    // rule cut it after `없` rather than at the space.
-    <th scope="col" className="break-keep pb-[14px] pr-[14px] text-left align-baseline">
-      <span className="block text-label font-bold text-ink">{label}</span>
-      <span className="block text-body-sm text-ink-2">
+    // `break-keep` because these boxes are narrow enough for Korean to break
+    // inside a word: `아직 제출 없음` does not fit one line on a phone, and the
+    // default rule cut it after `없` rather than at the space.
+    <>
+      <span className="block break-keep text-label font-bold text-ink">{label}</span>
+      <span className="block break-keep text-body-sm text-ink-2">
         {reports === 0 ? copy.noReportsHere : copy.submitted(reports)}
       </span>
-    </th>
+    </>
   )
 }
 
 /**
- * How many of that team found this defect. Tabular numerals, because the
- * column exists to be read downward and proportional digits make a `1` sit
- * narrower than a `3` in the one place on this page where that is the point.
+ * How many of that team found this defect. Tabular numerals, because the column
+ * exists to be read downward and proportional digits make a `1` sit narrower
+ * than a `3` in the one place on this page where that is the point.
  *
- * A team with no reports for this Stage gets an empty cell rather than a `0`:
- * its head already says so in words, and a zero here would be a finding.
+ * Empty rather than `0` for a team with no reports, for `TeamCaption`'s reason.
  */
 function Found({ found, reports, copy }: { found: number; reports: number; copy: Copy }) {
-  return (
-    <td className="py-[3px] pr-[14px] align-baseline text-label font-bold text-ink [font-variant-numeric:tabular-nums]">
-      {reports === 0 ? '' : copy.finders(found)}
-    </td>
-  )
+  return <>{reports === 0 ? '' : copy.finders(found)}</>
 }
+
+const FIGURE = 'text-label font-bold text-ink [font-variant-numeric:tabular-nums]'
 
 /**
  * The content half of the Maintainer dashboard (#28). Pass rates are per
@@ -213,6 +259,9 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
   const subjects = content.practicePages.map((page) => {
     const stageReports = reports.filter((report) => report.stage === page.stage)
     const korea = stageReports.filter((report) => cohortOf(report.email) === 'korea').length
+    // Read once per subject rather than once per row: both shelves below list
+    // the same defects, and the scan walks a few kilobytes of markup.
+    const labels = elementLabels(page.html[lang])
 
     return {
       stage: page.stage,
@@ -226,6 +275,8 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
           )
           return {
             defect,
+            label: labels[defect.element] ?? defect.element,
+            principle: principleName(defect.principle, lang),
             found: finders.length,
             missed: stageReports.length - finders.length,
             koreaFound: finders.filter((report) => cohortOf(report.email) === 'korea').length,
@@ -309,11 +360,15 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
               {subject.reports === 0 ? (
                 <p className="mt-1.5 text-body-sm text-ink-2">{copy.noReports}</p>
               ) : (
-                <ul className="mt-1.5 flex flex-col gap-1.5">
-                  {subject.defects.map(({ defect, missed }) => (
+                // 6px held one-line rows apart; a defect is two lines now, so
+                // the interval that separates entries has to beat the one that
+                // binds a name to the line under it.
+                <ul className="mt-[14px] flex flex-col gap-[14px]">
+                  {subject.defects.map(({ defect, label, principle, missed }) => (
                     <Row
                       key={defect.slug}
-                      name={defect.element}
+                      name={label}
+                      detail={<DefectDetail principle={principle} identifier={defect.element} />}
                       value={copy.missedBy(missed, subject.reports)}
                     />
                   ))}
@@ -345,59 +400,132 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
               {subject.reports === 0 ? (
                 <p className="mt-1.5 text-body-sm text-ink-2">{copy.noReports}</p>
               ) : (
-                // The one two-dimensional thing in this app, drawn as the
-                // table it is: a row per defect, a column per team. Until
-                // 2026-09-12 each defect was a three-line stack — its name,
-                // then a sentence per team — which named both teams once per
-                // defect, twenty-four times on this page, and set the two
-                // figures in wrapping flex boxes whose left edges moved with
-                // the width of the sentence beside them. The comparison the
-                // panel is named for was the one reading it did not support:
-                // nothing lined up in a column a Maintainer could read down.
+                // A comparison of two teams over one list of defects, in the
+                // two shapes that hold it. Until 2026-09-12 there was one
+                // shape and it held at neither width: each defect was a stack
+                // of its name and a sentence per team, in wrapping flex boxes
+                // whose left edges moved with the width of the sentence beside
+                // them, so nothing lined up in a column a Maintainer could read
+                // down — which is the one reading a panel called a comparison
+                // owes its reader.
                 //
-                // The row rhythm is the rest of this page's — 6px between
-                // rows, 14px to the head above them, 22px between Stages —
-                // because these rows are the same kind of thing the other two
-                // shelves list, and until now this shelf said otherwise.
+                // From `sm` it is a table, because that is what two axes are:
+                // a row per defect, a column per team, `scope` tying a figure
+                // to the team above it for a screen reader. Below `sm` the same
+                // two axes do not fit side by side — three columns in a 233px
+                // card on a 320px phone left a name 65px wide, which wrapped
+                // `shipping-form` over six lines and made this panel 7191px
+                // tall — so the figures move under the name instead of beside
+                // it, on a two-column grid that keeps the teams aligned with
+                // the heads above them. A table that scrolls sideways was tried
+                // first and rejected: it cut the second team off at the card's
+                // edge with nothing to say it was there, which on a comparison
+                // hides exactly the half being compared.
                 //
-                // The table stops at 36rem rather than running to the card's
-                // edge, and the name column is the same 22rem `Row` above is
-                // capped at, for the reason written there: pushed to the two
-                // ends of an 896px card, a name and its figure sat 506px
-                // apart and invited the eye to read one row's name against the
-                // next row's number. The blank space belongs outside the
-                // table, not between its columns.
-                <table className="mt-[14px] w-full table-fixed border-separate border-spacing-0 text-left sm:w-[36rem]">
-                  <caption className="sr-only">
-                    {copy.stage(subject.stage)} — {copy.locationsHeading}
-                  </caption>
-                  <colgroup>
-                    <col className="sm:w-[22rem]" />
-                    <col className="w-[5.5rem] sm:w-[7rem]" />
-                    <col className="w-[5.5rem] sm:w-[7rem]" />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <td />
-                      <TeamHead label={copy.korea} reports={subject.koreaReports} copy={copy} />
-                      <TeamHead label={copy.indonesia} reports={subject.indonesiaReports} copy={copy} />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {subject.defects.map(({ defect, koreaFound, indonesiaFound }) => (
-                      <tr key={defect.slug}>
-                        <th
-                          scope="row"
-                          className="py-[3px] pr-[14px] text-left align-baseline text-body-sm font-normal text-ink [overflow-wrap:anywhere]"
-                        >
-                          {defect.element}
+                // Both shapes are rendered and one is hidden. `hidden` takes it
+                // out of the accessibility tree as well as the page, and two
+                // short markups that each say what they mean beat one that
+                // reflows into a shape its own semantics no longer describe.
+                <>
+                  {/* Narrow: the heads once, then the figures under each name. */}
+                  <div className="mt-[14px] sm:hidden">
+                    <div className="grid grid-cols-2 gap-x-[14px]">
+                      <div>
+                        <TeamCaption label={copy.korea} reports={subject.koreaReports} copy={copy} />
+                      </div>
+                      <div>
+                        <TeamCaption
+                          label={copy.indonesia}
+                          reports={subject.indonesiaReports}
+                          copy={copy}
+                        />
+                      </div>
+                    </div>
+                    <ul className="mt-[14px] flex flex-col gap-[22px]">
+                      {subject.defects.map(({ defect, label, principle, koreaFound, indonesiaFound }) => (
+                        <li key={defect.slug}>
+                          <span className="block text-title font-bold text-ink [overflow-wrap:anywhere]">
+                            {label}
+                          </span>
+                          <DefectDetail principle={principle} identifier={defect.element} />
+                          {/* The team's name rides each figure for a screen
+                              reader, which has no columns to read them in. */}
+                          <div className="mt-1 grid grid-cols-2 gap-x-[14px]">
+                            <span className={FIGURE}>
+                              <span className="sr-only">{copy.korea} </span>
+                              <Found found={koreaFound} reports={subject.koreaReports} copy={copy} />
+                            </span>
+                            <span className={FIGURE}>
+                              <span className="sr-only">{copy.indonesia} </span>
+                              <Found
+                                found={indonesiaFound}
+                                reports={subject.indonesiaReports}
+                                copy={copy}
+                              />
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Wide: the same data with the teams as columns. The table
+                      stops at 36rem rather than running to the card's edge, and
+                      its name column is the same 22rem `Row` above is capped at,
+                      for the reason written there: pushed to the two ends of an
+                      896px card, a name and its figure sat 506px apart and
+                      invited the eye to read one row's name against the next
+                      row's number. The blank space belongs outside the table,
+                      not between its columns. */}
+                  <table className="mt-[14px] hidden w-full table-fixed border-separate border-spacing-0 text-left sm:table sm:w-[36rem]">
+                    <caption className="sr-only">
+                      {copy.stage(subject.stage)} — {copy.locationsHeading}
+                    </caption>
+                    <colgroup>
+                      <col className="w-[22rem]" />
+                      <col className="w-[7rem]" />
+                      <col className="w-[7rem]" />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <td />
+                        <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
+                          <TeamCaption label={copy.korea} reports={subject.koreaReports} copy={copy} />
                         </th>
-                        <Found found={koreaFound} reports={subject.koreaReports} copy={copy} />
-                        <Found found={indonesiaFound} reports={subject.indonesiaReports} copy={copy} />
+                        <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
+                          <TeamCaption
+                            label={copy.indonesia}
+                            reports={subject.indonesiaReports}
+                            copy={copy}
+                          />
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {subject.defects.map(({ defect, label, principle, koreaFound, indonesiaFound }) => (
+                        <tr key={defect.slug}>
+                          <th
+                            scope="row"
+                            className="py-[7px] pr-[14px] text-left align-baseline font-normal [overflow-wrap:anywhere]"
+                          >
+                            <span className="block text-title font-bold text-ink">{label}</span>
+                            <DefectDetail principle={principle} identifier={defect.element} />
+                          </th>
+                          <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                            <Found found={koreaFound} reports={subject.koreaReports} copy={copy} />
+                          </td>
+                          <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                            <Found
+                              found={indonesiaFound}
+                              reports={subject.indonesiaReports}
+                              copy={copy}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </>
               )}
             </div>
           ))}
