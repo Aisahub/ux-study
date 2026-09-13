@@ -620,6 +620,11 @@ test('the content half shows per-item rates beside draw counts, and the location
   // A rate never appears without its draw count.
   expect(text).toMatch(/correct of \d+ drawn/)
   expect(text).toContain(slugsDrawn[0])
+  // A pool nobody has been served is one line naming the count, not one row
+  // per item saying the same five words. The items are still on the page —
+  // folded, not dropped — which the next assertion holds.
+  expect(text).toMatch(/\d+ items? never drawn/)
+  expect(text).toContain(items['visual-hierarchy'].at(-1)!.slug)
   expect(text).toContain('Korea')
   expect(text).toContain('Indonesia')
   // Each team is a column, and how many of them submitted is said once at its

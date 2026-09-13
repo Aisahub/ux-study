@@ -20,7 +20,7 @@ type Copy = {
   notAuthored: string
   noSubject: string
   rate: (correct: number, drawn: number) => string
-  neverDrawn: string
+  neverDrawnPool: (items: number) => string
   defectsHeading: string
   defectsExplanation: string
   missedBy: (missed: number, of: number) => string
@@ -47,7 +47,7 @@ const COPY: Record<Language, Copy> = {
     notAuthored: 'No pool authored yet',
     noSubject: 'no page authored to audit yet',
     rate: (correct, drawn) => `${correct} correct of ${drawn} drawn`,
-    neverDrawn: 'never drawn',
+    neverDrawnPool: (items) => `${items} item${items === 1 ? '' : 's'} never drawn`,
     defectsHeading: 'Planted defects, most missed first',
     defectsExplanation: 'Across submitted reports: how many missed each defect.',
     missedBy: (missed, of) => `missed by ${missed} of ${of}`,
@@ -70,7 +70,7 @@ const COPY: Record<Language, Copy> = {
     notAuthored: '아직 작성된 문항 풀이 없습니다',
     noSubject: '아직 점검할 페이지가 작성되지 않았습니다',
     rate: (correct, drawn) => `${drawn}회 출제 중 ${correct}회 정답`,
-    neverDrawn: '아직 출제되지 않음',
+    neverDrawnPool: (items) => `아직 출제되지 않은 ${items}문항`,
     defectsHeading: '심어둔 결함 · 많이 놓친 순',
     defectsExplanation: '제출된 보고서 기준: 각 결함을 몇 명이 놓쳤는지입니다.',
     missedBy: (missed, of) => `${of}명 중 ${missed}명이 놓침`,
@@ -161,6 +161,43 @@ function DefectDetail({ principle, identifier }: { principle: string; identifier
     <span className="mt-0.5 block text-body-sm text-ink-2">
       {principle} · <span className="font-mono">{identifier}</span>
     </span>
+  )
+}
+
+/**
+ * One Competency's items that nobody has been served yet, named and folded.
+ *
+ * The label is in full ink rather than the faded tone the page spends on an
+ * absent figure: this is a control, and a control drawn in the colour of
+ * unavailable text is the Perceived clickability defect this platform's fourth
+ * Competency teaches. What is empty about the pool is said in the words.
+ *
+ * No `.press` class — `globals.css` reaches a `<summary>` by what it is, and a
+ * control that has to remember to enrol itself is the bug ERR-218 recorded.
+ * The native marker is dropped for a caret that can turn where this row needs
+ * it. `min-h-11` because the row is the target: 44px belongs to whatever
+ * answers a tap, not to the element around it.
+ */
+function NeverDrawn({ slugs, copy }: { slugs: string[]; copy: Copy }) {
+  return (
+    <details className="group">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-body-sm text-ink [&::-webkit-details-marker]:hidden">
+        <span
+          aria-hidden
+          className="text-ink-2 transition-transform duration-200 group-open:rotate-90 motion-reduce:transition-none"
+        >
+          ▸
+        </span>
+        {copy.neverDrawnPool(slugs.length)}
+      </summary>
+      <ul className="flex flex-col gap-1.5 pb-1.5 pl-[22px]">
+        {slugs.map((slug) => (
+          <li key={slug} className="text-body-sm text-ink-2 [overflow-wrap:anywhere]">
+            {slug}
+          </li>
+        ))}
+      </ul>
+    </details>
   )
 }
 
@@ -315,32 +352,55 @@ export default async function ContentHealth({ params }: { params: Promise<{ lang
               The rhythm is the grouping: 22px between Stages, 14px between
               Competencies, 6px between the rows of one pool. One interval
               repeated would give thirty-two items and three Stages the same
-              weight. */}
+              weight.
+
+              Within a Competency the items that have been drawn are rows and
+              the ones that have not are one line behind a press. This shelf
+              listed all ninety-six as rows until 2026-09-14, and ninety-one of
+              them said the same five words — `아직 출제되지 않음` — which made it
+              3257px of the page's 5844 and left the five rows that carry a
+              figure to be found by scanning the ninety-one that do not. The
+              job that list was doing is still done, in one line that names the
+              count: a pool nobody has been served is a fact about the pool,
+              not eight facts about eight items.
+
+              `<details>`, the way the passed-quiz review already offers the
+              items a Learner got right: closed, named, and one press away. It
+              folds before hydration and with JavaScript off, answers the
+              keyboard, and tells a screen reader whether it is open. Nothing
+              is hidden that a Maintainer cannot reach, and `⌘F` still finds a
+              slug on a closed pool in every browser that searches collapsed
+              `details` — which, where it does not, is one press from true. */}
           {content.config.stages.map(({ stage, competencies }) => (
             <div key={stage} className="mt-[22px]">
               <h3 className="text-title font-bold text-ink">{copy.stage(stage)}</h3>
               {competencies.map((slug) => {
                 const competency = content.competencies.find((entry) => entry.slug === slug)
-                const pool = content.items[slug]
+                const pool = content.items[slug] ?? []
+                const drawn = pool.filter((item) => byItem.has(item.slug))
+                const never = pool.filter((item) => !byItem.has(item.slug))
                 return (
                   <div key={slug} className="mt-[14px]">
                     <h4 className="text-label font-bold text-ink">{competency?.name[lang] ?? slug}</h4>
-                    {!pool || pool.length === 0 ? (
+                    {pool.length === 0 && (
                       <p className="mt-1.5 text-body-sm text-ink-2">{copy.notAuthored}</p>
-                    ) : (
+                    )}
+                    {drawn.length > 0 && (
                       <ul className="mt-1.5 flex flex-col gap-1.5">
-                        {pool.map((item) => {
-                          const stats = byItem.get(item.slug)
+                        {drawn.map((item) => {
+                          const stats = byItem.get(item.slug)!
                           return (
                             <Row
                               key={item.slug}
                               name={item.slug}
-                              value={stats ? copy.rate(stats.correct, stats.drawn) : copy.neverDrawn}
-                              absent={!stats}
+                              value={copy.rate(stats.correct, stats.drawn)}
                             />
                           )
                         })}
                       </ul>
+                    )}
+                    {never.length > 0 && (
+                      <NeverDrawn slugs={never.map((item) => item.slug)} copy={copy} />
                     )}
                   </div>
                 )
