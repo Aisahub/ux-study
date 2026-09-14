@@ -71,11 +71,14 @@ const COPY: Record<
     defectsHeading: '심어둔 결함 · 많이 놓친 순',
     defectsExplanation: '제출된 보고서 기준: 각 결함을 몇 명이 놓쳤는지입니다.',
     missedBy: (missed, of) => `${of}명 중 ${missed}명이 놓침`,
-    locationsHeading: '같은 페이지 · 거점별 결함 발견 비교',
+    locationsHeading: '같은 페이지 · 팀별 결함 발견 비교',
     locationsExplanation:
-      '두 거점이 완전히 같은 페이지를 점검하므로, 발견의 차이는 통제된 비교가 됩니다. Workspace 주소는 한국, 개인 주소는 인도네시아입니다.',
-    korea: '한국',
-    indonesia: '인도네시아',
+      '두 팀이 완전히 같은 페이지를 점검하므로, 발견의 차이는 통제된 비교가 됩니다. Workspace 주소는 한국팀, 개인 주소는 인도네시아팀입니다.',
+    // The English column says `Korea`, and a bare `한국` beside a number would
+    // read as the country rather than the people in it. `팀` is what makes the
+    // Korean label name the same thing its English sibling names (CONTEXT.md).
+    korea: '한국팀',
+    indonesia: '인도네시아팀',
     foundBy: (found, of) => `${of}명 중 ${found}명 발견`,
     noReportsHere: '아직 제출 없음',
     noReports: '제출된 보고서가 아직 없습니다.',
