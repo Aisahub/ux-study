@@ -9,7 +9,6 @@ import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
 import { COPY, type Copy } from '../copy'
-import { Row } from '../row'
 
 export const dynamic = 'force-dynamic'
 
@@ -47,21 +46,24 @@ function principleName(slug: string, lang: Language): string {
 }
 
 /**
- * One team, and how many of them submitted a report for this Stage.
+ * One column of counts, and how many people it divides by.
  *
  * The denominator belongs to the Stage, not to each defect, so it is said once
- * here instead of inside twelve cells. A team that has submitted nothing for
- * this Stage says so here, in words, and its figures below stay empty — a
- * controlled comparison may not report an absent team as a finding of zero,
- * because the two readings ask a Maintainer for opposite actions.
+ * here instead of inside thirteen cells. A column with nothing behind it — a
+ * team that has submitted no report for this Stage — says so here, in words,
+ * and its figures below stay empty: a comparison may not report an absent team
+ * as a finding of zero, because the two readings ask a Maintainer for opposite
+ * actions.
  */
-function TeamCaption({ label, reports, copy }: { label: string; reports: number; copy: Copy }) {
+function ColumnHead({ label, reports, copy }: { label: string; reports: number; copy: Copy }) {
   return (
-    // `break-keep` because these boxes are narrow enough for Korean to break
-    // inside a word: `아직 제출 없음` does not fit one line on a phone, and the
-    // default rule cut it after `없` rather than at the space.
     <>
-      <span className="block break-keep text-label font-bold text-ink">{label}</span>
+      {/* The label takes no `break-keep`: it is one unbreakable word, and on a
+          320px phone three columns leave `인도네시아팀` less room than it needs,
+          where breaking inside it beats overflowing the column beside it. The
+          line under it keeps `break-keep`, because `아직 제출 없음` has spaces to
+          break at and the default rule cut it after `없` instead. */}
+      <span className="block text-label font-bold text-ink">{label}</span>
       <span className="block break-keep text-body-sm text-ink-2">
         {reports === 0 ? copy.noReportsHere : copy.submitted(reports)}
       </span>
@@ -132,12 +134,15 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
             label: labels[defect.element] ?? defect.element,
             principle: principleName(defect.principle, lang),
             found: finders.length,
-            missed: stageReports.length - finders.length,
             koreaFound: finders.filter((report) => cohortOf(report.email) === 'korea').length,
             indonesiaFound: finders.filter((report) => cohortOf(report.email) !== 'korea').length,
           }
         })
-        .sort((a, b) => b.missed - a.missed),
+        // Fewest found first, which is the heading's order and, inside one
+        // Stage, the same order `missed` descending gave: every row here
+        // divides by the same `stageReports.length`. Sorted on the figure the
+        // table actually shows, so the code and the heading cannot drift.
+        .sort((a, b) => a.found - b.found),
     }
   })
 
@@ -149,194 +154,167 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
     .filter((stage) => !subjects.some((subject) => subject.stage === stage))
 
   return (
-    <div className="flex flex-col gap-[14px]">
-      <section aria-labelledby="defects" className="rounded-card bg-surface p-[26px] shadow-card">
-        <h2 id="defects" className="font-serif text-headline font-bold text-ink">
-          {copy.defectsHeading}
-        </h2>
-        <p className="mt-2 max-w-measure text-body-sm text-ink-2">{copy.defectsExplanation}</p>
-        {subjects.map((subject) => (
-          <div key={subject.stage} className="mt-[22px]">
-            <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>
-            {subject.reports === 0 ? (
-              <p className="mt-1.5 text-body-sm text-ink-2">{copy.noReports}</p>
-            ) : (
-              // 6px held one-line rows apart; a defect is two lines now, so
-              // the interval that separates entries has to beat the one that
-              // binds a name to the line under it.
-              <ul className="mt-[14px] flex flex-col gap-[14px]">
-                {subject.defects.map(({ defect, label, principle, missed }) => (
-                  <Row
-                    key={defect.slug}
-                    name={label}
-                    detail={<DefectDetail principle={principle} identifier={defect.element} />}
-                    value={copy.missedBy(missed, subject.reports)}
-                  />
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
-        {/* The unauthored Stages are one group, not one paragraph each: 22px
-            separates them from the Stage above, 14px holds them together.
-
-            `·`, not a 줄표. CONTEXT.md rules the dash out of Korean screen copy,
-            and the Korean headings on this very page already use the middot —
-            so the one separator the markup contributed was the one separator
-            the language does not take. It reads as a separator in English too,
-            which is why this stays one spelling rather than becoming two. */}
-        {unauthored.length > 0 && (
-          <div className="mt-[22px] flex flex-col gap-[14px]">
-            {unauthored.map((stage) => (
-              <p key={stage} className="text-body-sm text-ink-2">
-                {copy.stage(stage)} · {copy.noSubject}
-              </p>
-            ))}
-          </div>
-        )}
-      </section>
-
-      <section aria-labelledby="cohorts" className="rounded-card bg-surface p-[26px] shadow-card">
-        <h2 id="cohorts" className="font-serif text-headline font-bold text-ink">
-          {copy.cohortsHeading}
-        </h2>
-        <p className="mt-2 max-w-measure text-body-sm text-ink-2">{copy.cohortsExplanation}</p>
-        {subjects.map((subject) => (
-          <div key={subject.stage} className="mt-[22px]">
-            <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>
-            {subject.reports === 0 ? (
-              <p className="mt-1.5 text-body-sm text-ink-2">{copy.noReports}</p>
-            ) : (
-              // A comparison of two teams over one list of defects, in the
-              // two shapes that hold it. Until 2026-09-12 there was one
-              // shape and it held at neither width: each defect was a stack
-              // of its name and a sentence per team, in wrapping flex boxes
-              // whose left edges moved with the width of the sentence beside
-              // them, so nothing lined up in a column a Maintainer could read
-              // down — which is the one reading a panel called a comparison
-              // owes its reader.
-              //
-              // From `sm` it is a table, because that is what two axes are:
-              // a row per defect, a column per team, `scope` tying a figure
-              // to the team above it for a screen reader. Below `sm` the same
-              // two axes do not fit side by side — three columns in a 233px
-              // card on a 320px phone left a name 65px wide, which wrapped
-              // `shipping-form` over six lines and made this panel 7191px
-              // tall — so the figures move under the name instead of beside
-              // it, on a two-column grid that keeps the teams aligned with
-              // the heads above them. A table that scrolls sideways was tried
-              // first and rejected: it cut the second team off at the card's
-              // edge with nothing to say it was there, which on a comparison
-              // hides exactly the half being compared.
-              //
-              // Both shapes are rendered and one is hidden. `hidden` takes it
-              // out of the accessibility tree as well as the page, and two
-              // short markups that each say what they mean beat one that
-              // reflows into a shape its own semantics no longer describe.
-              <>
-                {/* Narrow: the heads once, then the figures under each name. */}
-                <div className="mt-[14px] sm:hidden">
-                  <div className="grid grid-cols-2 gap-x-[14px]">
-                    <div>
-                      <TeamCaption label={copy.korea} reports={subject.koreaReports} copy={copy} />
-                    </div>
-                    <div>
-                      <TeamCaption
-                        label={copy.indonesia}
-                        reports={subject.indonesiaReports}
-                        copy={copy}
-                      />
-                    </div>
+    <section aria-labelledby="defects" className="rounded-card bg-surface p-[26px] shadow-card">
+      <h2 id="defects" className="font-serif text-headline font-bold text-ink">
+        {copy.defectsHeading}
+      </h2>
+      <p className="mt-2 max-w-measure text-body-sm text-ink-2">{copy.defectsExplanation}</p>
+      {subjects.map((subject) => (
+        <div key={subject.stage} className="mt-[22px]">
+          <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>
+          {subject.reports === 0 ? (
+            <p className="mt-1.5 text-body-sm text-ink-2">{copy.noReports}</p>
+          ) : (
+            // One table, three counts, one direction. Until 2026-09-14 this
+            // panel carried two cards over the same thirteen defects in the
+            // same order: one saying how many missed each, one splitting the
+            // finders by team. Every defect was named twice, and the two cards
+            // counted opposite things, so `5명 중 5명이 놓침` on one and `0명`
+            // twice on the other were the same fact written as its own
+            // negative. They are now `전체`, `한국팀` and `인도네시아팀` on one
+            // row, all of them 발견, which also makes the row checkable: the
+            // two team figures add up to the first.
+            //
+            // From `sm` that is a table, because that is what two axes are —
+            // a row per defect, a column per count, `scope` tying a figure to
+            // the head above it for a screen reader. Below `sm` the counts do
+            // not fit beside the name, so they move under it on a three-column
+            // grid aligned with those heads, each carrying its own name for a
+            // screen reader. A table that scrolled sideways was tried on the
+            // two-column version and rejected: it cut the last column off at
+            // the card's edge with nothing to say it was there.
+            //
+            // Both shapes are rendered and one is hidden. `hidden` takes it
+            // out of the accessibility tree as well as the page.
+            <>
+              {/* Narrow: the heads once, then the counts under each name. */}
+              <div className="mt-[14px] sm:hidden">
+                <div className="grid grid-cols-3 gap-x-[14px]">
+                  <div>
+                    <ColumnHead label={copy.all} reports={subject.reports} copy={copy} />
                   </div>
-                  <ul className="mt-[14px] flex flex-col gap-[22px]">
-                    {subject.defects.map(({ defect, label, principle, koreaFound, indonesiaFound }) => (
-                      <li key={defect.slug}>
-                        <span className="block text-title font-bold text-ink [overflow-wrap:anywhere]">
-                          {label}
-                        </span>
-                        <DefectDetail principle={principle} identifier={defect.element} />
-                        {/* The team's name rides each figure for a screen
-                            reader, which has no columns to read them in. */}
-                        <div className="mt-1 grid grid-cols-2 gap-x-[14px]">
-                          <span className={FIGURE}>
-                            <span className="sr-only">{copy.korea} </span>
-                            <Found found={koreaFound} reports={subject.koreaReports} copy={copy} />
-                          </span>
-                          <span className={FIGURE}>
-                            <span className="sr-only">{copy.indonesia} </span>
-                            <Found
-                              found={indonesiaFound}
-                              reports={subject.indonesiaReports}
-                              copy={copy}
-                            />
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                  <div>
+                    <ColumnHead label={copy.korea} reports={subject.koreaReports} copy={copy} />
+                  </div>
+                  <div>
+                    <ColumnHead label={copy.indonesia} reports={subject.indonesiaReports} copy={copy} />
+                  </div>
                 </div>
-
-                {/* Wide: the same data with the teams as columns. The table
-                    stops at 36rem rather than running to the card's edge, and
-                    its name column is the same 22rem `Row` above is capped at,
-                    for the reason written there: pushed to the two ends of an
-                    896px card, a name and its figure sat 506px apart and
-                    invited the eye to read one row's name against the next
-                    row's number. The blank space belongs outside the table,
-                    not between its columns. */}
-                <table className="mt-[14px] hidden w-full table-fixed border-separate border-spacing-0 text-left sm:table sm:w-[36rem]">
-                  <caption className="sr-only">
-                    {copy.stage(subject.stage)} · {copy.cohortsHeading}
-                  </caption>
-                  <colgroup>
-                    <col className="w-[22rem]" />
-                    <col className="w-[7rem]" />
-                    <col className="w-[7rem]" />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <td />
-                      <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
-                        <TeamCaption label={copy.korea} reports={subject.koreaReports} copy={copy} />
-                      </th>
-                      <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
-                        <TeamCaption
-                          label={copy.indonesia}
-                          reports={subject.indonesiaReports}
-                          copy={copy}
-                        />
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {subject.defects.map(({ defect, label, principle, koreaFound, indonesiaFound }) => (
-                      <tr key={defect.slug}>
-                        <th
-                          scope="row"
-                          className="py-[7px] pr-[14px] text-left align-baseline font-normal [overflow-wrap:anywhere]"
-                        >
-                          <span className="block text-title font-bold text-ink">{label}</span>
-                          <DefectDetail principle={principle} identifier={defect.element} />
-                        </th>
-                        <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                <ul className="mt-[14px] flex flex-col gap-[22px]">
+                  {subject.defects.map(({ defect, label, principle, found, koreaFound, indonesiaFound }) => (
+                    <li key={defect.slug}>
+                      <span className="block text-title font-bold text-ink [overflow-wrap:anywhere]">
+                        {label}
+                      </span>
+                      <DefectDetail principle={principle} identifier={defect.element} />
+                      {/* Each figure carries its column's name for a screen
+                          reader, which has no columns to read them in. */}
+                      <div className="mt-1 grid grid-cols-3 gap-x-[14px]">
+                        <span className={FIGURE}>
+                          <span className="sr-only">{copy.all} </span>
+                          <Found found={found} reports={subject.reports} copy={copy} />
+                        </span>
+                        <span className={FIGURE}>
+                          <span className="sr-only">{copy.korea} </span>
                           <Found found={koreaFound} reports={subject.koreaReports} copy={copy} />
-                        </td>
-                        <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                        </span>
+                        <span className={FIGURE}>
+                          <span className="sr-only">{copy.indonesia} </span>
                           <Found
                             found={indonesiaFound}
                             reports={subject.indonesiaReports}
                             copy={copy}
                           />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </>
-            )}
-          </div>
-        ))}
-      </section>
-    </div>
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Wide: the same data with the counts as columns. The table
+                  stops at 43rem rather than running to the card's edge, and
+                  its name column is the same 22rem the item panel's rows are
+                  capped at, for the
+                  reason written there: pushed to the two ends of an 896px
+                  card, a name and its figure sat 506px apart and invited the
+                  eye to read one row's name against the next row's number. */}
+              <table className="mt-[14px] hidden w-full table-fixed border-separate border-spacing-0 text-left sm:table sm:w-[43rem]">
+                <caption className="sr-only">
+                  {copy.stage(subject.stage)} · {copy.defectsHeading}
+                </caption>
+                <colgroup>
+                  <col className="w-[22rem]" />
+                  <col className="w-[7rem]" />
+                  <col className="w-[7rem]" />
+                  <col className="w-[7rem]" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <td />
+                    <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
+                      <ColumnHead label={copy.all} reports={subject.reports} copy={copy} />
+                    </th>
+                    <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
+                      <ColumnHead label={copy.korea} reports={subject.koreaReports} copy={copy} />
+                    </th>
+                    <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
+                      <ColumnHead
+                        label={copy.indonesia}
+                        reports={subject.indonesiaReports}
+                        copy={copy}
+                      />
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {subject.defects.map(({ defect, label, principle, found, koreaFound, indonesiaFound }) => (
+                    <tr key={defect.slug}>
+                      <th
+                        scope="row"
+                        className="py-[7px] pr-[14px] text-left align-baseline font-normal [overflow-wrap:anywhere]"
+                      >
+                        <span className="block text-title font-bold text-ink">{label}</span>
+                        <DefectDetail principle={principle} identifier={defect.element} />
+                      </th>
+                      <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                        <Found found={found} reports={subject.reports} copy={copy} />
+                      </td>
+                      <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                        <Found found={koreaFound} reports={subject.koreaReports} copy={copy} />
+                      </td>
+                      <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                        <Found
+                          found={indonesiaFound}
+                          reports={subject.indonesiaReports}
+                          copy={copy}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+        </div>
+      ))}
+      {/* The unauthored Stages are one group, not one paragraph each: 22px
+          separates them from the Stage above, 14px holds them together.
+
+          `·`, not a 줄표. CONTEXT.md rules the dash out of Korean screen copy,
+          and the Korean headings on this very page already use the middot, so
+          the one separator the markup contributed was the one separator the
+          language does not take (ERR-239). It reads as a separator in English
+          too, which is why this stays one spelling rather than becoming two. */}
+      {unauthored.length > 0 && (
+        <div className="mt-[22px] flex flex-col gap-[14px]">
+          {unauthored.map((stage) => (
+            <p key={stage} className="text-body-sm text-ink-2">
+              {copy.stage(stage)} · {copy.noSubject}
+            </p>
+          ))}
+        </div>
+      )}
+    </section>
   )
 }

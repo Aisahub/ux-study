@@ -19,9 +19,7 @@ export type Copy = {
   neverDrawnPool: (items: number) => string
   defectsHeading: string
   defectsExplanation: string
-  missedBy: (missed: number, of: number) => string
-  cohortsHeading: string
-  cohortsExplanation: string
+  all: string
   korea: string
   indonesia: string
   submitted: (reports: number) => string
@@ -55,18 +53,21 @@ export const COPY: Record<Language, Copy> = {
     noSubject: 'no page authored to audit yet',
     rate: (correct, drawn) => `${correct} correct of ${drawn} drawn`,
     neverDrawnPool: (items) => `${items} item${items === 1 ? '' : 's'} never drawn`,
-    defectsHeading: 'Planted Defects, most missed first',
-    defectsExplanation: 'Across submitted reports: how many missed each defect.',
-    missedBy: (missed, of) => `missed by ${missed} of ${of}`,
-    // `cohorts`, not `locations`. CONTEXT.md settled the English word when it
-    // settled the Korean one on 2026-09-12, and the sentence below this
-    // heading had said `cohorts` all along — which left one idea wearing three
-    // names on one panel, counting the bare `Korea` and `Indonesia` columns.
-    cohortsHeading: 'The two cohorts, same page',
-    // `counts as`, not `is`. An address is not a cohort; it is what sorts a
-    // report into one. The Korean half said the same thing the same wrong way.
-    cohortsExplanation:
-      'Both cohorts audit identical input, so what each found is a controlled comparison. A Workspace address counts as the Korea cohort; a personal address as Indonesia.',
+    // `least found first`, not `most missed first`. One table counts one way
+    // now, and it counts what was found: a row that read `missed by 5 of 5`
+    // beside `0 found` and `0 found` asked its reader to hold two polarities
+    // at once. The order is unchanged — fewest found first is most missed
+    // first, since every row of a Stage divides by the same number.
+    defectsHeading: 'Planted Defects, least found first',
+    // Three sentences because this card absorbed a second one on 2026-09-14:
+    // what the counts are drawn from, what makes the split between the cohorts
+    // worth reading, and which address lands in which column. `counts as`, not
+    // `is` — an address is not a cohort; it is what sorts a report into one.
+    defectsExplanation:
+      'Across submitted reports: how many found each defect. Both cohorts audit identical input, so the split between them is a controlled comparison. A Workspace address counts as the Korea cohort; a personal address as Indonesia.',
+    // The column the two beside it add up to. `All`, not `Total`, because it
+    // heads a count of people rather than a sum of the rows under it.
+    all: 'All',
     korea: 'Korea',
     indonesia: 'Indonesia',
     submitted: (reports) => `${reports} submitted`,
@@ -115,19 +116,19 @@ export const COPY: Record<Language, Copy> = {
     // clause with the numeral welded to the noun is headline compression, and
     // this is a row you press.
     neverDrawnPool: (items) => `아직 출제되지 않은 문항 ${items}개`,
-    defectsHeading: '심어둔 결함 · 많이 놓친 순',
-    // `…를 표시합니다`, the ending the explanatory lines here settled on.
-    // The colon and the `~는지입니다` were the English punctuation and its noun
-    // clause carried over whole.
-    defectsExplanation: '제출된 보고서를 기준으로, 각 결함을 몇 명이 놓쳤는지 표시합니다.',
-    missedBy: (missed, of) => `${of}명 중 ${missed}명이 놓침`,
-    cohortsHeading: '같은 페이지 · 팀별 결함 발견 비교',
-    // Two repairs. A 차이 cannot 비교가 되다 in Korean; that is
-    // `what each found is a controlled comparison` translated word for word,
-    // and `통제된 비교` reads like a statistics paper on a working screen. And
-    // an address is not a team; it is what sorts a report into one.
-    cohortsExplanation:
-      '두 팀이 완전히 같은 페이지를 점검하므로, 각 팀이 무엇을 발견했는지를 같은 조건에서 비교할 수 있습니다. Workspace 주소를 쓰면 한국팀, 개인 주소를 쓰면 인도네시아팀으로 집계합니다.',
+    // `적게 발견된 순`, not `많이 놓친 순`. One table counts one way now, and it
+    // counts 발견: a row reading `5명 중 5명이 놓침` beside `0명` and `0명` asked
+    // its reader to hold two directions at once. The order did not move, since
+    // every row of a Stage divides by the same number.
+    defectsHeading: '심어둔 결함 · 적게 발견된 순',
+    // Three sentences because this card absorbed a second one on 2026-09-14.
+    // `…표시합니다`, the ending the explanatory lines here settled on. A 차이
+    // cannot 비교가 되다 in Korean, and an address is not a team; it is what
+    // sorts a report into one.
+    defectsExplanation:
+      '제출된 보고서를 기준으로, 각 결함을 몇 명이 발견했는지 표시합니다. 두 팀이 완전히 같은 페이지를 점검하므로 팀별 수치를 같은 조건에서 비교할 수 있습니다. Workspace 주소를 쓰면 한국팀, 개인 주소를 쓰면 인도네시아팀으로 집계합니다.',
+    // The column the two beside it add up to.
+    all: '전체',
     // The English column says `Korea`, and a bare `한국` beside a number would
     // read as the country rather than the people in it. `팀` is what makes the
     // Korean label name the same thing its English sibling names (CONTEXT.md).

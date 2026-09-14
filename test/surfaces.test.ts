@@ -638,13 +638,19 @@ test('the content half shows per-item rates beside draw counts, and the location
   // language switcher — which builds its counterpart from the pathname alone —
   // lands a Maintainer on the panel they were reading.
   expect(itemsMarkup).toContain('href="/en/maintain/content/defects"')
+  // Three columns over one list of defects, all of them counting what was
+  // found: everyone, then the two cohorts the first is made of.
+  expect(defectsPanel).toContain('All')
   expect(defectsPanel).toContain('Korea')
   expect(defectsPanel).toContain('Indonesia')
-  // Each team is a column, and how many of them submitted is said once at its
-  // head rather than inside every cell. Asserted with `\d+` because the rest
-  // of this suite writes reports to the same database.
+  // How many each column divides by is said once at its head rather than
+  // inside every cell. Asserted with `\d+` because the rest of this suite
+  // writes reports to the same database.
   expect(defectsPanel).toMatch(/\d+ submitted/)
-  expect(defectsPanel).toMatch(/missed by \d+ of \d+/)
+  expect(defectsPanel).toMatch(/\d+ found/)
+  // One direction, not two. `missed` was the other card's word, and the two
+  // cards became one on 2026-09-14 precisely so a reader holds one polarity.
+  expect(defectsPanel).not.toContain('missed by')
 
   // A defect is named by the words its element shows on the page, not only by
   // the identifier the record is keyed by — a Maintainer reading a column of
