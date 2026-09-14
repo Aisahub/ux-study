@@ -517,7 +517,9 @@ test('a Learner cannot agree with their own Finding — the page offers no contr
 test('both dashboard halves are Maintainer-only', async () => {
   const learnerCookie = await sessionCookieFor(freshLearner())
 
-  for (const path of ['/en/maintain/learners', '/en/maintain/content']) {
+  // The content half is two panels, and a gate on the first is not a gate on
+  // the second: each panel is its own address and answers a request of its own.
+  for (const path of ['/en/maintain/learners', '/en/maintain/content', '/en/maintain/content/defects']) {
     const response = await fetch(`${BASE_URL}${path}`, { headers: { cookie: learnerCookie } })
 
     expect(response.status).toBe(404)
@@ -598,8 +600,13 @@ test('the content half shows per-item rates beside draw counts, and the location
   await allow(maintainer, true)
   const cookie = await sessionCookieFor(maintainer)
 
+  // Two panels behind one heading since 2026-09-14: the Quiz Item pools, and
+  // the Planted Defects. Both are fetched, because both are this page.
   const text = visibleText(
     await (await fetch(`${BASE_URL}/en/maintain/content`, { headers: { cookie } })).text(),
+  )
+  const defectsPanel = visibleText(
+    await (await fetch(`${BASE_URL}/en/maintain/content/defects`, { headers: { cookie } })).text(),
   )
 
   // Grouped by Stage, every Stage the curriculum declares. A page that simply
@@ -625,13 +632,18 @@ test('the content half shows per-item rates beside draw counts, and the location
   // folded, not dropped — which the next assertion holds.
   expect(text).toMatch(/\d+ items? never drawn/)
   expect(text).toContain(items['visual-hierarchy'].at(-1)!.slug)
-  expect(text).toContain('Korea')
-  expect(text).toContain('Indonesia')
+
+  // The other panel is a real address, not a query string, so that the
+  // language switcher — which builds its counterpart from the pathname alone —
+  // lands a Maintainer on the panel they were reading.
+  expect(text).toContain('href="/en/maintain/content/defects"')
+  expect(defectsPanel).toContain('Korea')
+  expect(defectsPanel).toContain('Indonesia')
   // Each team is a column, and how many of them submitted is said once at its
   // head rather than inside every cell. Asserted with `\d+` because the rest
   // of this suite writes reports to the same database.
-  expect(text).toMatch(/\d+ submitted/)
-  expect(text).toMatch(/missed by \d+ of \d+/)
+  expect(defectsPanel).toMatch(/\d+ submitted/)
+  expect(defectsPanel).toMatch(/missed by \d+ of \d+/)
 
   // A defect is named by the words its element shows on the page, not only by
   // the identifier the record is keyed by — a Maintainer reading a column of
@@ -640,7 +652,7 @@ test('the content half shows per-item rates beside draw counts, and the location
   // document exactly as the page does and cannot drift from it.
   const named = elementLabels(practicePage.html.en)[practicePage.defects[0].element]
   expect(named).not.toBe(practicePage.defects[0].element)
-  expect(text).toContain(named)
+  expect(defectsPanel).toContain(named)
 })
 
 // ------------------------------------------------- a report belongs to a Stage
