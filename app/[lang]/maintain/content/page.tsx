@@ -8,9 +8,37 @@ import { isLanguage } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
 import { COPY, type Copy } from './copy'
-import { Row } from './row'
 
 export const dynamic = 'force-dynamic'
+
+/**
+ * One row of this shelf's two-part shape: what is being counted, and the count.
+ *
+ * The identifier takes the flexible column and wraps; the figure sits in a
+ * column that never shrinks. It was the other way round until 2026-07-31 —
+ * `truncate` on the identifier, `shrink-0` on the figure — which cut the only
+ * handle a Maintainer has for finding the item to fix and preserved the number
+ * they can always re-read. Below `sm` the two stack rather than sharing a
+ * 208px line.
+ *
+ * The name column is capped rather than elastic. Pushed to the two ends of an
+ * 896px card the pair sat a measured 506px apart, and seventy rows of that is
+ * an invitation to read one item's name against the row below's figure. 22rem
+ * holds the longest authored name (305px) with room to spare and still lands
+ * every figure on one vertical line, so the column stays scannable downward:
+ * median gap 143px. A name longer than the cap wraps; nothing is cut.
+ *
+ * A file of its own from 2026-09-14, while the defect shelves used it too, and
+ * back here now that they are one table with three figure columns and none.
+ */
+function Row({ name, value }: { name: string; value: string }) {
+  return (
+    <li className="grid gap-x-[14px] sm:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] sm:items-baseline">
+      <span className="min-w-0 text-body-sm text-ink [overflow-wrap:anywhere]">{name}</span>
+      <span className="text-label font-bold text-ink">{value}</span>
+    </li>
+  )
+}
 
 /**
  * One Competency's items that nobody has been served yet, named and folded.
