@@ -601,10 +601,11 @@ test('the content half shows per-item rates beside draw counts, and the location
   const cookie = await sessionCookieFor(maintainer)
 
   // Two panels behind one heading since 2026-09-14: the Quiz Item pools, and
-  // the Planted Defects. Both are fetched, because both are this page.
-  const text = visibleText(
-    await (await fetch(`${BASE_URL}/en/maintain/content`, { headers: { cookie } })).text(),
-  )
+  // the Planted Defects. Both are fetched, because both are this page. The
+  // markup is kept as well as its text, because what the switch links to is an
+  // attribute and `visibleText` throws attributes away.
+  const itemsMarkup = await (await fetch(`${BASE_URL}/en/maintain/content`, { headers: { cookie } })).text()
+  const text = visibleText(itemsMarkup)
   const defectsPanel = visibleText(
     await (await fetch(`${BASE_URL}/en/maintain/content/defects`, { headers: { cookie } })).text(),
   )
@@ -636,7 +637,7 @@ test('the content half shows per-item rates beside draw counts, and the location
   // The other panel is a real address, not a query string, so that the
   // language switcher — which builds its counterpart from the pathname alone —
   // lands a Maintainer on the panel they were reading.
-  expect(text).toContain('href="/en/maintain/content/defects"')
+  expect(itemsMarkup).toContain('href="/en/maintain/content/defects"')
   expect(defectsPanel).toContain('Korea')
   expect(defectsPanel).toContain('Indonesia')
   // Each team is a column, and how many of them submitted is said once at its
