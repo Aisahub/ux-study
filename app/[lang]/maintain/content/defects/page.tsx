@@ -178,23 +178,29 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
           </div>
         ))}
         {/* The unauthored Stages are one group, not one paragraph each: 22px
-            separates them from the Stage above, 14px holds them together. */}
+            separates them from the Stage above, 14px holds them together.
+
+            `·`, not a 줄표. CONTEXT.md rules the dash out of Korean screen copy,
+            and the Korean headings on this very page already use the middot —
+            so the one separator the markup contributed was the one separator
+            the language does not take. It reads as a separator in English too,
+            which is why this stays one spelling rather than becoming two. */}
         {unauthored.length > 0 && (
           <div className="mt-[22px] flex flex-col gap-[14px]">
             {unauthored.map((stage) => (
               <p key={stage} className="text-body-sm text-ink-2">
-                {copy.stage(stage)} — {copy.noSubject}
+                {copy.stage(stage)} · {copy.noSubject}
               </p>
             ))}
           </div>
         )}
       </section>
 
-      <section aria-labelledby="locations" className="rounded-card bg-surface p-[26px] shadow-card">
-        <h2 id="locations" className="font-serif text-headline font-bold text-ink">
-          {copy.locationsHeading}
+      <section aria-labelledby="cohorts" className="rounded-card bg-surface p-[26px] shadow-card">
+        <h2 id="cohorts" className="font-serif text-headline font-bold text-ink">
+          {copy.cohortsHeading}
         </h2>
-        <p className="mt-2 max-w-measure text-body-sm text-ink-2">{copy.locationsExplanation}</p>
+        <p className="mt-2 max-w-measure text-body-sm text-ink-2">{copy.cohortsExplanation}</p>
         {subjects.map((subject) => (
           <div key={subject.stage} className="mt-[22px]">
             <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>
@@ -280,7 +286,7 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
                     not between its columns. */}
                 <table className="mt-[14px] hidden w-full table-fixed border-separate border-spacing-0 text-left sm:table sm:w-[36rem]">
                   <caption className="sr-only">
-                    {copy.stage(subject.stage)} — {copy.locationsHeading}
+                    {copy.stage(subject.stage)} · {copy.cohortsHeading}
                   </caption>
                   <colgroup>
                     <col className="w-[22rem]" />
