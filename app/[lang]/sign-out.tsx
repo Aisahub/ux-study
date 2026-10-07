@@ -1,3 +1,4 @@
+import { RailTip } from './nav-rail'
 import type { Language } from '@/lib/language'
 
 const COPY: Record<Language, string> = {
@@ -29,9 +30,8 @@ export function SignOut({ lang, className = '' }: { lang: Language; className?: 
     <form action={`/api/auth/signout?lang=${lang}`} method="POST" className={className}>
       <button
         type="submit"
-        title={COPY[lang]}
         aria-label={COPY[lang]}
-        className="grid size-11 shrink-0 place-items-center rounded-full bg-surface text-ink-2 shadow-pill"
+        className="group relative grid size-11 shrink-0 place-items-center rounded-full bg-surface text-ink-2 shadow-pill"
       >
         {/* The rail's grammar: 24px box, 1.7 stroke, round caps, no fill. A
             doorway on the right and an arrow leaving through it — the arrow
@@ -44,6 +44,7 @@ export function SignOut({ lang, className = '' }: { lang: Language; className?: 
         >
           <path d="M14 4h4a1.6 1.6 0 011.6 1.6v12.8A1.6 1.6 0 0118 20h-4M4 12h7.5M8.5 8.5L12 12l-3.5 3.5" />
         </svg>
+        <RailTip label={COPY[lang]} />
       </button>
     </form>
   )
