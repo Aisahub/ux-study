@@ -47,6 +47,23 @@ const ICON: Record<RailId, React.ReactNode> = {
 }
 
 /**
+ * The mark's name, beside it on hover or keyboard focus. Replaces `title`,
+ * whose browser tooltip waits about a second before it appears — long enough
+ * that a reader scanning six unlabelled circles gives up on it. The parent
+ * needs `group relative`. Rail only: below `sm` the bar prints its labels.
+ */
+export function RailTip({ label }: { label: string }) {
+  return (
+    <span
+      aria-hidden
+      className="pointer-events-none absolute top-1/2 left-full z-50 ml-2.5 hidden -translate-y-1/2 rounded-md bg-ink px-2 py-1 text-label font-bold whitespace-nowrap text-white opacity-0 transition-opacity duration-75 group-hover:opacity-100 group-focus-visible:opacity-100 sm:block"
+    >
+      {label}
+    </span>
+  )
+}
+
+/**
  * The rail. A client component only because the active mark needs the current
  * path; every item it renders was decided on the server (see platform-nav).
  *
@@ -90,10 +107,9 @@ export function NavRail({ items, lang }: { items: RailItem[]; lang: Language }) 
           <Link
             key={item.id}
             href={item.href}
-            title={item.label}
             aria-label={item.label}
             aria-current={active ? 'page' : undefined}
-            className="press flex min-w-0 flex-1 flex-col items-center gap-[5px] rounded-[14px] py-0.5 sm:flex-none sm:gap-0 sm:py-0"
+            className="press group relative flex min-w-0 flex-1 flex-col items-center gap-[5px] rounded-[14px] py-0.5 sm:flex-none sm:gap-0 sm:py-0"
           >
             <span
               className={`grid size-11 shrink-0 place-items-center rounded-full ${
@@ -108,6 +124,7 @@ export function NavRail({ items, lang }: { items: RailItem[]; lang: Language }) 
                 {ICON[item.id]}
               </svg>
             </span>
+            <RailTip label={item.label} />
             {/* Two lines' worth of room is reserved whether or not the label
                 needs it, so the bar is the same height for a Learner with two
                 marks and a Maintainer with six — a navigation that changed
