@@ -23,8 +23,7 @@ roleHint:
       Take the last review comment you left on somebody else's interface and
       ask whether a stranger could act on it with you out of the room.
     ko: >-
-      다른 사람의 인터페이스에 마지막으로 남긴 리뷰 코멘트를 꺼내, 내가
-      옆에서 설명하지 않아도 처음 보는 사람이 그 코멘트만 보고 고칠 수
+      다른 사람의 인터페이스에 마지막으로 남긴 리뷰 코멘트를 꺼내, 본인이 옆에서 설명하지 않아도 처음 보는 사람이 그 코멘트만 보고 고칠 수
       있을지 따져 보세요.
   pm:
     en: >-
