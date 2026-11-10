@@ -43,7 +43,7 @@ prompt:
   en: >-
     What should change here so the person can get this file through?
   ko: >-
-    이 사람이 이 파일을 통과시키려면 여기서 무엇이 바뀌어야 할까요?
+    업로드한 사람이 이 파일을 통과시키려면 여기서 무엇이 바뀌어야 할까요?
 options:
   en:
     - text: Show the message in a dialog over the page rather than as a strip at the top

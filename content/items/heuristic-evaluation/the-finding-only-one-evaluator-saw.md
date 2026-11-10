@@ -55,7 +55,7 @@ prompt:
   en: >-
     What should the team do with the fifth finding?
   ko: >-
-    이 팀은 다섯 번째 발견을 어떻게 해야 할까요?
+    평가자들은 다섯 번째 발견을 어떻게 해야 할까요?
 options:
   en:
     - text: Take it to the team who built it and find out whether the figure really does change, before ranking it
