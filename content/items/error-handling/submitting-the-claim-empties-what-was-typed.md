@@ -85,7 +85,7 @@ prompt:
     What should this page do differently when it comes back carrying that
     message?
   ko: >-
-    이 페이지가 그 메시지를 안고 돌아올 때, 무엇을 달리해야 할까요?
+    이 메시지와 함께 페이지가 다시 뜰 때, 무엇이 달라져야 할까요?
 options:
   en:
     - text: Move the message from the top of the page to just under Approver
@@ -116,7 +116,7 @@ options:
         없어집니다.
     - text: 입력했던 값을 모두 그대로 둔 채로 페이지를 돌려주고, 커서를 결재자 칸에 둡니다
       reason: >-
-        비어 있는 다섯 번째 하나 때문에 제대로 채운 네 값을 버렸습니다. 그 네
+        빠진 값 하나 때문에 페이지가 제대로 채운 값 네 개를 버렸습니다. 그 네
         값은 이미 인터페이스에 들어와 있었습니다.
       correct: true
 ---

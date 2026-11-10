@@ -23,3 +23,12 @@ export const TRANSLATIONESE: [RegExp, string][] = [
   [/최적화된/, '최적화된'],
   [/완벽하게/, '완벽하게'],
 ]
+
+/**
+ * Coined words the owner's Korean writing convention replaces with the
+ * industry term (its section 5-가), which takes precedence over this repo's own
+ * rulings. `원장` and `서식` are on that list but left off this one: here they
+ * are the accounting ledger and part of a real tax form's name, not coinages.
+ * Each must also be named in CONTEXT.md's Coined words section.
+ */
+export const COINED = ['이름표', '관문', '울타리', '일꾼', '격자', '단추', '서랍', '시험지', '묶음']

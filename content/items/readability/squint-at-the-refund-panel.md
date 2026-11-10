@@ -71,7 +71,7 @@ prompt:
   en: >-
     What is the squinting telling the team?
   ko: >-
-    눈을 가늘게 뜨는 이 행동은 팀에게 무엇을 말해 주고 있을까요?
+    상담원들이 눈을 가늘게 뜨는 것은 무슨 뜻일까요?
 options:
   en:
     - text: That panel's type fails as type
@@ -91,7 +91,7 @@ options:
         People also squint when concentrating, so it needs a reading-speed
         measurement before it counts as a signal.
   ko:
-    - text: 그 패널의 글자가 글자로서 실패하고 있다는 뜻입니다
+    - text: 그 패널은 글자 자체를 알아보기 어렵다는 뜻입니다
       reason: >-
         회색 위 옅은 회색, 10px의 가는 획은 눈이 분간할 거리를 거의 주지 않고,
         눈을 가늘게 뜨는 것은 판독성 문제의 전형적인 신호입니다.

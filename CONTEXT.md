@@ -34,7 +34,7 @@ _Avoid_: phase, level, unit
 The assessment attached to a single Competency, testing whether the Learner *understands* it. Objective items scored against a stored answer key; the problem is already framed for them. A Gate Quiz is not a fixed set of questions — each attempt draws its items from the Competency's Item Pool. See ADR-0006.
 _Avoid_: test, exam, assessment (too broad — those cover both instruments), 관문 테스트, 관문 퀴즈
 
-The Korean is the bare noun on purpose (2026-07-31). This entry had read `관문 테스트` while the build shipped `관문 퀴즈`, and the gloss used the very word the line above it rules out. `관문` is a heavier register than `퀴즈` and the pair read as two words pulling against each other; the gating it was carrying is said by the status beside every quiz and by the Competency page's `마지막 관문` kicker, neither of which needs the name to repeat it. English keeps **Gate Quiz** — it is the term this repo's docs, ADRs and tests are written in, and the register clash is Korean's alone.
+The Korean is the bare noun on purpose (2026-07-31). This entry had read `관문 테스트` while the build shipped `관문 퀴즈`, and the gloss used the very word the line above it rules out. `관문` is a heavier register than `퀴즈` and the pair read as two words pulling against each other; the gating it was carrying is said by the status beside every quiz and by the Competency page's `마지막 게이트` kicker (관문 until 2026-11-10; see Coined words), neither of which needs the name to repeat it. English keeps **Gate Quiz** — it is the term this repo's docs, ADRs and tests are written in, and the register clash is Korean's alone.
 
 **Quiz Item** (문항 / 测验题):
 One question inside a Gate Quiz. Presents a concrete artefact — a screenshot, a described page, a pair of alternatives — and asks for a judgement about it. An item that can be answered without examining the artefact is not a Quiz Item; it is a definition question, and does not belong. Every item names the section of the source article it derives from, which is what a Learner who gets it wrong is given in place of the answer on a failed attempt. On a passed one every drawn item is given both, since there is no retry left for the answer to convert (ADR-0006, amended 2026-08-05).
@@ -115,7 +115,7 @@ already taught 발견 while the drawer a Learner writes into said `Finding`.
 
 **컨트롤** for a control (over 조작 장치, 조작부). **칸** for an input
 (over 입력란). **폼** for a form (over 양식). **맨 아래** for the foot of a
-screen — `바닥` is a floor. **이름표** for a label (over 라벨, 레이블).
+screen — `바닥` is a floor. **레이블** for a label (over 이름표, 라벨).
 **결재자** for whoever approves a request; `관리자` is the system
 administrator, and a Korean approval flow does not use it for a person.
 **px**, not 픽셀, matching what the screens' own CSS says.
@@ -148,6 +148,21 @@ A Principle's justification sentence is said out loud with a `[slot]` filled in,
 so no slot may be followed by a particle that agrees with the word filling it
 (을/를, 은/는, 이/가, 와/과, 으로/로). Put a fixed noun after the slot, or let
 the clause end on a copula. The content build refuses the rest. See ERR-214.
+
+### Coined words
+
+Where this file and the owner's Korean writing convention
+(`~/.claude/references/dev-conventions/korean-writing-style.md`, section 5-가)
+disagree, **the convention wins** (settled 2026-11-10). That reversed two
+rulings here: a label is **레이블**, not 이름표, and the quiz that gates a
+Competency is a **게이트**, not a 관문. A visual group is a **그룹**, not a 묶음.
+
+The suite refuses these coined words in the chrome and in every Learner-facing
+content field (screens exempt): `이름표`, `관문`, `울타리`, `일꾼`, `격자`,
+`단추`, `서랍`, `시험지`, `묶음`. Two words on the convention's list are left
+off because Korean uses them in a sense the convention does not mean: `원장` is
+the accounting ledger an item about year-end close describes, and `서식` is part
+of the real name of a tax form.
 
 ### Translationese
 

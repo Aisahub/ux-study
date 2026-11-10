@@ -18,8 +18,7 @@ artefact:
     "재무"라는 제목과 "2025 연말 결산" 카드가 있고, 1월 12일에 열린다는 한
     줄과 파란 "연말 결산 시작" 버튼이 들어 있습니다. 두 번째 상태에서는 왼쪽
     메뉴가 사라지고 화면에 결산만 남습니다. "2025 연말 결산"이라는 제목,
-    "7단계 중 1단계"라는 줄, "원장 잠그기"라는 소제목 아래 원장 네 개를 적은
-    테두리 블록, 그리고 오른쪽 아래에는 파란 "계속" 컨트롤 하나뿐입니다.
+    "7단계 중 1단계"라는 줄, "원장 잠그기"라는 소제목 아래 원장 네 개를 적은 테두리 블록이 있고, 컨트롤은 오른쪽 아래 파란 "계속" 하나뿐입니다.
 sequence:
   - caption:
       en: The moment before Start year-end close is pressed
@@ -100,7 +99,7 @@ prompt:
     Someone started the close by accident and is now on its first step. Which
     change should this flow get?
   ko: >-
-    실수로 결산을 시작해서 지금 첫 단계에 있습니다. 이 플로우에 어떤 변화가
+    누군가 실수로 결산을 시작해 지금 첫 단계에 와 있습니다. 이 플로우에 어떤 변화가
     필요할까요?
 options:
   en:

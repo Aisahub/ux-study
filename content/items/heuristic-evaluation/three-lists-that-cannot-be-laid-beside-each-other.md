@@ -12,7 +12,7 @@ artefact:
     nine annotated screenshots, each with an arrow and a few words, and no
     ordering. All three cover the same six screens.
   ko: >-
-    평가자 세 명이 같은 반품 흐름을 각자 훑고 제출한 결과물입니다. 사전에 형식을
+    평가자 세 명이 같은 반품 플로우를 각자 훑고 제출한 결과물입니다. 사전에 형식을
     정해 두지는 않았습니다. 프리야는 열한 줄짜리 표를 냈고, 줄마다 화면 이름,
     휴리스틱, 1에서 4까지의 심각도가 적혀 있습니다. 톰은 다섯 문단짜리 문서를
     냈는데, 훑어본 순서대로 서술되어 있고 문제는 문장 속에 섞여 있으며 휴리스틱
@@ -94,7 +94,7 @@ prompt:
     The three evaluated independently, exactly as they should have. Consolidation
     is now the problem. What went wrong, and when?
   ko: >-
-    세 사람은 마땅히 그래야 하는 대로 각자 따로 평가했습니다. 그런데 이제 정리가
+    세 사람은 원래 해야 하는 대로 각자 평가했습니다. 그런데 이제 정리가
     되지 않습니다. 무엇이, 언제 잘못됐을까요?
 options:
   en:
@@ -116,19 +116,17 @@ options:
         The most usable of the three becomes the structure, and nothing anybody
         found gets dropped.
   ko:
-    - text: 준비 단계입니다. 아무도 훑기 시작하기 전에 기록 형식을 맞춰 뒀어야 합니다
+    - text: 준비 단계입니다. 훑기 시작하기 전에 기록 형식부터 맞춰 뒀어야 합니다
       reason: >-
         따로 적은 발견은 나중에 나란히 놓고 견주어야 하는데, 형식이 셋이면 각각이
         아무리 좋아도 나란히 놓이지 않습니다.
       correct: true
     - text: 잘못된 것은 없습니다. 각자 자기 발견을 프리야의 형식으로 다시 적게 해서 정리합니다
       reason: >-
-        따로 한 작업은 그대로 살아남고, 다시 옮겨 적는 일은 자기가 무슨 뜻이었는지
-        아는 사람이 하게 됩니다.
-    - text: 준비 단계입니다. 셋에게 흐름 전체가 아니라 화면을 하나씩 나눠 줬어야 합니다
+        따로 한 작업은 그대로 살아남고, 다시 옮겨 적는 일은 무슨 뜻으로 썼는지 아는 본인이 하게 됩니다.
+    - text: 준비 단계입니다. 셋에게 플로우 전체가 아니라 화면을 하나씩 나눠 줬어야 합니다
       reason: >-
-        평가자 셋이 여섯 화면을 나눠 보는 것보다, 한 사람이 한 화면을 제대로 보는
-        쪽이 촘촘합니다.
+        평가자 셋이 여섯 화면을 모두 훑는 것보다, 저마다 한 화면씩 제대로 보는 쪽이 더 촘촘합니다.
     - text: 잘못된 것은 없습니다. 프리야의 표를 틀로 삼고 나머지 둘에서 빠진 것을 채워 넣습니다
       reason: >-
         셋 중 가장 쓸 만한 것이 뼈대가 되고, 누구의 발견도 버려지지 않습니다.

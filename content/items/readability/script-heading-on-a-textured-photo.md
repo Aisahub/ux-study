@@ -48,7 +48,7 @@ prompt:
   en: >-
     Where does this page actually fail, and as what kind of problem?
   ko: >-
-    이 페이지는 실제로 어디에서, 어떤 종류의 문제로 무너지고 있을까요?
+    이 페이지는 실제로 어디에서, 어떤 종류의 문제를 안고 있을까요?
 options:
   en:
     - text: In the heading, as a legibility problem
@@ -82,8 +82,7 @@ options:
         써야 합니다.
     - text: 심각한 곳은 없습니다
       reason: >-
-        64px면 어떤 최소 크기든 훨씬 웃돌고, 제목에 요구되는 것은 충분히 큰
-        크기이기 때문입니다.
+        64px이면 어떤 최소 크기보다도 훨씬 크고, 지침이 제목에 요구하는 것도 충분히 큰 크기입니다.
     - text: 둘 다에서 똑같이
       reason: >-
         손글씨체와 고딕체를 섞은 것 자체가 결함이고, 페이지 전체를 한 서체로

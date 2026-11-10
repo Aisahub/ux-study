@@ -48,8 +48,7 @@ prompt:
     The tenant opened this screen to find out whether they can still pay this
     month's rent out of it. Which change should the screen make?
   ko: >-
-    이 세입자가 화면을 연 이유는 이 계좌에서 이번 달 월세를 낼 수 있는지 알기
-    위해서입니다. 이 화면은 무엇을 바꿔야 할까요?
+    세입자는 이 계좌에서 이번 달 월세를 낼 수 있는지 알아보려고 이 화면을 열었습니다. 이 화면은 무엇을 바꿔야 할까요?
 options:
   en:
     - text: Replace the definition with what it means here — which £640 is still theirs to spend, and what ends the hold
@@ -72,17 +71,14 @@ options:
   ko:
     - text: 뜻풀이를 지우고, 이 상황에서 무슨 뜻인지(남은 64만 원은 쓸 수 있다는 것과 언제 풀리는지)를 적습니다
       reason: >-
-        독자는 어떤 말을 언제나 자기 상황 안에서 만나고, 그 상황이야말로 이
-        화면에 들어온 이유입니다.
+        독자는 낱말을 늘 자기 처지 속에서 읽고, 바로 그 처지를 풀려고 이 화면을 열었습니다.
       correct: true
-    - text: 뜻은 그대로 두되 한 줄로 줄입니다
+    - text: 뜻풀이를 한 줄로 줄이되, 내용은 바꾸지 않습니다
       reason: >-
-        뜻은 그대로 남으면서, 회색 덩어리로 건너뛰지 않고 한눈에 읽히는 길이가
-        됩니다.
+        뜻은 그대로 남으면서, 회색 글 덩어리라서 건너뛰는 대신, 한눈에 읽히는 길이가 됩니다.
     - text: 그 말에 링크를 걸어 임대차 약관의 해당 조항으로 보냅니다
       reason: >-
-        자기 돈을 묶어 두는 근거를 옮겨 적은 말이 아니라 원래 문구 그대로
-        확인하게 됩니다.
+        독자는 자기 돈을 묶어 둔 근거를, 남이 풀어 쓴 말이 아니라 약관 원문 그대로 확인하게 됩니다.
     - text: 그 말을 전부 "출금 제한"으로 바꾸고 뜻풀이는 지웁니다
       reason: >-
         독자의 어휘 밖에서 온 말이 화면에서 사라지므로, 따로 설명할 것도

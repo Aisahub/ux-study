@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { expect, test } from 'vitest'
 
 import { loadContent } from '../lib/content'
-import { TRANSLATIONESE } from './korean'
+import { COINED, TRANSLATIONESE } from './korean'
 
 /**
  * Stage 1 authoring rules for the Competency definitions (#14) — what the spec
@@ -247,6 +247,24 @@ test('Korean copy carries none of the constructions CONTEXT.md names as translat
     for (const text of koreanCopy(readFileSync(path, 'utf8'))) check(path, text)
   }
   expect(found).toEqual([])
+})
+
+test('Korean copy uses the industry term, not a word the writing convention calls coined', () => {
+  const found: string[] = []
+  const check = (where: string, text: string) => {
+    for (const word of COINED) if (text.includes(word)) found.push(`${where}: ${word}`)
+  }
+  for (const [where, text] of koreanContentStrings()) check(where, text)
+  for (const path of sources(join(__dirname, '..', 'app'))) {
+    for (const text of koreanCopy(readFileSync(path, 'utf8'))) check(path, text)
+  }
+  expect(found).toEqual([])
+})
+
+test('every coined word the suite refuses is named in CONTEXT.md', () => {
+  const context = readFileSync(join(__dirname, '..', 'CONTEXT.md'), 'utf8')
+  const section = context.split('### Coined words')[1]?.split('### ')[0] ?? ''
+  expect(COINED.filter((word) => !section.includes(`\`${word}\``))).toEqual([])
 })
 
 test('every construction the translationese check bans is written in CONTEXT.md', () => {
