@@ -53,8 +53,8 @@ sequence:
           </div>
         </div>
   - caption:
-      en: Step 3, once the two steps in between have been filled in
-      ko: 그 사이 두 단계를 채우고 도착한 3단계
+      en: Step 3, once step 2 has been filled in
+      ko: 2단계까지 채우고 도착한 3단계
     screen:
       en: |-
         <div class="screen">

@@ -39,7 +39,7 @@ screen:
   ko: |-
     <div class="screen">
       <h2>보안 공지 — API 키 노출</h2>
-      <div class="prose" style="font-size:15px;line-height:1.6;max-width:38ch;color:#222222">
+      <div class="prose" style="font-size:15px;line-height:1.6;max-width:38em;color:#222222">
         <p>화요일 아침, 모니터링이 한 고객 키에서 나오는 이상한 API 호출 패턴을 잡아냈습니다.</p>
         <p>양은 적었습니다. 어떤 호출 제한에도 걸리지 않았고, 그때는 알림도 울리지 않았습니다.</p>
         <p>주간 로그를 살피던 엔지니어가 같은 키가 1분 안에 두 지역에서 호출된 것을 발견했습니다.</p>

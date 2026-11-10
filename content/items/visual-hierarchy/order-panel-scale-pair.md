@@ -51,7 +51,7 @@ screen:
   ko: |-
     <div class="split">
       <div>
-        <p class="pane-label">A 버전</p>
+        <p class="pane-label">A안</p>
         <div class="screen">
           <p style="font-size:28px;font-weight:700;margin:0 0 12px">20260714-0093</p>
           <p style="font-size:15px;margin:0">김지우</p>
@@ -61,7 +61,7 @@ screen:
         </div>
       </div>
       <div>
-        <p class="pane-label">B 버전</p>
+        <p class="pane-label">B안</p>
         <div class="screen">
           <p style="font-size:13px;color:#9ca3af;margin:0 0 12px">20260714-0093</p>
           <p style="font-size:15px;margin:0">김지우</p>
