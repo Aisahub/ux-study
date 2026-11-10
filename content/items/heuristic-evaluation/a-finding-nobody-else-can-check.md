@@ -15,7 +15,7 @@ artefact:
     phone, so on a 375px screen it is not visible when the page loads (Visual
     hierarchy)."
   ko: >-
-    결제 흐름을 평가한 뒤 정리한 발견 네 개입니다. 고칠 팀에게 그대로 넘어가는
+    결제 플로우를 평가한 뒤 정리한 발견 네 개입니다. 고칠 팀에게 그대로 넘어가는
     문서입니다. 내용은 이렇습니다. "1. 결제 페이지가 어수선하고 싸구려 같아서,
     나라면 카드번호를 넣고 싶지 않다.", "2. 배송 단계에서 고른 주소가 결제
     단계에서 다시 보이지 않아, 결제 전에 맞는지 대조해 볼 것이 없다
@@ -59,8 +59,7 @@ prompt:
     One of these four cannot be acted on as written. What should be done with
     it?
   ko: >-
-    네 개 가운데 하나는 적힌 그대로는 손을 댈 수 없습니다. 그것을 어떻게 해야
-    할까요?
+    네 개 가운데 하나는 적힌 그대로는 손을 댈 수 없습니다. 그 발견은 어떻게 해야 할까요?
 options:
   en:
     - text: Send finding 1 back to be rewritten against a named heuristic, on the specific thing that breaks it
@@ -81,21 +80,20 @@ options:
         The impression becomes checkable against the same screen the evaluator
         was looking at when they formed it.
   ko:
-    - text: 1번은 돌려보내, 어떤 휴리스틱을 어겼는지 이름을 대고 무엇이 그것을 어기는지 짚어 다시 쓰게 합니다
+    - text: 1번을 돌려보내, 어긴 휴리스틱의 이름과 어긴 지점을 짚어 다시 쓰게 합니다
       reason: >-
         지금대로는 느낌을 적은 것이라, 근거를 놓고 동의하거나 반박할 수도 없고
         무엇을 고쳐야 해결되는지도 알 수 없습니다.
       correct: true
-    - text: 1번을 뺍니다. 휴리스틱 평가는 휴리스틱 위반을 적는 것이고 저것은 위반이 아니니까요
+    - text: 1번을 뺍니다. 휴리스틱 평가는 휴리스틱 위반을 적는 일인데 1번은 위반이 아닙니다
       reason: >-
         그러면 이 문서에는 이 방법이 실제로 만들어 내는 발견만 남고, 다툴 거리는
         남지 않습니다.
-    - text: 1번을 남기되 심각도를 낮음으로 표시해, 다른 것들과 경쟁하지 않게 둡니다
+    - text: 1번을 남기되 심각도를 낮음으로 표시해, 팀이 보기는 하되 다른 발견보다 앞에 오지 않게 합니다
       reason: >-
         평가자가 느낀 꺼림칙함도 적어 둘 값어치가 있고, 무엇을 먼저 볼지는
         심각도가 말해 줍니다.
     - text: 1번을 남기고 화면 캡처를 붙여, 무엇을 두고 한 말인지 팀이 볼 수 있게 합니다
       reason: >-
-        그 인상이 평가자가 보고 있던 바로 그 화면과 견주어 확인 가능한 것이
-        됩니다.
+        평가자가 그 인상을 받을 때 보던 화면과 견주어 그 인상을 확인할 수 있게 됩니다.
 ---

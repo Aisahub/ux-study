@@ -39,7 +39,7 @@ prompt:
     You are writing this up as a finding. Which heuristic should it be anchored
     to?
   ko: >-
-    이것을 발견으로 적으려고 합니다. 어떤 휴리스틱에 기대어 써야 할까요?
+    이 화면을 발견으로 적는다면, 어떤 휴리스틱을 근거로 삼아야 할까요?
 options:
   en:
     - text: Visibility of system status
@@ -62,13 +62,12 @@ options:
   ko:
     - text: 시스템 상태 가시성
       reason: >-
-        화면은 무언가를 하고 있으면서 그에 대해 아무 말도 하지 않으므로, 앞에
+        화면은 무언가를 처리하고 있지만 아무것도 알리지 않아, 앞에
         앉은 사람은 돌아가는 중인지 멈춘 것인지 가릴 수가 없습니다.
       correct: true
     - text: 오류 복구
       reason: >-
-        90초가 지나면 담당자는 무언가 실패했다고 여기게 되는데, 화면에는 그것을
-        바로잡을 방법이 없습니다.
+        90초가 지나면 담당자는 무언가 실패했다고 여기게 되는데, 바로잡을 방법은 화면 어디에도 없습니다.
     - text: 컨트롤 적합성
       reason: >-
         오래 걸리는 작업을 버튼 하나와 파일 이름만으로 다루고 있어, 하는 일에

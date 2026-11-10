@@ -19,8 +19,7 @@ artefact:
     선택됨"이라고 적힌 줄 옆에 "보관" 버튼과 "내보내기" 버튼이 있고, 그 아래
     표의 각 행에 체크 표시가 붙어 있습니다. 주간 파이프라인, 세그먼트별 이탈,
     3분기 갱신입니다. 그 밑에 "선택한 40개 중 3개 표시"라는 줄이 있습니다. 두
-    번째 상태는 "리포트 40개를 보관할까요?"라는 대화상자로, "모두의 저장한
-    리포트 목록에서 내려갑니다."라는 한 줄과 글자만 있는 "취소", 빨간 "보관"이
+    번째 상태는 "리포트 40개를 보관할까요?"라는 대화상자로, "모든 사람의 저장된 리포트 목록에서 사라집니다."라는 한 줄과 글자만 있는 "취소", 빨간 "보관"이
     있습니다. 세 번째 상태는 다시 그 목록입니다. 위쪽 줄은 "선택 없음"으로
     바뀌고 보관은 회색이 되었으며, 표에는 다른 리포트 두 개가 있고, 그 아래
     짙은 색 메시지에 "리포트 40개를 보관했습니다"라고만 적혀 있을 뿐 누를 것은
@@ -28,7 +27,7 @@ artefact:
 sequence:
   - caption:
       en: The moment Archive is pressed on the selected reports
-      ko: 선택한 리포트에 보관을 누른 순간
+      ko: 리포트를 선택하고 보관을 누른 순간
     screen:
       en: |-
         <div class="screen">
@@ -74,7 +73,7 @@ sequence:
         <div class="screen">
           <div class="dialog" style="max-width:420px">
             <p class="dialog-title">리포트 40개를 보관할까요?</p>
-            <p>모두의 저장한 리포트 목록에서 내려갑니다.</p>
+            <p>모든 사람의 저장된 리포트 목록에서 사라집니다.</p>
             <div class="dialog-foot actions--end"><span class="btn btn--ghost">취소</span><button class="btn btn--danger">보관</button></div>
           </div>
         </div>
@@ -113,7 +112,7 @@ prompt:
     This dialog is the tool's only guard on a bulk archive. Which change should
     the archive get?
   ko: >-
-    이 대화상자가 일괄 보관을 막아 주는 유일한 장치입니다. 보관 동작에 어떤 변화가
+    일괄 보관 앞에 놓인 안전장치는 이 대화상자 하나뿐입니다. 보관 동작에 어떤 변화가
     필요할까요?
 options:
   en:
@@ -146,7 +145,6 @@ options:
         이미 한 번 막아 두었으니, 두 번 막는 것은 과하게 겹치는 장치입니다.
     - text: 대화상자를 없애고 바로 보관한 뒤, 뒤따르는 메시지에 실행 취소를 답니다
       reason: >-
-        대화상자는 미리 확신하라고 요구할 뿐이고, 확신하지 못했던 사람을 실제로
-        구하는 것은 나중에 열려 있는 되돌아갈 길입니다.
+        대화상자는 미리 확신하라고 요구할 뿐입니다. 확신하지 못했던 사람에게 실제로 도움이 되는 것은 보관한 뒤에도 되돌릴 수 있는 길입니다.
       correct: true
 ---

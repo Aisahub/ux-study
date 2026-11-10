@@ -12,10 +12,10 @@ artefact:
     a "Recent activity" heading at 24px, an activity table at 14px, and a
     footer note at 11px.
   ko: >-
-    배송 매니저가 아침마다 여는 사내 대시보드입니다. 글자 크기를 여섯 단계
+    운영 매니저가 아침마다 여는 사내 대시보드입니다. 글자 크기를 여섯 단계
     씁니다. 맨 위에 "안녕하세요, 민준님"이 40px로 넓게 깔립니다. 그 아래에
-    카드 네 장이 있고, 숫자는 20px, 이름표는 13px입니다. 전체 고객사 128, 발송
-    메일 3,400, 미수금 청구서 7, 결제 실패 2입니다. 이어서 "최근 활동" 제목이
+    카드 네 장이 있고, 숫자는 20px, 레이블은 13px입니다. 전체 고객사 128, 발송
+    메일 3,400, 연체 청구서 7, 결제 실패 2입니다. 이어서 "최근 활동" 제목이
     24px, 활동 표가 14px, 맨 아래 안내 문구가 11px입니다.
 screen:
   en: |-
@@ -44,7 +44,7 @@ screen:
       <div class="stats">
         <div class="card"><p class="stat-label">전체 고객사</p><p class="stat-value">128</p></div>
         <div class="card"><p class="stat-label">발송 메일</p><p class="stat-value">3,400</p></div>
-        <div class="card"><p class="stat-label">미수금 청구서</p><p class="stat-value">7</p></div>
+        <div class="card"><p class="stat-label">연체 청구서</p><p class="stat-value">7</p></div>
         <div class="card"><p class="stat-label">결제 실패</p><p class="stat-value">2</p></div>
       </div>
       <p style="font-size:24px;font-weight:600;margin:20px 0 10px">최근 활동</p>
@@ -82,9 +82,9 @@ options:
       reason: >-
         It stops competing without anything being resized.
   ko:
-    - text: 인사말을 줄이고 예외 숫자 둘을 키웁니다
+    - text: 인사말을 줄이고 문제를 알리는 숫자 둘을 키웁니다
       reason: >-
-        인사말은 표 본문과 같은 크기로 낮추고, 미수금 청구서와 결제 실패 두
+        인사말은 표 본문과 같은 크기로 낮추고, 연체 청구서와 결제 실패 두
         숫자를 페이지에서 가장 큰 글자로 올립니다.
       correct: true
     - text: 카드 숫자 네 개를 모두 40px로 올리고 인사말은 14px로 낮춥니다

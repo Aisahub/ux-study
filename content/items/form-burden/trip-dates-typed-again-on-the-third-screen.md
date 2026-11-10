@@ -25,8 +25,7 @@ artefact:
     두 건이 적혀 있고 아래에 "이전"과 "다음"이 있습니다. 세 번째에는 "3/3단계 —
     일비"라는 줄 아래로 칸 네 개가 서 있습니다. "출장 첫날", "출장 마지막 날",
     "일수"는 모두 비어 있고 "일비 단가"에는 40,000원이 들어 있습니다. 그 아래
-    합계는 줄표이고, "정산 제출"은 이 도구가 아직 쓸 수 없는 컨트롤에 입히는 회색을
-    하고 있습니다.
+    합계는 줄표이고, "정산 제출" 버튼은 회색입니다. 이 도구에서 회색은 아직 누를 수 없는 컨트롤에 쓰는 색입니다.
 sequence:
   - caption:
       en: Step 1, once the trip details have been filled in
@@ -111,8 +110,7 @@ prompt:
     Settlements from this tool come back to be corrected most often because two
     dates on the same claim disagree. Which change fixes that?
   ko: >-
-    이 도구로 올린 정산이 수정하라고 돌아오는 가장 흔한 이유는 한 건 안의 두 날짜가
-    서로 어긋나 있기 때문입니다. 무엇을 바꿔야 그것이 없어질까요?
+    이 도구로 올린 정산이 수정하라고 돌아오는 가장 흔한 이유는 한 건 안의 두 날짜가 서로 어긋나는 것입니다. 무엇을 바꿔야 이런 일이 없어질까요?
 options:
   en:
     - text: Carry the departure and return through to the per-diem step, shown filled in and still changeable, and work the day count out from them
@@ -133,19 +131,16 @@ options:
         A disagreeing pair never reaches the finance team, and it is caught while
         the claim is still on the traveller's screen.
   ko:
-    - text: 출발일과 복귀일을 일비 단계까지 가져와 채워진 채로 보여 주고, 바꿀 수 있게 두고, 일수는 거기서 계산해 냅니다
+    - text: 출발일과 복귀일을 일비 단계에 미리 채워 두되 바꿀 수 있게 하고, 일수는 그 날짜로 계산합니다
       reason: >-
-        날짜 쌍이 둘이 아니라 하나가 되니 어긋날 것이 남지 않고, 일수는 사람이
-        손으로 세는 셈이기를 그만둡니다.
+        날짜가 한 쌍뿐이니 어긋날 일이 없고, 일수를 사람이 손으로 셀 필요도 없어집니다.
       correct: true
     - text: 1단계의 출발일과 복귀일을 일비 날짜 칸 위에 글자로 띄워, 입력하는 동안 참고하게 합니다
       reason: >-
-        무엇을 적었는지 떠올리려고 화면을 되돌아갈 일이 없어지는데, 날짜를 잘못
-        적는 것은 바로 그때입니다.
+        무엇을 적었는지 떠올리려고 무엇을 적었는지 떠올리려고 화면을 되돌아갈 일이 없어집니다. 날짜를 잘못 적는 일은 대개 그렇게 오갈 때 생깁니다.
     - text: 일비 날짜 칸 위에 "출장 날짜 가져오기" 버튼을 답니다
       reason: >-
-        날짜 두 개를 치는 대신 한 번만 누르면 되고, 어느 날짜로 정산할지는 출장자가
-        계속 쥐고 있습니다.
+        날짜 두 개를 치는 대신 한 번만 누르면 되고, 어느 날짜로 정산할지는 여전히 출장자가 정합니다.
     - text: 제출할 때 두 쌍을 견주어 보고, 다르면 정산을 되돌립니다
       reason: >-
         어긋난 쌍이 재무팀까지 가지 않고, 아직 출장자의 화면에 있는 동안 잡힙니다.

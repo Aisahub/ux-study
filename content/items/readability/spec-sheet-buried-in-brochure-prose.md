@@ -41,7 +41,7 @@ prompt:
   en: >-
     Why are visitors leaving without the price, and what fixes it?
   ko: >-
-    방문자들은 왜 가격도 못 찾고 떠나며, 무엇이 이를 고칠까요?
+    방문자들은 왜 가격도 찾지 못하고 떠날까요? 무엇을 고쳐야 할까요?
 options:
   en:
     - text: The page is written for a reader it does not have
@@ -63,22 +63,21 @@ options:
         Raise the size and darken the text so the paragraphs invite reading
         instead of discouraging it.
   ko:
-    - text: 이 페이지는 존재하지 않는 독자를 위해 쓰였습니다
+    - text: 이 페이지는 실제로 오지 않는 독자를 상대로 쓰였습니다
       reason: >-
         방문자는 훑어보는데, 여기엔 훑어서 얻을 것이 없습니다. 가격, 폭,
-        하중 한계를 이름표 붙은 줄로 맨 위에 꺼내 놓고 산문은 그 뒤에 둬야
+        하중 한계를 레이블 붙은 줄로 맨 위에 꺼내 놓고 산문은 그 뒤에 둬야
         합니다.
       correct: true
     - text: 산문의 수준이 너무 높게 잡혀 있습니다
       reason: >-
         문장을 더 쉬운 수준으로 낮추면 방문자가 가격이 나오는 데까지는 읽어
         들어갈 것입니다.
-    - text: 네 문단은 그저 너무 많습니다
+    - text: 문단 네 개는 애초에 너무 많습니다
       reason: >-
         각 문단을 두 문장으로 줄이면, 글이 충분히 짧아진 것만으로 사실들이
         저절로 드러날 것입니다.
     - text: 판매 페이지치고 조판이 너무 소박합니다
       reason: >-
-        글자를 키우고 색을 진하게 해서 문단이 읽기를 밀어내지 않고 청하게
-        만들어야 합니다.
+        글자를 키우고 색을 진하게 해서 문단이 읽고 싶어지게 만들어야 합니다.
 ---

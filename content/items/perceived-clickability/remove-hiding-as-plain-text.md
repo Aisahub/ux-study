@@ -11,7 +11,7 @@ artefact:
     clickable and works, yet the maintainer keeps getting emails asking how
     to delete files.
   ko: >-
-    공유 드라이브 파일 목록의 한 행입니다. 파일명 "3분기-실적전망.xlsx"은 14px
+    공유 드라이브 파일 목록의 한 행입니다. 파일명 "3분기-실적전망.xlsx"는 14px
     검정 글자입니다. 그 오른쪽의 "다운로드"는 테두리를 갖춘 둥근 버튼입니다.
     행의 맨 끝에는 "삭제"라는 단어가 있는데, 파일명과 똑같은 14px 검정 글자에
     밑줄도, 색도, 테두리도 없습니다. 삭제는 누르면 멀쩡히 동작하는데도,
@@ -37,7 +37,7 @@ prompt:
   en: >-
     Which change makes Remove findable?
   ko: >-
-    어떻게 바꿔야 삭제를 찾을 수 있게 될까요?
+    "삭제"를 찾기 쉽게 하려면 무엇을 바꿔야 할까요?
 options:
   en:
     - text: Give Remove a signifier that plain text lacks
@@ -56,7 +56,7 @@ options:
       reason: >-
         It would say that every row can be removed from its right-hand end.
   ko:
-    - text: 글자만 있는 상태에는 없는 시그니파이어를 "삭제"에 줍니다
+    - text: '"삭제"를 글자로만 두지 말고 시그니파이어를 붙입니다'
       reason: >-
         밑줄 있는 링크 스타일이나, "다운로드"가 이미 갖춘 것과 같은 테두리
         버튼 차림을 입힙니다.
@@ -67,7 +67,7 @@ options:
         수 있다는 표준 신호입니다.
     - text: '"삭제"를 행의 맨 앞으로 옮깁니다'
       reason: >-
-        파일명보다 먼저 나오는, 읽는 눈이 가장 먼저 닿는 자리입니다.
+        파일명보다 앞이라 시선이 가장 먼저 닿는 자리입니다.
     - text: 목록 위에 안내 문구를 답니다
       reason: >-
         각 행의 오른쪽 끝에서 파일을 지울 수 있다고 적어 둡니다.

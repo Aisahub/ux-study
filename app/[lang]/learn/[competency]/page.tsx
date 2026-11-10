@@ -70,7 +70,7 @@ const COPY: Record<
     quizPassed: '퀴즈 통과',
     reviewAnswers: '문항별 정답과 해설',
     quizStart: (attempts) => (attempts > 0 ? '퀴즈 다시 도전' : '퀴즈 시작'),
-    nextKicker: '마지막 관문',
+    nextKicker: '마지막 게이트',
     quizTitle: '퀴즈',
     quizRules: (draw, threshold) =>
       `이 역량의 문항 풀에서 ${draw}문항이 무작위로 나옵니다. ${threshold}문항 이상 맞히면 통과합니다.`,

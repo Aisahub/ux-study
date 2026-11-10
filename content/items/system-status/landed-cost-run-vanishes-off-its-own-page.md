@@ -15,13 +15,12 @@ artefact:
     recalculation anywhere on it. In the third, nine minutes in and back on
     Costs, the ring and the line are there again, now reading "980 of 1,240".
   ko: >-
-    왼쪽에 원가, 주문, 공급사 메뉴가 있는 원가 도구를, 15분쯤 걸리는 재계산
-    한 번 동안 세 시점에 걸쳐 보여 줍니다. 첫 시점은 시작하고 1분 뒤로, 원가
-    페이지가 열려 있고 제목 아래 줄에 작은 고리와 함께 "육상원가 재계산 중 ·
+    원가 도구를 세 시점에 걸쳐 보여 줍니다. 왼쪽에는 원가, 주문, 공급사 메뉴가 있고, 세 시점은 모두 15분쯤 걸리는 재계산 한 번 사이에 있습니다. 첫 시점은 시작하고 1분 뒤로, 원가
+    페이지가 열려 있고 제목 아래 줄에 작은 스피너와 함께 "수입원가 재계산 중 ·
     1,240건 중 340건"이 적혀 있습니다. 두 번째 시점은 3분 뒤로, 주문 페이지가
     열려 있습니다. 제목과 검색 칸과 주문 표가 있고, 옆의 메뉴는 앞과
-    똑같습니다. 이 페이지 어디에도 고리도, 건수도, 재계산 이야기도 없습니다.
-    세 번째 시점은 9분 뒤에 다시 원가 페이지로 돌아온 순간으로, 고리와 그 줄이
+    똑같습니다. 이 페이지 어디에도 스피너도, 건수도, 재계산 이야기도 없습니다.
+    세 번째 시점은 9분 뒤에 다시 원가 페이지로 돌아온 순간으로, 스피너와 그 줄이
     다시 보이고 이번에는 "1,240건 중 980건"이라고 적혀 있습니다.
 sequence:
   - caption:
@@ -61,11 +60,11 @@ sequence:
               <div class="side-item">공급사</div>
             </div>
             <div>
-              <h2>육상원가</h2>
-              <p style="margin:0 0 12px"><span class="spinner"></span> <span>육상원가 재계산 중 · 1,240건 중 340건</span></p>
+              <h2>수입원가</h2>
+              <p style="margin:0 0 12px"><span class="spinner"></span> <span>수입원가 재계산 중 · 1,240건 중 340건</span></p>
               <div class="scroller">
                 <table class="table">
-                  <thead><tr><th>부품</th><th>공급사</th><th>단가</th><th>육상원가</th></tr></thead>
+                  <thead><tr><th>부품</th><th>공급사</th><th>단가</th><th>수입원가</th></tr></thead>
                   <tbody>
                     <tr><td>BR-1140</td><td>대한금속</td><td>4,100원</td><td>4,860원</td></tr>
                     <tr><td>BR-1152</td><td>대한금속</td><td>9,400원</td><td>10,920원</td></tr>
@@ -165,11 +164,11 @@ sequence:
               <div class="side-item">공급사</div>
             </div>
             <div>
-              <h2>육상원가</h2>
-              <p style="margin:0 0 12px"><span class="spinner"></span> <span>육상원가 재계산 중 · 1,240건 중 980건</span></p>
+              <h2>수입원가</h2>
+              <p style="margin:0 0 12px"><span class="spinner"></span> <span>수입원가 재계산 중 · 1,240건 중 980건</span></p>
               <div class="scroller">
                 <table class="table">
-                  <thead><tr><th>부품</th><th>공급사</th><th>단가</th><th>육상원가</th></tr></thead>
+                  <thead><tr><th>부품</th><th>공급사</th><th>단가</th><th>수입원가</th></tr></thead>
                   <tbody>
                     <tr><td>BR-1140</td><td>대한금속</td><td>4,100원</td><td>4,910원</td></tr>
                     <tr><td>BR-1152</td><td>대한금속</td><td>9,400원</td><td>11,020원</td></tr>
@@ -208,12 +207,11 @@ options:
   ko:
     - text: 모든 페이지에 공통으로 붙는 상단 영역에 실행 상태 줄을 둡니다. 무슨 작업인지와 어디까지 갔는지를 적습니다
       reason: >-
-        시작한 페이지보다 오래 가는 작업이라면, 지금 보고 있는 페이지가
-        어디든 그곳에서 읽혀야 합니다.
+        시작한 페이지보다 오래 가는 작업이라면, 어느 페이지에 있든 진행 상황을 볼 수 있어야 합니다.
       correct: true
     - text: 재계산이 끝날 때까지 원가 페이지를 떠나지 못하게 합니다
       reason: >-
-        떠날 수 없는 작업이라면 눈에서 놓칠 일도 없습니다.
+        작업 곁을 떠날 수 없으면 진행 상황을 놓칠 일도 없습니다.
     - text: 건수 옆에 이 페이지를 떠나지 말아 달라는 안내를 붙입니다
       reason: >-
         작업을 시작하는 바로 그 자리에 규칙이 적혀 있으니, 떠나기 전에 읽게

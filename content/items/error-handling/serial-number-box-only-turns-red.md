@@ -21,7 +21,7 @@ artefact:
 sequence:
   - caption:
       en: While the serial number is being typed, with the cursor in the box
-      ko: 일련번호를 입력하는 중, 커서가 그 칸에 있는 동안
+      ko: 일련번호를 입력하는 중, 커서가 그 칸에 있는 시점
     screen:
       en: |-
         <div class="screen">
@@ -71,7 +71,7 @@ prompt:
   en: >-
     What should change about the way this box reports the serial number?
   ko: >-
-    이 칸이 일련번호에 대해 알리는 방식에서 무엇을 바꿔야 할까요?
+    이 칸이 일련번호 문제를 알리는 방식에서 무엇을 바꿔야 할까요?
 options:
   en:
     - text: Thicken the red border and add a red glow around the box
@@ -96,13 +96,11 @@ options:
         한눈에 지나치기 어려운 칸이 됩니다.
     - text: 칸 안 오른쪽 끝에 빨간 경고 아이콘을 넣습니다
       reason: >-
-        색이 아닌 표시가 색과 함께 붙으므로, 빨강을 가려내지 못하는 사람에게도
-        칸이 읽힙니다.
-    - text: 칸 아래에 무엇이 잘못됐고 이 대장이 무엇을 원하는지 적은 줄을 두되, 색과 함께 표시도 답니다
+        색 말고 다른 표시도 함께 붙으므로, 빨강을 구별하지 못하는 사람도 이 칸에 문제가 있다는 것을 알 수 있습니다.
+    - text: 칸 아래에 무엇이 잘못됐는지와 어떤 형식이어야 하는지를 적고, 색과 함께 다른 표시도 붙입니다
       reason: >-
         빨간 테두리는 무언가 잘못됐다고만 하고 무엇이 잘못됐는지는 말하지
-        않습니다. 사용자에게는 멀쩡해 보이는 일련번호를 계속 다시 칠 수밖에
-        없습니다.
+        않습니다. 사용자는 자기 눈에는 멀쩡해 보이는 일련번호를 계속 다시 입력할 수밖에 없습니다.
       correct: true
     - text: 거절된 값이 대장에 들어가지 않도록 칸을 비웁니다
       reason: >-

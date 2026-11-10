@@ -26,7 +26,7 @@ artefact:
 sequence:
   - caption:
       en: While the contact email is three characters in, with the cursor still in the box
-      ko: 담당자 이메일을 세 글자까지 입력한 시점, 커서는 아직 그 칸에 있습니다
+      ko: 담당자 이메일을 세 글자까지 입력하고 커서가 아직 그 칸에 있는 시점
     screen:
       en: |-
         <div class="screen">
@@ -136,12 +136,11 @@ options:
   ko:
     - text: 검사 시점은 그대로 두고 문구만 부드럽게 다듬습니다
       reason: >-
-        같은 순간은 그대로이고, 문장만 지적처럼 들리지 않게 됩니다.
+        메시지가 뜨는 시점은 그대로이고, 문장만 덜 나무라는 투가 됩니다.
     - text: 커서가 칸을 떠날 때까지 검사를 미루고, 문구는 지금 그대로 둡니다
       reason: >-
         주소를 절반쯤 쓴 상태는 아직 틀린 것이 아니며, 문장은 이미 해결
-        방법까지 담고 있습니다. 사용자가 할 말을 다 끝낸 뒤에 나오기만 하면
-        됩니다.
+        방법까지 담고 있습니다. 그 문장이 사용자가 입력을 마친 뒤에 나오기만 하면 됩니다.
       correct: true
     - text: 이 칸의 검사를 없애고 "담당자 저장"이 주소를 알리게 합니다
       reason: >-

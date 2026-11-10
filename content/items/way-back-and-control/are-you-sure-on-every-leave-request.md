@@ -142,7 +142,7 @@ prompt:
   en: >-
     A manager works down this queue in one sitting. Which change should it get?
   ko: >-
-    결재자는 이 목록을 한자리에서 위에서 아래로 처리합니다. 무엇을 바꿔야 할까요?
+    결재자는 이 목록을 위에서부터 한 번에 몰아서 처리합니다. 무엇을 바꿔야 할까요?
 options:
   en:
     - text: Decline without the dialog, and let a decline be taken back from the row afterwards
@@ -164,7 +164,7 @@ options:
   ko:
     - text: 대화상자 없이 바로 반려하고, 반려한 뒤에 그 행에서 되돌릴 수 있게 합니다
       reason: >-
-        세 번째 행쯤 되면 매번 같은 말을 하는 대화상자는 읽히기도 전에 눌리지만,
+        세 번째 행쯤 되면 매번 같은 말을 하는 대화상자는 읽지도 않고 넘기게 되지만,
         되돌아갈 길은 잘못 누른 한 건을 여전히 붙잡아 줍니다.
       correct: true
     - text: 대화상자에 신청자 이름과 날짜를 넣어 하나하나 다르게 만듭니다
@@ -175,5 +175,5 @@ options:
         결정을 막는 장치가 무거울수록 더 신중하게 결정하게 됩니다.
     - text: 대화상자는 두되, 반려 버튼을 2초 동안 누를 수 없게 합니다
       reason: >-
-        아직 눌리지 않는 버튼은 아무도 지나칠 수 없습니다.
+        아직 누를 수 없는 버튼을 습관처럼 눌러 넘길 수는 없습니다.
 ---
