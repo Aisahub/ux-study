@@ -141,7 +141,7 @@ const COPY: Record<
     openQuiz: '퀴즈 열기',
     capstoneHeading: '자가 점검 리포트',
     capstoneExplanation:
-      '네 역량에서 배운 것을 모두 활용해 실제 페이지를 혼자 점검하는 마무리 과제입니다.',
+      '역량 네 개에서 배운 것을 모두 활용해 실제 페이지를 혼자 점검하는 마무리 과제입니다.',
     capstoneLocked: '퀴즈 네 개를 모두 통과하면 열립니다.',
     locked: '잠김',
     capstoneOpen: '자가 점검 리포트 열기',
