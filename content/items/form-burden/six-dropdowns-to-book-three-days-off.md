@@ -67,7 +67,7 @@ options:
         Nobody counts a weekend by hand, which is where most requests come back
         with the wrong total on them.
   ko:
-    - text: 드롭다운 여섯 개를 기간 입력 하나로 바꿔, 달력에서 고르거나 그대로 입력하게 합니다
+    - text: 드롭다운 여섯 개를 기간 입력 하나로 바꿔, 달력에서 고르거나 직접 입력하게 합니다
       reason: >-
         기간은 하나이므로 컨트롤도 하나여야 합니다. 눈앞에 펼쳐진 달력에서 두
         번만 누르면 드롭다운을 여섯 번 연 것과 같은 결과가 되고, 서로 맞춰야

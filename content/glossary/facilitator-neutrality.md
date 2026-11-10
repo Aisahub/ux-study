@@ -18,8 +18,7 @@ justification:
     and we cannot unhear their answer. "Tell me what you were expecting there"
     asks the same thing without handing them the answer first.
   ko: >-
-    "그 부분이 헷갈리셨나요?"라고 물으면 헷갈릴 만한 곳이었다고 참가자에게 알려
-    주는 셈이 되고, 한번 그렇게 듣고 나면 그 답은 없던 일로 돌릴 수 없습니다. "거기서 무엇을
+    "그 부분이 헷갈리셨나요?"라고 물으면 헷갈릴 만한 곳이었다고 참가자에게 알려 주는 셈이 됩니다. 그렇게 얻은 답은 한번 듣고 나면 없던 일로 돌릴 수 없습니다. "거기서 무엇을
     예상하셨는지 말씀해 주세요"는 답을 먼저 쥐여 주지 않고 같은 것을 묻습니다.
 competencies:
   - testing-with-real-users
