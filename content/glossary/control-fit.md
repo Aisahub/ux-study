@@ -9,8 +9,7 @@ definition:
     options behind a tap and makes them impossible to compare, which is a fair
     trade for fifty countries and a bad one for three delivery speeds.
   ko: >-
-    사용자가 할 선택에 맞는 입력 컨트롤을 쓰는 것. 드롭다운은 선택지를 한 번의
-    탭 뒤로 감추고 서로 견주어 볼 수 없게 만든다. 나라 쉰 개 중에서 고를 때는 남는 장사지만, 배송 속도 세 가지 중에서 고를 때는 밑지는 장사다.
+    사용자가 할 선택에 맞는 입력 컨트롤을 쓰는 것. 드롭다운은 선택지를 한 번 눌러야 보이도록 감추고 서로 견주어 볼 수 없게 만든다. 나라 쉰 개 중에서 고를 때는 남는 장사지만, 배송 속도 세 가지 중에서 고를 때는 밑지는 장사다.
 justification:
   en: >-
     [Control] hides [how many] options that the user needs to compare, turning
