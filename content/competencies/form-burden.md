@@ -38,7 +38,7 @@ preReadingQuestions:
       The article groups the work a form imposes into four kinds. Which of them
       is about what the user must know, and which about what they must do?
     ko: >-
-      이 글은 폼이 지우는 부담을 네 갈래로 나눈다. 그중 어느 것이 사용자가
+      이 글은 폼이 사용자에게 지우는 부담을 네 갈래로 나눈다. 그중 어느 것이 사용자가
       알아야 하는 것에 관한 부담이고, 어느 것이 사용자가 해야 하는 일에
       관한 부담인가?
   - en: >-

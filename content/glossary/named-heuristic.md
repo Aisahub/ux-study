@@ -10,8 +10,7 @@ definition:
     third person check the finding instead of taking it on trust.
   ko: >-
     평가자의 취향이 아니라 닐슨의 열 가지 휴리스틱 가운데 하나에 근거하고,
-    그 휴리스틱의 이름을 밝힌 판단. 그 이름이 있어야 제3자가 그 발견을
-    믿고 받아들이는 대신 직접 확인해 볼 수 있다.
+    그 휴리스틱의 이름을 밝힌 판단. 그 이름이 있어야 제3자가 그 판단을 믿고 받아들이는 대신 직접 확인해 볼 수 있다.
 justification:
   en: >-
     This finding says [what] is wrong without naming the heuristic it breaks, so
