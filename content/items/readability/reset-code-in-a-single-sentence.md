@@ -68,7 +68,7 @@ options:
       reason: >-
         A line that carries too many characters is what makes a block hard to
         follow, and capping the measure restores it.
-    - text: Take the text from #2B2B2B to full black
+    - text: 'Take the text from #2B2B2B to full black'
       reason: >-
         Characters need the highest contrast available before anything else
         about the text can work.
@@ -86,7 +86,7 @@ options:
     - text: 단 너비를 줄입니다
       reason: >-
         한 줄에 글자가 너무 많으면 글을 따라가기 어렵습니다. 줄 길이를 제한하면 그 문제가 풀립니다.
-    - text: 글자색을 #2B2B2B에서 순검정으로 바꿉니다
+    - text: '글자색을 #2B2B2B에서 순검정으로 바꿉니다'
       reason: >-
         글을 어떻게 손보든, 그보다 먼저 글자의 대비부터 최대로 높여야 합니다.
     - text: 새 인증번호를 요청하라는 구절을 굵게 표시합니다

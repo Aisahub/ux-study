@@ -20,8 +20,7 @@ justification:
     the length of the action would settle that.
   ko: >-
     [동작], 이건 걸리는 시간이 [얼마]인데 돌아오는 반응은 [무엇]입니다. 그 동작에 견주면 크기가 맞지 않습니다. 사용자는
-    [흐름이 끊깁니다 / 확신하지 못합니다]. 피드백을 동작의
-    길이에 맞추면 해결됩니다.
+    [흐름이 끊깁니다 / 확신하지 못합니다]. 피드백을 동작에 걸리는 시간에 맞추면 해결됩니다.
 competencies:
   - system-status
 source: https://www.nngroup.com/articles/visibility-system-status/
