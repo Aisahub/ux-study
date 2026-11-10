@@ -53,7 +53,7 @@ const COPY: Record<
     never: '없음',
     attemptsLabel: '시도 횟수',
     attemptCount: (n) => `${n}회`,
-    nobodyYet: '아직 아무도 로그인하지 않았습니다. 처음 로그인하면 바로 여기에 나타납니다.',
+    nobodyYet: '아직 아무도 로그인하지 않았습니다. 학습자가 처음 로그인하면 바로 여기에 나타납니다.',
   },
 }
 
