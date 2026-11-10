@@ -158,7 +158,7 @@ options:
         The run is written down permanently, in the place the team already
         reads every morning.
   ko:
-    - text: 실행을 "지급 18건, 11시 4분 이체"로 기록된 실행 패널에 남깁니다
+    - text: '"기록된 실행" 패널에 이번 실행을 "지급 18건, 11시 4분 이체"로 남깁니다'
       reason: >-
         돈이 나갔다는 표시가 화면에 남아, 한 시간 뒤에 보는 사람에게도 그대로
         보입니다. 어떤 메시지보다도 오래 갑니다.
