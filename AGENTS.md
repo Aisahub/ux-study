@@ -28,6 +28,23 @@ empty bypass list on purpose. The one deliberate escape hatch is the
 maintainer disabling the ruleset for a named incident, which should be rare
 enough to be memorable.
 
+## Changing Korean copy
+
+Korean copy here is checked twice, because the two kinds of defect need two
+kinds of check.
+
+1. **The suite** refuses the marks and constructions `CONTEXT.md` rules out
+   (its *Learner-facing Korean* section), both in the `ko:` records and on the
+   rendered Korean pages.
+2. **A reader** catches the rest: sentences in English word order, a subject
+   that changes mid-sentence, a label written as a sentence. Before the pull
+   request for any change that adds or edits Korean copy, run the
+   `korean-naturalness` agent (`.claude/agents/`) over the files it touches and
+   fix its high and medium findings in the same change. Its findings are
+   suggestions; a factual or terminology change still checks `CONTEXT.md`.
+
+ERR-240 is what happened while only the first of these ran.
+
 ## Agent skills
 
 ### Issue tracker

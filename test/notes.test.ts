@@ -218,7 +218,7 @@ test('a Learner who has written nothing is told where notes are written', async 
   // Unavailable is stated in words, and an empty page says what to do about
   // being empty rather than only that it is.
   expect(text).toContain('Nothing written down yet.')
-  expect(text).toContain('Every Competency page has a place')
+  expect(text).toContain('Every Competency page has a Your notes tab')
 })
 
 test('the notes page exists in Korean, saying the same thing', async () => {

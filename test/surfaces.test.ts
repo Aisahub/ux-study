@@ -9,6 +9,7 @@ import { elementLabels } from '../lib/element-label'
 import { BASE_URL } from './config'
 import { schema, sessionCookieFor, testDb } from './db'
 import { visibleText } from './html'
+import { TRANSLATIONESE } from './korean'
 
 /**
  * The remaining Learner and Maintainer surfaces: My page (#26, #54), the
@@ -136,6 +137,60 @@ test('every surface names itself in the tab, so open tabs are told apart without
   }
 
   expect(new Set(titles).size, titles.join(' | ')).toBe(paths.length)
+})
+
+/**
+ * The copy checks in competencies.test.ts read `ko:` records, which is where
+ * Korean copy is written but not the only place Korean screen text comes from.
+ * A separator typed between two JSX expressions, or a page title assembled in
+ * `generateMetadata`, is in no record at all, and ERR-239 is two of those that
+ * shipped past every check. This reads what a Korean reader is actually
+ * served, across every surface a submitted Maintainer can open.
+ */
+test('every Korean surface, as rendered, is free of the marks and constructions CONTEXT.md rules out', async () => {
+  const email = freshLearner()
+  await allow(email, true)
+  const report = await submittedReport(email, [practicePage.defects[0].element])
+  const [finding] = await testDb.select().from(schema.findings).where(eq(schema.findings.reportId, report.id))
+  const cookie = await sessionCookieFor(email)
+  const slug = config.stages[0].competencies[0]
+
+  const paths = [
+    '/ko/learn',
+    `/ko/learn/${slug}`,
+    `/ko/learn/${slug}/quiz`,
+    `/ko/learn/${slug}/notes`,
+    '/ko/notes',
+    '/ko/me',
+    '/ko/audit/1',
+    '/ko/findings',
+    `/ko/findings/${finding.id}`,
+    '/ko/specimen',
+    '/ko/maintain/learners',
+    '/ko/maintain/content',
+    '/ko/maintain/content/defects',
+    '/ko/maintain/allowlist',
+  ]
+
+  // A Planted Defect is named by quoting the practice page, and that page is
+  // the specimen: a fictional product's own copy, which may carry any mark
+  // (ERR-229). Quotes of it are taken out before the platform's text is read.
+  const quoted = content.practicePages.flatMap((page) => Object.values(elementLabels(page.html.ko)))
+
+  const found: string[] = []
+  for (const path of paths) {
+    const response = await fetch(`${BASE_URL}${path}`, { headers: { cookie } })
+    expect(response.status, path).toBe(200)
+    const html = await response.text()
+    const text = quoted.reduce((rest, label) => rest.split(label).join(' '), `${titleOf(html)} ${visibleText(html)}`)
+    for (const mark of ['—', '「', '」', '『', '』']) {
+      if (text.includes(mark)) found.push(`${path}: ${mark}`)
+    }
+    for (const [pattern, name] of TRANSLATIONESE) {
+      if (pattern.test(text)) found.push(`${path}: ${name}`)
+    }
+  }
+  expect(found).toEqual([])
 })
 
 test('the Self-Audit Report has no navigation slot of its own', async () => {
@@ -421,7 +476,7 @@ test('the Remove control is not offered on the row that would refuse it, and the
   expect(html).toContain('aria-label="Remove @aisahub.com"')
 
   const ko = await (await fetch(`${BASE_URL}/ko/maintain/allowlist`, { headers: { cookie } })).text()
-  expect(visibleText(ko)).toContain('본인의 접근을 허용하는 항목입니다. 삭제하면 다시 로그인할 수 없습니다')
+  expect(visibleText(ko)).toContain('지금 로그인한 계정을 허용하는 항목이라 삭제할 수 없습니다.')
 })
 
 test('the guard keys on the entry that admits, not on the address it spells', async () => {

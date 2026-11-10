@@ -23,6 +23,7 @@ const COPY: Record<
     today: string
     never: string
     attemptsLabel: string
+    attemptCount: (n: number) => string
     nobodyYet: string
   }
 > = {
@@ -37,20 +38,22 @@ const COPY: Record<
     today: 'today',
     never: 'no activity yet',
     attemptsLabel: 'attempts',
+    attemptCount: (n) => `${n}`,
     nobodyYet: 'No one has signed in yet. Anyone who does appears here from their first visit.',
   },
   ko: {
     heading: '학습자',
     explanation:
-      '전체 학습자의 진행 위치와 마지막 활동 시점을 표시합니다. 진행이 멈춘 동료가 조용히 이탈하기 전에 알아차리기 위한 화면이며, 누구에게도 순위를 매기지 않습니다.',
+      '학습자마다 어디까지 왔는지, 마지막으로 활동한 지 얼마나 됐는지 보여 줍니다. 진도가 멈춘 동료를 조용히 그만두기 전에 알아차리려는 화면입니다. 순위는 매기지 않습니다.',
     position: (passed, total) => `퀴즈 ${total}개 중 ${passed}개 통과`,
-    reportSubmitted: '보고서 제출',
+    reportSubmitted: '리포트 제출',
     lastActivity: '마지막 활동',
     daysAgo: (days) => `${days}일 전`,
     today: '오늘',
-    never: '아직 활동 없음',
-    attemptsLabel: '시도',
-    nobodyYet: '아직 아무도 로그인하지 않았습니다. 로그인한 사람은 첫 방문부터 여기에 표시됩니다.',
+    never: '없음',
+    attemptsLabel: '시도 횟수',
+    attemptCount: (n) => `${n}회`,
+    nobodyYet: '아직 아무도 로그인하지 않았습니다. 처음 로그인하면 바로 여기에 나타납니다.',
   },
 }
 
@@ -152,7 +155,7 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
                     {slugs
                       .map((slug) => {
                         const n = own.filter((attempt) => attempt.competency === slug).length
-                        return `${content.competencies.find((c) => c.slug === slug)!.name[lang]} ${n}`
+                        return `${content.competencies.find((c) => c.slug === slug)!.name[lang]} ${copy.attemptCount(n)}`
                       })
                       .join(' · ')}
                   </p>

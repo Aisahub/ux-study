@@ -121,7 +121,7 @@ const COPY: Record<
   },
   ko: {
     heading: '학습',
-    intro: '원하는 역량부터 골라 지금 필요한 관찰력을 훈련하세요.',
+    intro: '원하는 역량부터 골라 지금 필요한 관찰력을 길러 보세요.',
     stageProgress: (stage) => `${stage}단계 진도`,
     goToStage: (stage) => `${stage}단계 목차로 이동`,
     goToCurrentStage: '현재 단계로 이동',
@@ -141,7 +141,7 @@ const COPY: Record<
     openQuiz: '퀴즈 열기',
     capstoneHeading: '자가 점검 리포트',
     capstoneExplanation:
-      '마무리 과제: 네 역량에서 배운 것으로, 도움 없이 실제 페이지를 점검합니다.',
+      '네 역량에서 배운 것을 모두 활용해 실제 페이지를 혼자 점검하는 마무리 과제입니다.',
     capstoneLocked: '퀴즈 네 개를 모두 통과하면 열립니다.',
     locked: '잠김',
     capstoneOpen: '자가 점검 리포트 열기',
@@ -152,7 +152,7 @@ const COPY: Record<
       { name: '3단계', detail: '남이 봐야 보이는 결함' },
     ],
     visibility:
-      '운영자는 학습자가 어느 단계까지 수료했는지, 마지막 활동이 얼마나 지났는지, 퀴즈마다 몇 번 시도했는지를 볼 수 있습니다. 누구와도 순위를 매기지 않습니다.',
+      '운영자는 진도를 볼 수 있습니다. 어느 단계까지 수료했는지, 마지막 활동 후 얼마나 지났는지, 퀴즈마다 몇 번 시도했는지가 보입니다. 다른 학습자와 비교해 순위를 매기지는 않습니다.',
   },
 }
 

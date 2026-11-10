@@ -14,7 +14,7 @@ const COPY: Record<Language, { heading: string; explanation: string; button: str
   ko: {
     heading: '로그인',
     explanation:
-      '로그인 방법은 모두 동일합니다. Aisahub 구성원은 Workspace 계정으로, 인도네시아 동료는 등록된 개인 Google 계정으로 로그인합니다.',
+      '모두 아래 버튼 하나로 로그인합니다. 한국팀은 회사 Workspace 계정을, 인도네시아팀은 운영자가 등록한 개인 Google 계정을 사용합니다.',
     button: 'Google로 계속하기',
   },
 }

@@ -80,14 +80,14 @@ export const COPY: Record<
   ko: {
     heading: (stage) => `${stage}단계 자가 점검 리포트`,
     intro:
-      '심어둔 결함 전체와, 제출한 발견이 그중 무엇을 가리켰는지를 표시합니다. 일부를 놓치는 것은 정상이며, 핵심은 페이지를 직접 살펴보는 과정에 있습니다.',
+      '심어둔 결함을 모두 보여 드리고, 그중 내 발견이 가리킨 것을 표시했습니다. 몇 개쯤 놓치는 것은 당연합니다. 중요한 것은 직접 살펴본 과정입니다.',
     panels: '이 리포트',
     planted: '심어둔 결함',
     yours: '내 발견',
     subject: '점검한 페이지',
     source: '페이지 소스 보기',
     locate: '화면에서 보기',
-    found: '발견',
+    found: '찾음',
     missed: '놓침',
     principle: '원칙',
     // `제안` dropped on this reading surface (ERR-237): the reveal shows a
@@ -97,7 +97,7 @@ export const COPY: Record<
     issueHeading: '(선택) 고친 결과 공유',
     issueSave: '링크 저장',
     issueSaved: '저장되었습니다.',
-    complete: (stage) => `${stage}단계 수료 · 퀴즈 전부 통과, 보고서 제출 완료.`,
+    complete: (stage) => `${stage}단계 수료 · 퀴즈 모두 통과, 리포트 제출 완료`,
     // 화면, not 단계: the subject calls these 단계, but on this page 단계 is
     // already the Stage — `2단계 수료` sits a few lines below — and one word
     // cannot mean both in one view.
@@ -294,7 +294,7 @@ export function FindingCard({
       </div>
       <p className="mt-3 max-w-measure text-body-sm text-ink">{finding.description}</p>
       <p className="mt-2 max-w-measure text-body-sm text-ink-2">
-        <span className="font-bold">{copy.fix}</span> — {finding.fix}
+        <span className="font-bold">{copy.fix}</span>: {finding.fix}
       </p>
       <LocateButton element={finding.element} label={copy.locate} />
     </li>
