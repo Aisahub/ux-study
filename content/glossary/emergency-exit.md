@@ -20,7 +20,7 @@ justification:
     would let them leave the way they came.
   ko: >-
     [단계]에 들어가고 나면 빠져나가는 길이 [끝까지 진행하는 것 / 브라우저 뒤로
-    가기]뿐이라, 잘못 들어온 사용자는 갇힙니다. 취소를 눈에 보이게 두면 들어온
+    가기]뿐이라, 잘못 들어온 사용자는 갇힙니다. 취소 버튼을 눈에 보이게 두면 들어온
     길로 그대로 나갈 수 있습니다.
 competencies:
   - way-back-and-control
