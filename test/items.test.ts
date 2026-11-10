@@ -85,3 +85,27 @@ test('no unquoted option text carries a " #", which YAML reads as the start of a
   }
   expect(cut).toEqual([])
 })
+
+test('no Korean screen measures its width in ch, which counts the width of a 0 (ERR-213)', () => {
+  // A Hangul syllable is about two `ch` wide, so `38ch` on a Korean screen
+  // wraps after roughly twenty syllables. The English screens may keep `ch`;
+  // the Korean ones use `em`. One reading item still said 38ch after ERR-213
+  // and showed a column too narrow to read, on an item whose answer is that
+  // the typesetting is fine.
+  const found: string[] = []
+  const walk = (node: unknown, where: string, underScreen: boolean) => {
+    if (typeof node === 'string') {
+      if (underScreen && /\b\d+(\.\d+)?ch\b/.test(node)) found.push(where)
+      return
+    }
+    if (Array.isArray(node)) return node.forEach((child, i) => walk(child, `${where}[${i}]`, underScreen))
+    if (node && typeof node === 'object') {
+      for (const [key, value] of Object.entries(node)) {
+        if (key === 'en') continue
+        walk(value, `${where}.${key}`, underScreen || key === 'screen')
+      }
+    }
+  }
+  walk(loadContent(join(__dirname, '..', 'content')).items, 'items', false)
+  expect(found).toEqual([])
+})
