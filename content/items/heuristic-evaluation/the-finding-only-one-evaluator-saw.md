@@ -46,7 +46,7 @@ screen:
             <tr><td>"이전 출금"과 "적립금 옮기기"가 같은 동작을 가리킴</td><td>✓</td><td>✓</td><td></td></tr>
             <tr><td>위험 성향 설문을 시작하면 되돌아갈 길이 없음</td><td>✓</td><td></td><td>✓</td></tr>
             <tr><td>요약 타일에 통화 기호 없이 숫자만 표시됨</td><td></td><td>✓</td><td>✓</td></tr>
-            <tr><td>예상 수령액이 새로고침할 때마다 달라지는데 이유가 없음</td><td></td><td></td><td>✓</td></tr>
+            <tr><td>예상 수령액이 새로고침할 때마다 달라지는데 이유 설명이 없음</td><td></td><td></td><td>✓</td></tr>
           </tbody>
         </table>
       </div>
