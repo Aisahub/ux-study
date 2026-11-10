@@ -38,8 +38,7 @@ preReadingQuestions:
       Undo is treated as more than a convenience. What does the article say a
       user does differently once they know an action can be taken back?
     ko: >-
-      이 글은 실행 취소를 단순한 편의 기능 이상으로 다룬다. 되돌릴 수 있다는 것을
-      아는 사용자는 무엇을 다르게 한다고 말하는가?
+      이 글은 실행 취소를 단순한 편의 기능 이상으로 다룬다. 이 글에 따르면, 되돌릴 수 있다는 것을 아는 사용자는 무엇을 다르게 하는가?
   - en: >-
       An exit that exists but cannot be found is treated as a failure of its
       own. What makes an exit discoverable rather than merely present?
