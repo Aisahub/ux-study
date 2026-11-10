@@ -45,7 +45,7 @@ preReadingQuestions:
       Why does the article treat the belief as the thing that matters, rather
       than whether the belief is correct?
     ko: >-
-      이 글은 멘탈 모델을 사용자가 아는 것, 또는 안다고 여기는 것이라고 설명한다. 그런데 왜 그 믿음이 맞는지 틀렸는지보다 믿음 자체를 중요하게 다루는가?
+      이 글은 멘탈 모델을 사용자가 아는 것, 또는 안다고 여기는 것이라고 설명한다. 그런데 왜 그 생각이 맞는지 틀렸는지보다, 사용자가 그렇게 믿고 있다는 사실 자체를 중요하게 다루는가?
   - en: >-
       The article names a gap between the designer's model and the user's. What
       does it say makes the designer's own model an unreliable stand-in for the
