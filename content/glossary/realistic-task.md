@@ -11,8 +11,7 @@ definition:
   ko: >-
     참가자가 이루어야 할 일을, 참가자 자신의 상황에서 나올 법한 말로 적은
     것. 그 일을 이루는 절차를 적은 것이 아니다. 어떤 컨트롤을 누르라고
-    이름을 대는 과제는, 그 자리에서 알아내려던 것을 이미 스스로 답해 버린
-    과제다.
+    이름을 대는 과제는, 세션에서 알아내려던 것을 과제가 미리 답해 버린 셈이다.
 justification:
   en: >-
     This task tells the participant to press [control], so all it can tell us is
