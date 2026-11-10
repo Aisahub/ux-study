@@ -18,7 +18,7 @@ justification:
     reader] would expect. They would predict [what], so matching the expectation
     is a safer change than explaining it away in a tooltip.
   ko: >-
-    [컨트롤], 이건 [읽는 사람] 쪽에서 예상하는 방식이 아니라 시스템 내부 구조대로 동작합니다. 예상하는 것은 [무엇]이므로,
+    [컨트롤], 이건 [읽는 사람] 쪽에서 예상하는 방식이 아니라 시스템 내부 구조대로 동작합니다. 그 사람이 예상하는 것은 [무엇]이므로,
     툴팁으로 무마하기보다 그 예상에 맞추는 편이 더 안전합니다.
 competencies:
   - mental-model-mismatch

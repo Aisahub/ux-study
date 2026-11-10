@@ -18,7 +18,7 @@ justification:
     / nothing at all] instead. Making it undoable would let people try it
     without having to be sure first.
   ko: >-
-    [동작], 이건 되돌릴 수 없습니다. 지금 이를 막아 주는 것은
+    [동작], 이건 되돌릴 수 없습니다. 지금 잘못 누르는 일을 막아 주는 것은
     [확인 대화상자뿐입니다 / 아무것도 없습니다]. 되돌릴 수 있게
     만들면, 미리 확신하지 않고도 일단 해 볼 수 있게 됩니다.
 competencies:

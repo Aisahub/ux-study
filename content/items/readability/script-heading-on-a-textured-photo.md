@@ -48,7 +48,7 @@ prompt:
   en: >-
     Where does this page actually fail, and as what kind of problem?
   ko: >-
-    이 페이지는 실제로 어디에서, 어떤 종류의 문제를 안고 있을까요?
+    이 페이지는 실제로 어디에서 탈이 났고, 어떤 종류의 문제로 봐야 할까요?
 options:
   en:
     - text: In the heading, as a legibility problem
