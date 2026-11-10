@@ -8,8 +8,7 @@ objective:
     interactive but is not — judging from how it looks at rest, before any
     hover or click.
   ko: >-
-    마우스를 올리거나 누르기 전의 모습만 보고, 누를 수 있는데도 사용자가
-    알아차리지 못할 요소나 누를 수 있어 보이지만 실제로는 눌리지 않는
+    마우스를 올리거나 누르기 전의 모습만 보고, 누를 수 있다는 것을 사용자가 알아차리지 못할 요소나 누를 수 있어 보이지만 실제로는 눌리지 않는
     요소를 찾아낼 수 있다.
 roleHint:
   developer:
