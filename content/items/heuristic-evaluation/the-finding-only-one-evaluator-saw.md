@@ -42,7 +42,7 @@ screen:
           <thead><tr><th>발견</th><th>프리야</th><th>톰</th><th>사라</th></tr></thead>
           <tbody>
             <tr><td>납입 내역에 휴대폰에서 열 제목이 없음</td><td>✓</td><td>✓</td><td>✓</td></tr>
-            <tr><td>"이전 출금"과 "적립금 옮기기"가 같은 동작을 가리킴</td><td>✓</td><td>✓</td><td></td></tr>
+            <tr><td>"계좌 이전"과 "적립금 옮기기"가 같은 동작을 가리킴</td><td>✓</td><td>✓</td><td></td></tr>
             <tr><td>위험 성향 설문을 시작하면 되돌아갈 길이 없음</td><td>✓</td><td></td><td>✓</td></tr>
             <tr><td>요약 타일에 통화 기호 없이 숫자만 표시됨</td><td></td><td>✓</td><td>✓</td></tr>
             <tr><td>예상 수령액이 새로고침할 때마다 달라지는데 이유 설명이 없음</td><td></td><td></td><td>✓</td></tr>

@@ -208,7 +208,7 @@ options:
         The person is told the moment it is done, whatever they happen to be
         doing.
   ko:
-    - text: 모든 페이지에 공통으로 붙는 상단 영역에 실행 상태 줄을 둡니다. 무슨 작업인지와 어디까지 갔는지를 적습니다
+    - text: 어느 페이지에서나 보이는 공통 영역에 실행 상태 줄을 둡니다. 무슨 작업인지와 어디까지 갔는지를 적습니다
       reason: >-
         시작한 페이지보다 오래 가는 작업이라면, 어느 페이지에 있든 진행 상황을
         볼 수 있어야 합니다.
