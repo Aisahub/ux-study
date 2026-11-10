@@ -85,7 +85,7 @@ options:
       reason: >-
         All five then answer the same tasks, and the comparison between a
         practised user and a new one is there to be made.
-    - text: Keep the five and add three more owners, so both groups are the same size
+    - text: Keep the five and add one more owner, so both groups are the same size
       reason: >-
         Neither group is then thinner than the other, and the round still
         happens in one day.
@@ -103,7 +103,7 @@ options:
       reason: >-
         다섯 명이 같은 과제를 수행하게 되고, 익숙한 사람과 처음인 사람을 견주어 볼
         여지도 생깁니다.
-    - text: 다섯 명은 그대로 두고 보호자를 세 명 더 모아 두 집단 크기를 맞춥니다
+    - text: 다섯 명은 그대로 두고 보호자를 한 명 더 모아 두 집단 크기를 맞춥니다
       reason: >-
         어느 쪽도 인원이 모자라지 않게 되고, 회차는 여전히 하루에 끝납니다.
     - text: 다섯 명 그대로 진행하고, 정리할 때 두 집단을 나눠서 분석합니다
