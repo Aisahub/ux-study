@@ -12,8 +12,7 @@ artefact:
     and a single "OK" button. Nothing on the screen says what did not happen to
     the contract, or what to do next.
   ko: >-
-    계약서 보관함의 업로드 화면입니다. 맨 위에 고른 파일
-    "2026-nusantara-msa-signed.pdf"가 있습니다. 그
+    계약서 보관함의 업로드 화면입니다. 고른 파일 "2026-nusantara-msa-signed.pdf"가 맨 위에 있습니다. 그
     아래 "오류"라는 제목이 붙은 작은 상자 안에 고정폭 글꼴로 한 줄이
     들어 있습니다. SQLSTATE 코드, "documents"라는 테이블의
     외래 키 제약을 어겼다는 말, 그리고 소유자 id 0이 "users"라는
