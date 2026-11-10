@@ -19,9 +19,7 @@ justification:
     fault in [screen] rather than as something new worth learning.
   ko: >-
     [변경], 이건 사용자가 [무엇]에 대해 이미 믿고 있던 것을
-    내려놓으라고 요구합니다. 그 믿음은 쉽게 움직이지 않으므로, 새로
-    익힐 만한 것이 아니라 [화면]의 결함으로 읽힐 것을 각오해야
-    합니다.
+    내려놓으라고 요구합니다. 그 믿음은 쉽게 움직이지 않으므로, 이 변경이 새로 익힐 거리가 아니라 [화면]의 결함으로 받아들여질 것을 각오해야 합니다.
 competencies:
   - mental-model-mismatch
 source: https://www.nngroup.com/articles/mental-models/
