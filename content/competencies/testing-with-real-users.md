@@ -23,7 +23,7 @@ roleHint:
       stranger to carry out with it. Read it back — does it say what to
       achieve, or where to click?
     ko: >-
-      가장 최근에 내보낸 기능을 두고, 모르는 사람에게 부탁할 과제 한 문장을 써
+      가장 최근에 배포한 기능을 두고, 모르는 사람에게 부탁할 과제 한 문장을 써
       보세요. 다시 읽어 보세요. 무엇을 이루라고 말하고 있나요, 아니면 어디를
       누르라고 말하고 있나요?
   pm:

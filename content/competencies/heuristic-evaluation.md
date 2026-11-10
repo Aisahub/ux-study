@@ -35,8 +35,7 @@ roleHint:
     ko: >-
       어떤 디자인에 남긴 피드백을, 어떤 요소가 어떤 휴리스틱을 어겼는지 짚는
       문장으로 다시 써 보세요. 들어맞는 휴리스틱이 없다면 그 피드백은
-      취향이었던 셈입니다. 그 피드백을 받아 고쳐야 하는 사람에게 넘기기 전에
-      알아 두는 편이 좋습니다.
+      취향이었던 셈입니다. 그 점은 피드백을 받아 고칠 사람에게 넘기기 전에 알아 두는 편이 좋습니다.
 preReadingQuestions:
   - en: >-
       Evaluators are told to work alone, and not to see each other's results
