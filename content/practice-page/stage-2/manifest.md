@@ -129,7 +129,7 @@ defects:
         arrive holding the number already given, editable for the person who
         genuinely wants a different one.
       ko: >-
-        운전자 정보 화면에서 받은 휴대전화 번호를 마지막 화면에서 이름만 바꿔 빈
+        운전자 정보 화면에서 받은 휴대전화 번호를 마지막 화면에서 레이블만 바꿔 빈
         칸으로 다시 묻습니다. 제품이 이미 아는 답을 다시 묻는 것은 제품이 할 일을 운전자에게 떠넘기는 셈입니다. 게다가 그저 번거로운 데서 그치지
         않습니다. 예약 하나에 번호가 둘이 생기는데, 둘 중 어느 쪽으로 전화가
         갈지는 아무도 말해 주지 않습니다. 이 칸은 이미 받은 번호를 담은 채로
