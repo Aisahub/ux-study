@@ -68,11 +68,11 @@ screen:
           <table class="table">
             <thead><tr><th>#</th><th>체크박스 찾음</th><th>완료</th><th>시간</th></tr></thead>
             <tbody>
-              <tr><td>1</td><td>아니오</td><td>예</td><td>1:10</td></tr>
-              <tr><td>2</td><td>아니오</td><td>예</td><td>2:05</td></tr>
+              <tr><td>1</td><td>아니요</td><td>예</td><td>1:10</td></tr>
+              <tr><td>2</td><td>아니요</td><td>예</td><td>2:05</td></tr>
               <tr><td>3</td><td>예</td><td>예</td><td>3:30</td></tr>
-              <tr><td>4</td><td>아니오</td><td>아니오</td><td>5:15</td></tr>
-              <tr><td>5</td><td>아니오</td><td>아니오</td><td>6:40</td></tr>
+              <tr><td>4</td><td>아니요</td><td>아니요</td><td>5:15</td></tr>
+              <tr><td>5</td><td>아니요</td><td>아니요</td><td>6:40</td></tr>
             </tbody>
           </table>
         </div>
