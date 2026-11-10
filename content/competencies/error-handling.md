@@ -38,7 +38,7 @@ preReadingQuestions:
       Which failures belong to being noticed, and which to what it says?
     ko: >-
       이 지침은 메시지가 눈에 띄는지와 메시지가 무엇을 말하는지를 나누어 다룬다.
-      어떤 실패는 메시지가 눈에 띄지 않아서 생기고, 어떤 실패는 메시지 내용 때문에 생기는가?
+      그렇다면 메시지가 눈에 띄지 않아서 생기는 실패는 어떤 것이고, 메시지 내용 때문에 생기는 실패는 어떤 것인가?
   - en: >-
       A message can be accurate and still leave the user stuck. What does the
       article say a message has to carry beyond naming the problem?
