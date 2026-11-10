@@ -23,7 +23,7 @@ roleHint:
       person who wrote the validator.
     ko: >-
       직접 만든 폼을 비운 채로 한 번, 한 칸만 틀리게 채워서 한 번 제출해
-      보세요. 돌아온 두 메시지를 검증 코드를 쓴 사람이 아니라 처음 온 사용자의 눈으로 읽어 보세요.
+      보세요. 돌아온 두 메시지를, 검증 코드를 쓴 사람이 아니라 처음 온 사용자의 눈으로 읽어 보세요.
   pm:
     en: >-
       In a flow you signed off, do the likeliest wrong thing a real customer

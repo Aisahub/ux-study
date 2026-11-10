@@ -42,8 +42,7 @@ preReadingQuestions:
       What makes a piece of feedback the wrong size for the action it answers?
     ko: >-
       이 글은 피드백이 있기만 해서는 안 되고 알맞아야 한다고 말한다.
-      피드백이 그 동작에 비해 너무 크거나 너무 작다고 판단하는 기준은
-      무엇인가?
+      어떤 동작에 대한 피드백이 그 동작에 비해 너무 크거나 너무 작다고 판단하는 기준은 무엇인가?
   - en: >-
       Which of the situations the article describes could you spot in a
       screenshot, and which only appear once you operate the thing yourself?

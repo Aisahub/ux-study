@@ -13,7 +13,7 @@ artefact:
     comments", and the help text at the bottom says "Photos must be under
     5 MB".
   ko: >-
-    프로필 페이지입니다. 아바타 아래에는 색이 채워진 파란 "사진 올리기"
+    프로필 페이지입니다. 아바타 아래에는 색이 채워진 파란 "사진 업로드"
     버튼이 있습니다. 더 내려가면 "자기 소개" 폼 안에 회색 글자 링크 "이미지 추가"가 있는데, 이것도 프로필에 그림을 넣는 같은 동작입니다. 이 페이지의 다른 동작은 "변경사항 저장", "이메일 갱신", "번호 인증"처럼 모두 무엇을 하는지 밝힌 파란 채움 버튼입니다. 아바타 밑
     설명문에는 "사진은 댓글 옆에 표시됩니다"라고, 페이지 맨 아래
     도움말에는 "사진은 5MB 이하여야 합니다"라고 적혀 있습니다.
@@ -46,7 +46,7 @@ screen:
       <div class="actions">
         <div class="avatar"></div>
         <div>
-          <button class="btn btn--blue">사진 올리기</button>
+          <button class="btn btn--blue">사진 업로드</button>
           <p class="muted" style="margin:6px 0 0">사진은 댓글 옆에 표시됩니다</p>
         </div>
       </div>
@@ -90,7 +90,7 @@ options:
       reason: >-
         Then the question of matching them never arises.
   ko:
-    - text: 둘 다 "사진 올리기"라는 파란 채움 버튼으로 맞춥니다
+    - text: 둘 다 "사진 업로드"라는 파란 채움 버튼으로 맞춥니다
       reason: >-
         이 페이지의 다른 동작이 모두 그 형태이고, 페이지의 설명문과 도움말도
         이미 줄곧 "이미지"가 아니라 "사진"이라고 부르고 있습니다.
