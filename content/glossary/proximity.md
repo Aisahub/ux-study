@@ -18,7 +18,7 @@ justification:
     would settle it.
   ko: >-
     [제목], 이건 위아래 블록과 같은 간격으로 떨어져 있어서 어느 쪽
-    제목인지 모호합니다. 자기 내용 쪽 간격을 좁히면 정리됩니다.
+    제목인지 모호합니다. 제목과 그 제목이 가리키는 블록 사이 간격을 좁히면 정리됩니다.
 competencies:
   - visual-hierarchy
 source: https://www.nngroup.com/articles/visual-hierarchy-ux-definition/

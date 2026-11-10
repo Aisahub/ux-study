@@ -41,7 +41,7 @@ preReadingQuestions:
       until their own is finished. What does the article say that separation
       protects?
     ko: >-
-      이 글은 평가자에게 각자 따로 작업하고, 자기 평가를 마치기 전에는
+      이 글은 평가자에게 각자 따로 작업하고, 자신의 평가를 마치기 전에는
       서로의 결과를 보지 말라고 한다. 이렇게 떼어 놓으면 무엇을 지킬 수
       있다고 말하는가?
   - en: >-
