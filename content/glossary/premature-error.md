@@ -2,7 +2,7 @@
 slug: premature-error
 name:
   en: Premature error
-  ko: 이른 오류
+  ko: 때 이른 오류
 definition:
   en: >-
     An error raised before the user has finished saying what they meant — a
