@@ -59,7 +59,7 @@ prompt:
     One of these four cannot be acted on as written. What should be done with
     it?
   ko: >-
-    네 개 가운데 하나는 적힌 그대로는 손을 댈 수 없습니다. 그 발견은
+    네 개 가운데 하나는 적힌 그대로는 조치할 수 없습니다. 그 발견은
     어떻게 해야 할까요?
 options:
   en:
