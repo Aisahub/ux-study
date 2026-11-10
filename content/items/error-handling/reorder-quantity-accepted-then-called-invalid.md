@@ -96,7 +96,7 @@ options:
       reason: >-
         The rule is one tap away for anyone who wants to read it in full.
   ko:
-    - text: 메시지를 한도가 얼마인지와 그다음에 무엇을 하면 되는지 알려 주는 문장으로 바꾸고, 숫자가 한도를 넘는 순간 보여 줍니다
+    - text: 한도가 얼마이고 그다음에 무엇을 하면 되는지 알려 주는 문장으로 메시지를 바꾸고, 숫자가 한도를 넘는 순간 보여 줍니다
       reason: >-
         숫자를 아무 말 없이 받아 놓고 한도도 밝히지 않은 채 잘못됐다고만 하니,
         어떤 숫자였으면 됐는지 알아낼 방법이 없습니다.
