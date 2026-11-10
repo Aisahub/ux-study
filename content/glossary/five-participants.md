@@ -2,7 +2,7 @@
 slug: five-participants
 name:
   en: Five participants
-  ko: 다섯 명
+  ko: 참가자 다섯 명
 definition:
   en: >-
     The number a qualitative study of one user group needs to surface most of
