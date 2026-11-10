@@ -7,15 +7,13 @@ artefact:
     A product page for a standing desk. Four paragraphs of warm, simply
     worded prose about craftsmanship and mornings, set comfortably at 16px
     with short lines. There are no headings. The facts a buyer needs are in
-    there — the price sits mid-way through paragraph two, the width and the
-    weight limit mid-way through paragraph three. Analytics show most
+    there — the price and the width sit in paragraph two, the weight limit mid-way through paragraph three. Analytics show most
     visitors leave within seconds, and support's most-asked question is the
     price.
   ko: >-
     스탠딩 데스크 제품 페이지입니다. 장인정신과 아침 풍경을 담은, 쉽게 쓰인
     따뜻한 산문 네 문단이 16px에 짧은 줄로 편안하게 짜여 있습니다. 제목은
-    하나도 없습니다. 구매자에게 필요한 사실은 다 들어 있긴 합니다. 가격은 둘째
-    문단 중간에, 폭과 하중 한계는 셋째 문단 중간에 있습니다. 분석 도구를 보면
+    하나도 없습니다. 구매자에게 필요한 사실은 다 들어 있긴 합니다. 가격과 폭은 둘째 문단에, 하중 한계는 셋째 문단 중간에 있습니다. 분석 도구를 보면
     방문자 대부분이 몇 초 만에 떠나고, 지원팀이 가장 많이 받는 질문은
     가격입니다.
 screen:
