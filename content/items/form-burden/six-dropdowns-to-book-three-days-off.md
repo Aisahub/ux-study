@@ -44,7 +44,7 @@ prompt:
     Most people using this tool are booking a short run of days, a few weeks
     ahead. Which change takes the most work out of that?
   ko: >-
-    이 도구를 쓰는 사람들은 대개 몇 주 뒤로 며칠짜리 휴가를 신청합니다.
+    이 도구를 쓰는 사람들은 대개 몇 주 뒤의 며칠짜리 휴가를 신청합니다.
     이 신청을 가장 수월하게 만드는 변경은 무엇일까요?
 options:
   en:

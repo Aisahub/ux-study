@@ -10,7 +10,7 @@ definition:
     still working. Feedback that is too loud interrupts, and feedback that is
     too quiet is not found.
   ko: >-
-    피드백이 응답하는 동작에 맞춰 피드백의 크기를 정하는 것. 작고 즉시 끝나는 동작에는 작은 반응이면
+    피드백의 크기를 그 피드백이 답하는 동작에 맞추는 것. 작고 즉시 끝나는 동작에는 작은 반응이면
     되고, 오래 걸리는 동작에는 아직 진행 중이라고 계속 알려 주어야 한다.
     너무 요란한 피드백은 흐름을 끊고, 너무 조용한 피드백은 눈에 띄지 않는다.
 justification:
