@@ -95,7 +95,7 @@ options:
         The team read the screen; nobody in the room was trying to get something
         done on it, and that is where all five failures lived.
       correct: true
-    - text: A large enough group — six people in one room is fewer than the study eventually used
+    - text: A large enough group — six people in one room were too few
       reason: >-
         Five sessions found what six reviewers did not, so the number in the
         room was the thing that was short.
@@ -114,7 +114,7 @@ options:
         하려던 사람이 없었고, 다섯 건의 실패는 모두 바로 그 지점에서
         나왔습니다.
       correct: true
-    - text: 충분한 인원(한 방에 모인 여섯 명은 결국 진행한 연구의 참가자 수보다 적습니다)
+    - text: 충분한 인원(한 방에 모인 여섯 명으로는 머릿수가 모자랐습니다)
       reason: >-
         리뷰어 여섯이 못 본 것을 세션 다섯이 찾아냈으니, 모자랐던 것은 방 안의
         머릿수입니다.
