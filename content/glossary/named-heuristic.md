@@ -2,7 +2,7 @@
 slug: named-heuristic
 name:
   en: Named heuristic
-    ko: 이름을 밝힌 휴리스틱
+  ko: 이름을 밝힌 휴리스틱
 definition:
   en: >-
     A judgement anchored to one of Nielsen's ten heuristics and cited by its
