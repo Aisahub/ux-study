@@ -12,12 +12,12 @@ artefact:
     Prescriptions, Help, Account — is above both. The pharmacy does stock
     ibuprofen 200mg.
   ko: >-
-    온라인 약국의 고객센터를 두 시점에 걸쳐 보여 줍니다. 첫 시점에는
+    건강기능식품 쇼핑몰의 고객센터를 두 시점에 걸쳐 보여 줍니다. 첫 시점에는
     "고객센터"라는 제목 아래에 "검색"이라는 안내 문구가 든 검색창이 있습니다. 두 번째
-    시점에는 "이부프로펜 200mg"을 입력해 검색한 뒤이고, 아래에는 "'이부프로펜
-    200mg'에 대한 결과가 없습니다"라고 적혀 있으며 "도움말 주제 둘러보기" 링크가
-    하나 있습니다. 사이트의 주 메뉴인 쇼핑, 처방전, 고객센터, 내 정보는 두 시점
-    모두 위에 있습니다. 이 약국은 이부프로펜 200mg을 실제로 판매합니다.
+    시점에는 "비타민D 1000IU"를 입력해 검색한 뒤이고, 아래에는 "'비타민D
+    1000IU'에 대한 결과가 없습니다"라고 적혀 있으며 "도움말 주제 둘러보기" 링크가
+    하나 있습니다. 사이트의 주 메뉴인 쇼핑, 정기배송, 고객센터, 내 정보는 두 시점
+    모두 위에 있습니다. 이 쇼핑몰은 비타민D 1000IU를 실제로 판매합니다.
 sequence:
   - caption:
       en: The help centre as it opens
@@ -31,13 +31,13 @@ sequence:
         </div>
       ko: |-
         <div class="screen">
-          <div class="tabs"><span class="tab">쇼핑</span><span class="tab">처방전</span><span class="tab tab--on">고객센터</span><span class="tab">내 정보</span></div>
+          <div class="tabs"><span class="tab">쇼핑</span><span class="tab">정기배송</span><span class="tab tab--on">고객센터</span><span class="tab">내 정보</span></div>
           <h2 style="margin-top:14px">고객센터</h2>
           <div class="toolbar"><span class="control control--empty" style="flex:1">검색</span><button class="btn btn--blue">검색</button></div>
         </div>
   - caption:
       en: After "ibuprofen 200mg" is typed and submitted
-      ko: '"이부프로펜 200mg"을 입력해 검색한 뒤'
+      ko: '"비타민D 1000IU"를 입력해 검색한 뒤'
     screen:
       en: |-
         <div class="screen">
@@ -49,10 +49,10 @@ sequence:
         </div>
       ko: |-
         <div class="screen">
-          <div class="tabs"><span class="tab">쇼핑</span><span class="tab">처방전</span><span class="tab tab--on">고객센터</span><span class="tab">내 정보</span></div>
+          <div class="tabs"><span class="tab">쇼핑</span><span class="tab">정기배송</span><span class="tab tab--on">고객센터</span><span class="tab">내 정보</span></div>
           <h2 style="margin-top:14px">고객센터</h2>
-          <div class="toolbar"><span class="control" style="flex:1">이부프로펜 200mg</span><button class="btn btn--blue">검색</button></div>
-          <p style="margin:14px 0 4px">"이부프로펜 200mg"에 대한 결과가 없습니다</p>
+          <div class="toolbar"><span class="control" style="flex:1">비타민D 1000IU</span><button class="btn btn--blue">검색</button></div>
+          <p style="margin:14px 0 4px">"비타민D 1000IU"에 대한 결과가 없습니다</p>
           <p class="muted" style="margin:0"><span class="link">도움말 주제 둘러보기</span></p>
         </div>
 prompt:
@@ -60,7 +60,7 @@ prompt:
     This shopper leaves believing the pharmacy does not stock it. Which change
     should this page make?
   ko: >-
-    이 구매자는 약국에 그 약이 없다고 믿은 채 떠납니다. 이 페이지는 무엇을 바꿔야
+    이 구매자는 쇼핑몰에 그 제품이 없다고 믿은 채 떠납니다. 이 페이지는 무엇을 바꿔야
     할까요?
 options:
   en:

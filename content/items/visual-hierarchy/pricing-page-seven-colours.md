@@ -98,7 +98,7 @@ prompt:
     The team is cutting this page back to two primary and two secondary
     colours. Which two belong as the primaries?
   ko: >-
-    이 페이지의 색을 주색 둘, 보조색 둘로 줄이려고 합니다. 주색으로 남겨야 할
+    이 페이지의 색을 주 색상 둘, 보조 색상 둘로 줄이려고 합니다. 주 색상으로 남겨야 할
     두 색은 무엇일까요?
 options:
   en:
