@@ -43,7 +43,7 @@ preReadingQuestions:
       A message can be accurate and still leave the user stuck. What does the
       article say a message has to carry beyond naming the problem?
     ko: >-
-      정확한 메시지인데도 사용자가 그 자리에 갇힐 수 있다. 이 글은 메시지가
+      정확한 메시지인데도 사용자가 더 나아가지 못하고 멈춰 버릴 수 있다. 이 글은 메시지가
       문제를 짚는 것 말고 무엇을 더 담아야 한다고 말하는가?
   - en: >-
       Timing gets its own treatment. When is a message early enough to help and
