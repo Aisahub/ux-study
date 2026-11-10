@@ -36,7 +36,7 @@ preReadingQuestions:
       Why does the article say to follow existing conventions even when your own
       alternative seems better?
     ko: >-
-      이 글은 왜 자기만의 대안이 더 나아 보일 때조차 기존 관례를 따르라고
+      이 글은 왜 직접 고안한 대안이 더 나아 보일 때조차 기존 관례를 따르라고
       말하는가?
   - en: >-
       When a product breaks its own conventions, what extra work does the
