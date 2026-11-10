@@ -15,8 +15,7 @@ artefact:
   ko: >-
     한 물류창고 도구의 화면 세 개가 나란히 있습니다. 셋 다 작업자가 한 작업을
     끝내고 다음으로 넘기는 지점이고, 같은 동작을 저마다 다르게 부릅니다.
-    피킹 화면의 버튼은 "피킹 완료"입니다. 곧바로 이어지는 포장 화면에서는 "포장
-    표시"입니다. 마지막인 출고 화면에서는 "완료"입니다. 이 세 화면은 같은 사람이
+    피킹 화면의 버튼은 "피킹 완료"입니다. 곧바로 이어지는 포장 화면에서는 "포장 처리"입니다. 마지막인 출고 화면에서는 "완료"입니다. 이 세 화면은 같은 사람이
     한 근무 동안 여러 번, 차례로 씁니다.
 screen:
   en: |-
@@ -61,7 +60,7 @@ screen:
         <div class="screen">
           <h3>주문 88-4120</h3>
           <p class="muted" style="margin:0 0 10px">박스 2개</p>
-          <div class="actions actions--start"><button class="btn btn--blue">포장 표시</button></div>
+          <div class="actions actions--start"><button class="btn btn--blue">포장 처리</button></div>
         </div>
       </div>
       <div>
@@ -106,7 +105,7 @@ options:
       correct: true
     - text: 쉬운 말
       reason: >-
-        "포장 표시"는 화면 앞의 사람이 쓸 말이 아니라 창고 안에서 쓰는 말을 그대로
+        "포장 처리"는 화면 앞의 사람이 쓸 말이 아니라 창고 안에서 쓰는 말을 그대로
         옮긴 것입니다.
     - text: 컨트롤 적합성
       reason: >-

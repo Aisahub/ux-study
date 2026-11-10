@@ -17,7 +17,7 @@ artefact:
     지출 결의 폼을 두 시점에 걸쳐 보여 줍니다. 첫 번째에서는 날짜, 분류, 금액,
     그리고 공장까지 택시를 세 번 탔다는 내용, 이렇게 네 칸이 채워져 있고, 다섯 번째
     "결재자" 칸만 아직 안내 문구 상태입니다. 맨 아래에는 "임시 저장"과
-    "제출"이 있습니다. 두 번째 시점에서는 맨 위에 "500,000원이 넘는 지출은
+    "제출"이 있습니다. 두 번째 시점에서는 맨 위에 "50,000원이 넘는 지출은
     결재자가 필요합니다. 결재자를 고르고 다시 제출하세요"라는 빨간 띠가
     생겼고, 다섯 칸 모두가 안내 문구 상태로 돌아가 있습니다. 고르지 않았던
     결재자와 함께 날짜와 분류, 금액, 내용까지 모두 사라졌습니다.
@@ -44,7 +44,7 @@ sequence:
           <div class="stack">
             <div class="field"><span class="field-label">날짜</span><input class="control" style="width:200px" value="2026-07-24"></div>
             <div class="field"><span class="field-label">분류</span><input class="control" style="width:200px" value="교통비"></div>
-            <div class="field"><span class="field-label">금액</span><input class="control" style="width:200px" value="812,000원"></div>
+            <div class="field"><span class="field-label">금액</span><input class="control" style="width:200px" value="81,200원"></div>
             <div class="field"><span class="field-label">내용</span><input class="control" style="width:340px" value="판교 공장까지 택시 세 번"></div>
             <div class="field"><span class="field-label">결재자</span><input class="control control--empty" style="width:200px" value="선택 안 함"></div>
             <div class="actions actions--end"><span class="btn btn--outline">임시 저장</span><button class="btn btn--blue">제출</button></div>
@@ -71,7 +71,7 @@ sequence:
         <div class="screen">
           <h1>지출 결의</h1>
           <div class="stack">
-            <p class="banner banner--red">500,000원이 넘는 지출은 결재자가 필요합니다. 결재자를 고르고 다시 제출하세요.</p>
+            <p class="banner banner--red">50,000원이 넘는 지출은 결재자가 필요합니다. 결재자를 고르고 다시 제출하세요.</p>
             <div class="field"><span class="field-label">날짜</span><input class="control control--empty" style="width:200px" value="연-월-일"></div>
             <div class="field"><span class="field-label">분류</span><input class="control control--empty" style="width:200px" value="선택 안 함"></div>
             <div class="field"><span class="field-label">금액</span><input class="control control--empty" style="width:200px" value="0원"></div>
