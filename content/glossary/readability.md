@@ -10,8 +10,7 @@ definition:
     perfectly legible character by character and still be exhausting in quantity.
   ko: >-
     글 덩어리를 처음부터 끝까지 편하게 읽어나갈 수 있는지를 말한다.
-    행간, 한 줄의 길이, 자간, 크기가 이를 결정한다. 글자 하나하나는 또렷해도
-    (판독성이 높아도) 양이 많으면 읽기 힘들 수 있다.
+    행간, 한 줄의 길이, 자간, 크기가 이를 결정한다. 글자 하나하나는 또렷해도(판독성이 높아도) 양이 많으면 읽기 힘들 수 있다.
 justification:
   en: >-
     [Element] is legible character by character but tiring to read as a block —
