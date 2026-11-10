@@ -14,7 +14,7 @@ artefact:
     5 MB".
   ko: >-
     프로필 페이지입니다. 아바타 아래에는 색이 채워진 파란 "사진 업로드"
-    버튼이 있습니다. 더 내려가면 "자기 소개" 폼 안에 회색 글자 링크 "이미지 추가"가 있는데, 이것도 프로필에 그림을 넣는 같은 동작입니다. 이 페이지의 다른 동작은 "변경사항 저장", "이메일 갱신", "번호 인증"처럼 모두 무엇을 하는지 밝힌 파란 채움 버튼입니다. 아바타 밑
+    버튼이 있습니다. 더 내려가면 "자기소개" 폼 안에 회색 글자 링크 "이미지 추가"가 있는데, 이것도 프로필에 그림을 넣는 같은 동작입니다. 이 페이지의 다른 동작은 "변경사항 저장", "이메일 갱신", "번호 인증"처럼 모두 무엇을 하는지 밝힌 파란 채움 버튼입니다. 아바타 밑
     설명문에는 "사진은 댓글 옆에 표시됩니다"라고, 페이지 맨 아래
     도움말에는 "사진은 5MB 이하여야 합니다"라고 적혀 있습니다.
 screen:
@@ -51,7 +51,7 @@ screen:
         </div>
       </div>
       <div>
-        <h2>자기 소개</h2>
+        <h2>자기소개</h2>
         <div class="field" style="margin-bottom:10px"><span class="field-label">표시 이름</span><input class="control" value="김지우"></div>
         <div class="field" style="margin-bottom:10px"><span class="field-label">직함</span><input class="control" value="운영 리드"></div>
         <div class="field" style="margin-bottom:10px"><span class="field-label">프로필 사진</span><span class="link--bare" style="color:#6b7280">이미지 추가</span></div>
