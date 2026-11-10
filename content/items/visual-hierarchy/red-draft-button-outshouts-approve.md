@@ -15,7 +15,7 @@ artefact:
   ko: >-
     사내 재무 도구의 결재 화면입니다. 맨 위에 "청구서 결재"라는 제목이 짙은
     회색으로 놓여 있습니다. 그 아래에는 버튼 세 개가 나란히 있습니다. "임시
-    저장"은 빨강으로 꽉 채운 사각형에 흰 글자입니다. "재무팀에 문의"는 흰
+    저장"은 빨강으로 꽉 채운 사각형에 흰 글자입니다. "재무팀 검토 요청"은 흰
     바탕에 짙은 회색 외곽선입니다. 정작 돈이 나가는 동작이자 이 화면을 여는
     이유인 "결재 승인"은 흰 바탕에 옅은 회색 글자뿐이고 테두리조차 없습니다.
     그 아래에 "대기 중인 청구서 23건"이 흐릿하게 적혀 있습니다.
@@ -35,7 +35,7 @@ screen:
       <h1>청구서 결재</h1>
       <div class="actions">
         <button class="btn btn--danger">임시 저장</button>
-        <button class="btn btn--outline">재무팀에 문의</button>
+        <button class="btn btn--outline">재무팀 검토 요청</button>
         <button class="btn btn--ghost">결재 승인</button>
       </div>
       <p class="note">대기 중인 청구서 23건</p>
