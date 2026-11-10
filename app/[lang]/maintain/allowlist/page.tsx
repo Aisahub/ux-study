@@ -65,7 +65,7 @@ const COPY: Record<
   ko: {
     heading: '허용 목록',
     explanation:
-      '여기 있는 주소만 로그인할 수 있습니다. 주소를 전부 적으면 그 계정 하나가, @aisahub.com 와일드카드를 적으면 모든 Workspace 계정이 로그인할 수 있습니다. 항목을 삭제하면 그 사람은 바로 로그인할 수 없게 됩니다.',
+      '여기 있는 주소만 로그인할 수 있습니다. 전체 주소를 적으면 그 계정 하나만, @aisahub.com 와일드카드를 적으면 모든 Workspace 계정이 로그인할 수 있습니다. 항목을 삭제하면 그 사람은 바로 로그인할 수 없게 됩니다.',
     entriesHeading: '현재 항목',
     addHeading: '항목 추가',
     pattern: '주소 또는 와일드카드',

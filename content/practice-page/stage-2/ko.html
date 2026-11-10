@@ -9,14 +9,14 @@
 <body data-audit-mode="operate">
 
 <div class="audit-bar" data-audit-chrome>
-  <p class="audit-bar-title">감사 도구</p>
-  <div class="audit-modes" role="group" aria-label="클릭이 하는 일">
+  <p class="audit-bar-title">점검 도구</p>
+  <div class="audit-modes" role="group" aria-label="클릭 모드">
     <button type="button" class="audit-mode" data-mode="operate" aria-pressed="true"
-            data-mode-state="조작 — 클릭이 인터페이스를 움직입니다.">조작</button>
+            data-mode-state="조작 모드: 클릭하면 화면이 실제로 동작합니다.">조작</button>
     <button type="button" class="audit-mode" data-mode="select" aria-pressed="false"
-            data-mode-state="선택 — 클릭이 Finding에 담을 요소를 가리킵니다.">선택</button>
+            data-mode-state="선택 모드: 클릭한 요소를 발견에 담습니다.">선택</button>
   </div>
-  <p class="audit-bar-state" id="audit-mode-state" role="status">조작 — 클릭이 인터페이스를 움직입니다.</p>
+  <p class="audit-bar-state" id="audit-mode-state" role="status">조작 모드: 클릭하면 화면이 실제로 동작합니다.</p>
   <button type="button" class="audit-restart" id="audit-restart">플로우 다시 시작</button>
 </div>
 
@@ -57,11 +57,11 @@
     </div>
 
     <p class="availability" id="availability-result" role="status" data-element="step1-availability-result" hidden>
-      <span data-answer="branch"></span> 지점, <span data-answer="pickup"></span> ~ <span data-answer="return"></span> 이용 가능한 차량 3대.
+      <span data-answer="branch"></span> 지점에 <span data-answer="pickup"></span> ~ <span data-answer="return"></span> 기간 이용 가능한 차량이 3대 있습니다.
     </p>
 
     <div class="step-actions">
-      <button type="button" class="btn btn-quiet" id="check-availability" data-element="step1-check-availability">차량 확인</button>
+      <button type="button" class="btn btn-quiet" id="check-availability" data-element="step1-check-availability">예약 가능 차량 조회</button>
       <button type="button" class="btn btn-primary" data-next="2" data-element="step1-continue">계속</button>
     </div>
   </section>
@@ -141,8 +141,8 @@
   <section class="panel" id="confirmation" data-step-label="예약 요청 접수됨"
            data-element="flow-confirmation" hidden>
     <h2 class="step-heading" id="confirmation-heading" tabindex="-1">예약 요청이 접수되었습니다</h2>
-    <p>예약 번호는 <strong>NW-2841</strong>입니다. 예약을 변경하거나 취소할 때 이 번호를 묻습니다.</p>
-    <p>한 시간 안에 <span data-fill="email"></span> 으로 차량 확정 메일을 보내 드립니다. 그 전까지는 아무것도 결제되지 않습니다.</p>
+    <p>예약 번호는 <strong>NW-2841</strong>입니다. 예약을 변경하거나 취소할 때 필요하니 보관해 주세요.</p>
+    <p>한 시간 안에 차량 확정 메일을 <span data-fill="email"></span> 주소로 보내 드립니다. 그 전까지는 아무것도 결제되지 않습니다.</p>
     <button type="button" class="btn btn-quiet" id="new-booking">새 예약 시작</button>
   </section>
 

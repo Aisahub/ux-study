@@ -9,9 +9,9 @@ definition:
     that contradicts what they believe, a user more often concludes the
     interface is broken than that their belief was wrong.
   ko: >-
-    사용자 머릿속에 이미 자리 잡은 모델이 좀처럼 물러서지 않는 성질. 자기 믿음과
-    어긋나는 것을 만난 사용자는 자기 믿음이 틀렸다고 여기기보다 인터페이스가
-    고장 났다고 여기는 쪽이 더 많다.
+    사용자 머릿속에 이미 자리 잡은 모델이 좀처럼 물러서지 않는 성질.
+    사용자는 자기 믿음과 어긋나는 것을 만나면, 믿음이 틀렸다고 여기기보다
+    인터페이스가 고장 났다고 여기는 경우가 많다.
 justification:
   en: >-
     [Change] asks the user to give up something they already believe about

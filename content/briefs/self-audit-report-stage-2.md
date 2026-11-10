@@ -66,7 +66,7 @@ advice:
     planted here and which of it you found; submission is final, so walk it
     until you are satisfied before you press it.
   ko: >-
-    판단하기 전에 한 번 더 해 보세요. 한 번은 의도된 대로, 또 한 번은
+    판단하기 전에 같은 과정을 두 번 거쳐 보세요. 한 번은 의도된 대로, 또 한 번은
     사람들이 실제로 하는 대로입니다. 잘못 넣었다가 고치고, 앞 화면으로
     돌아가 보고, 정했던 것을 나중에 바꿔 보는 식입니다. 두 번째 시도에서
     플로우가 어떻게 반응하는지 보세요. 설명은 우리 입장이 아니라 그
@@ -85,8 +85,7 @@ optionalFix:
     does not affect completion either way.
   ko: >-
     제출 후 선택 사항: 작성한 발견 중 하나를 골라 실제로 고쳐 보고,
-    바뀐 결과를 보여 주는 링크를 첨부해 주세요. 코드를 쓴다면 pull
-    request나 commit이면 되고, 그렇지 않다면 고친 화면의
+    바뀐 결과를 보여 주는 링크를 첨부해 주세요. 코드를 쓴다면 pull request(풀 리퀘스트)나 commit(커밋)이면 되고, 그렇지 않다면 고친 화면의
     스크린샷으로 충분합니다. 이 과정의 목적은 내가 고친 결과를 직접
     확인하는 것이지, 도구를 익히는 것이 아닙니다. 첨부 여부는 수료에
     영향을 주지 않습니다.

@@ -63,7 +63,7 @@ prompt:
     A user has come here to change the card they pay with. What does the
     spacing cost them?
   ko: >-
-    결제 카드를 바꾸러 온 사용자가 이 간격 때문에 치르는 대가는 무엇일까요?
+    이 간격 때문에 결제 카드를 바꾸러 온 사용자는 어떤 어려움을 겪을까요?
 options:
   en:
     - text: Nothing shows where the billing settings begin and end

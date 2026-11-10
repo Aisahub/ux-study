@@ -23,8 +23,7 @@ artefact:
     글자도 15px입니다.
 
     B안은 맨 위 주문번호가 13px 회색입니다. 고객 이름과 주소는 15px,
-    금액은 28px이고, "출고 처리"는 금액 높이만 한, 색을 채운 버튼에 18px
-    글자입니다.
+    금액은 28px이고, "출고 처리"는 금액 글자만큼 높은 채움 버튼에 18px 글자입니다.
 screen:
   en: |-
     <div class="split">
@@ -76,7 +75,7 @@ prompt:
   en: >-
     Which version's scale matches the operator's job, and for which reason?
   ko: >-
-    담당자가 하는 일에 크기가 맞게 쓰인 쪽은 어디이고, 그 이유는 무엇일까요?
+    글자 크기가 담당자의 일에 맞는 쪽은 어느 안이고, 그 이유는 무엇일까요?
 options:
   en:
     - text: Version B
@@ -111,6 +110,6 @@ options:
         하나뿐이어야 합니다.
     - text: 둘 다 아닙니다
       reason: >-
-        두 버전 모두 글자 크기를 세 단계 쓰는데, 이만한 패널 하나에는 한
+        두 안 모두 글자 크기를 세 단계 쓰는데, 이만한 패널 하나에는 한
         단계면 충분합니다.
 ---

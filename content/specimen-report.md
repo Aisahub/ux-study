@@ -65,7 +65,7 @@ findings:
         선택한 주문을 확정하는 것이 이 페이지의 존재 이유인데,
         그 버튼이 화면에서 가장 흐린 컨트롤입니다.
         옅은 회색 바탕에 옅은 회색 글자라 위쪽 업그레이드 배너보다도 약합니다.
-        저는 비활성 상태라고 읽고 진짜 버튼을 찾아 두리번거리다가,
+        저는 비활성 상태인 줄 알고 진짜 버튼을 찾아 두리번거리다가,
         더 눌러 볼 것이 없어진 뒤에야 다시 돌아왔습니다.
     fix:
       en: >-
@@ -74,7 +74,7 @@ findings:
         the thing the page exists for.
       ko: >-
         페이지에서 가장 강한 대비를 확정 버튼에 주고, 배너에서는 그만큼 덜어
-        내세요. 화면에서 가장 눈에 띄는 것이 이 페이지에서 해야 할 일이어야
+        내세요. 화면에서 가장 눈에 띄는 것은 이 페이지의 핵심 동작 버튼이어야
         합니다.
   - element: order-search
     principle: consistency
@@ -107,7 +107,7 @@ findings:
       ko: >-
         마지막 갱신 시각이 이 페이지에서 글자가 가장 큽니다.
         제가 이 페이지를 여는 이유인 신규 주문 수와 매출보다 시선을 더 강하게
-        끕니다. 아무도 그것을 보고 움직이지 않는데 화면에서 가장 강할 이유가
+        끕니다. 보고 행동할 사람이 없는 정보가 화면에서 가장 강할 이유가
         없습니다.
     fix:
       en: >-
@@ -124,14 +124,14 @@ findings:
         phone you have to scroll past every field before you can save anything.
         It should be reachable from the moment the form appears.
       ko: >-
-        저장 버튼이 배송 폼의 맨 아래에 있어서, 휴대폰에서는 모든 칸을 지나
-        스크롤해야 저장할 수 있습니다. 폼이 나타난 순간부터 닿을 수 있어야
+        설정 저장 버튼이 배송 폼의 맨 아래에 있어서, 휴대폰에서는 모든 칸을 지나
+        스크롤해야 저장할 수 있습니다. 폼이 열리자마자 누를 수 있어야
         합니다.
     fix:
       en: >-
         Pin Save settings to the bottom of the screen so it is always in reach.
       ko: >-
-        저장 버튼을 화면 맨 아래에 고정해서 언제든 누를 수 있게 하세요.
+        설정 저장 버튼을 화면 맨 아래에 고정해서 언제든 누를 수 있게 하세요.
   - element: tax-invoice-link
     principle: signifier
     quality: sound
@@ -154,7 +154,7 @@ findings:
         as well as with a mouse.
       ko: >-
         링크임을 드러내세요. 밑줄을 넣고 링크 색을 쓰고, 마우스를 올렸을 때와
-        키보드 초점이 닿았을 때 눈에 보이게 바뀌도록 하세요.
+        키보드 포커스가 갔을 때 눈에 보이게 바뀌도록 하세요.
   - element: upgrade-banner
     principle: visual-hierarchy
     quality: taste

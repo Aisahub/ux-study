@@ -23,7 +23,7 @@ artefact:
     행이 더 이어집니다.
 
     상태 열은 너비 48px에 좌우 여백이 8px씩입니다. 상태 칸에는 지름 10px쯤 되는 속이 찬 동그라미 하나만 있습니다. 초록은 배송 완료, 주황은
-    배송 중, 빨강은 지연입니다. 여백을 빼고 남는 폭에는 표의 13px 글자로 쓰면 세 가지 상태 이름 중 어느 것도 한 줄에 들어가지 않습니다. 그 행의 다른 어디에도 이
+    배송 중, 빨강은 지연입니다. 여백을 빼고 남는 폭에는 세 가지 상태 이름 중 어느 것도 표의 13px 글자로 한 줄에 들어가지 않습니다. 그 행의 다른 어디에도 이
     배송이 무슨 상태인지 적혀 있지 않습니다.
 screen:
   en: |-
@@ -81,7 +81,8 @@ prompt:
     An operator who cannot tell red from green works this table all day. Which
     change gives them the state back?
   ko: >-
-    빨강과 초록을 구분하지 못하는 담당자가 이 표를 하루 종일 봅니다. 이 담당자도 상태를 알아볼 수 있게 하려면 무엇을 바꿔야 할까요?
+    빨강과 초록을 구분하지 못하는 담당자가 이 표를 하루 종일 봅니다. 이
+    담당자도 상태를 알아볼 수 있게 하려면 무엇을 바꿔야 할까요?
 options:
   en:
     - text: Give each state a shape of its own as well as its colour

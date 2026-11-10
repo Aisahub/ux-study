@@ -12,11 +12,12 @@ artefact:
     above and below, the same gap this page uses everywhere else. Then the
     report table, and under the table the pagination.
   ko: >-
-    리포트 화면입니다. 맨 위에는 요약 카드 세 장이 옅은 배경의 테두리 패널
-    하나 안에 함께 들어 있습니다. 그 패널 아래에는 컨트롤 다섯 개가 한 줄로 떠
-    있습니다. 기간, 고객사, 상태, 통화, 그리고 초기화 링크입니다. 주위에 테두리도 배경도 없고 위아래 여백은 16px로, 이 페이지가 다른 곳에서
-    쓰는 간격과 똑같습니다. 그 아래에 리포트 표가 있고, 표 밑에 페이지 이동이
-    있습니다.
+    리포트 화면입니다. 맨 위에는 요약 카드 세 장이 옅은 배경의 테두리
+    패널 하나 안에 함께 들어 있습니다. 그 패널 아래에는 컨트롤 다섯 개가
+    한 줄로 떠 있습니다. 기간, 고객사, 상태, 통화, 그리고 초기화
+    링크입니다. 주위에 테두리도 배경도 없고 위아래 여백은 16px로, 이
+    페이지가 다른 곳에서 쓰는 간격과 똑같습니다. 그 아래에 리포트 표가
+    있고, 표 밑에 페이지 이동이 있습니다.
 screen:
   en: |-
     <div class="screen stack">
@@ -79,7 +80,8 @@ prompt:
     The five controls do not read as one set. What is the smallest change that
     groups them?
   ko: >-
-    이 컨트롤 다섯 개가 한 그룹으로 보이지 않습니다. 하나로 묶으려면 최소한 무엇을 바꾸면 될까요?
+    이 컨트롤 다섯 개가 한 그룹으로 보이지 않습니다. 하나로 묶으려면
+    최소한 무엇을 바꾸면 될까요?
 options:
   en:
     - text: Put the five controls inside a single bordered region

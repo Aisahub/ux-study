@@ -22,8 +22,7 @@ roleHint:
       Across the features you signed off, check whether one concept has kept
       one name.
     ko: >-
-      승인한 기능들 전반에서 하나의 개념이 하나의 이름을 지켜 왔는지 확인해
-      보세요.
+      승인한 기능을 두루 살펴보며 한 개념을 줄곧 한 이름으로 불러 왔는지 확인해 보세요.
 preReadingQuestions:
   - en: >-
       Heuristic 4 covers consistency inside your own product and consistency
@@ -31,7 +30,8 @@ preReadingQuestions:
       does each matter?
     ko: >-
       네 번째 휴리스틱은 제품 안에서의 일관성과 바깥 세상과의 일관성을 함께
-      다룬다. 이 글은 그 두 가지를 각각 무엇이라 부르고, 왜 둘 다 중요한가?
+      다룬다. 이 글은 그 두 가지를 각각 무엇이라 부르는가? 그리고 둘은
+      각각 왜 중요한가?
   - en: >-
       Why does the article say to follow existing conventions even when your own
       alternative seems better?

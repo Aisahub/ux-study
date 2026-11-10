@@ -44,7 +44,8 @@ prompt:
     Most people using this tool are booking a short run of days, a few weeks
     ahead. Which change takes the most work out of that?
   ko: >-
-    이 도구를 쓰는 사람들은 대개 몇 주 뒤로 며칠짜리 휴가를 신청합니다. 이 신청을 가장 수월하게 만드는 변경은 무엇일까요?
+    이 도구를 쓰는 사람들은 대개 몇 주 뒤로 며칠짜리 휴가를 신청합니다.
+    이 신청을 가장 수월하게 만드는 변경은 무엇일까요?
 options:
   en:
     - text: Replace the six dropdowns with one date-range field, picked on a calendar or typed straight in
@@ -68,9 +69,11 @@ options:
   ko:
     - text: 드롭다운 여섯 개를 기간 입력 하나로 바꿔, 달력에서 고르거나 그대로 입력하게 합니다
       reason: >-
-        기간은 하나이므로 컨트롤도 하나여야 합니다. 눈앞에 펼쳐진 달력에서 두 번만 누르면 드롭다운을 여섯 번 연 것과 같은 결과가 되고, 서로 맞춰야 하는 답 여섯 개도 사라집니다.
+        기간은 하나이므로 컨트롤도 하나여야 합니다. 눈앞에 펼쳐진 달력에서 두
+        번만 누르면 드롭다운을 여섯 번 연 것과 같은 결과가 되고, 서로 맞춰야
+        하는 답 여섯 개도 사라집니다.
       correct: true
-    - text: 시작일은 드롭다운 셋으로 두고, 종료일은 "며칠" 칸에서 계산해 냅니다
+    - text: 시작일은 드롭다운 셋으로 두고, 종료일은 "일수" 칸에 적은 값으로 계산합니다
       reason: >-
         드롭다운이 절반으로 줄고, 어차피 휴가는 대개 이어지는 며칠이라 두 번째
         날짜는 도구가 대신 셈해 줄 수 있는 값입니다.

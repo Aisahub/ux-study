@@ -71,7 +71,7 @@ const COPY: Record<
     reportDraft: '작성 중',
     reportNone: '시작 전',
     attempts: '시도 기록',
-    attemptsNone: '아직 완료한 시도가 없습니다.',
+    attemptsNone: '아직 완료한 시도 없음',
     scoreLabel: '점수',
     notes: '메모',
     noteCount: (n) => `메모 ${n}개`,

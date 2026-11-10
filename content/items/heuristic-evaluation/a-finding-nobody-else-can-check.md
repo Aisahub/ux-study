@@ -59,7 +59,8 @@ prompt:
     One of these four cannot be acted on as written. What should be done with
     it?
   ko: >-
-    네 개 가운데 하나는 적힌 그대로는 손을 댈 수 없습니다. 그 발견은 어떻게 해야 할까요?
+    네 개 가운데 하나는 적힌 그대로는 손을 댈 수 없습니다. 그 발견은
+    어떻게 해야 할까요?
 options:
   en:
     - text: Send finding 1 back to be rewritten against a named heuristic, on the specific thing that breaks it
@@ -95,5 +96,5 @@ options:
         심각도가 말해 줍니다.
     - text: 1번을 남기고 화면 캡처를 붙여, 무엇을 두고 한 말인지 팀이 볼 수 있게 합니다
       reason: >-
-        평가자가 그 인상을 받을 때 보던 화면과 견주어 그 인상을 확인할 수 있게 됩니다.
+        평가자가 그런 인상을 받았을 때 보던 화면과 견주어 확인해 볼 수 있게 됩니다.
 ---

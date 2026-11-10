@@ -11,11 +11,11 @@ objective:
     readers rather than about the word, so the judgement is made against a
     stated reader and never against your own ear.
   ko: >-
-    화면의 문구를 이곳에서 일하지 않는 사람의 눈으로 읽으면서, 팀 안에서만
+    화면의 문구를 회사 밖 사람의 눈으로 읽으면서, 팀 안에서만
     뜻이 통하고 밖에서는 통하지 않는 말을 찾아낼 수 있다. 그런 말이란
     스키마에서 그대로 가져온 단어, 공급사만 쓰는 이름, 아무도 풀어 쓰지 않은
     약어다. 어떤 말이 전문 용어인지 아닌지는 그 말 자체가 아니라 읽는 사람에
-    달린 문제이므로, 판단의 기준은 명시된 독자이지 내 귀가 아니다.
+    달린 문제이므로, 판단의 기준은 내 감이 아니라 미리 정해 둔 독자다.
 roleHint:
   developer:
     en: >-
@@ -23,9 +23,9 @@ roleHint:
       table name, an API field, or a ticket title. Would the person who uses
       this screen have said that word before they met your product?
     ko: >-
-      직접 만든 화면에서 테이블 이름, API 필드, 티켓 제목에서 그대로 건너온
-      명사를 모두 적어 보세요. 이 화면을 쓰는 사람이 우리 제품을 만나기 전에도
-      그 말을 써 본 적이 있을까요?
+      직접 만든 화면에 있는 명사 가운데 테이블 이름, API 필드, 티켓
+      제목에서 그대로 건너온 것을 모두 적어 보세요. 이 화면을 쓰는 사람이
+      우리 제품을 쓰기 전에도 그 말을 써 본 적이 있을까요?
   pm:
     en: >-
       Hand a page you wrote the copy for to somebody in another team, explain
@@ -46,7 +46,7 @@ preReadingQuestions:
       Two questions are offered for deciding what to do with a term. What are
       they, and what does each answer change about the treatment?
     ko: >-
-      어떤 용어를 어떻게 다룰지 정하기 위해 두 가지 물음이 제시된다. 무엇과
+      이 글은 용어를 어떻게 다룰지 정할 때 던질 물음 두 가지를 제시한다. 무엇과
       무엇이며, 각각의 답은 그 용어를 다루는 방식을 어떻게 바꾸는가?
   - en: >-
       Sometimes the technical term is kept and written alongside a plain one.
