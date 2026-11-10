@@ -44,7 +44,7 @@ prompt:
     Customers will meet this same term again on their own bank statement.
     Which change should this section make?
   ko: >-
-    이 고객들은 자기 은행 거래내역에서 같은 말을 다시 마주치게 됩니다. 이
+    이 고객들은 쇼핑몰의 환불 안내나 상담에서도 같은 말을 다시 마주치게 됩니다. 이
     단락은 무엇을 바꿔야 할까요?
 options:
   en:
