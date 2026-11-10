@@ -77,7 +77,7 @@ options:
         A page this long needs a face designed for sustained reading, and the
         current one is what fatigues the eye.
   ko:
-    - text: 단 너비를 줄이고 행간을 넓힙니다
+    - text: 본문 폭을 줄이고 행간을 넓힙니다
       reason: >-
         글자는 애초에 문제가 아니었습니다. 한 줄에 담기는 글자 수를 크게
         줄여야 독자가 글 덩어리에 지치지 않습니다.

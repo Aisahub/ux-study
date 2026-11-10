@@ -29,7 +29,7 @@ preReadingQuestions:
       with the wider world. What does the article call these two kinds, and why
       does each matter?
     ko: >-
-      네 번째 휴리스틱은 제품 안에서의 일관성과 바깥 세상과의 일관성을 함께
+      네 번째 휴리스틱은 제품 안에서의 일관성과 바깥세상과의 일관성을 함께
       다룬다. 이 글은 그 두 가지를 각각 무엇이라 부르는가? 그리고 둘은
       각각 왜 중요한가?
   - en: >-
