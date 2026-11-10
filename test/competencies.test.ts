@@ -277,6 +277,25 @@ test('every construction the translationese check bans is written in CONTEXT.md'
   expect(TRANSLATIONESE.map(([, name]) => name).filter((name) => !section.includes(`\`${name}\``))).toEqual([])
 })
 
+test('a closing quote takes 으로 or 로 by the last syllable it quotes', () => {
+  // `"… 이체"으로` shipped after one word inside the quote changed and the
+  // particle outside it did not (ERR-242). 로 follows a vowel or ㄹ; 으로
+  // follows any other final consonant.
+  const wrong: string[] = []
+  const check = (where: string, text: string) => {
+    for (const hit of text.matchAll(/([가-힣])["”']\s*(으로|로)(?![가-힣])/g)) {
+      const final = (hit[1].codePointAt(0)! - 0xac00) % 28
+      const want = final === 0 || final === 8 ? '로' : '으로'
+      if (hit[2] !== want) wrong.push(`${where}: ${hit[0]}`)
+    }
+  }
+  for (const [where, text] of koreanContentStrings()) check(where, text)
+  for (const path of sources(join(__dirname, '..', 'app'))) {
+    for (const text of koreanCopy(readFileSync(path, 'utf8'))) check(path, text)
+  }
+  expect(wrong).toEqual([])
+})
+
 test('a borrowed noun takes the particle its final consonant calls for', () => {
   const wrong: string[] = []
 

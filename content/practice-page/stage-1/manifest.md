@@ -75,7 +75,7 @@ defects:
         one idea per line, the cutoff stated first and bold, and the edge cases
         moved behind a link.
       ko: >-
-        배송 안내문이 위탁 명세, 배송사 프로필, 취소 후 재발행 같은 내부 물류
+        배송 안내문이 위탁 배송 명세, 배송사 프로필, 취소 후 재발행 같은 내부 물류
         용어로 가득한, 끊김 없는 한 덩어리 문단입니다. 사장님이 절대 놓치면 안
         되는 단 하나의 사실, 15:00 마감이 첫 줄 속에 묻혀 있고, 눈에 띄게
         해 주는 장치가 없습니다. 이렇게 빽빽한 글은 대충 훑거나 건너뛰게 되어
