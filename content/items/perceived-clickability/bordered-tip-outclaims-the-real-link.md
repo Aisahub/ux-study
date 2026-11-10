@@ -12,8 +12,7 @@ artefact:
     line next to them; that plain text is the actual link that opens the
     support form. New users click the tip box and never find the link.
   ko: >-
-    보고서 도구 하단의 도움말 영역입니다. 왼쪽에는 모서리가 둥글고 가는
-    파란 테두리에 옅은 파란 바탕을 깐 안내 상자가 있고, "팁: 보고서는
+    보고서 도구 하단의 도움말 영역입니다. 왼쪽에는 가는 파란 테두리에 옅은 파란 바탕을 깐, 모서리가 둥근 안내 상자가 있고, "팁: 보고서는
     CSV로 내보낼 수 있습니다."라고 적혀 있습니다. 순수한 안내문이라 눌러도
     아무 일도 없고, 이동할 곳 자체가 없습니다. 그 옆의 "고객 지원 문의"는
     바로 옆 저작권 표시줄과 똑같은 작은 짙은 회색 글자인데, 그 밋밋한 글자야말로
