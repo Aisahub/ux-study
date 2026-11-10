@@ -63,7 +63,7 @@ options:
         Raise the size and darken the text so the paragraphs invite reading
         instead of discouraging it.
   ko:
-    - text: 이 페이지는 실제로 오지 않는 독자를 상대로 쓰였습니다
+    - text: 이 페이지는 실제 방문자와 다른 독자를 상정하고 쓰였습니다
       reason: >-
         방문자는 훑어보는데, 여기엔 훑어서 얻을 것이 없습니다. 가격, 폭,
         하중 한계를 레이블 붙은 줄로 맨 위에 꺼내 놓고 산문은 그 뒤에 둬야

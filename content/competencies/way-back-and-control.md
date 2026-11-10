@@ -18,15 +18,15 @@ roleHint:
       it — does the application agree with the browser about what just
       happened?
     ko: >-
-      직접 만든 플로우 한가운데서 브라우저의 뒤로 가기를 눌러 보세요. 방금
-      무슨 일이 있었는지에 대해 애플리케이션과 브라우저의 생각이 같나요?
+      직접 만든 플로우 한가운데서 브라우저의 뒤로 가기를 눌러 보세요.
+      애플리케이션이 보여 주는 상태가 브라우저가 돌아간 자리와 맞나요?
   pm:
     en: >-
       In a flow you signed off, get three steps in and then decide you have
       changed your mind; count how much of your work leaving costs you.
     ko: >-
-      승인한 플로우를 세 단계쯤 진행한 뒤 마음을 바꿨다고 해 보세요. 빠져나오는
-      데 여태 한 일 중 얼마를 내놓아야 하는지 세어 보세요.
+      승인한 플로우를 세 단계쯤 진행한 뒤 마음을 바꿨다고 해 보세요.
+      빠져나오면서 여태 한 일 중 얼마를 잃는지 세어 보세요.
 preReadingQuestions:
   - en: >-
       The article separates going back from getting out entirely. What does it
@@ -38,13 +38,13 @@ preReadingQuestions:
       Undo is treated as more than a convenience. What does the article say a
       user does differently once they know an action can be taken back?
     ko: >-
-      실행 취소는 단순한 편의 기능 이상으로 다루어진다. 되돌릴 수 있다는 것을
+      이 글은 실행 취소를 단순한 편의 기능 이상으로 다룬다. 되돌릴 수 있다는 것을
       아는 사용자는 무엇을 다르게 한다고 말하는가?
   - en: >-
       An exit that exists but cannot be found is treated as a failure of its
       own. What makes an exit discoverable rather than merely present?
     ko: >-
-      있기는 하지만 찾을 수 없는 출구는 그 자체로 실패로 다루어진다. 출구가
+      이 글은 있기는 해도 찾을 수 없는 출구를 그 자체로 실패라고 본다. 출구가
       그저 존재하는 데서 그치지 않고 눈에 띄려면 무엇이 필요한가?
 source:
   url: https://www.nngroup.com/articles/user-control-and-freedom/

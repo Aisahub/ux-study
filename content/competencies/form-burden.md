@@ -10,11 +10,13 @@ objective:
     into several steps. This is the cost of the path where nothing goes wrong;
     what the interface says when something does go wrong is error handling.
   ko: >-
-    무언가를 처음부터 끝까지 직접 채워 보고, 굳이 시키지 않아도 되었을 일을
-    짚어낼 수 있다. 그런 일을 만드는 것은 사용자가 다른 데서 찾아오거나, 외워
-    두거나, 변환하거나, 두 번 입력해야 했던 값, 혹은 간단한 선택 하나를 여러
-    단계로 만들어 버린 컨트롤이다. 이것은 아무것도 잘못되지 않은 길에서 치르는
-    비용이다. 무언가 잘못됐을 때 인터페이스가 하는 말은 오류 처리의 몫이다.
+    무언가를 처음부터 끝까지 직접 채워 보고, 굳이 시키지 않아도 되었을
+    일을 짚어낼 수 있다. 그런 일은 대개 둘 중 하나에서 생긴다. 사용자가
+    다른 데서 찾아오거나, 외워 두거나, 변환하거나, 두 번 입력해야 했던
+    값이 하나이고, 간단한 선택 하나를 여러 단계로 늘려 버린 컨트롤이 다른
+    하나다. 여기서 다루는 것은 아무 문제 없이 끝까지 갈 때 치르는
+    비용이다. 무언가 잘못됐을 때 인터페이스가 하는 말은 오류 처리의
+    몫이다.
 roleHint:
   developer:
     en: >-
@@ -22,9 +24,10 @@ roleHint:
       no remembered format, no test data on the clipboard — and count what you
       had to leave the page to find out.
     ko: >-
-      직접 만든 폼을 만든 사람의 지식 없이 채워 보세요. 외우고 있는 입력
-      형식도, 클립보드에 담아 둔 테스트 데이터도 쓰지 말고요. 그러고서 답을
-      찾으러 화면 밖으로 나가야 했던 횟수를 세어 보세요.
+      직접 만든 폼을, 만든 사람만 아는 것은 하나도 쓰지 말고 채워 보세요.
+      외우고 있는 입력 형식도, 클립보드에 담아 둔 테스트 데이터도 쓰지
+      말고요. 그러고서 답을 찾으러 화면 밖으로 나가야 했던 횟수를 세어
+      보세요.
   pm:
     en: >-
       Hand a flow you signed off to someone who has never seen it and watch
@@ -38,8 +41,9 @@ preReadingQuestions:
       The article groups the work a form imposes into four kinds. Which of them
       is about what the user must know, and which about what they must do?
     ko: >-
-      이 글은 폼이 지우는 부담을 네 갈래로 나눈다. 그중 사용자가 무엇을 알아야
-      하는가의 문제는 어느 것이고, 무엇을 해야 하는가의 문제는 어느 것인가?
+      이 글은 폼이 지우는 부담을 네 갈래로 나눈다. 그중 어느 것이 사용자가
+      알아야 하는 것에 관한 부담이고, 어느 것이 사용자가 해야 하는 일에
+      관한 부담인가?
   - en: >-
       Some burden is visible in a still screenshot and some appears only while
       filling the thing in. Which of the article's examples are which?

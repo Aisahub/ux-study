@@ -18,10 +18,8 @@ justification:
     one of us following the other. Writing our findings apart first would show
     which of them [the reader] would actually run into.
   ko: >-
-    함께 본 것이 [화면]이므로, [무엇] 하나를 두고 의견이 같다는
-    사실은 한 사람이 다른 사람을 따라간 결과일 수 있습니다. 각자 따로
-    적은 뒤에 맞춰 보면, 이 가운데 실제로 [읽는 사람]이 부딪힐 것이
-    무엇인지 가려집니다.
+    [화면], 이건 함께 본 화면이라서, [무엇] 하나를 두고 의견이 같다는
+    사실은 한 사람이 다른 사람을 따라간 결과일 수 있습니다. 각자 발견을 따로 적은 뒤에 맞춰 보면, 그 가운데 [읽는 사람] 쪽에서 실제로 부딪힐 것이 무엇인지 가려집니다.
 competencies:
   - heuristic-evaluation
 source: https://www.nngroup.com/articles/how-to-conduct-a-heuristic-evaluation/

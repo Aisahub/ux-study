@@ -12,12 +12,13 @@ objective:
     mismatch sits between two models, so asking whether the screen is clear
     will not surface it; only reading it as the stated user will.
   ko: >-
-    명시된 사용자가 이것이 어떻게 작동한다고 이미 믿고 있는지를 말로 옮긴 뒤,
-    그 믿음에 견주어 인터페이스를 읽으며 둘이 어긋나는 지점을 찾아낼 수 있다.
-    그 지점은 시스템이 스스로를 이해하는 방식대로 이름 붙은 컨트롤, 뒤편의
-    저장 구조를 본 사람에게만 자연스러운 단계 순서, 읽는 사람이라면 다르게
-    예상했을 결과다. 어긋남은 두 모델 사이에 있으므로 "이 화면이 명확한가"를
-    물어서는 드러나지 않는다. 명시된 사용자의 눈으로 읽어야만 드러난다.
+    미리 정해 둔 사용자가 제품이 어떻게 작동한다고 이미 믿고 있는지 말로
+    옮긴 뒤, 그 믿음에 견주어 인터페이스를 읽으며 둘이 어긋나는 지점을
+    찾아낼 수 있다. 그 지점은 시스템 내부의 구조를 따라 이름 붙인
+    컨트롤, 데이터가 어떻게 저장되는지 아는 사람에게만 자연스러운 단계
+    순서, 사용자라면 다르게 예상했을 결과 같은 것이다. 어긋남은 두 모델
+    사이에 있으므로 "이 화면이 명확한가"를 물어서는 드러나지 않는다. 미리
+    정해 둔 사용자의 눈으로 읽어야만 드러난다.
 roleHint:
   developer:
     en: >-
@@ -27,7 +28,7 @@ roleHint:
     ko: >-
       직접 만든 플로우에서 사용자가 주요 컨트롤을 누를 때 무슨 일이
       벌어진다고 생각하는지를 한 문장으로 적고, 이어서 실제로 무슨 일이
-      벌어지는지를 적어 보세요. 두 문장 사이의 간격이 곧 발견이 있는 자리입니다.
+      벌어지는지를 적어 보세요. 두 문장이 어긋나는 곳에 발견이 있습니다.
   pm:
     en: >-
       Show a screen to somebody who has never seen the product and ask them to
@@ -44,8 +45,7 @@ preReadingQuestions:
       Why does the article treat the belief as the thing that matters, rather
       than whether the belief is correct?
     ko: >-
-      멘탈 모델은 사용자가 아는 것, 또는 안다고 여기는 것으로 설명된다. 이 글은
-      왜 그 믿음이 맞는지 틀렸는지보다 믿음 자체를 중요하게 다루는가?
+      이 글은 멘탈 모델을 사용자가 아는 것, 또는 안다고 여기는 것이라고 설명한다. 그런데 왜 그 믿음이 맞는지 틀렸는지보다 믿음 자체를 중요하게 다루는가?
   - en: >-
       The article names a gap between the designer's model and the user's. What
       does it say makes the designer's own model an unreliable stand-in for the
@@ -58,8 +58,8 @@ preReadingQuestions:
       Two ways out of a mismatch are offered. What are they, and what does the
       article say about how readily a model the user already holds gives way?
     ko: >-
-      어긋남에서 빠져나오는 길이 두 가지 제시된다. 무엇과 무엇이며, 사용자
-      머릿속에 이미 자리 잡은 모델이 얼마나 쉽게 물러선다고 말하는가?
+      이 글은 어긋남을 푸는 방법 두 가지를 제시한다. 무엇과 무엇인가? 또
+      사용자 머릿속에 이미 자리 잡은 모델은 얼마나 쉽게 바뀐다고 말하는가?
 source:
   url: https://www.nngroup.com/articles/mental-models/
   attribution: >-

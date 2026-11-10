@@ -1,16 +1,16 @@
 ---
 name:
   en: Perceived clickability
-  ko: 지각된 클릭 가능성
+  ko: 클릭 가능성 인지
 objective:
   en: >-
     Find an element users would not realise is interactive, or one that looks
     interactive but is not — judging from how it looks at rest, before any
     hover or click.
   ko: >-
-    사용자가 상호작용할 수 있다는 걸 알아차리지 못할 요소, 혹은 상호작용할 수
-    있어 보이지만 실제로는 아닌 요소를, 마우스를 올리거나 누르기 전의 정지된
-    모습만으로 찾아낼 수 있다.
+    마우스를 올리거나 누르기 전의 모습만 보고, 누를 수 있는데도 사용자가
+    알아차리지 못할 요소나 누를 수 있어 보이지만 실제로는 눌리지 않는
+    요소를 찾아낼 수 있다.
 roleHint:
   developer:
     en: >-
@@ -31,7 +31,7 @@ preReadingQuestions:
       Before anyone touches a button, what does the article say its resting
       (enabled) state must communicate, and by what visual means?
     ko: >-
-      버튼에 손을 대기 전, 이 글은 기본(활성) 상태가 무엇을 알려야 하고 어떤
+      이 글은 사용자가 버튼을 누르기 전의 기본(활성) 상태가 무엇을, 어떤
       시각적 수단으로 알려야 한다고 말하는가?
   - en: >-
       The article walks through several button states. Which of them can a
@@ -43,8 +43,8 @@ preReadingQuestions:
       How should a disabled control look, so that it neither invites a click nor
       disappears from the page entirely?
     ko: >-
-      비활성 컨트롤은 클릭을 유도하지도 않고 페이지에서 아예 사라져 보이지도
-      않으려면 어떤 모습이어야 한다고 말하는가?
+      비활성 컨트롤이 클릭을 부르지도 않고 페이지에서 아예 사라져 보이지도
+      않으려면 어떤 모습이어야 하는가?
 source:
   url: https://www.nngroup.com/articles/button-states-communicate-interaction/
   attribution: >-

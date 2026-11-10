@@ -11,20 +11,21 @@ objective:
     usable by another, and what is examined here is the finding as written —
     not the feeling behind it, and not the interface it is about.
   ko: >-
-    다른 사람이 어떤 인터페이스를 점검하고 적어 놓은 발견을 두고 판단할 수
-    있다. 어떤 요소가 어떤 휴리스틱을 어긴 것인지 짚었는지, 그리고 제3자가
-    무슨 뜻이냐고 되묻지 않고도 그 발견을 확인할 수 있는지를 본다. 취향이
-    아니라 공개된 목록에 기대어 점검하는 것이 한 사람의 발견을 다른 사람도 쓸
-    수 있게 만들며, 여기서 살펴보는 대상은 적혀 있는 발견 그 자체다. 그 뒤에
-    있는 느낌도, 그 발견이 가리키는 인터페이스도 아니다.
+    다른 사람이 어떤 인터페이스를 점검하고 적어 놓은 발견이 제대로 쓰였는지
+    판단할 수 있다. 어떤 요소가 어떤 휴리스틱을 어긴 것인지 짚었는지,
+    그리고 제3자가 무슨 뜻이냐고 되묻지 않고도 그 발견을 확인할 수
+    있는지를 본다. 취향이 아니라 공개된 목록에 기대어 점검해야, 한 사람이 적은 발견을 다른 사람도 쓸 수 있다. 여기서 살펴보는 대상은 적혀 있는 발견
+    그 자체다. 그 뒤에 있는 느낌도, 그 발견이 가리키는 인터페이스도
+    아니다.
 roleHint:
   developer:
     en: >-
       Take the last review comment you left on somebody else's interface and
       ask whether a stranger could act on it with you out of the room.
     ko: >-
-      다른 사람의 인터페이스에 마지막으로 남긴 리뷰 코멘트를 꺼내, 내가 그
-      자리에 없어도 모르는 사람이 그 코멘트대로 움직일 수 있을지 따져 보세요.
+      다른 사람의 인터페이스에 마지막으로 남긴 리뷰 코멘트를 꺼내, 내가
+      옆에서 설명하지 않아도 처음 보는 사람이 그 코멘트만 보고 고칠 수
+      있을지 따져 보세요.
   pm:
     en: >-
       Take a piece of feedback you gave on a design and rewrite it naming the
@@ -33,29 +34,31 @@ roleHint:
       to act on it.
     ko: >-
       어떤 디자인에 남긴 피드백을, 어떤 요소가 어떤 휴리스틱을 어겼는지 짚는
-      문장으로 다시 써 보세요. 들어맞는 휴리스틱이 없다면 그것은 취향이었다는
-      뜻입니다. 그 피드백을 받아 움직여야 하는 사람에게 닿기 전에 알아 두면
-      좋은 사실입니다.
+      문장으로 다시 써 보세요. 들어맞는 휴리스틱이 없다면 그 피드백은
+      취향이었던 셈입니다. 그 피드백을 받아 고쳐야 하는 사람에게 넘기기 전에
+      알아 두는 편이 좋습니다.
 preReadingQuestions:
   - en: >-
       Evaluators are told to work alone, and not to see each other's results
       until their own is finished. What does the article say that separation
       protects?
     ko: >-
-      평가자들은 각자 따로 작업하고, 자기 평가가 끝나기 전에는 서로의 결과를
-      보지 말라고 안내된다. 이 분리는 무엇을 지키기 위한 것이라고 말하는가?
+      이 글은 평가자에게 각자 따로 작업하고, 자기 평가를 마치기 전에는
+      서로의 결과를 보지 말라고 한다. 이렇게 떼어 놓으면 무엇을 지킬 수
+      있다고 말하는가?
   - en: >-
       Before evaluating anything, the article has you go through the task once
       without evaluating. What is that first pass for?
     ko: >-
-      무엇을 평가하기도 전에, 이 글은 아무것도 평가하지 말고 과제를 한 번 그냥
-      통과해 보라고 한다. 그 첫 통과는 무엇을 위한 것인가?
+      이 글은 평가에 들어가기 전에, 평가는 접어 두고 과제를 처음부터 끝까지
+      한 번 해 보라고 한다. 이렇게 먼저 한 번 해 보는 것은 무엇을
+      위해서인가?
   - en: >-
       Findings from several evaluators are consolidated rather than simply
       stacked together. What does the article say that step is deciding?
     ko: >-
-      여러 평가자의 발견은 그저 쌓아 두는 것이 아니라 하나로 정리된다. 이 정리
-      단계에서 무엇을 정하는 것이라고 말하는가?
+      이 글은 여러 평가자의 발견을 그저 쌓아 두지 말고 하나로 정리하라고
+      한다. 이 정리 단계에서 무엇을 정한다고 말하는가?
 source:
   url: https://www.nngroup.com/articles/how-to-conduct-a-heuristic-evaluation/
   attribution: >-

@@ -95,7 +95,7 @@ const COPY: Record<
     verdictPassed: '통과',
     verdictFailed: '미통과',
     score: (score, of) => `${of}문항 중 ${score}문항을 맞혔습니다.`,
-    passedExplanation: '이 역량을 통과했습니다.',
+    passedExplanation: '이 역량을 마쳤습니다.',
     reviewNote: (missed, of) =>
       missed === 0
         ? `아래에서 ${of}문항 모두의 정답과 근거를 볼 수 있습니다.`
@@ -115,7 +115,7 @@ const COPY: Record<
     retry: '지금 다시 도전',
     backToLearn: '학습 개요로',
     backToCompetency: '이 역량 페이지로',
-    whatNow: '다음 단계',
+    whatNow: '이어서 할 일',
     article: '기사',
   },
 }

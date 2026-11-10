@@ -14,7 +14,7 @@ import { COINED, TRANSLATIONESE } from './korean'
  * anything a visitor can observe over HTTP yet.
  */
 
-const { config, competencies, glossary, briefs, items, specimen } = loadContent(join(__dirname, '..', 'content'))
+const { config, competencies, glossary, briefs, items, specimen, practicePages } = loadContent(join(__dirname, '..', 'content'))
 
 test('every Competency the curriculum declares is authored', () => {
   // This was Stage 1's list alone while the later Stages were declared and
@@ -195,7 +195,11 @@ function koreanContentStrings(): [string, string][] {
       }
     }
   }
-  walk({ competencies, glossary, briefs, items, specimen }, 'content')
+  // The Planted Defect explanations are included: the reveal shows them to
+  // the Learner after submission, so they are the platform's own voice even
+  // though they sit beside the specimen page (ERR-242).
+  const defects = practicePages.map((page) => page.defects)
+  walk({ competencies, glossary, briefs, items, specimen, defects }, 'content')
   return out
 }
 

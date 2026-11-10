@@ -11,12 +11,11 @@ objective:
     task that names the control to press, a question that tells the
     participant what to think, a group who already know how the thing works.
   ko: >-
-    이곳에서 일하지 않는 사람 앞에 인터페이스를 내놓기 위한 계획을 읽고, 그
-    계획이 인터페이스가 아니라 계획 자신에 대한 답을 내놓게 될 자리를 찾아낼
-    수 있다. 실제로 소리 내어 전달될 과제 문장, 그 과제를 부탁할 사람, 그리고
-    그 인원을 읽는다. 누를 컨트롤을 이름으로 알려 주는 과제, 참가자에게 무엇을
-    생각해야 하는지 일러 주는 물음, 이미 작동 방식을 아는 사람들로 채워진
-    명단을 찾아낸다.
+    회사 밖 사람에게 인터페이스를 써 보게 하는 계획을 읽고, 그
+    계획대로라면 결과가 인터페이스가 아니라 계획의 허점을 보여 주게 될
+    자리를 찾아낼 수 있다. 계획에서 볼 것은 세 가지다. 실제로 소리 내어 전달될 과제 문장, 그 과제를 부탁할 사람, 그리고 그 인원이다. 누를 컨트롤을 이름으로 알려
+    주는 과제, 참가자에게 무엇을 생각해야 하는지 일러 주는 물음, 이미
+    작동 방식을 아는 사람들로 채워진 명단을 찾아낸다.
 roleHint:
   developer:
     en: >-
@@ -35,16 +34,16 @@ roleHint:
       them is usually a courtesy.
     ko: >-
       디자인을 두고 고객에게 던진 물음("이거 명확한가요?")을 평가할 거리가
-      아니라 해 볼 거리로 바꿔 써 보세요. 사람이 무엇을 하는지는 증거이고, 보여
-      준 화면을 두고 무어라 말해 주는지는 대개 예의입니다.
+      아니라 해 볼 거리로 바꿔 써 보세요. 사람이 무엇을 하는지는 증거이고,
+      보여 준 화면을 두고 하는 말은 대개 예의상 하는 말입니다.
 preReadingQuestions:
   - en: >-
       Three elements are named as what a usability study is made of. What are
       they, and what does the article require of each for the result to mean
       anything?
     ko: >-
-      사용성 조사를 이루는 세 가지 요소가 제시된다. 무엇과 무엇과 무엇이며,
-      결과가 뜻을 가지려면 각각이 어떠해야 한다고 말하는가?
+      이 글은 사용성 조사를 이루는 요소 세 가지를 든다. 각각 무엇이며,
+      결과가 의미 있으려면 각 요소가 어떠해야 한다고 말하는가?
   - en: >-
       The article warns that the person running the session can change the
       result without meaning to. Where does it say that influence gets in?
@@ -55,7 +54,7 @@ preReadingQuestions:
       A number of participants is recommended, but only for one kind of study.
       What is the number, and which kind of study is it for?
     ko: >-
-      권장 참가자 수가 제시되지만, 그것은 한 가지 종류의 조사에만 해당한다.
+      이 글이 권장하는 참가자 수는 한 가지 조사에만 해당한다.
       그 수는 몇이며, 어떤 종류의 조사를 위한 수인가?
 source:
   url: https://www.nngroup.com/articles/usability-testing-101/

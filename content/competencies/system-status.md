@@ -10,10 +10,11 @@ objective:
     belongs here; an action that fails and says the wrong thing is error
     handling.
   ko: >-
-    인터페이스를 직접 조작해 보면서, 사용자를 깜깜한 상태로 두는 순간을 찾아낼
-    수 있다. 그런 순간은 눌러도 아무 반응이 없는 동작, 아무 신호 없이 흘러가는
-    대기 시간, 말없이 바뀌어 버린 상태다. 실패하고도 아무 말이 없는 동작은
-    여기에 속하고, 실패했다고 말은 하되 잘못 말하는 동작은 오류 처리의 몫이다.
+    인터페이스를 직접 조작해 보면서, 사용자가 지금 무슨 일이 일어나는지 알
+    수 없게 되는 순간을 찾아낼 수 있다. 그런 순간은 눌러도 아무 반응이
+    없는 동작, 아무 신호 없이 흘러가는 대기 시간, 말없이 바뀌어 버린
+    상태다. 실패하고도 아무 말이 없는 동작은 여기에 속하고, 실패했다고
+    말은 하되 잘못 말하는 동작은 오류 처리의 몫이다.
 roleHint:
   developer:
     en: >-
@@ -42,8 +43,9 @@ preReadingQuestions:
       Feedback is described as needing to be appropriate, not merely present.
       What makes a piece of feedback the wrong size for the action it answers?
     ko: >-
-      피드백은 있기만 하면 되는 것이 아니라 알맞아야 한다고 말한다. 어떤
-      피드백이 그 동작에 견주어 너무 크거나 너무 작다고 할 수 있는가?
+      이 글은 피드백이 있기만 해서는 안 되고 알맞아야 한다고 말한다.
+      피드백이 그 동작에 비해 너무 크거나 너무 작다고 판단하는 기준은
+      무엇인가?
   - en: >-
       Which of the situations the article describes could you spot in a
       screenshot, and which only appear once you operate the thing yourself?

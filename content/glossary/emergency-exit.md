@@ -9,9 +9,10 @@ definition:
     does not require finishing what they started. Every step needs one, and it
     has to be findable from inside the step rather than remembered from outside.
   ko: >-
-    들어올 생각이 없었던 상태에서 빠져나가는, 분명히 표시된 길. 시작한 일을 끝내야
-    나갈 수 있어서는 안 된다. 모든 단계에 하나씩 필요하고, 밖에서 외워 온 것이
-    아니라 그 단계 안에서 눈에 띄어야 한다.
+    들어올 생각이 없었던 상태에서 빠져나갈 수 있도록 분명히 표시해 둔 길.
+    시작한 일을 끝내야 나갈 수 있어서는 안 된다. 모든 단계에 하나씩
+    필요하고, 밖에서 미리 알고 있어야 하는 것이 아니라 그 단계 안에서
+    찾을 수 있어야 한다.
 justification:
   en: >-
     Once in [step], the only way out is [finishing it / the browser's back

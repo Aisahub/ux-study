@@ -10,11 +10,11 @@ objective:
     answer after something goes wrong — the cost of the path where nothing goes
     wrong is form burden.
   ko: >-
-    일부러 실수를 저질러 보고, 인터페이스가 그에 어떻게 답하는지 판단할 수
-    있다. 메시지가 언제 나타났는지, 다음에 무엇을 하라고 알려 주는지,
-    인터페이스가 허용해 놓고선 그 책임을 사용자에게 돌리지는 않는지를 본다.
-    여기서 다루는 것은 무언가 잘못됐을 때의 답변이다. 아무것도 잘못되지 않은
-    길에서 치르는 비용은 폼 부담의 몫이다.
+    일부러 실수를 해 보고 인터페이스가 어떻게 반응하는지 판단할 수 있다.
+    메시지가 언제 나타났는지, 다음에 무엇을 하라고 알려 주는지,
+    인터페이스가 막지 않은 실수를 사용자 탓으로 돌리지는 않는지를 본다.
+    여기서 다루는 것은 무언가 잘못됐을 때 인터페이스가 보이는 반응이다.
+    아무 문제 없이 끝까지 갈 때 치르는 비용은 폼 부담에서 다룬다.
 roleHint:
   developer:
     en: >-
@@ -22,9 +22,8 @@ roleHint:
       wrong — read the two answers as a first-time user would, not as the
       person who wrote the validator.
     ko: >-
-      직접 만든 폼을 비운 채로 한 번, 한 필드만 틀리게 채워서 한 번 제출해
-      보세요. 검증 코드를 쓴 사람이 아니라 처음 온 사용자의 눈으로 두 답변을
-      읽어 보세요.
+      직접 만든 폼을 비운 채로 한 번, 한 칸만 틀리게 채워서 한 번 제출해
+      보세요. 돌아온 두 메시지를 검증 코드를 쓴 사람이 아니라 처음 온 사용자의 눈으로 읽어 보세요.
   pm:
     en: >-
       In a flow you signed off, do the likeliest wrong thing a real customer
@@ -32,7 +31,7 @@ roleHint:
       them moving again.
     ko: >-
       승인한 플로우에서 실제 고객이 가장 저지르기 쉬운 실수를 그대로 해 보고,
-      돌아온 메시지만으로 다시 앞으로 나아갈 수 있을지 따져 보세요.
+      돌아온 메시지만 보고도 고객이 다음 단계로 넘어갈 수 있을지 따져 보세요.
 preReadingQuestions:
   - en: >-
       The guidelines separate whether a message is noticed from what it says.
@@ -44,14 +43,14 @@ preReadingQuestions:
       A message can be accurate and still leave the user stuck. What does the
       article say a message has to carry beyond naming the problem?
     ko: >-
-      정확한 메시지인데도 사용자가 그 자리에 갇힐 수 있다. 문제를 짚는 것 말고
-      메시지가 무엇을 더 담아야 한다고 말하는가?
+      정확한 메시지인데도 사용자가 그 자리에 갇힐 수 있다. 이 글은 메시지가
+      문제를 짚는 것 말고 무엇을 더 담아야 한다고 말하는가?
   - en: >-
       Timing gets its own treatment. When is a message early enough to help and
       when is it early enough to interrupt?
     ko: >-
-      시점 역시 따로 다루어진다. 메시지는 언제 나와야 도움이 되고, 언제부터는
-      방해가 되는가?
+      이 글은 시점도 따로 다룬다. 메시지가 얼마나 일찍 나와야 도움이 되고,
+      얼마나 일찍 나오면 오히려 방해가 되는가?
 source:
   url: https://www.nngroup.com/articles/error-message-guidelines/
   attribution: >-

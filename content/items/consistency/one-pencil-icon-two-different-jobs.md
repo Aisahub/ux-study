@@ -12,11 +12,12 @@ artefact:
     freehand annotation. Both pencils are the identical glyph at the same
     size, with no label on either.
   ko: >-
-    문서 도구의 화면 두 개를 함께 보여 줍니다. 문서 목록에서는 행마다 끝에
-    연필 아이콘이 있고, 누르면 문서 이름을 바꿉니다. 같은 연필이 보드
-    목록에서는 보드 이름을, 연락처 목록에서는 연락처 이름을 바꿉니다. 두 번째
-    화면에는 문서가 열려 있고, 상단 도구 막대에 같은 연필 아이콘이 있는데, 거기서는 누르면 손으로 자유롭게 그리는 주석 도구로 바뀝니다. 두 연필 모두 같은
-    크기의 똑같은 모양이고, 어느 쪽에도 글자 레이블은 없습니다.
+    문서 도구의 화면 두 개를 함께 보여 줍니다. 문서 목록에서는 행마다
+    끝에 연필 아이콘이 있고, 누르면 문서 이름을 바꿉니다. 같은 연필이
+    보드 목록에서는 보드 이름을, 연락처 목록에서는 연락처 이름을 바꿉니다.
+    두 번째 화면에는 문서가 열려 있고, 상단 도구 막대에 같은 연필
+    아이콘이 있는데, 거기서 누르면 그리기 도구가 켜져 주석을 손으로 자유롭게 그릴 수 있습니다. 두 연필 모두 같은 크기의 똑같은 모양이고, 어느 쪽에도 글자
+    레이블은 없습니다.
 screen:
   en: |-
     <div class="split">
@@ -74,7 +75,8 @@ prompt:
   en: >-
     One glyph is carrying two meanings. Which meaning should the pencil keep?
   ko: >-
-    아이콘 하나가 두 가지 뜻으로 쓰이고 있습니다. 연필 아이콘은 어느 뜻으로 남겨야 할까요?
+    아이콘 하나가 두 가지 뜻으로 쓰이고 있습니다. 연필 아이콘은 어느
+    뜻으로 남겨야 할까요?
 options:
   en:
     - text: Keep the pencil for "rename" and give the drawing tool a different glyph

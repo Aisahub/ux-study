@@ -9,9 +9,10 @@ definition:
     put it — never the steps for accomplishing it. A task that names the control
     to press has already answered the thing the session was meant to find out.
   ko: >-
-    참가자가 처한 상황이라면 그렇게 말했을 법한 방식으로 적힌, 이루어야 할 일.
-    그것을 이루는 절차가 아니다. 어떤 컨트롤을 누르라고 이름을 대는 과제는,
-    그 자리에서 알아내려던 것을 이미 스스로 답해 버린 과제다.
+    참가자가 이루어야 할 일을, 참가자 자신의 상황에서 나올 법한 말로 적은
+    것. 그 일을 이루는 절차를 적은 것이 아니다. 어떤 컨트롤을 누르라고
+    이름을 대는 과제는, 그 자리에서 알아내려던 것을 이미 스스로 답해 버린
+    과제다.
 justification:
   en: >-
     This task tells the participant to press [control], so all it can tell us is
