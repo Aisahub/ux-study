@@ -12,7 +12,7 @@ artefact:
     their screen, and answer three written questions at the end. No facilitator
     — it lets us run 20 instead of 5 for the same money, next week."
   ko: >-
-    학교 급식비 결제 포털의 한 장짜리 연구 계획서입니다. "질문" 항목에는
+    자녀용 교통카드 충전 앱의 한 장짜리 연구 계획서입니다. "질문" 항목에는
     이렇게 적혀 있습니다. "학부모들이 자녀 계정에 금액을 충전하면서도 셋 중
     하나는 자동 충전을 끝내 설정하지 않는다. 거의 모두가 더는 신경 쓰고 싶지 않다고
     말하는데도 그렇다. 왜 도중에 그만두는가?" "방법" 항목에는 이렇게 적혀

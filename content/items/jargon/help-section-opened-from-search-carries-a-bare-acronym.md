@@ -12,7 +12,7 @@ artefact:
     times, with nothing on the visible part of the page saying what the letters
     stand for. A note at the foot links to "Contact us".
   ko: >-
-    은행 고객센터 글의 한 부분입니다. "환불 언제 들어오나요"를 검색한 고객이 검색
+    간편결제 서비스 고객센터 글의 한 부분입니다. "환불 언제 들어오나요"를 검색한 고객이 검색
     결과를 눌러 들어왔는데, 글의 맨 위가 아니라 이 부분으로 곧장 연결됐습니다.
     경로 표시에는 "고객센터 › 결제 › 환불 소요 기간"이라고 적혀 있습니다.
     제목은 "환불에 걸리는 기간"이고, 그 아래 세 문장에서 "PG사"라는 말이 네 번
