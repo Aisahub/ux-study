@@ -41,7 +41,7 @@ screen:
     </div>
   ko: |-
     <div class="screen">
-      <h2>결제 흐름 평가 — 발견 목록</h2>
+      <h2>결제 플로우 평가 — 발견 목록</h2>
       <div class="scroller">
         <table class="table">
           <thead><tr><th>#</th><th>발견</th></tr></thead>
