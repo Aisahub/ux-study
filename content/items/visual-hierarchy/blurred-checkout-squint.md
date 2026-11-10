@@ -69,7 +69,7 @@ screen:
       <div>
         <p class="pane-label">선명</p>
         <div class="screen">
-          <div class="banner banner--navy">4만원 이상 무료배송</div>
+          <div class="banner banner--navy">4만 원 이상 무료배송</div>
           <div class="split" style="margin-top:12px">
             <div>
               <p class="muted" style="margin:0 0 6px">주문 내역</p>
@@ -90,7 +90,7 @@ screen:
       <div>
         <p class="pane-label">흐림</p>
         <div class="screen blur">
-          <div class="banner banner--navy">4만원 이상 무료배송</div>
+          <div class="banner banner--navy">4만 원 이상 무료배송</div>
           <div class="split" style="margin-top:12px">
             <div>
               <p class="muted" style="margin:0 0 6px">주문 내역</p>
