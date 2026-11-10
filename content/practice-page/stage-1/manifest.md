@@ -55,10 +55,10 @@ defects:
         spacing. Each label needs to sit close to its own field and clearly
         apart from the previous one.
       ko: >-
-        배송 설정 폼에서 각 레이블이 자기 입력칸과는 멀고, 바로 위 입력칸에 딱
+        배송 설정 폼에서 각 레이블이 자기 칸과는 멀고, 바로 위 칸에 딱
         붙어 있습니다. 눈은 간격으로 소속을 판단하기 때문에 "연락처"는 담당자
         이름 칸의 설명처럼, "출고지 주소"는 연락처 칸의 설명처럼 읽힙니다.
-        마크업이 잘못 연결된 곳은 한 군데도 없습니다. 오직 간격만으로 그룹이 틀어진 것입니다. 레이블은 자기 입력칸에 가깝게 붙이고, 이전 칸과는 확실히
+        마크업이 잘못 연결된 곳은 한 군데도 없습니다. 오직 간격만으로 그룹이 틀어진 것입니다. 레이블은 자기 칸에 가깝게 붙이고, 이전 칸과는 확실히
         떨어뜨려야 합니다.
   - slug: help-text-wall
     element: shipping-help-text
