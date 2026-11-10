@@ -66,7 +66,7 @@ const COPY: Record<
     agree: '이 발견에 동의',
     agreeing: '기록 중…',
     agreed: '동의함',
-    ownFinding: '내가 쓴 발견입니다. 동의는 동료만 할 수 있습니다.',
+    ownFinding: '직접 쓰신 발견입니다. 동의는 동료만 할 수 있습니다.',
     back: '동료의 발견으로',
   },
 }
