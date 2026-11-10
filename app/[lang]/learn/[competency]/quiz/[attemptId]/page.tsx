@@ -94,15 +94,15 @@ const COPY: Record<
     pageTitle: (name) => `${name} 퀴즈`,
     verdictPassed: '통과',
     verdictFailed: '미통과',
-    score: (score, of) => `${of}문항 중 ${score}문항 정답.`,
+    score: (score, of) => `${of}문항 중 ${score}문항을 맞혔습니다.`,
     passedExplanation: '이 역량을 통과했습니다.',
     reviewNote: (missed, of) =>
       missed === 0
-        ? `${of}문항 모두 아래에 정답과 그 근거가 있습니다.`
-        : `${missed}문항은 틀렸습니다. ${of}문항 모두 아래에 정답과 그 근거가 있습니다.`,
+        ? `아래에서 ${of}문항 모두의 정답과 근거를 볼 수 있습니다.`
+        : `${missed}문항은 틀렸습니다. 아래에서 ${of}문항 모두의 정답과 근거를 볼 수 있습니다.`,
     summaryHeading: '핵심 요약',
     failedExplanation:
-      '아래는 틀린 문항과, 기사에서 그 내용을 다루는 위치입니다. 정답은 공개하지 않습니다. 다시 읽고, 새로 뽑힌 문항으로 도전하세요.',
+      '아래에 틀린 문항과, 기사에서 각 문항을 다루는 부분을 모았습니다. 정답은 알려 드리지 않습니다. 그 부분을 다시 읽은 뒤 새 문항으로 도전해 보세요.',
     reviewHeading: '문항별 정답과 해설',
     wrongHeading: '다시 볼 문항',
     itemCorrect: '맞힘',
@@ -110,12 +110,12 @@ const COPY: Record<
     yourChoice: '고른 답',
     noChoice: '이 문항에는 답하지 않았습니다.',
     keyedAnswer: '정답',
-    coveredIn: '다루는 절',
+    coveredIn: '기사에서 다루는 부분',
     opensNewTab: '새 탭에서 열림',
     retry: '지금 다시 도전',
     backToLearn: '학습 개요로',
     backToCompetency: '이 역량 페이지로',
-    whatNow: '다음으로',
+    whatNow: '다음 단계',
     article: '기사',
   },
 }

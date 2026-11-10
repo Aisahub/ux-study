@@ -91,7 +91,7 @@ export const COPY: Record<Language, Copy> = {
     heading: '콘텐츠 상태',
     // `시도 기록`, one noun, the way every other screen says it. `시도와 보고서
     // 기록` left the reader deciding whether `기록` reached back over `시도`.
-    explanation: '모든 수치는 페이지를 열 때 시도 기록과 제출된 보고서에서 계산하며, 따로 저장하지 않습니다.',
+    explanation: '모든 수치는 페이지를 열 때 시도 기록과 제출된 리포트에서 계산하며, 따로 저장하지 않습니다.',
     itemsPanel: '문항',
     defectsPanel: '심어둔 결함',
     itemsHeading: '문항별 정답률',
@@ -104,8 +104,8 @@ export const COPY: Record<Language, Copy> = {
     stage: (n) => `${n}단계`,
     // `문항 풀` + the subject marker renders as `문항 풀이`, which a Korean reader
     // meets first as `문항 풀이`, a worked solution, and has to back out of.
-    notAuthored: '아직 문항 풀을 작성하지 않았습니다',
-    noSubject: '아직 점검할 페이지가 작성되지 않았습니다',
+    notAuthored: '아직 문항 풀 없음',
+    noSubject: '아직 연습 페이지 없음',
     // `출제 5회 중` rather than `5회 출제 중`: `출제` is a verbal noun, so the `중`
     // behind it reads as "currently being set" before it reads as "out of".
     // The other Maintainer screen already closes the quantity first:
@@ -126,7 +126,7 @@ export const COPY: Record<Language, Copy> = {
     // cannot 비교가 되다 in Korean, and an address is not a team; it is what
     // sorts a report into one.
     defectsExplanation:
-      '제출된 보고서를 기준으로, 각 결함을 몇 명이 발견했는지 표시합니다. 두 팀이 완전히 같은 페이지를 점검하므로 팀별 수치를 같은 조건에서 비교할 수 있습니다. Workspace 주소를 쓰면 한국팀, 개인 주소를 쓰면 인도네시아팀으로 집계합니다.',
+      '제출된 리포트를 기준으로, 각 결함을 몇 명이 발견했는지 표시합니다. 두 팀이 완전히 같은 페이지를 점검하므로 팀별 수치를 같은 조건에서 비교할 수 있습니다. Workspace 주소를 쓰면 한국팀, 개인 주소를 쓰면 인도네시아팀으로 집계합니다.',
     // The column the two beside it add up to.
     all: '전체',
     // The English column says `Korea`, and a bare `한국` beside a number would
@@ -142,6 +142,6 @@ export const COPY: Record<Language, Copy> = {
     submitted: (reports) => `제출 ${reports}명`,
     finders: (found) => `${found}명`,
     noReportsHere: '아직 제출 없음',
-    noReports: '제출된 보고서가 아직 없습니다.',
+    noReports: '제출된 리포트가 아직 없습니다.',
   },
 }

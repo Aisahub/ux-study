@@ -51,7 +51,7 @@ const COPY: Record<
   ko: {
     pageTitle: '발견',
     stage: (n) => `${n}단계`,
-    by: '작성',
+    by: '작성자',
     principle: 'UX 원칙',
     // Reading-surface spellings (ERR-237): noun phrases that stand alone as
     // headings, where the prompt clause of the drawer (`-는지`) cannot, and
@@ -62,12 +62,12 @@ const COPY: Record<
     // by quote pairing, and either mark breaks their frame.)
     description: '잘못된 점',
     fix: '고치는 방법',
-    agreementCount: (n) => `동료 ${n}명이 동의했습니다`,
-    agree: '이 발견에 동의합니다',
-    agreeing: '기록하는 중…',
-    agreed: '동의했습니다',
-    ownFinding: '본인이 작성한 발견입니다. 동의는 동료만 할 수 있습니다.',
-    back: '전체 발견',
+    agreementCount: (n) => (n === 0 ? '아직 동의한 동료 없음' : `동료 ${n}명 동의`),
+    agree: '이 발견에 동의',
+    agreeing: '기록 중…',
+    agreed: '동의함',
+    ownFinding: '내가 쓴 발견입니다. 동의는 동료만 할 수 있습니다.',
+    back: '동료의 발견으로',
   },
 }
 

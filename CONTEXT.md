@@ -14,7 +14,7 @@ _Avoid_: student, user, trainee
 The member of staff who keeps the programme running: the access allowlist, the Practice Page, the content, and the watch on defective Quiz Items. Distinguished from a Learner by a flag on their allowlist entry, not by a role hierarchy. **Judges nothing** — no assessment in this programme has a human verdict. Renamed from "Reviewer" by ADR-0007, which removed the only thing that role reviewed.
 _Avoid_: reviewer, admin, grader, instructor, teacher
 
-**Competency** (능력점 / 能力点):
+**Competency** (역량 / 能力点):
 One UX ability a Learner is expected to acquire, small enough to be assessed on its own. Stated as an observable action ("can find and fix X"), never as knowledge held. Learner-facing copy names a Competency's position in its Stage **Lesson N (레슨 N)** — amended 2026-08-03, when the Korean word that stood there, "역", turned out to read as an abbreviation of 역량 on a screen that also says 전체 역량 보기. "Lesson" stays out of this document's own vocabulary and out of every other surface: it names a place in the route, not the ability.
 _Avoid_: knowledge point, chapter, module, topic
 
@@ -44,7 +44,7 @@ _Avoid_: question, MCQ, problem
 The full set of Quiz Items authored for one Competency, larger than the number any single attempt presents. It exists so that a Learner who retries is tested on the Competency rather than on the items they already saw. Sized by the retry rules in ADR-0006, not by how much there is to ask about.
 _Avoid_: question bank, item set
 
-**Attempt** (응시 / 作答):
+**Attempt** (시도 / 作答):
 One pass through a Gate Quiz by one Learner. Records which items were drawn, what was selected for each, and the verdict. Attempts are never overwritten — a retry is a new Attempt, and the count of them is visible to a Maintainer.
 _Avoid_: try, submission, run
 
@@ -76,7 +76,7 @@ _Avoid_: bug, seeded error, answer key (reserve "answer key" for Gate Quiz scori
 One Learner reading another Learner's submitted Self-Audit Report, and marking agreement with individual Findings. Available from Stage 3 onward, once the reader has submitted their own report. What it offers is exposure to how another head framed the same page — never a judgement about whether a Finding is real, which the Planted Defect manifest answers. It gates nothing: a Learner with nobody else at their Stage reaches Completion with nothing missing, because the outsider's work they are assessed on is an authored specimen report rather than a colleague's. Redefined by ADR-0011, which removed the claim that this is the Competency itself.
 _Avoid_: cross-check, buddy review, marking
 
-**Completion** (결업 / 结业):
+**Completion** (수료 / 结业):
 The state a Learner reaches after passing every Gate Quiz and **submitting** a complete Self-Audit Report for each Stage. Submission, not approval — since ADR-0007 no assessment carries a human verdict, and a Report is complete when it is well-formed, not when someone agrees with it.
 _Avoid_: graduation, certification, done
 
@@ -148,6 +148,29 @@ A Principle's justification sentence is said out loud with a `[slot]` filled in,
 so no slot may be followed by a particle that agrees with the word filling it
 (을/를, 은/는, 이/가, 와/과, 으로/로). Put a fixed noun after the slot, or let
 the clause end on a copula. The content build refuses the rest. See ERR-214.
+
+### Translationese
+
+Every Korean string here was written beside an English one, so the usual
+failure is not wrong Korean but correct Korean no Korean writer would have
+produced: English sentence structure carried across, or the stock phrases of
+machine-written marketing copy. The constructions below are refused by the
+suite in the chrome and in every Learner-facing content field (screens are
+exempt; their copy is the specimen). Each has a rewrite that is always better:
+
+- `에 의해`: name the actor as the subject. `관리자에 의해 삭제됨` → `관리자가 삭제함`.
+- `되어지다`: a doubled passive. `표시되어집니다` → `표시됩니다`.
+- `것이 가능하다`: `할 수 있다`.
+- `가지고 있다` for possession: `있다`, or the verb the English hid.
+  `값을 가지고 있었다` → `값이 들어와 있었다`.
+- `원활`, `효과적으로`, `다양한`, `손쉽게`, `간편하게`, `최적화된`,
+  `완벽하게`: praise the copy gives itself. Say what happens instead.
+
+The check is short on purpose. `에 대해`, `을 통해` and `할 수 있습니다` are
+lawful Korean and a substring ban would fail correct copy (ERR-229), so they
+are left to review: any change to Korean copy is read by the
+`korean-naturalness` agent (`.claude/agents/`) before its pull request opens,
+and its high and medium findings are fixed in the same change.
 
 ### Punctuation on a Korean screen
 

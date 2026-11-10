@@ -25,10 +25,10 @@ intro:
     where it works against the person using it, and write down what you find.
     There is no time limit and nothing is watching how long you take.
   ko: >-
-    지금부터 보는 페이지는, 언젠가 동료가 여러분이 만든 페이지를 보게 될 방식
-    그대로 봅니다. 옆에서 의도를 설명해 줄 작성자 없이요. 페이지를 살펴보고,
-    어디가 사용자를 방해하는지 판단하고, 발견한 것을 기록하세요. 제한 시간은
-    없고, 얼마나 걸리는지 아무도 재지 않습니다.
+    언젠가 동료가 여러분이 만든 페이지를 볼 때처럼 이 페이지를 봐 주세요.
+    옆에서 의도를 설명해 줄 작성자는 없습니다. 페이지를 살펴보고, 어디가
+    사용하는 사람을 방해하는지 판단한 뒤, 발견한 것을 기록해 주세요. 제한
+    시간은 없고, 얼마나 걸리는지 아무도 재지 않습니다.
 whatCounts:
   en: >-
     A complete submission carries at least three Findings. Each Finding has
@@ -38,13 +38,12 @@ whatCounts:
     and a proposed fix. All four parts are required for every Finding, and no
     two Findings may point at the same element.
   ko: >-
-    제출이 완결로 인정되려면 발견이 세 개 이상 있어야 합니다. 발견 하나는 네
-    부분으로 이루어집니다. 문제의 요소, 그 요소가 어기고 있는 UX 원칙,
-    페이지를 사용하는 사람에게 무엇이 잘못되는지 적은 설명, 고치는 방법
-    제안입니다. 요소는 말로 설명하지 않고 페이지에서 직접 가리켜 고르고,
-    원칙은 용어집에서 고릅니다. 네 부분 모두 모든 발견에 필수이며, 두 발견이
-    같은 요소를 가리킬
-    수 없습니다.
+    제출하려면 발견이 세 개 이상 있어야 합니다. 발견 하나는 네 부분으로
+    이루어집니다. 문제의 요소, 그 요소가 어기는 UX 원칙, 페이지를
+    사용하는 사람이 겪는 문제를 적은 설명, 고치는 방법 제안입니다. 요소는
+    말로 설명하지 않고 페이지에서 직접 가리켜 고르고, 원칙은 용어집에서
+    고릅니다. 발견마다 네 부분을 모두 채워야 하며, 한 요소를 두 발견이
+    함께 가리킬 수는 없습니다.
 advice:
   en: >-
     Write the description for the person using the page, not for us: what goes
@@ -54,11 +53,12 @@ advice:
     it you found; submission is final, so look until you are satisfied before
     you press it.
   ko: >-
-    설명은 우리가 읽으라고 쓰는 것이 아니라, 그 페이지를 사용하는 사람이
-    읽으라고 쓰세요. 그 사람에게 무엇이, 언제 잘못되는지 말입니다. 고치는
-    방법은 기발할 필요가 없습니다. 문제를 없애는 가장 작은 변경이 가장 좋은 답입니다.
-    제출하면 페이지에 심어 둔 모든 것과 그중 무엇을 찾았는지 곧바로 보게
-    됩니다. 제출은 한 번뿐이니, 충분히 봤다고 확신할 때 누르세요.
+    설명은 우리 입장이 아니라 그 페이지를 사용하는 사람의 입장에서 써
+    주세요. 그 사람이 언제, 무엇 때문에 막히는지를 적으면 됩니다. 고치는
+    방법은 기발할 필요가 없습니다. 문제를 없애는 가장 작은 변경이 가장
+    좋은 답입니다. 제출하면 페이지에 심어둔 결함 전체와 그중 무엇을
+    찾았는지 바로 보입니다. 제출은 한 번뿐이니, 충분히 살펴봤다는 확신이
+    들 때 제출 버튼을 눌러 주세요.
 optionalFix:
   en: >-
     Optional, after submitting: pick one of your Findings and actually fix it,
@@ -67,9 +67,10 @@ optionalFix:
     entirely sufficient — this step is about seeing your fix exist, not about
     tooling. It does not affect completion either way.
   ko: >-
-    제출 후 선택 사항: 작성한 발견 중 하나를 골라 실제로 고쳐 보고, 그 변경을
-    보여 주는 링크를 첨부하세요. 코드를 쓴다면 pull request나 commit이면 되고,
-    그렇지 않다면 고쳐진 페이지의 스크린샷으로 충분합니다. 이 단계의 목적은
-    자신의 수정이 실재하는 걸 보는 것이지, 도구를 다루는 것이 아닙니다. 첨부
-    여부는 수료에 어떤 영향도 주지 않습니다.
+    제출 후 선택 사항: 작성한 발견 중 하나를 골라 실제로 고쳐 보고,
+    바뀐 결과를 보여 주는 링크를 첨부해 주세요. 코드를 쓴다면 pull
+    request나 commit이면 되고, 그렇지 않다면 고친 페이지의
+    스크린샷으로 충분합니다. 이 과정의 목적은 내가 고친 결과를 직접
+    확인하는 것이지, 도구를 익히는 것이 아닙니다. 첨부 여부는 수료에
+    영향을 주지 않습니다.
 ---

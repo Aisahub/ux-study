@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { expect, test } from 'vitest'
 
 import { loadContent } from '../lib/content'
+import { TRANSLATIONESE } from './korean'
 
 /**
  * Stage 1 authoring rules for the Competency definitions (#14) — what the spec
@@ -231,6 +232,27 @@ test('Korean screen copy uses neither 줄표 nor 낫표', () => {
   }
 
   expect(found).toEqual([])
+})
+
+test('Korean copy carries none of the constructions CONTEXT.md names as translationese', () => {
+  const found: string[] = []
+  const check = (where: string, text: string) => {
+    for (const [pattern, name] of TRANSLATIONESE) {
+      const hit = text.match(pattern)
+      if (hit) found.push(`${where}: ${name} in …${text.slice(Math.max(0, hit.index! - 15), hit.index! + 20)}…`)
+    }
+  }
+  for (const [where, text] of koreanContentStrings()) check(where, text)
+  for (const path of sources(join(__dirname, '..', 'app'))) {
+    for (const text of koreanCopy(readFileSync(path, 'utf8'))) check(path, text)
+  }
+  expect(found).toEqual([])
+})
+
+test('every construction the translationese check bans is written in CONTEXT.md', () => {
+  const context = readFileSync(join(__dirname, '..', 'CONTEXT.md'), 'utf8')
+  const section = context.split('### Translationese')[1]?.split('\n## ')[0] ?? ''
+  expect(TRANSLATIONESE.map(([, name]) => name).filter((name) => !section.includes(`\`${name}\``))).toEqual([])
 })
 
 test('a borrowed noun takes the particle its final consonant calls for', () => {

@@ -27,16 +27,16 @@ const COPY: Record<
       'Everything you have written down, kept under the Competency you wrote it against and in the order the programme runs. Yours alone — no colleague and no Maintainer reads these, nothing here is counted, and nothing here decides anything.',
     openLesson: 'Open the Competency',
     empty:
-      'Nothing written down yet. Every Competency page has a place to keep what you take from it, between the article and the Gate Quiz.',
+      'Nothing written down yet. Every Competency page has a Your notes tab for what you take from it.',
     count: (n) => (n === 1 ? '1 note' : `${n} notes`),
   },
   ko: {
     heading: '내 메모',
     explanation:
-      '지금까지 작성한 메모 전체입니다. 메모를 작성한 역량별로, 프로그램 진행 순서에 따라 정렬됩니다. 본인만 볼 수 있으며, 동료와 운영자에게 공개되지 않고 어떤 평가에도 반영되지 않습니다.',
+      '지금까지 쓴 메모를 역량별로 묶어 프로그램 순서대로 모았습니다. 나만 볼 수 있습니다. 동료나 운영자에게는 보이지 않고, 어떤 평가에도 반영되지 않습니다.',
     openLesson: '역량 페이지 열기',
     empty:
-      '아직 작성한 메모가 없습니다. 각 역량 페이지의 원문 기사와 퀴즈 사이에 메모를 남기는 칸이 있습니다.',
+      '아직 쓴 메모가 없습니다. 각 역량 페이지의 내 메모 탭에서 메모를 남길 수 있습니다.',
     count: (n) => `메모 ${n}개`,
   },
 }

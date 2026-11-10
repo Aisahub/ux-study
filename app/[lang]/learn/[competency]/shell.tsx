@@ -58,7 +58,7 @@ const COPY: Record<
     status: { unstarted: '시작 전', 'in-progress': '진행 중', passed: '통과' },
     attempts: (n) => `${n}회 시도`,
     panels: '이 역량',
-    competency: '역량',
+    competency: '학습 내용',
     notes: '내 메모',
   },
 }

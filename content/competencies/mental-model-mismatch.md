@@ -58,8 +58,8 @@ preReadingQuestions:
       Two ways out of a mismatch are offered. What are they, and what does the
       article say about how readily a model the user already holds gives way?
     ko: >-
-      어긋남에서 빠져나오는 길이 두 가지 제시된다. 무엇과 무엇이며, 사용자가
-      이미 가지고 있는 모델이 얼마나 쉽게 물러선다고 말하는가?
+      어긋남에서 빠져나오는 길이 두 가지 제시된다. 무엇과 무엇이며, 사용자
+      머릿속에 이미 자리 잡은 모델이 얼마나 쉽게 물러선다고 말하는가?
 source:
   url: https://www.nngroup.com/articles/mental-models/
   attribution: >-

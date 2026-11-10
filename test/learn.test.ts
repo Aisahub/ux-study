@@ -258,7 +258,7 @@ test('being watched is stated before any first attempt, in both languages (#30)'
   // screen copy, and an assertion on the sentence went red for a page that
   // still said everything it had to.
   expect(ko).toContain('어느 단계까지 수료했는지')
-  expect(ko).toContain('마지막 활동이 얼마나 지났는지')
+  expect(ko).toContain('마지막 활동 후 얼마나 지났는지')
   expect(ko).toContain('몇 번 시도했는지')
 })
 

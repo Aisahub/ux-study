@@ -215,7 +215,7 @@ test("the Stage 2 audit reads Stage 2's brief, in both languages", async () => {
   // Asserted in Korean too, because a suite that exercises one language does
   // not know whether the other is there.
   const ko = visibleText(await (await fetch(`${BASE_URL}/ko/audit/2`, { headers: { cookie } })).text())
-  expect(ko).toContain('연습 흐름 점검하기')
+  expect(ko).toContain('연습 플로우 점검하기')
   expect(ko).not.toContain('연습 페이지 점검하기')
 })
 

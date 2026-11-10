@@ -42,11 +42,11 @@ const COPY: Record<
   ko: {
     heading: '내 메모',
     explanation:
-      '이 역량에서 남겨 두고 싶은 내용을 기록하는 공간입니다. 기사에서 얻은 한 줄, 그 말이 그대로 들어맞는 우리 제품 화면, 리뷰에서 활용할 문장 등을 적을 수 있습니다. 본인만 볼 수 있으며, 동료와 운영자에게 공개되지 않고 어디에도 반영되지 않습니다.',
+      '이 역량에서 남겨 두고 싶은 내용을 적는 곳입니다. 기사에서 얻은 한 줄, 그 말이 들어맞는 우리 제품 화면, 리뷰에서 쓸 문장 같은 것을 적을 수 있습니다. 나만 볼 수 있습니다. 동료나 운영자에게는 보이지 않고, 어떤 평가에도 반영되지 않습니다.',
     label: '새 메모',
-    placeholder: '이 역량에서 무엇을 얻으셨나요?',
+    placeholder: '이 역량에서 얻은 것을 적어 주세요',
     add: '메모 추가',
-    adding: '추가하는 중…',
+    adding: '추가 중…',
     empty: '이 역량에는 아직 메모가 없습니다.',
     saved: (n) => `메모 ${n}개`,
     all: '전체 메모 보기',
@@ -86,7 +86,7 @@ export async function generateMetadata({
   const { lang, competency: slug } = await params
   const language = isLanguage(lang) ? lang : 'en'
   const name = content.competencies.find((entry) => entry.slug === slug)?.name[language]
-  return name ? { title: `${COPY[language].heading} — ${name}` } : {}
+  return name ? { title: language === 'ko' ? `${name} 메모` : `${COPY[language].heading} — ${name}` } : {}
 }
 
 export default async function CompetencyNotes({

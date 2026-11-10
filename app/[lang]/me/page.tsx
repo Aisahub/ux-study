@@ -75,7 +75,7 @@ const COPY: Record<
     scoreLabel: '점수',
     notes: '메모',
     noteCount: (n) => `메모 ${n}개`,
-    notesNone: '아직 작성한 메모가 없습니다',
+    notesNone: '아직 메모 없음',
     allNotes: '전체 메모 보기',
   },
 }

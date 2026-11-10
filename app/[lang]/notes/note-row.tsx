@@ -18,7 +18,7 @@ const COPY: Record<
   },
   ko: {
     remove: '삭제',
-    removing: '삭제하는 중…',
+    removing: '삭제 중…',
     removeNote: (opening) => `메모 “${opening}” 삭제`,
   },
 }
