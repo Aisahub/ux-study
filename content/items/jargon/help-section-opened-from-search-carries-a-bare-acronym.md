@@ -45,7 +45,7 @@ prompt:
     Which change should this section make?
   ko: >-
     이 고객들은 쇼핑몰의 환불 안내나 상담에서도 같은 말을 다시 마주치게 됩니다. 이
-    단락은 무엇을 바꿔야 할까요?
+    부분은 무엇을 바꿔야 할까요?
 options:
   en:
     - text: Write the term out in full the first time it appears in this section, with the short form beside it
@@ -68,7 +68,7 @@ options:
   ko:
     - text: 이 부분에서 그 말이 처음 나올 때 온전한 이름으로 풀어 쓰고, 약어를 괄호로 함께 적습니다
       reason: >-
-        독자는 자기가 검색한 단락으로 곧장 들어오므로, 풀이는 글이 시작하는
+        독자는 자기가 검색한 부분으로 곧장 들어오므로, 풀이는 글이 시작하는
         자리가 아니라 독자가 도착하는 자리에 있어야 합니다.
       correct: true
     - text: 글의 첫 문단에서 한 번 온전한 이름으로 풀어 씁니다

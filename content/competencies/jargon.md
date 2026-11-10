@@ -40,8 +40,7 @@ preReadingQuestions:
       The article says whether a word counts as jargon is not a property of the
       word. What does it say the judgement rests on instead?
     ko: >-
-      이 글은 어떤 말이 전문 용어인지 아닌지가 그 말 자체의 속성이 아니라고
-      말한다. 그렇다면 무엇을 기준으로 판단하라고 하는가?
+      이 글은 어떤 말이 전문 용어인지 아닌지가 그 말 자체로 정해지지 않는다고 말한다. 그렇다면 무엇을 기준으로 판단하라고 하는가?
   - en: >-
       Two questions are offered for deciding what to do with a term. What are
       they, and what does each answer change about the treatment?
