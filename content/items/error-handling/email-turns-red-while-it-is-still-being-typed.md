@@ -53,7 +53,7 @@ sequence:
               <div class="field"><span class="field-label">담당자 이메일</span><input class="control" style="width:280px;border-color:#2563eb" value="ana"></div>
               <p class="field-msg field-msg--red">name@company.com 형식의 이메일 주소를 입력하세요</p>
             </div>
-            <div class="field"><span class="field-label">전화번호</span><input class="control control--empty" style="width:280px" value="선택"></div>
+            <div class="field"><span class="field-label">전화번호</span><input class="control control--empty" style="width:280px" value="선택 입력"></div>
             <div class="actions actions--end"><span class="btn btn--outline">취소</span><button class="btn btn--blue">담당자 저장</button></div>
           </div>
         </div>
@@ -83,7 +83,7 @@ sequence:
               <div class="field"><span class="field-label">담당자 이메일</span><input class="control" style="width:280px;border-color:#2563eb" value="ana.wijaya@"></div>
               <p class="field-msg field-msg--red">name@company.com 형식의 이메일 주소를 입력하세요</p>
             </div>
-            <div class="field"><span class="field-label">전화번호</span><input class="control control--empty" style="width:280px" value="선택"></div>
+            <div class="field"><span class="field-label">전화번호</span><input class="control control--empty" style="width:280px" value="선택 입력"></div>
             <div class="actions actions--end"><span class="btn btn--outline">취소</span><button class="btn btn--blue">담당자 저장</button></div>
           </div>
         </div>
@@ -107,7 +107,7 @@ sequence:
           <div class="stack">
             <div class="field"><span class="field-label">공급처</span><span class="control">누산타라 부품</span></div>
             <div class="field"><span class="field-label">담당자 이메일</span><input class="control" style="width:280px" value="ana.wijaya@nusantara-parts.co.id"></div>
-            <div class="field"><span class="field-label">전화번호</span><input class="control control--empty" style="width:280px;border-color:#2563eb" value="선택"></div>
+            <div class="field"><span class="field-label">전화번호</span><input class="control control--empty" style="width:280px;border-color:#2563eb" value="선택 입력"></div>
             <div class="actions actions--end"><span class="btn btn--outline">취소</span><button class="btn btn--blue">담당자 저장</button></div>
           </div>
         </div>
