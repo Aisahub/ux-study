@@ -63,8 +63,8 @@ options:
   en:
     - text: Open with the action and its deadline, then tell the story
       reason: >-
-        The notice makes readers hold twelve paragraphs before revealing why
-        any of it matters to them, and most never get that far.
+        The notice holds back why any of it matters to readers until the
+        twelfth and last paragraph, and most never get that far.
       correct: true
     - text: Rewrite the sentences at a lower reading level
       reason: >-
