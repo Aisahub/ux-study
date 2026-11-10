@@ -49,8 +49,7 @@ preReadingQuestions:
       Before reading, write down the last form that made you leave the page to
       look something up. Which of the four does that failure belong to?
     ko: >-
-      읽기 전에, 무언가를 찾으러 화면 밖으로 나가게 만들었던 가장 최근의 폼을
-      적어 보라. 그 실패는 네 갈래 중 어디에 속하는가?
+      읽기 전에, 무언가를 찾으러 화면 밖으로 나가게 만들었던 가장 최근의 폼이 어떤 폼이었는지 적어 보라. 그 실패는 네 갈래 중 어디에 속하는가?
 source:
   url: https://www.nngroup.com/articles/4-principles-reduce-cognitive-load/
   attribution: >-
