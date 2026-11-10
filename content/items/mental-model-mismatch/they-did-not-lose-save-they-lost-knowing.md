@@ -65,7 +65,7 @@ prompt:
     back to a Save button. What should they do about these messages?
   ko: >-
     글자마다 저장하는 쪽이 더 나은 설계이고, 팀은 저장 버튼으로 돌아갈 생각이
-    없습니다. 이런 문의에는 어떻게 대응해야 할까요?
+    없습니다. 이런 문의가 계속 들어오는 상황에서, 팀은 무엇을 해야 할까요?
 options:
   en:
     - text: Show the saved state continuously on the document, and let Ctrl-S answer by confirming it
