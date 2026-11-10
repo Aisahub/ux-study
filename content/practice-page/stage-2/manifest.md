@@ -106,7 +106,7 @@ defects:
         say so and wait, or it means nothing and should not have been raised.
         Holding both positions at once teaches a driver to ignore the red.
       ko: >-
-        이메일 칸이 방금 잘못됐다고 말한 주소를 그대로 두고 "계속" 버튼을 누르면 아무 제지 없이 다음 화면으로 넘어갑니다. 그리고 확인 화면은 그 거절당한 주소를 예약 정보인 양 다시
+        이메일 칸에 방금 오류가 표시된 주소를 그대로 두고 "계속" 버튼을 누르면 아무 제지 없이 다음 화면으로 넘어갑니다. 그리고 확인 화면은 그 거절당한 주소를 예약 정보인 양 다시
         보여 줍니다. 결국 그 메시지는 무언가를 걸러 내는 검사가 아니었던
         셈입니다. 나무라기만 하고 그대로 통과시켜 주는 장식이었을 뿐입니다. 오류란 그
         값을 쓸 수 없다는 뜻이거나 아무 뜻도 없거나 둘 중 하나입니다. 쓸 수

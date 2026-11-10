@@ -81,7 +81,7 @@ const COPY: Record<
     remove: '삭제',
     submit: '리포트 제출',
     needMore: (more) => `제출하려면 발견이 ${more}개 더 필요합니다.`,
-    submitWarning: '제출은 한 번뿐이며 되돌릴 수 없습니다. 제출하면 바로 심어둔 결함이 공개되고, 그 뒤로는 발견을 추가할 수 없습니다.',
+    submitWarning: '제출은 한 번뿐이며 되돌릴 수 없습니다. 제출하면 심어둔 결함이 바로 공개되고, 그 뒤로는 발견을 추가할 수 없습니다.',
     errors: {
       'duplicate-element': '이 요소를 가리키는 발견이 이미 있습니다. 요소 하나에는 발견 하나만 쓸 수 있습니다.',
       'unknown-element': '페이지에서 요소를 클릭해 골라 주세요.',

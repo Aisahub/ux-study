@@ -9,7 +9,7 @@ definition:
     its neighbours. Hierarchy comes from contrast, not from colour itself — the
     same colour advances or recedes depending on what surrounds it.
   ko: >-
-    어떤 요소의 명도와 채도가 배경 및 주변 요소와 얼마나 떨어져 있는지를 말한다.
+    어떤 요소의 명도와 채도가 배경이나 주변 요소와 얼마나 차이 나는지를 말한다.
     위계를 만드는 것은 색 자체가 아니라 대비이며, 같은 색이라도 주변에 따라
     튀어 보이기도 하고 묻히기도 한다.
 justification:
