@@ -12,7 +12,7 @@ artefact:
     until a debt owed by that person is discharged." The two buttons on the
     screen are "Move money" and "See statement".
   ko: >-
-    임대차 보증금 계좌의 잔액 화면입니다. 자기 돈 가운데 일부를 쓸 수 없다는
+    세입자가 월세를 내는 입출금 계좌의 잔액 화면입니다. 자기 돈 가운데 일부를 쓸 수 없다는
     안내를 막 받은 세입자가 열어 본 화면입니다. 잔액은 184만 원이라고 적혀 있고,
     그 아래 한 줄이 있습니다. "이 잔액 중 120만 원에 질권이 설정되었습니다."
     그 밑에는 더 작은 회색 글씨로 뜻풀이가 붙어 있습니다. "질권이란 채권자가
@@ -33,7 +33,7 @@ screen:
     </div>
   ko: |-
     <div class="screen">
-      <h2>보증금 계좌</h2>
+      <h2>입출금 계좌</h2>
       <p class="stat-label">잔액</p>
       <p class="stat-value" style="margin:0 0 10px">1,840,000원</p>
       <p style="margin:0 0 6px">이 잔액 중 1,200,000원에 질권이 설정되었습니다.</p>
