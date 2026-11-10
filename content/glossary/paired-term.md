@@ -19,8 +19,7 @@ justification:
     price of understanding the sentence.
   ko: >-
     [용어], 이건 [다시 마주치는 곳]에서 그대로 쓰이므로 남겨야 합니다.
-    다만 "[쉬운 말]([용어])" 형태로 적으면, 용어는 남기면서도 그
-    용어를 몰라도 문장을 이해할 수 있습니다.
+    다만 "[쉬운 말]([용어])" 형태로 적으면 용어는 그대로 남고, 그 용어를 모르는 독자도 문장을 이해할 수 있습니다.
 competencies:
   - jargon
 source: https://www.nngroup.com/articles/technical-jargon/
