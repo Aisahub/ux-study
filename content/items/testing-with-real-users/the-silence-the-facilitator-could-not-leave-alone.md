@@ -57,14 +57,14 @@ screen:
             <p><span class="muted">00:24</span> <strong>진행자:</strong> 예약 항목 안쪽에 있을 수도 있어요.</p>
             <p><span class="muted">00:26</span> <strong>참가자:</strong> 아, 그렇네요. <em>(예약을 열어 일정 변경을 찾고 과제를 마침)</em></p>
             <p><span class="muted">00:41</span> <strong>진행자:</strong> 됐네요. 예상하신 자리에 있었나요?</p>
-            <p><span class="muted">00:44</span> <strong>참가자:</strong> 네, 말이 되네요.</p>
+            <p><span class="muted">00:44</span> <strong>참가자:</strong> 네, 그럴 만하네요.</p>
           </div>
         </div>
       </div>
       <div>
         <p class="pane-label">메모</p>
         <div class="screen">
-          <p>약간의 힌트와 함께 41초 만에 일정 변경을 찾음. 위치가 사용자에게 납득됨.</p>
+          <p>힌트를 조금 주자 41초 만에 일정 변경을 찾음. 사용자가 위치를 납득함.</p>
         </div>
       </div>
     </div>
