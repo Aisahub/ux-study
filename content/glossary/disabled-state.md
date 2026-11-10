@@ -19,8 +19,7 @@ justification:
     enables it would fix both problems.
   ko: >-
     [요소], 이건 비활성 상태인데 그렇게 보이지 않아서, 사용자는
-    눌러본 뒤 제품이 고장 났다고 판단하게 됩니다. 흐리게 처리하고
-    어떤 조건에서 쓸 수 있는지 함께 알려 주면 두 문제가 같이 해결됩니다.
+    눌러본 뒤 제품이 고장 났다고 판단하게 됩니다. 흐리게 처리하면 비활성이라는 것이 보이고, 어떤 조건에서 쓸 수 있는지 함께 알려 주면 사용자가 고장으로 오해하지 않습니다.
 competencies:
   - perceived-clickability
 source: https://www.nngroup.com/articles/button-states-communicate-interaction/
