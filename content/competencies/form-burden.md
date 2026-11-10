@@ -21,9 +21,7 @@ roleHint:
       no remembered format, no test data on the clipboard — and count what you
       had to leave the page to find out.
     ko: >-
-      직접 만든 폼을, 만든 사람만 아는 것은 하나도 쓰지 말고 채워 보세요.
-      외우고 있는 입력 형식도, 클립보드에 담아 둔 테스트 데이터도 쓰지
-      말고요. 그러고서 답을 찾으러 화면 밖으로 나가야 했던 횟수를 세어
+      직접 만든 폼을, 만든 사람이라서 아는 것에는 하나도 기대지 말고 채워 보세요. 외우고 있는 입력 형식도, 클립보드에 담아 둔 테스트 데이터도 빼고요. 그러고서 답을 찾으러 화면 밖으로 나가야 했던 횟수를 세어
       보세요.
   pm:
     en: >-

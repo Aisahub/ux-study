@@ -20,8 +20,7 @@ justification:
   ko: >-
     [동작] 이후 [얼마 동안] 화면에 아무 변화가 없어서, 사용자는
     이게 된 건지 안 된 건지 알 수 없습니다. 진행되는 동안 [무엇]
-    하나를 보여 주면, 사용자가 짐작하는 대신 기다리는 동안 무슨 일이
-    벌어지는지 알 수 있게 됩니다.
+    하나를 보여 주면, 사용자는 짐작할 필요 없이, 기다리는 동안 무슨 일이 벌어지는지 알 수 있습니다.
 competencies:
   - system-status
 source: https://www.nngroup.com/articles/visibility-system-status/
