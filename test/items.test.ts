@@ -1,3 +1,4 @@
+import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { expect, test } from 'vitest'
@@ -63,4 +64,24 @@ test('every UX Principle an item cites resolves to the Glossary', () => {
       expect(principles, `${name} cites ${slug}`).toContain(slug)
     }
   }
+})
+
+test('no unquoted option text carries a " #", which YAML reads as the start of a comment', () => {
+  // `- text: Raise the text from #333333 to pure black` parses as "Raise the
+  // text from": everything after the space-hash is a comment. Two options on
+  // main were cut that way in both languages and nothing noticed, because the
+  // stump still parses as a non-empty string (ERR-242).
+  const cut: string[] = []
+  for (const dir of readdirSync(join(__dirname, '..', 'content', 'items'))) {
+    const folder = join(__dirname, '..', 'content', 'items', dir)
+    if (!statSync(folder).isDirectory()) continue
+    for (const file of readdirSync(folder)) {
+      readFileSync(join(folder, file), 'utf8')
+        .split('\n')
+        .forEach((line, index) => {
+          if (/^\s*- text: [^'"].* #/.test(line)) cut.push(`${dir}/${file}:${index + 1}`)
+        })
+    }
+  }
+  expect(cut).toEqual([])
 })

@@ -64,7 +64,7 @@ options:
         The letters were never the problem; a line carrying far fewer
         characters is what stops the shape of the block wearing the reader out.
       correct: true
-    - text: Raise the text from #333333 to pure black
+    - text: 'Raise the text from #333333 to pure black'
       reason: >-
         The article calls for high contrast between characters and background,
         and this grey falls short of it.
@@ -82,13 +82,13 @@ options:
         글자는 애초에 문제가 아니었습니다. 한 줄에 담기는 글자 수를 크게
         줄여야 독자가 글 덩어리에 지치지 않습니다.
       correct: true
-    - text: 글자색을 #333333에서 순검정으로 바꿉니다
+    - text: '글자색을 #333333에서 순검정으로 바꿉니다'
       reason: >-
         원문은 글자와 배경의 대비를 높게 두라고 하는데, 이 회색은
         거기에 못 미칩니다.
     - text: 글자를 16px보다 크게 키웁니다
       reason: >-
-        시력은 사람마다 다르고, 글자가 편하게 알아볼 수 없을 만큼 작으면
+        시력은 사람마다 다르고, 글자가 너무 작아 편하게 알아볼 수 없으면
         독자는 읽다가 멈춥니다.
     - text: 서체를 바꿉니다
       reason: >-
