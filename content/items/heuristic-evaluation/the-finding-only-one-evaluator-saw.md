@@ -76,7 +76,7 @@ options:
         Where a finding came from is recorded honestly, and a reader can weigh
         it knowing that.
   ko:
-    - text: 순위를 매기기 전에, 만든 팀에게 가져가 그 숫자가 실제로 달라지는지 확인합니다
+    - text: 순위를 매기기 전에, 대시보드를 만든 팀에게 가져가 그 숫자가 실제로 달라지는지 확인합니다
       reason: >-
         표시가 하나라는 것은 한 사람이 봤다는 뜻이지 사소하다는 뜻이 아니고,
         게다가 이 발견은 사실인지 아닌지를 바로 확인해 볼 수 있습니다.
