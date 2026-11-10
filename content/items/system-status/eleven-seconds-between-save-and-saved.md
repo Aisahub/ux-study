@@ -130,7 +130,7 @@ options:
       reason: >-
         There is then no press to answer for, and the buyer never waits on one.
   ko:
-    - text: 저장이 도는 동안 버튼을 작업 중 상태로 둡니다
+    - text: 저장하는 동안 버튼을 작업 중 상태로 둡니다
       reason: >-
         버튼에 "저장 중"이 뜨고 다시 눌러도 받지 않으니, 담당자는 방금 누른
         버튼만 보고도 기다려야 한다는 것을 압니다.
