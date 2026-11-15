@@ -8,6 +8,7 @@ import { LanguageSwitcher } from './language-switcher'
 import { PlatformNav } from './platform-nav'
 import { SignOut } from './sign-out'
 import { getSession } from '@/lib/auth'
+import { isDemoEmail } from '@/lib/demo'
 import { LANGUAGES, isLanguage, type Language } from '@/lib/language'
 import '../globals.css'
 
@@ -88,6 +89,12 @@ export async function generateMetadata({
     title: { template: '%s · ux-study', default: 'ux-study' },
     description: isLanguage(lang) ? DESCRIPTION[lang] : DESCRIPTION.en,
   }
+}
+
+/** Shown to demo visitors only (lib/demo.ts). */
+const DEMO_NOTICE: Record<Language, string> = {
+  en: 'Demo: you are a temporary Learner. Your answers are kept apart from the team and are not counted anywhere.',
+  ko: '데모 모드입니다. 임시 학습자로 들어왔으며, 답안과 리포트는 팀 기록과 분리되어 어디에도 집계되지 않습니다.',
 }
 
 export default async function LanguageLayout({
@@ -215,6 +222,11 @@ export default async function LanguageLayout({
               </div>
             </div>
 
+            {session && isDemoEmail(session.email) && (
+              <p role="status" className="rounded-badge bg-white/70 px-4 py-2 text-body-sm text-ink">
+                {DEMO_NOTICE[lang]}
+              </p>
+            )}
             {children}
           </div>
         </div>

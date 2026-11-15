@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 
-import { isNotNull } from 'drizzle-orm'
+import { and, isNotNull } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
 import { requireMaintainer } from '@/lib/auth'
+import { realLearner } from '@/lib/demo'
 import { isLanguage } from '@/lib/language'
 import { content } from '@/lib/server-content'
 
@@ -91,7 +92,7 @@ export default async function QuizItemHealth({ params }: { params: Promise<{ lan
   await requireMaintainer(lang)
   const copy = COPY[lang]
 
-  const attempts = await db.select().from(schema.attempts).where(isNotNull(schema.attempts.submittedAt))
+  const attempts = await db.select().from(schema.attempts).where(and(isNotNull(schema.attempts.submittedAt), realLearner(schema.attempts.email)))
 
   // Per item: how often drawn, how often answered correctly.
   const byItem = new Map<string, { drawn: number; correct: number }>()

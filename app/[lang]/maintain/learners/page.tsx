@@ -5,6 +5,7 @@ import { asc } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
 import { requireMaintainer } from '@/lib/auth'
+import { realLearner } from '@/lib/demo'
 import { competenciesOfStage } from '@/lib/content'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
@@ -90,9 +91,9 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
   // three Stages at once.
   const slugs = competenciesOfStage(content.config, 1)
 
-  const users = await db.select().from(schema.users).orderBy(asc(schema.users.email))
-  const attempts = await db.select().from(schema.attempts)
-  const reports = await db.select().from(schema.reports)
+  const users = await db.select().from(schema.users).where(realLearner(schema.users.email)).orderBy(asc(schema.users.email))
+  const attempts = await db.select().from(schema.attempts).where(realLearner(schema.attempts.email))
+  const reports = await db.select().from(schema.reports).where(realLearner(schema.reports.email))
 
   const now = Date.now()
 

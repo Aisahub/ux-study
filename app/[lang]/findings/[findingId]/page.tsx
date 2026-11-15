@@ -97,7 +97,7 @@ export default async function FindingPage({
   const session = await requireSession(lang)
   const copy = COPY[lang]
 
-  const row = await submittedFinding(id)
+  const row = await submittedFinding(id, session.email)
   if (!row) notFound()
 
   // The submitted gate, against *this Finding's* Stage rather than against

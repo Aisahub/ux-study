@@ -5,6 +5,7 @@ import { cookies } from 'next/headers'
 import { notFound, redirect } from 'next/navigation'
 
 import { db, schema } from '@/db'
+import { isDemoEmail } from '@/lib/demo'
 import type { Language } from '@/lib/language'
 
 /**
@@ -77,6 +78,8 @@ export function cohortOf(email: string): Cohort {
 
 /** What the allowlist says about an address, which is what its admitting row says. */
 export async function resolveAccess(email: string): Promise<Access> {
+  // Demo visitors are Learners by construction, never Maintainers (lib/demo.ts)
+  if (isDemoEmail(email)) return { allowed: true, isMaintainer: false }
   const entry = await resolveEntry(email)
   if (!entry) return { allowed: false, isMaintainer: false }
   return { allowed: true, isMaintainer: entry.isMaintainer }

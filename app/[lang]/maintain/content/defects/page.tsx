@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 
-import { isNotNull } from 'drizzle-orm'
+import { and, isNotNull } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
 import { cohortOf, requireMaintainer } from '@/lib/auth'
+import { realLearner } from '@/lib/demo'
 import { elementLabels } from '@/lib/element-label'
 import { isLanguage, type Language } from '@/lib/language'
 import { content } from '@/lib/server-content'
@@ -101,7 +102,7 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
   await requireMaintainer(lang)
   const copy = COPY[lang]
 
-  const reports = await db.select().from(schema.reports).where(isNotNull(schema.reports.submittedAt))
+  const reports = await db.select().from(schema.reports).where(and(isNotNull(schema.reports.submittedAt), realLearner(schema.reports.email)))
   const findings = await db.select().from(schema.findings)
 
   const submittedIds = new Set(reports.map((report) => report.id))

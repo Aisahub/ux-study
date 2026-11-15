@@ -25,7 +25,7 @@ export default async function FindingLayout({
   if (!Number.isInteger(id)) notFound()
   const session = await requireSession(lang)
 
-  const row = await submittedFinding(id)
+  const row = await submittedFinding(id, session.email)
   if (!row) notFound()
   if (!(await mayRead(session.email, row.stage))) redirect(`/${lang}/audit`)
   return children

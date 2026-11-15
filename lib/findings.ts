@@ -1,6 +1,7 @@
 import { and, desc, eq, inArray, isNotNull, sql } from 'drizzle-orm'
 
 import { db, schema } from '@/db'
+import { isDemoEmail, realLearner } from '@/lib/demo'
 import { reportFor, reportsFor } from '@/lib/progress'
 
 /**
@@ -59,19 +60,24 @@ export async function libraryFor(email: string): Promise<{ earned: number[]; row
     })
     .from(schema.findings)
     .innerJoin(schema.reports, eq(schema.findings.reportId, schema.reports.id))
-    .where(and(isNotNull(schema.reports.submittedAt), inArray(schema.reports.stage, earned)))
+    .where(and(isNotNull(schema.reports.submittedAt), inArray(schema.reports.stage, earned), visibleTo(email)))
     .orderBy(desc(agreements), desc(schema.findings.id))
 
   return { earned, rows }
 }
 
+/** Demo visitors see only their own Findings; everyone else sees no demo Findings (lib/demo.ts). */
+function visibleTo(reader: string) {
+  return isDemoEmail(reader) ? eq(schema.reports.email, reader.toLowerCase()) : realLearner(schema.reports.email)
+}
+
 /** One submitted Finding with its author and Stage, or null — a draft is not readable by anyone but its writer. */
-export async function submittedFinding(id: number) {
+export async function submittedFinding(id: number, reader: string) {
   const [row] = await db
     .select({ finding: schema.findings, author: schema.reports.email, stage: schema.reports.stage })
     .from(schema.findings)
     .innerJoin(schema.reports, eq(schema.findings.reportId, schema.reports.id))
-    .where(and(eq(schema.findings.id, id), isNotNull(schema.reports.submittedAt)))
+    .where(and(eq(schema.findings.id, id), isNotNull(schema.reports.submittedAt), visibleTo(reader)))
   return row ?? null
 }
 
@@ -105,7 +111,7 @@ export async function agreementOn(id: number, email: string): Promise<{ count: n
  * wanted is the state that holds.
  */
 export async function agreeWith(id: number, email: string): Promise<boolean> {
-  const target = await submittedFinding(id)
+  const target = await submittedFinding(id, email)
   if (!target || target.author === email) return false
   if (!(await mayRead(email, target.stage))) return false
 

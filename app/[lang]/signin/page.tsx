@@ -4,18 +4,22 @@ import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/auth'
 import { isLanguage, type Language } from '@/lib/language'
 
-const COPY: Record<Language, { heading: string; explanation: string; button: string }> = {
+const COPY: Record<Language, { heading: string; explanation: string; button: string; demo: string; demoNote: string }> = {
   en: {
     heading: 'Sign in',
     explanation:
       'One button for everyone: Aisahub staff use their Workspace account, and colleagues in Indonesia use the personal Google account they were enrolled with.',
     button: 'Continue with Google',
+    demo: 'Try the demo',
+    demoNote: 'No account needed. You join as a temporary Learner, kept apart from the team.',
   },
   ko: {
     heading: '로그인',
     explanation:
       '모두 아래 버튼 하나로 로그인합니다. 한국팀은 회사 Workspace 계정을, 인도네시아팀은 운영자가 등록한 개인 Google 계정을 사용합니다.',
     button: 'Google로 계속하기',
+    demo: '데모로 둘러보기',
+    demoNote: '계정 없이 임시 학습자로 들어가며, 기록은 팀과 분리됩니다.',
   },
 }
 
@@ -46,6 +50,10 @@ export default async function SignIn({ params }: { params: Promise<{ lang: strin
       >
         {copy.button}
       </a>
+      <a href={`/api/demo?lang=${language}`} className="w-fit text-body-sm font-bold text-oxblood underline">
+        {copy.demo}
+      </a>
+      <p className="text-body-sm text-ink-2">{copy.demoNote}</p>
     </main>
   )
 }
