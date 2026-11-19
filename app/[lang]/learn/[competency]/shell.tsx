@@ -92,7 +92,7 @@ export async function loadCompetency(lang: Language, slug: string) {
  */
 function StatusChip({ status, label }: { status: QuizStatus; label: string }) {
   return (
-    <span className="flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill">
+    <span className="chip flex items-center gap-2">
       <i
         aria-hidden
         className={`size-[11px] rounded-full ${
@@ -202,10 +202,10 @@ export function CompetencyShell({
     // handing it the full working area would only widen the cards around a
     // measure that is fixed at the reading measure anyway.
     <main className="mx-auto w-full max-w-[720px] px-0.5">
-      <nav className="px-1.5 pb-3.5">
+      <nav className="px-1.5 pb-sibling">
         <Link
           href={`/${lang}/learn`}
-          className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+          className="press chip inline-flex items-center gap-2"
         >
           <span aria-hidden>←</span>
           {copy.back}
@@ -223,19 +223,19 @@ export function CompetencyShell({
           )}
         </div>
         <div className="ml-auto flex flex-wrap gap-2.5">
-          <span className="rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill">
+          <span className="chip">
             {copy.station(station)}
           </span>
           <StatusChip status={quiz.status} label={copy.status[quiz.status]} />
           {quiz.attempts > 0 && (
-            <span className="rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill">
+            <span className="chip">
               {copy.attempts(quiz.attempts)}
             </span>
           )}
         </div>
       </div>
 
-      <div className="px-1.5 pb-3.5">
+      <div className="px-1.5 pb-sibling">
         <PanelSwitch lang={lang} slug={slug} active={active} noteCount={noteCount} copy={copy} />
       </div>
 

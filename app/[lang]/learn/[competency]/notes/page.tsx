@@ -113,7 +113,7 @@ export default async function CompetencyNotes({
       active="notes"
       noteCount={notes.length}
     >
-      <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+      <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
         {/* No numeral. The four numbered steps are the four that happen in
             order, and they are all on the other panel; a `05` here would say
             this comes after the Gate Quiz, which is not true of a note. */}
@@ -138,19 +138,19 @@ export default async function CompetencyNotes({
           />
           <SubmitButton
             pendingLabel={copy.adding}
-            className="mt-3.5 min-h-11 rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white"
+            className="button-primary mt-sibling"
           >
             {copy.add}
           </SubmitButton>
         </form>
 
-        <div className="mt-[26px] border-t border-khaki/40 pt-[22px]">
+        <div className="mt-card border-t border-khaki/40 pt-inset">
           {notes.length === 0 ? (
             <p className="text-body-sm text-ink-2">{copy.empty}</p>
           ) : (
             <>
               <h3 className="text-label font-bold text-ink-2">{copy.saved(notes.length)}</h3>
-              <ul className="mt-3.5 flex flex-col gap-2.5">
+              <ul className="mt-sibling flex flex-col gap-2.5">
                 {notes.map((note) => (
                   <NoteRow key={note.id} lang={lang} note={note} />
                 ))}

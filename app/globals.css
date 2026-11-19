@@ -198,6 +198,17 @@
      rather than baking in a value — which is what lets :lang() reset it. */
   --container-measure: var(--measure);
 
+  /* ── the spacing rhythm ──────────────────────────────── */
+  /* The three intervals DESIGN.md's Layout names: `sibling` between siblings,
+     `inset` for content off the board, `card` inside a card. Tokens for the
+     same reason the type scale is: until 2026-11-19 they were typed as bare
+     px at ~140 call sites, with 14px spelled two ways (`[14px]` and `3.5`).
+     px rather than rem, because DESIGN.md declares the rhythm in px and the
+     Reader's Size Rule binds type, not space. */
+  --spacing-sibling: 14px;
+  --spacing-inset: 22px;
+  --spacing-card: 26px;
+
   --radius-card: 22px;
   --radius-badge: 14px;
 
@@ -323,4 +334,27 @@ body {
       transform: none;
     }
   }
+}
+
+/* ── the two drawn controls ────────────────────────────────
+   DESIGN.md's Components section names one button and one chip. Until
+   2026-11-19 each was retyped at its call site, and the copies had drifted:
+   nine primary buttons in two label sizes, three of them carrying a lift the
+   spec never gave a button. The class owns the drawing — shape, colour,
+   padding, type step. The call site keeps the layout — display, width,
+   margins — because that is the part that genuinely differs per screen. */
+
+/* Oxblood, white, `15px 26px`, label at the `title` step, no lift. */
+@utility button-primary {
+  @apply min-h-11 rounded-full bg-oxblood px-card py-[15px] text-title font-bold text-white;
+}
+
+/* White pill, `9px 17px`, label step, pill lift. */
+@utility chip {
+  @apply rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill;
+}
+
+/* The same pill sunk into a card: no lift, the sunk fill. */
+@utility chip-sunk {
+  @apply rounded-full bg-sunk px-[17px] py-[9px] text-label font-bold text-ink;
 }

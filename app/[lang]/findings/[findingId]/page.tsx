@@ -136,7 +136,7 @@ export default async function FindingPage({
 
       {/* One card, one Finding — the reading surface the board's rows open
           into, on the same white card the rows themselves wear. */}
-      <article className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card">
+      <article className="grid gap-sibling rounded-card bg-surface p-card shadow-card">
         <h1 className="max-w-measure font-mono text-headline font-bold text-ink">{row.finding.element}</h1>
         {/* Where it comes from before who wrote it, as the board's rows say
             it. The local part, as the board and the top bar spell people —
@@ -152,15 +152,15 @@ export default async function FindingPage({
             sections (the Competency page's notes head, the verdict's item
             rows). Label-step grey alone did not hold the three apart. */}
         <dl className="grid max-w-measure divide-y divide-khaki/40 border-t border-khaki/40">
-          <div className="py-[14px]">
+          <div className="py-sibling">
             <dt className="text-title font-bold text-ink">{copy.principle}</dt>
             <dd className="mt-1 text-body">{principle ? principle.name[lang] : row.finding.principle}</dd>
           </div>
-          <div className="py-[14px]">
+          <div className="py-sibling">
             <dt className="text-title font-bold text-ink">{copy.description}</dt>
             <dd className="mt-1 text-body">{row.finding.description}</dd>
           </div>
-          <div className="py-[14px] pb-0">
+          <div className="py-sibling pb-0">
             <dt className="text-title font-bold text-ink">{copy.fix}</dt>
             <dd className="mt-1 text-body">{row.finding.fix}</dd>
           </div>
@@ -174,7 +174,7 @@ export default async function FindingPage({
             about authorship, the other a status already given its colour.
             The same hairline above it marks where reading ends and acting
             begins, as the report drawer's action foot already does. */}
-        <section className="grid gap-[14px] border-t border-khaki/40 pt-[14px]">
+        <section className="grid gap-sibling border-t border-khaki/40 pt-sibling">
           <p className="flex items-center gap-2.5 text-body-sm text-ink-2">
             <span
               aria-hidden
@@ -192,7 +192,7 @@ export default async function FindingPage({
             <form action={agree}>
               <SubmitButton
                 pendingLabel={copy.agreeing}
-                className="flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+                className="button-primary flex w-full items-center justify-center gap-2.5"
               >
                 {copy.agree}
               </SubmitButton>

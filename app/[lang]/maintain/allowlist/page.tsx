@@ -154,25 +154,25 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
-      <header className="px-1.5 pb-[26px]">
+      <header className="px-1.5 pb-card">
         <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
         <p className="mt-3 max-w-measure text-body text-ink">{copy.explanation}</p>
       </header>
 
-      <div className="flex flex-col gap-[14px]">
-        <section aria-labelledby="entries" className="rounded-card bg-surface p-[26px] shadow-card">
+      <div className="flex flex-col gap-sibling">
+        <section aria-labelledby="entries" className="rounded-card bg-surface p-card shadow-card">
           <h2 id="entries" className="font-serif text-headline font-bold text-ink">
             {copy.entriesHeading}
           </h2>
 
           {entries.length === 0 ? (
-            <p className="mt-[14px] text-body-sm text-ink-2">{copy.nobodyYet}</p>
+            <p className="mt-sibling text-body-sm text-ink-2">{copy.nobodyYet}</p>
           ) : (
-            <ul className="mt-[22px] flex flex-col gap-[22px]">
+            <ul className="mt-inset flex flex-col gap-inset">
               {entries.map((entry) => (
                 <li
                   key={entry.id}
-                  className="grid gap-x-[14px] sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline"
+                  className="grid gap-x-sibling sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline"
                 >
                   <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1">
                     <span className="min-w-0 text-title font-bold text-ink [overflow-wrap:anywhere]">
@@ -226,7 +226,7 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
           )}
         </section>
 
-        <section aria-labelledby="add" className="rounded-card bg-surface p-[26px] shadow-card">
+        <section aria-labelledby="add" className="rounded-card bg-surface p-card shadow-card">
           <h2 id="add" className="font-serif text-headline font-bold text-ink">
             {copy.addHeading}
           </h2>
@@ -234,7 +234,7 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
           {/* A persistent label rather than a placeholder standing in for one:
               the placeholder is an example of the format, and it disappears
               exactly when someone is typing and might want the rule. */}
-          <form action={add} className="mt-[22px] flex flex-wrap items-end gap-x-[14px] gap-y-[14px]">
+          <form action={add} className="mt-inset flex flex-wrap items-end gap-x-sibling gap-y-sibling">
             <div className="flex min-w-0 flex-1 flex-col gap-1.5">
               <label htmlFor="pattern" className="text-label font-bold text-ink">
                 {copy.pattern}
@@ -258,7 +258,7 @@ export default async function Allowlist({ params }: { params: Promise<{ lang: st
 
             <SubmitButton
               pendingLabel={copy.adding}
-              className="min-h-11 rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white"
+              className="button-primary"
             >
               {copy.add}
             </SubmitButton>

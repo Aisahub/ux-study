@@ -97,24 +97,24 @@ export default async function Notes({ params }: { params: Promise<{ lang: string
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
-      <header className="px-1.5 pb-[26px]">
+      <header className="px-1.5 pb-card">
         <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
         <p className="mt-3 max-w-measure text-body text-ink">{copy.explanation}</p>
       </header>
 
       {groups.length === 0 ? (
-        <section className="rounded-card bg-surface p-[26px] shadow-card">
+        <section className="rounded-card bg-surface p-card shadow-card">
           <p className="max-w-measure text-body text-ink-2">{copy.empty}</p>
         </section>
       ) : (
-        <div className="flex flex-col gap-[14px]">
+        <div className="flex flex-col gap-sibling">
           {groups.map((group) => (
             <section
               key={group.slug}
               aria-labelledby={`notes-${group.slug}`}
-              className="rounded-card bg-surface p-[26px] shadow-card"
+              className="rounded-card bg-surface p-card shadow-card"
             >
-              <div className="flex flex-wrap items-baseline justify-between gap-x-[22px] gap-y-1">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-inset gap-y-1">
                 <h2
                   id={`notes-${group.slug}`}
                   className="font-serif text-headline font-bold break-keep text-ink"
@@ -124,7 +124,7 @@ export default async function Notes({ params }: { params: Promise<{ lang: string
                 <p className="text-label font-bold text-ink-2">{copy.count(group.notes.length)}</p>
               </div>
 
-              <ul className="mt-[22px] flex flex-col gap-2.5">
+              <ul className="mt-inset flex flex-col gap-2.5">
                 {group.notes.map((note) => (
                   <NoteRow key={note.id} lang={lang} note={note} />
                 ))}

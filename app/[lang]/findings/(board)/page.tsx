@@ -95,7 +95,7 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
       {earned.map((stage) => {
         const shelf = rows.filter((row) => row.stage === stage)
         return (
-          <section key={stage} className="mt-[14px] first-of-type:mt-0">
+          <section key={stage} className="mt-sibling first-of-type:mt-0">
             {/* The step and the voice the Learn overview already gives a
                 Stage heading — the same word, in the same clothes. */}
             <h2 className="px-1.5 font-serif text-headline font-bold text-ink">
@@ -106,15 +106,15 @@ export default async function Findings({ params }: { params: Promise<{ lang: str
                 the answer is a thing on the board and not a caption floating
                 under a heading. */}
             {shelf.length === 0 && (
-              <p className="mt-[14px] rounded-card bg-surface p-[26px] text-body-sm text-ink-2 shadow-card">
+              <p className="mt-sibling rounded-card bg-surface p-card text-body-sm text-ink-2 shadow-card">
                 <span className="block max-w-measure">{copy.empty}</span>
               </p>
             )}
-            <ul className="mt-[14px] grid gap-[14px]">
+            <ul className="mt-sibling grid gap-sibling">
               {shelf.map((row) => (
                 <li
                   key={row.finding.id}
-                  className="grid grid-cols-[44px_minmax(0,1fr)] gap-[14px] rounded-card bg-surface p-[26px] shadow-card"
+                  className="grid grid-cols-[44px_minmax(0,1fr)] gap-sibling rounded-card bg-surface p-card shadow-card"
                 >
                   {/* The agreement count, worn as the row's mark — the board
                       is the one surface where order carries meaning, and the

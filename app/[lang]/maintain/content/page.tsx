@@ -33,7 +33,7 @@ export const dynamic = 'force-dynamic'
  */
 function Row({ name, value }: { name: string; value: string }) {
   return (
-    <li className="grid gap-x-[14px] sm:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] sm:items-baseline">
+    <li className="grid gap-x-sibling sm:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] sm:items-baseline">
       <span className="min-w-0 text-body-sm text-ink [overflow-wrap:anywhere]">{name}</span>
       <span className="text-label font-bold text-ink">{value}</span>
     </li>
@@ -66,7 +66,7 @@ function NeverDrawn({ slugs, copy }: { slugs: string[]; copy: Copy }) {
         </span>
         {copy.neverDrawnPool(slugs.length)}
       </summary>
-      <ul className="flex flex-col gap-1.5 pb-1.5 pl-[22px]">
+      <ul className="flex flex-col gap-1.5 pb-1.5 pl-inset">
         {slugs.map((slug) => (
           <li key={slug} className="text-body-sm text-ink-2 [overflow-wrap:anywhere]">
             {slug}
@@ -105,7 +105,7 @@ export default async function QuizItemHealth({ params }: { params: Promise<{ lan
   }
 
   return (
-    <section aria-labelledby="items" className="rounded-card bg-surface p-[26px] shadow-card">
+    <section aria-labelledby="items" className="rounded-card bg-surface p-card shadow-card">
       <h2 id="items" className="font-serif text-headline font-bold text-ink">
         {copy.itemsHeading}
       </h2>
@@ -137,7 +137,7 @@ export default async function QuizItemHealth({ params }: { params: Promise<{ lan
           slug on a closed pool in every browser that searches collapsed
           `details` — which, where it does not, is one press from true. */}
       {content.config.stages.map(({ stage, competencies }) => (
-        <div key={stage} className="mt-[22px]">
+        <div key={stage} className="mt-inset">
           <h3 className="text-title font-bold text-ink">{copy.stage(stage)}</h3>
           {competencies.map((slug) => {
             const competency = content.competencies.find((entry) => entry.slug === slug)
@@ -145,7 +145,7 @@ export default async function QuizItemHealth({ params }: { params: Promise<{ lan
             const drawn = pool.filter((item) => byItem.has(item.slug))
             const never = pool.filter((item) => !byItem.has(item.slug))
             return (
-              <div key={slug} className="mt-[14px]">
+              <div key={slug} className="mt-sibling">
                 <h4 className="text-label font-bold text-ink">{competency?.name[lang] ?? slug}</h4>
                 {pool.length === 0 && (
                   <p className="mt-1.5 text-body-sm text-ink-2">{copy.notAuthored}</p>

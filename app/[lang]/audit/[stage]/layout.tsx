@@ -70,7 +70,7 @@ export default async function AuditLayout({
       stage={stage}
       copy={copy}
       issue={
-        <section className="rounded-card bg-surface p-[26px] shadow-card">
+        <section className="rounded-card bg-surface p-card shadow-card">
           <h2 className="font-serif text-headline font-bold text-ink">{copy.issueHeading}</h2>
           {/* The authored paragraph, not a second one written here. The brief
               is what describes this step (CONTEXT.md), and while the surface
@@ -93,7 +93,7 @@ export default async function AuditLayout({
             />
             <button
               type="submit"
-              className="press inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-oxblood px-[26px] text-label font-bold whitespace-nowrap text-white shadow-pill"
+              className="press inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-oxblood px-card text-label font-bold whitespace-nowrap text-white shadow-pill"
             >
               {copy.issueSave}
             </button>

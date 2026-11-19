@@ -240,10 +240,10 @@ export default async function AttemptPage({
     // and it ends the way it began rather than spreading back onto the grid
     // the map pages use.
     <main className={`mx-auto w-full px-0.5 ${explainsItems ? 'max-w-[880px]' : 'max-w-[720px]'}`}>
-      <nav className="px-1.5 pb-3.5">
+      <nav className="px-1.5 pb-sibling">
         <Link
           href={`/${lang}/learn`}
-          className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+          className="press chip inline-flex items-center gap-2"
         >
           <span aria-hidden>←</span>
           {copy.backToLearn}
@@ -259,15 +259,15 @@ export default async function AttemptPage({
           including each item inside this page's own card.
 
           The mark, not a coloured heading: The Headings Are Ink Rule. */}
-      <h1 className="flex items-center gap-3.5 px-1.5 pb-5 font-serif text-display font-bold text-ink">
+      <h1 className="flex items-center gap-sibling px-1.5 pb-5 font-serif text-display font-bold text-ink">
         <AttemptMark state={attempt.passed ? 'passed' : 'failed'} size={24} />
         {attempt.passed ? copy.verdictPassed : copy.verdictFailed}
       </h1>
 
-      <div className="flex flex-col gap-3.5">
+      <div className="flex flex-col gap-sibling">
         {attempt.passed ? (
           // Nothing is outstanding, so nothing here wears the warm field.
-          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
             <p className="max-w-measure text-body">
               {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.passedExplanation}{' '}
               {copy.reviewNote(wrong.length, attempt.drawn.length)}
@@ -277,13 +277,13 @@ export default async function AttemptPage({
           // The one warm field: the single next action, which is to go again.
           // The prose points down at the list below before the button is
           // pressed — the retry is offered, not urged.
-          <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
+          <section className="rounded-card bg-sand p-5 sm:p-card shadow-warm">
             <p className="max-w-measure text-body">
               {copy.score(attempt.score ?? 0, attempt.drawn.length)} {copy.failedExplanation}
             </p>
             <Link
               href={`/${lang}/learn/${slug}/quiz`}
-              className="press relative mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+              className="press button-primary relative mt-5.5 flex w-full items-center justify-center"
             >
               {copy.retry}
               <LinkPending />
@@ -305,7 +305,7 @@ export default async function AttemptPage({
             behind this Learner, so there is no attempt left for the answers to
             convert. */}
         {attempt.passed && (attempt.selections ?? []).length > 0 && (
-          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
             <h2 className="font-serif text-headline font-bold text-ink">
               {copy.reviewHeading}
             </h2>
@@ -315,7 +315,7 @@ export default async function AttemptPage({
                 so the language change arrived unannounced. Said once for the
                 card rather than on each of five links. */}
             {lang === 'ko' && competency.koTranslationNotice && (
-              <p className="mt-3.5 rounded-badge bg-sunk p-[17px] text-body-sm">
+              <p className="mt-sibling rounded-badge bg-sunk p-[17px] text-body-sm">
                 {competency.koTranslationNotice}
               </p>
             )}
@@ -365,7 +365,7 @@ export default async function AttemptPage({
                       // The native triangle is dropped for the caret below,
                       // which is the one that can sit where this layout needs
                       // it and turn when the item opens.
-                      className="grid cursor-pointer list-none grid-cols-[14px_minmax(0,1fr)] items-start gap-3.5 py-[15px] [&::-webkit-details-marker]:hidden"
+                      className="grid cursor-pointer list-none grid-cols-[14px_minmax(0,1fr)] items-start gap-sibling py-[15px] [&::-webkit-details-marker]:hidden"
                     >
                       {/* Filled for an item that was answered, hollow for one
                           that went the other way — the same two marks the
@@ -462,7 +462,7 @@ export default async function AttemptPage({
                           items is the question itself. DESIGN.md settled this
                           for the wizard's two-column row: the screen sits at
                           exactly its floor. It sits there here too. */}
-                      <div className="mb-3.5 -ml-[28px] w-full max-w-(--item-screen-floor)">
+                      <div className="mb-sibling -ml-[28px] w-full max-w-(--item-screen-floor)">
                         {item.sequence ? (
                           <ItemSequence
                             slug={`review:${item.slug}`}
@@ -559,18 +559,18 @@ export default async function AttemptPage({
             the Learner back to the article section by section (ADR-0006), and a
             summary offered in its place would be read instead of the article. */}
         {attempt.passed && competency.explanation && (
-          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
             <h2 className="font-serif text-headline font-bold text-ink">
               {copy.summaryHeading}
             </h2>
-            <p className="mt-3.5 max-w-measure text-body whitespace-pre-line">
+            <p className="mt-sibling max-w-measure text-body whitespace-pre-line">
               {competency.explanation[lang]}
             </p>
           </section>
         )}
 
         {!attempt.passed && wrong.length > 0 && (
-          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
             <h2 className="mb-4.5 font-serif text-headline font-bold text-ink">
               {copy.wrongHeading}
             </h2>
@@ -580,7 +580,7 @@ export default async function AttemptPage({
                 return (
                   <div
                     key={selection.item}
-                    className="grid grid-cols-[14px_minmax(0,1fr)] items-start gap-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5"
+                    className="grid grid-cols-[14px_minmax(0,1fr)] items-start gap-sibling border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5"
                   >
                     {/* A hollow blue-grey ring: real, and not yet reached. The
                         same mark an unvisited station wears, because that is
@@ -633,21 +633,21 @@ export default async function AttemptPage({
           False Current Rule exists to refuse. Two ways back, no ranking of
           them.
         */}
-        <nav aria-labelledby="what-now" className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+        <nav aria-labelledby="what-now" className="rounded-card bg-surface p-5 sm:p-card shadow-card">
           <h2 id="what-now" className="font-serif text-headline font-bold text-ink">
             {copy.whatNow}
           </h2>
           <div className="mt-4.5 flex flex-wrap gap-2.5">
             <Link
               href={`/${lang}/learn/${slug}`}
-              className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+              className="press chip inline-flex items-center gap-2"
             >
               <span aria-hidden>←</span>
               {copy.backToCompetency}
             </Link>
             <Link
               href={`/${lang}/learn`}
-              className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+              className="press chip inline-flex items-center gap-2"
             >
               <span aria-hidden>←</span>
               {copy.backToLearn}

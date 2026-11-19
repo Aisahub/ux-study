@@ -65,7 +65,7 @@ rounded:
   badge: "14px"
   pill: "999px"
 spacing:
-  gap: "14px"
+  sibling: "14px"
   inset: "22px"
   card: "26px"
   page: "26px"
@@ -370,6 +370,8 @@ incomplete.)
 
 One spacing rhythm throughout: `14px` between siblings, `22px` content inset off the board, `26px` inside a card. More space above a heading than below it.
 
+The three intervals are tokens, declared once in `app/globals.css` and reached as `sibling`, `inset` and `card` on any spacing utility (`gap-sibling`, `mt-inset`, `p-card`). Until 2026-11-19 they were typed as bare px at ~140 call sites, and `14px` was spelled two ways, `[14px]` and Tailwind's `3.5`, which are not even the same unit. `` grep -rnE "[ \"'`:](p[xytblr]?|m[xytblr]?|gap(-[xy])?|space-[xy])-\[(14|22|26)px\]" app lib `` returning nothing is the check that keeps it that way. A value that is not one of the three is not a fourth interval; it is component-internal geometry (a button's `15px`, a chip's `9px 17px`) and belongs inside that component's class.
+
 Desktop and mobile are equally primary. On narrow screens the rail becomes a bottom bar. In the Learn directory, each Gate Quiz action drops below its Competency description and keeps a `44px` minimum touch height; the programme order itself does not change.
 
 **The Stage Strip Rule** (decided 2026-07-28). The three Stage cards are three cards in a row from `sm`, and three rows inside one card below it. Only the container count changes with the band; the grouping does not, because the strip is one object at both. Three stacked cards cost 446px on a phone — 53% of the viewport — to say that Stage 1 is open and the other two are not written yet, and that pushed the first Competency, the only thing on the page a Learner can act on, entirely below the fold. Orientation precedes work on this board; it may not consume the screen the work needed. Any future summary strip on a narrow screen owes the same test: what does the Learner's first screen let them do?
@@ -447,7 +449,7 @@ The Learn badge carried a `6px` dot in its lower-right corner for this until 202
 
 ### Buttons
 - **Shape:** Fully round (`999px`).
-- **Primary:** Oxblood ground, white label, `15px 26px`, full width inside its card. A trailing `small` carries a quiet detail ("5문항") at 72% opacity.
+- **Primary:** Oxblood ground, white label at the `title` step, `15px 26px`, no lift, full width inside its card. A trailing `small` carries a quiet detail ("5문항") at 72% opacity. Drawn by one class, `button-primary`, in `app/globals.css`; the call site adds only layout (display, width, margins). (Unified 2026-11-19: the Learn directory's row buttons and two form buttons had drifted to the `label` step with a pill lift, which this line never gave a button.)
 - **Hover / Focus:** Oxblood deepens; focus shows a visible ring — never removed, this platform teaches keyboard operability.
 
 **The Answering Control Rule** (decided 2026-08-05, widened 2026-08-06). Every control deepens on hover and deepens again while pressed, and it gets that by *being* a control rather than by declaring itself one. The rule in `globals.css` reaches `button`, `summary`, `[role='button']` and the `<input>` button spellings; `.press` remains the opt-in for an `<a>` drawn as a pill, because nothing in the markup separates that from three words in a sentence. Inline text links and `<label>` are deliberately outside it.
@@ -460,7 +462,7 @@ The widening is the rule's own history and worth keeping: it shipped as `button`
 The exception is narrow. It applies only to a list of peers, only to the identical action repeated, and never alongside a second differently-weighted button on the same screen. Everywhere else, one action per screen still holds. (Recorded 2026-07-28: the Layout section had described this per-row action since the Studio Board was built, while this section still said one action per screen. The build followed Layout; the rule had simply never been written down.)
 
 ### Chips
-- **Style:** White pill, `9px 17px`, pill lift, a `label`-step word with a `15px` khaki-stroked icon. (Corrected 2026-07-29: this line read `12.5px/600` and had never matched the build. 12.5px is not a step on the scale, and 600 is a weight the Two Weights Rule says does not exist here — the code has always shipped a label-step word at 700. Naming the step instead of a number is also what stops the two drifting again.) Numerals inside a chip go bold and oxblood.
+- **Style:** Drawn by the `chip` class (`chip-sunk` for the same pill sunk into a card: sunk fill, no lift). White pill, `9px 17px`, pill lift, a `label`-step word with a `15px` khaki-stroked icon. (Corrected 2026-07-29: this line read `12.5px/600` and had never matched the build. 12.5px is not a step on the scale, and 600 is a weight the Two Weights Rule says does not exist here — the code has always shipped a label-step word at 700. Naming the step instead of a number is also what stops the two drifting again.) Numerals inside a chip go bold and oxblood.
 - **Use:** Read-only facts about the page — competency count, last activity, steps complete. Chips are never controls.
 
 ### Cards / Containers

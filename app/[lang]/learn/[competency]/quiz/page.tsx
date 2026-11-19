@@ -137,10 +137,10 @@ export default async function QuizStart({
     // pages use. A doorstep is one thing to decide, and a Learner standing at
     // it should not be given a second column to scan first.
     <main className="mx-auto w-full max-w-[720px] px-0.5">
-      <nav className="px-1.5 pb-3.5">
+      <nav className="px-1.5 pb-sibling">
         <Link
           href={`/${lang}/learn/${slug}`}
-          className="press inline-flex items-center gap-2 rounded-full bg-surface px-[17px] py-[9px] text-label font-bold shadow-pill"
+          className="press chip inline-flex items-center gap-2"
         >
           <span aria-hidden>←</span>
           {copy.back}
@@ -151,7 +151,7 @@ export default async function QuizStart({
         {copy.heading(competency.name[lang])}
       </h1>
 
-      <div className="flex flex-col gap-3.5">
+      <div className="flex flex-col gap-sibling">
         {/*
           The one warm field: the gate itself, and the single way through it.
 
@@ -172,12 +172,12 @@ export default async function QuizStart({
             with no subject — what the state is, then that it is a gap in the
             writing rather than something the Learner broke.
           */
-          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
             <p className="max-w-measure text-title font-bold text-ink">{copy.notReady}</p>
             <p className="mt-2.5 max-w-measure text-body">{copy.notReadyWhy}</p>
           </section>
         ) : (
-          <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
+          <section className="rounded-card bg-sand p-5 sm:p-card shadow-warm">
             <p className="max-w-measure text-body">{copy.rules(drawSize, passThreshold)}</p>
             {/* Both buttons report their own flight. This one spends a draw, an
                 insert and a redirect before its next screen exists, and until
@@ -187,7 +187,7 @@ export default async function QuizStart({
             <form action={start}>
               <SubmitButton
                 pendingLabel={copy.drawing}
-                className="mt-5.5 flex w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+                className="button-primary mt-5.5 flex w-full items-center justify-center"
               >
                 {open ? copy.continueOpen : attempts.length > 0 ? copy.retry : copy.start}
               </SubmitButton>
@@ -208,7 +208,7 @@ export default async function QuizStart({
         )}
 
         {attempts.length > 0 && (
-          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
             <h2 className="mb-4.5 font-serif text-headline font-bold text-ink">
               {copy.history}
             </h2>
@@ -235,7 +235,7 @@ export default async function QuizStart({
                   </>
                 )
                 const cells =
-                  'grid grid-cols-[14px_minmax(0,1fr)] items-start gap-x-3.5 border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5 sm:grid-cols-[14px_minmax(0,1fr)_auto] sm:items-center'
+                  'grid grid-cols-[14px_minmax(0,1fr)] items-start gap-x-sibling border-b border-khaki/40 py-[15px] last:border-b-0 last:pb-0.5 sm:grid-cols-[14px_minmax(0,1fr)_auto] sm:items-center'
 
                 // An open attempt has no verdict to read, so it is not a way
                 // back into one — it is reached by the button above.

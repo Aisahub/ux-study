@@ -225,7 +225,7 @@ function ElementName({ label, identifier }: { label: string; identifier: string 
  */
 function FoundMark({ found, label }: { found: boolean; label: string }) {
   return (
-    <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-sunk px-[17px] py-[9px] text-label font-bold text-ink">
+    <span className="chip-sunk inline-flex shrink-0 items-center gap-2">
       <i
         aria-hidden
         className={`size-[11px] rounded-full ${
@@ -254,11 +254,11 @@ export function DefectCard({
   copy: (typeof COPY)[Language]
 }) {
   return (
-    <li className="rounded-card bg-surface p-[26px] shadow-card">
+    <li className="rounded-card bg-surface p-card shadow-card">
       <div className="flex flex-wrap items-start gap-2.5">
         <FoundMark found={found} label={found ? copy.found : copy.missed} />
         {defect.step !== undefined && (
-          <span className="inline-flex items-center rounded-full bg-sunk px-[17px] py-[9px] text-label font-bold text-ink">
+          <span className="chip-sunk inline-flex items-center">
             {copy.defectStep(defect.step, steps)}
           </span>
         )}
@@ -285,8 +285,8 @@ export function FindingCard({
   copy: (typeof COPY)[Language]
 }) {
   return (
-    <li className="rounded-card bg-surface p-[26px] shadow-card">
-      <span className="inline-flex items-center rounded-full bg-sunk px-[17px] py-[9px] text-label font-bold text-ink">
+    <li className="rounded-card bg-surface p-card shadow-card">
+      <span className="chip-sunk inline-flex items-center">
         {copy.principle} · {principle}
       </span>
       <div className="mt-4">
@@ -310,11 +310,11 @@ export function GroupedPanel<T>({
   render: (item: T, index: number) => React.ReactNode
 }) {
   return (
-    <div className="flex flex-col gap-3.5">
+    <div className="flex flex-col gap-sibling">
       {groups.map((group) => (
-        <section key={group.slug} className="flex flex-col gap-3.5">
+        <section key={group.slug} className="flex flex-col gap-sibling">
           <GroupHeading>{group.name}</GroupHeading>
-          <ul className="flex flex-col gap-3.5">{group.items.map(render)}</ul>
+          <ul className="flex flex-col gap-sibling">{group.items.map(render)}</ul>
         </section>
       ))}
     </div>
@@ -346,13 +346,13 @@ export function RevealShell({
   children: React.ReactNode
 }) {
   return (
-    <main className="flex w-full flex-1 flex-col gap-3.5 px-0.5 font-sans">
+    <main className="flex w-full flex-1 flex-col gap-sibling px-0.5 font-sans">
       <header className="px-1.5">
         <h1 className="font-serif text-display font-bold text-ink">{copy.heading(stage)}</h1>
         <p className="mt-2.5 max-w-measure text-ink-2">{copy.intro}</p>
       </header>
 
-      <div className="flex flex-col gap-3.5 wide:flex-row wide:items-start">
+      <div className="flex flex-col gap-sibling wide:flex-row wide:items-start">
         {/* Open at both widths, and collapsible at both. A control that is
             there on one screen and gone on another is the Consistency defect
             the third Competency teaches; what changes with width is where the
@@ -372,7 +372,7 @@ export function RevealShell({
             entirely. */}
         <details
           open
-          className="group w-full rounded-card bg-surface p-[26px] shadow-card wide:sticky wide:top-3.5 wide:min-w-0 wide:flex-1"
+          className="group w-full rounded-card bg-surface p-card shadow-card wide:sticky wide:top-3.5 wide:min-w-0 wide:flex-1"
         >
           <summary className="flex cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
             <span
@@ -407,7 +407,7 @@ export function RevealShell({
           </p>
         </details>
 
-        <div className="flex w-full flex-col gap-3.5 wide:w-[440px] wide:shrink-0">
+        <div className="flex w-full flex-col gap-sibling wide:w-[440px] wide:shrink-0">
           <div className="px-1.5">
             <PanelSwitch
               lang={lang}

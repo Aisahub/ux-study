@@ -288,7 +288,7 @@ function StageCard({
       aria-label={label}
       data-stage={number}
       data-stage-state={state}
-      className="press group grid grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-x-3.5 text-ink sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-[14px] sm:rounded-card sm:bg-surface sm:p-[26px] sm:shadow-card"
+      className="press group grid grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-x-sibling text-ink sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-sibling sm:rounded-card sm:bg-surface sm:p-card sm:shadow-card"
     >
       <span
         aria-hidden
@@ -304,7 +304,7 @@ function StageCard({
           navigates from looking like the read-only summary it used to be.
           `aria-hidden`, because the destination is already in the card's
           spoken name and a repeated glyph is noise there. */}
-      <h3 className="col-start-2 row-start-1 min-w-0 text-title font-bold text-ink underline-offset-4 group-hover:underline sm:col-span-2 sm:col-start-1 sm:row-start-2 sm:mt-[14px]">
+      <h3 className="col-start-2 row-start-1 min-w-0 text-title font-bold text-ink underline-offset-4 group-hover:underline sm:col-span-2 sm:col-start-1 sm:row-start-2 sm:mt-sibling">
         {name}
         <span aria-hidden className="text-oxblood">
           &nbsp;→
@@ -363,13 +363,13 @@ export default async function Learn({
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
-      <header className="grid gap-[22px] px-1.5 pb-[26px] sm:grid-cols-[minmax(0,1fr)_240px] sm:items-end">
+      <header className="grid gap-inset px-1.5 pb-card sm:grid-cols-[minmax(0,1fr)_240px] sm:items-end">
         <div>
           <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
           <p className="mt-3 max-w-measure text-body text-ink">{copy.intro}</p>
         </div>
         <div>
-          <div className="flex items-center justify-between gap-[14px] text-label font-bold">
+          <div className="flex items-center justify-between gap-sibling text-label font-bold">
             <span>{copy.stageProgress(current.stage)}</span>
             <span>{copy.done(current.progress.stepsDone, current.progress.stepsTotal)}</span>
           </div>
@@ -418,7 +418,7 @@ export default async function Learn({
         <h2 id="programme-stages" className="sr-only">
           {copy.programmeStages}
         </h2>
-        <div className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-3 sm:bg-transparent sm:p-0 sm:shadow-none">
+        <div className="grid gap-sibling rounded-card bg-surface p-card shadow-card sm:grid-cols-3 sm:bg-transparent sm:p-0 sm:shadow-none">
           {stages.map((entry, index) => {
             const state = stageState(entry.progress)
             return (
@@ -437,7 +437,7 @@ export default async function Learn({
         </div>
       </section>
 
-      <section className="mt-[26px]" aria-labelledby="programme-contents">
+      <section className="mt-card" aria-labelledby="programme-contents">
         <div className="px-1.5">
           <h2 id="programme-contents" className="font-serif text-headline font-bold text-ink">
             {copy.contentsTitle}
@@ -456,7 +456,7 @@ export default async function Learn({
           const capstone = capstoneState(entry.progress)
 
           return (
-          <div key={entry.stage} className="mt-[26px] first:mt-[14px]">
+          <div key={entry.stage} className="mt-card first:mt-sibling">
             {/* The landing point for the Stage's card and for the progress
                 bar's way here. `scroll-mt` clears the board and bed insets the
                 fragment jump knows nothing about, so the heading arrives below
@@ -467,12 +467,12 @@ export default async function Learn({
             <h3
               id={stageAnchor(entry.stage)}
               tabIndex={-1}
-              className="scroll-mt-[26px] px-1.5 font-serif text-headline font-bold text-ink"
+              className="scroll-mt-card px-1.5 font-serif text-headline font-bold text-ink"
             >
               {copy.stageHeading(entry.stage)}
             </h3>
 
-            <div className="mt-[14px] grid gap-[14px]">
+            <div className="mt-sibling grid gap-sibling">
               {entry.competencies.map((competency, index) => {
                 const quiz = entry.progress.quizzes[competency.slug]
 
@@ -481,7 +481,7 @@ export default async function Learn({
                     key={competency.slug}
                     data-competency={competency.slug}
                     data-quiz-status={quiz.status}
-                    className="@container grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
+                    className="@container grid gap-sibling rounded-card bg-surface p-card shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
                   >
                     <span
                       aria-hidden
@@ -514,7 +514,7 @@ export default async function Learn({
                       </p>
                     </div>
 
-                    <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
+                    <div className="flex min-w-0 flex-col gap-sibling sm:items-end">
                       {/* The 44px is what holds this line level with the row's
                           name and mark. The inner span is load-bearing: as direct
                           flex children the status and the attempt count become
@@ -557,7 +557,7 @@ export default async function Learn({
                           is where the description still has ~390px at the moment
                           the row forms, measured on the English labels, which are
                           the wider pair. */}
-                      <div className="flex flex-col gap-[14px] @min-[780px]:flex-row @min-[780px]:items-center">
+                      <div className="flex flex-col gap-sibling @min-[780px]:flex-row @min-[780px]:items-center">
                         <Link
                           href={`/${lang}/learn/${competency.slug}`}
                           className="inline-flex min-h-11 items-center self-start text-label font-bold text-oxblood underline-offset-4 hover:underline sm:self-end @min-[780px]:self-auto"
@@ -567,7 +567,7 @@ export default async function Learn({
                         </Link>
                         <Link
                           href={`/${lang}/learn/${competency.slug}/quiz`}
-                          className="press relative inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill @min-[780px]:w-auto"
+                          className="press button-primary relative inline-flex w-full items-center justify-center @min-[780px]:w-auto"
                         >
                           {copy.openQuiz}
                           <LinkPending />
@@ -580,7 +580,7 @@ export default async function Learn({
 
           <article
             data-report-status={capstone}
-            className="grid gap-[14px] rounded-card bg-surface p-[26px] shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
+            className="grid gap-sibling rounded-card bg-surface p-card shadow-card sm:grid-cols-[44px_minmax(0,1fr)_auto] sm:items-start"
           >
             <span
               aria-hidden
@@ -607,7 +607,7 @@ export default async function Learn({
               </p>
             </div>
 
-            <div className="flex min-w-0 flex-col gap-[14px] sm:items-end">
+            <div className="flex min-w-0 flex-col gap-sibling sm:items-end">
               <p className="text-label font-bold text-ink sm:flex sm:min-h-11 sm:items-center">
                 {capstone === 'submitted'
                   ? copy.capstoneSubmitted
@@ -618,7 +618,7 @@ export default async function Learn({
               {capstone !== 'locked' && (
                 <Link
                   href={`/${lang}/audit/${entry.stage}`}
-                  className="press relative inline-flex min-h-11 w-full items-center justify-center rounded-full bg-oxblood px-[26px] py-[15px] text-label font-bold text-white shadow-pill"
+                  className="press button-primary relative inline-flex w-full items-center justify-center"
                 >
                   {copy.capstoneOpen}
                   <LinkPending />
@@ -642,7 +642,7 @@ export default async function Learn({
           A notice about who can see you may not be the fine print. Full ink,
           not faded: this sits on the bed rather than on a white card, and the
           fade is allowed only on white. */}
-      <p className="mt-3.5 max-w-measure px-1.5 text-body-sm">{copy.visibility}</p>
+      <p className="mt-sibling max-w-measure px-1.5 text-body-sm">{copy.visibility}</p>
     </main>
   )
 }
