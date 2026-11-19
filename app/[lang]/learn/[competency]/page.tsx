@@ -113,7 +113,7 @@ function StepHead({
     // and Korean without it breaks inside a word — 할 수 있 / 는 것. English
     // is unaffected: it already only breaks at spaces. The gutter is narrower
     // on a phone, where those same pixels are the ones the heading needs.
-    <div className="grid grid-cols-[26px_minmax(0,1fr)] items-baseline gap-x-2.5 break-keep sm:grid-cols-[34px_minmax(0,1fr)] sm:gap-x-3.5">
+    <div className="grid grid-cols-[26px_minmax(0,1fr)] items-baseline gap-x-2.5 break-keep sm:grid-cols-[34px_minmax(0,1fr)] sm:gap-x-sibling">
       <span
         aria-hidden
         className={`font-serif text-headline font-bold ${
@@ -212,22 +212,22 @@ export default async function CompetencyPage({
       active="competency"
       noteCount={noteCount}
     >
-      <div className="flex flex-col gap-3.5">
+      <div className="flex flex-col gap-sibling">
         {/* ── 01 · what this station is for, and where to aim it ── */}
-        <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+        <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
           <StepHead step="01">
             <h2 className="font-serif text-headline font-bold text-ink">
               {copy.objective}
             </h2>
           </StepHead>
-          <p className="mt-3.5 max-w-measure text-body">
+          <p className="mt-sibling max-w-measure text-body">
             {competency.objective[lang]}
           </p>
 
           {/* The same Competency pointed at this Learner's own work. It shares
               the card because it is not a second subject: it is the objective
               with an address on it — so it takes no number of its own. */}
-          <h3 className="mt-[26px] border-t border-khaki/40 pt-[22px] font-serif text-headline font-bold text-ink">
+          <h3 className="mt-card border-t border-khaki/40 pt-inset font-serif text-headline font-bold text-ink">
             {copy.roleHint}
           </h3>
           {/* One block per role, each under the role's own name. Both hints ran
@@ -251,7 +251,7 @@ export default async function CompetencyPage({
         </section>
 
         {/* ── 02 · the questions to carry into the reading ── */}
-        <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+        <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
           <StepHead step="02">
             <h2 className="font-serif text-headline font-bold text-ink">
               {copy.questionsHeading}
@@ -263,11 +263,11 @@ export default async function CompetencyPage({
           {/* The question markers are sunk chips rather than a second run of
               display numerals: inside a step, the ordinals belong to the step,
               and only the four step numbers own the column's left edge. */}
-          <ol className="mt-5.5 flex flex-col gap-3.5">
+          <ol className="mt-5.5 flex flex-col gap-sibling">
             {competency.preReadingQuestions.map((question, index) => (
               <li
                 key={question.en}
-                className="grid grid-cols-[34px_minmax(0,1fr)] items-start gap-3.5"
+                className="grid grid-cols-[34px_minmax(0,1fr)] items-start gap-sibling"
               >
                 <span className="grid size-[34px] place-items-center rounded-badge bg-sunk text-label font-bold text-ink-2">
                   {index + 1}
@@ -279,13 +279,13 @@ export default async function CompetencyPage({
         </section>
 
         {/* ── 03 · what the questions are carried into ── */}
-        <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+        <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
           <StepHead step="03">
             <h2 className="font-serif text-headline font-bold text-ink">
               {copy.articleTitle}
             </h2>
           </StepHead>
-          <p className="mt-3.5 text-body-sm text-ink-2">
+          <p className="mt-sibling text-body-sm text-ink-2">
             {competency.source.attribution}
           </p>
 
@@ -312,13 +312,13 @@ export default async function CompetencyPage({
         {quiz.status === 'passed' ? (
           // Nothing here is outstanding any more, so nothing here wears the
           // warm field — retrying is offered as a link, not as a second action.
-          <section className="rounded-card bg-surface p-5 shadow-card sm:p-[26px]">
+          <section className="rounded-card bg-surface p-5 shadow-card sm:p-card">
             <StepHead step="04">
               <h2 className="font-serif text-headline font-bold text-ink">
                 {copy.quizPassed}
               </h2>
             </StepHead>
-            <p className="mt-3.5 max-w-measure text-body">{copy.passedBody}</p>
+            <p className="mt-sibling max-w-measure text-body">{copy.passedBody}</p>
             {/* The way back into the passed attempt first, retrying second:
                 after a pass, rereading the answers is what this card is
                 revisited for, and the only route there used to be the retry
@@ -346,7 +346,7 @@ export default async function CompetencyPage({
           // card rather than the first thing a Learner meets. It says it is the
           // last of the four, not that it is the next thing to do — before the
           // article is read, "do this next" was not true.
-          <section className="rounded-card bg-sand p-5 sm:p-[26px] shadow-warm">
+          <section className="rounded-card bg-sand p-5 sm:p-card shadow-warm">
             {/* Full ink, not the 72% fade: that value is measured against
                 white and is marginal on the sand field. */}
             <span className="mb-2.5 block text-micro font-bold text-ink">
@@ -362,7 +362,7 @@ export default async function CompetencyPage({
             </p>
             <Link
               href={`/${lang}/learn/${slug}/quiz`}
-              className="press relative mt-5.5 flex w-full items-center justify-center gap-2.5 rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+              className="press button-primary relative mt-5.5 flex w-full items-center justify-center gap-2.5"
             >
               {copy.quizStart(quiz.attempts)}
               {/* body-sm, not the label step: this detail is set regular, and
@@ -382,9 +382,9 @@ export default async function CompetencyPage({
             warm one because the single sand field per screen belongs to the
             one thing to do next, which is the Gate Quiz above. */}
         {content.specimen?.competency === slug && (
-          <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+          <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
             <h2 className="font-serif text-headline font-bold text-ink">{copy.specimenTitle}</h2>
-            <p className="mt-3.5 max-w-measure text-body-sm text-ink-2">{copy.specimenBody}</p>
+            <p className="mt-sibling max-w-measure text-body-sm text-ink-2">{copy.specimenBody}</p>
             <Link
               href={`/${lang}/specimen`}
               className="press mt-5.5 inline-flex text-title font-bold text-oxblood"

@@ -50,12 +50,12 @@ export default async function ContentHealthLayout({
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
-      <header className="px-1.5 pb-[26px]">
+      <header className="px-1.5 pb-card">
         <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
         {/* Full ink rather than ink-2: the board is not a white card, and
             faded text is a white-card value here (DESIGN.md). */}
         <p className="mt-3 max-w-measure text-body text-ink">{copy.explanation}</p>
-        <div className="mt-[22px]">
+        <div className="mt-inset">
           <PanelSwitch
             lang={lang}
             labels={{ panels: copy.heading, items: copy.itemsPanel, defects: copy.defectsPanel }}

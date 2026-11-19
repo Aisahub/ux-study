@@ -222,7 +222,7 @@ export function QuizWizard({
   return (
     <main className="mx-auto w-full max-w-[880px] px-0.5 wide:max-w-[1240px]">
       {/* ── the line, carrying the five drawn items ─────── */}
-      <section className="rounded-card bg-surface p-5 sm:p-[26px] shadow-card">
+      <section className="rounded-card bg-surface p-5 sm:p-card shadow-card">
         {/* Said in words only where the line cannot say it. From `sm` the
             stations carry their own labels and the marker names the current
             one, so this line repeats them — and it repeats them in the band
@@ -232,7 +232,7 @@ export function QuizWizard({
         <p className="text-label font-bold text-ink-2 sm:hidden">
           {copy.progress(current + 1, items.length)}
         </p>
-        <div className="mt-3.5 grid grid-cols-5 sm:mt-0">
+        <div className="mt-sibling grid grid-cols-5 sm:mt-0">
           {items.map((candidate, index) => (
             <ItemStop
               key={candidate.slug}
@@ -301,7 +301,7 @@ export function QuizWizard({
           question, and the second take everything left over, which is where a
           tall screen's slack belongs — beside the options, not inside the gap
           above them. */}
-      <section className="mt-3.5 grid grid-cols-1 gap-[26px] rounded-card bg-surface p-5 sm:p-[26px] shadow-card min-[1200px]:grid-cols-[minmax(0,var(--item-screen-floor))_minmax(400px,1fr)] min-[1200px]:grid-rows-[min-content_minmax(0,1fr)] min-[1200px]:items-start">
+      <section className="mt-sibling grid grid-cols-1 gap-card rounded-card bg-surface p-5 sm:p-card shadow-card min-[1200px]:grid-cols-[minmax(0,var(--item-screen-floor))_minmax(400px,1fr)] min-[1200px]:grid-rows-[min-content_minmax(0,1fr)] min-[1200px]:items-start">
         {/* The question, first in the markup and first on a stacked card.
             What is being asked has to arrive before the thing it is asked
             about: a Learner handed a screen with no question studies it for
@@ -389,7 +389,7 @@ export function QuizWizard({
               // leave a step between them, and the pair reads as one row.
               <label
                 key={option.index}
-                className="flex cursor-pointer items-start gap-3.5 rounded-badge bg-sunk p-[17px] has-checked:shadow-[inset_0_0_0_2px_var(--oxblood)]"
+                className="flex cursor-pointer items-start gap-sibling rounded-badge bg-sunk p-[17px] has-checked:shadow-[inset_0_0_0_2px_var(--oxblood)]"
               >
                 <input
                   type="radio"
@@ -406,12 +406,12 @@ export function QuizWizard({
             ))}
           </fieldset>
 
-          <div className="mt-[26px] flex flex-wrap items-center gap-3.5">
+          <div className="mt-card flex flex-wrap items-center gap-sibling">
             <button
               type="button"
               disabled={current === 0}
               onClick={() => setCurrent(current - 1)}
-              className="rounded-full bg-surface px-[26px] py-[15px] text-title font-bold shadow-pill disabled:opacity-40"
+              className="rounded-full bg-surface px-card py-[15px] text-title font-bold shadow-pill disabled:opacity-40"
             >
               {copy.back}
             </button>
@@ -419,7 +419,7 @@ export function QuizWizard({
               <button
                 type="button"
                 onClick={() => setCurrent(current + 1)}
-                className="rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white"
+                className="button-primary"
               >
                 {copy.forward}
               </button>
@@ -435,7 +435,7 @@ export function QuizWizard({
                 disabled={pending || unanswered > 0}
                 aria-busy={pending}
                 onClick={() => startTransition(() => submitAttempt(attemptId, lang, choices))}
-                className={`rounded-full bg-oxblood px-[26px] py-[15px] text-title font-bold text-white ${
+                className={`button-primary ${
                   pending ? '' : 'disabled:opacity-40'
                 }`}
               >

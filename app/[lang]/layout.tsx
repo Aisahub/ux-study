@@ -121,7 +121,7 @@ export default async function LanguageLayout({
             navigation at all, so nothing is reserved for a bar they will not
             be shown. */}
         <div
-          className={`relative grid min-h-screen w-full grid-cols-1 gap-3.5 p-3.5 sm:grid-cols-[78px_minmax(0,1fr)] sm:pb-3.5 ${
+          className={`relative grid min-h-screen w-full grid-cols-1 gap-sibling p-sibling sm:grid-cols-[78px_minmax(0,1fr)] sm:pb-sibling ${
             session ? 'pb-(--bottom-bar)' : ''
           }`}
         >
@@ -143,20 +143,20 @@ export default async function LanguageLayout({
           {/* The content bed: a brighter frost sitting on the board, holding the
               top bar and the page. The board reads through around it — most
               visibly down the navigation rail, which sits on the board itself. */}
-          <div className="rounded-card bg-bed p-4 inset-shadow-bed sm:p-[22px]">
+          <div className="rounded-card bg-bed p-4 inset-shadow-bed sm:p-inset">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-3 px-1.5 pb-5">
               {/* A wordmark, and a way home only for someone who has a home:
                   a signed-out visitor is offered no navigation at all. */}
               {session ? (
                 <Link
                   href={`/${lang}/learn`}
-                  className="text-label font-bold tracking-[0.26em] uppercase"
+                  className="font-serif text-title font-bold sm:text-headline"
                 >
-                  ux&thinsp;·&thinsp;study
+                  UX Study
                 </Link>
               ) : (
-                <span className="text-label font-bold tracking-[0.26em] uppercase">
-                  ux&thinsp;·&thinsp;study
+                <span className="font-serif text-title font-bold sm:text-headline">
+                  UX Study
                 </span>
               )}
 

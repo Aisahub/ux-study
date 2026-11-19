@@ -56,7 +56,7 @@ export function NoteRow({ lang, note }: { lang: Language; note: Note }) {
       <p className="max-w-measure text-body whitespace-pre-line [overflow-wrap:anywhere]">
         {note.body}
       </p>
-      <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-3.5">
+      <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-sibling">
         <p className="text-body-sm text-ink-2">{note.createdAt.toISOString().slice(0, 10)}</p>
         {/* The 44px minimum goes on the control that answers the tap, not on
             the row around it. The negative inset keeps the target clear of the

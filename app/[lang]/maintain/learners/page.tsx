@@ -98,12 +98,12 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
-      <header className="px-1.5 pb-[26px]">
+      <header className="px-1.5 pb-card">
         <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
         <p className="mt-3 max-w-measure text-body text-ink">{copy.explanation}</p>
       </header>
 
-      <section aria-labelledby="cohort" className="rounded-card bg-surface p-[26px] shadow-card">
+      <section aria-labelledby="cohort" className="rounded-card bg-surface p-card shadow-card">
         <h2 id="cohort" className="sr-only">
           {copy.heading}
         </h2>
@@ -114,7 +114,7 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
           // branch, before the first sign-in writes the first row.
           <p className="text-body-sm text-ink-2">{copy.nobodyYet}</p>
         ) : (
-          <ul className="flex flex-col gap-[22px]">
+          <ul className="flex flex-col gap-inset">
             {users.map((user) => {
               const own = attempts.filter((attempt) => attempt.email === user.email)
               // Stage 1's report, matching the Competencies counted beside it.
@@ -137,7 +137,7 @@ export default async function Learners({ params }: { params: Promise<{ lang: str
                 // break at (the same reason My page gives).
                 <li
                   key={user.email}
-                  className="grid gap-x-[14px] sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline"
+                  className="grid gap-x-sibling sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline"
                 >
                   <span className="min-w-0 text-title font-bold text-ink [overflow-wrap:anywhere]">
                     {user.email}

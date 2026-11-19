@@ -443,7 +443,7 @@ export function ItemSequence({
         read the entire description three times over before reaching the first
         caption.
       */}
-      <ol aria-label={description} className="flex flex-col gap-[22px]">
+      <ol aria-label={description} className="flex flex-col gap-inset">
         {steps.map((step, index) => {
           const frameKey = frameKeyOf(slug, index)
           return (

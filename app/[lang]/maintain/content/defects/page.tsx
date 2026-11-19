@@ -154,13 +154,13 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
     .filter((stage) => !subjects.some((subject) => subject.stage === stage))
 
   return (
-    <section aria-labelledby="defects" className="rounded-card bg-surface p-[26px] shadow-card">
+    <section aria-labelledby="defects" className="rounded-card bg-surface p-card shadow-card">
       <h2 id="defects" className="font-serif text-headline font-bold text-ink">
         {copy.defectsHeading}
       </h2>
       <p className="mt-2 max-w-measure text-body-sm text-ink-2">{copy.defectsExplanation}</p>
       {subjects.map((subject) => (
-        <div key={subject.stage} className="mt-[22px]">
+        <div key={subject.stage} className="mt-inset">
           <h3 className="text-title font-bold text-ink">{copy.stage(subject.stage)}</h3>
           {subject.reports === 0 ? (
             <p className="mt-1.5 text-body-sm text-ink-2">{copy.noReports}</p>
@@ -188,8 +188,8 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
             // out of the accessibility tree as well as the page.
             <>
               {/* Narrow: the heads once, then the counts under each name. */}
-              <div className="mt-[14px] sm:hidden">
-                <div className="grid grid-cols-3 gap-x-[14px]">
+              <div className="mt-sibling sm:hidden">
+                <div className="grid grid-cols-3 gap-x-sibling">
                   <div>
                     <ColumnHead label={copy.all} reports={subject.reports} copy={copy} />
                   </div>
@@ -200,7 +200,7 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
                     <ColumnHead label={copy.indonesia} reports={subject.indonesiaReports} copy={copy} />
                   </div>
                 </div>
-                <ul className="mt-[14px] flex flex-col gap-[22px]">
+                <ul className="mt-sibling flex flex-col gap-inset">
                   {subject.defects.map(({ defect, label, principle, found, koreaFound, indonesiaFound }) => (
                     <li key={defect.slug}>
                       <span className="block text-title font-bold text-ink [overflow-wrap:anywhere]">
@@ -209,7 +209,7 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
                       <DefectDetail principle={principle} identifier={defect.element} />
                       {/* Each figure carries its column's name for a screen
                           reader, which has no columns to read them in. */}
-                      <div className="mt-1 grid grid-cols-3 gap-x-[14px]">
+                      <div className="mt-1 grid grid-cols-3 gap-x-sibling">
                         <span className={FIGURE}>
                           <span className="sr-only">{copy.all} </span>
                           <Found found={found} reports={subject.reports} copy={copy} />
@@ -239,7 +239,7 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
                   reason written there: pushed to the two ends of an 896px
                   card, a name and its figure sat 506px apart and invited the
                   eye to read one row's name against the next row's number. */}
-              <table className="mt-[14px] hidden w-full table-fixed border-separate border-spacing-0 text-left sm:table sm:w-[43rem]">
+              <table className="mt-sibling hidden w-full table-fixed border-separate border-spacing-0 text-left sm:table sm:w-[43rem]">
                 <caption className="sr-only">
                   {copy.stage(subject.stage)} · {copy.defectsHeading}
                 </caption>
@@ -252,13 +252,13 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
                 <thead>
                   <tr>
                     <td />
-                    <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
+                    <th scope="col" className="pb-sibling pr-sibling text-left align-baseline last:pr-0">
                       <ColumnHead label={copy.all} reports={subject.reports} copy={copy} />
                     </th>
-                    <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
+                    <th scope="col" className="pb-sibling pr-sibling text-left align-baseline last:pr-0">
                       <ColumnHead label={copy.korea} reports={subject.koreaReports} copy={copy} />
                     </th>
-                    <th scope="col" className="pb-[14px] pr-[14px] text-left align-baseline last:pr-0">
+                    <th scope="col" className="pb-sibling pr-sibling text-left align-baseline last:pr-0">
                       <ColumnHead
                         label={copy.indonesia}
                         reports={subject.indonesiaReports}
@@ -272,18 +272,18 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
                     <tr key={defect.slug}>
                       <th
                         scope="row"
-                        className="py-[7px] pr-[14px] text-left align-baseline font-normal [overflow-wrap:anywhere]"
+                        className="py-[7px] pr-sibling text-left align-baseline font-normal [overflow-wrap:anywhere]"
                       >
                         <span className="block text-title font-bold text-ink">{label}</span>
                         <DefectDetail principle={principle} identifier={defect.element} />
                       </th>
-                      <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                      <td className={`py-[7px] pr-sibling align-baseline last:pr-0 ${FIGURE}`}>
                         <Found found={found} reports={subject.reports} copy={copy} />
                       </td>
-                      <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                      <td className={`py-[7px] pr-sibling align-baseline last:pr-0 ${FIGURE}`}>
                         <Found found={koreaFound} reports={subject.koreaReports} copy={copy} />
                       </td>
-                      <td className={`py-[7px] pr-[14px] align-baseline last:pr-0 ${FIGURE}`}>
+                      <td className={`py-[7px] pr-sibling align-baseline last:pr-0 ${FIGURE}`}>
                         <Found
                           found={indonesiaFound}
                           reports={subject.indonesiaReports}
@@ -307,7 +307,7 @@ export default async function PlantedDefectHealth({ params }: { params: Promise<
           language does not take (ERR-239). It reads as a separator in English
           too, which is why this stays one spelling rather than becoming two. */}
       {unauthored.length > 0 && (
-        <div className="mt-[22px] flex flex-col gap-[14px]">
+        <div className="mt-inset flex flex-col gap-sibling">
           {unauthored.map((stage) => (
             <p key={stage} className="text-body-sm text-ink-2">
               {copy.stage(stage)} · {copy.noSubject}

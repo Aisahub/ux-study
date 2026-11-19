@@ -159,14 +159,14 @@ export default async function Me({ params }: { params: Promise<{ lang: string }>
 
   return (
     <main className="mx-auto w-full max-w-4xl px-0.5">
-      <header className="px-1.5 pb-[26px]">
+      <header className="px-1.5 pb-card">
         <h1 className="font-serif text-display font-bold text-ink">{copy.heading}</h1>
       </header>
 
-      <div className="flex flex-col gap-[14px]">
+      <div className="flex flex-col gap-sibling">
         <section
           aria-labelledby="account"
-          className="rounded-card bg-surface p-[26px] shadow-card"
+          className="rounded-card bg-surface p-card shadow-card"
         >
           <h2 id="account" className="sr-only">
             {copy.account}
@@ -175,7 +175,7 @@ export default async function Me({ params }: { params: Promise<{ lang: string }>
               equally: it is the only one of the three whose content is not a
               short fixed word, and at equal thirds it was the only one that
               had to wrap. */}
-          <dl className="grid items-start gap-[22px] sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)]">
+          <dl className="grid items-start gap-inset sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)]">
             <Fact label={copy.signedInAs}>{session.email}</Fact>
             <Fact label={copy.roleLabel}>
               {session.isMaintainer ? copy.role.maintainer : copy.role.learner}
@@ -186,7 +186,7 @@ export default async function Me({ params }: { params: Promise<{ lang: string }>
 
         <section
           aria-labelledby="report"
-          className="flex flex-wrap items-baseline justify-between gap-x-[22px] gap-y-1 rounded-card bg-surface p-[26px] shadow-card"
+          className="flex flex-wrap items-baseline justify-between gap-x-inset gap-y-1 rounded-card bg-surface p-card shadow-card"
         >
           <h2 id="report" className="text-title font-bold text-ink">
             {copy.report}
@@ -198,8 +198,8 @@ export default async function Me({ params }: { params: Promise<{ lang: string }>
             notes step — the rail's bottom-bar form is full at six marks, which
             is what a Maintainer already carries, so a seventh would put every
             target on a 320px screen under 44px. */}
-        <section aria-labelledby="notes" className="rounded-card bg-surface p-[26px] shadow-card">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-[22px] gap-y-1">
+        <section aria-labelledby="notes" className="rounded-card bg-surface p-card shadow-card">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-inset gap-y-1">
             <h2 id="notes" className="text-title font-bold text-ink">
               {copy.notes}
             </h2>
@@ -216,24 +216,24 @@ export default async function Me({ params }: { params: Promise<{ lang: string }>
           </Link>
         </section>
 
-        <section aria-labelledby="attempts" className="rounded-card bg-surface p-[26px] shadow-card">
+        <section aria-labelledby="attempts" className="rounded-card bg-surface p-card shadow-card">
           <h2 id="attempts" className="text-title font-bold text-ink">
             {copy.attempts}
           </h2>
 
           {history.length === 0 ? (
-            <p className="mt-[14px] text-body-sm text-ink-2">{copy.attemptsNone}</p>
+            <p className="mt-sibling text-body-sm text-ink-2">{copy.attemptsNone}</p>
           ) : (
             /* Newest first, and no verdict anywhere on the row. Whether an
                attempt passed is a status, and status is Learn's sentence to
                say; scored in ink rather than oxblood or green keeps this a
                record of what happened rather than a second place the platform
                judges. */
-            <ol className="mt-[14px] flex flex-col gap-[14px]">
+            <ol className="mt-sibling flex flex-col gap-sibling">
               {history.map((attempt) => (
                 <li
                   key={attempt.id}
-                  className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-[14px]"
+                  className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-sibling"
                 >
                   <span className="min-w-0 text-title font-bold text-ink">
                     {nameOf(attempt.competency)}
